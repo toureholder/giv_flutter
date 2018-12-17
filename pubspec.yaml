@@ -25,8 +25,8 @@ dependencies:
   cupertino_icons: ^0.1.2
 
 dev_dependencies:
-#  flutter_test:
-#    sdk: flutter
+  flutter_test:
+    sdk: flutter
 
 
 dependency_overrides:
