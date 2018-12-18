@@ -1,36 +1,71 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel/carousel.dart';
 import 'package:flutter/material.dart';
-import 'package:giv_flutter/model/product/Product.dart';
+import 'package:giv_flutter/features/detail/product_detail.dart';
+import 'package:giv_flutter/features/home/bloc/home_bloc.dart';
+import 'package:giv_flutter/features/home/model/home_content.dart';
+import 'package:giv_flutter/model/carousel/carousel_item.dart';
+import 'package:giv_flutter/model/product/product.dart';
 import 'package:giv_flutter/util/presentation/app_bar_builder.dart';
 import 'package:giv_flutter/util/presentation/dimens.dart';
 import 'package:giv_flutter/util/presentation/spacing.dart';
-import 'package:giv_flutter/features/detail/product_detail.dart';
 
-class Home extends StatelessWidget {
-  final List<String> imgList = [
-    'https://firebasestorage.googleapis.com/v0/b/pullup-life.appspot.com/o/marketing%2Ftemp_giv%2Fgiv_banner_o_que_eh_minimalismo.jpg?alt=media&token=dfe0d449-0044-4c9b-88f4-5f9375d94784',
-    'https://firebasestorage.googleapis.com/v0/b/pullup-life.appspot.com/o/marketing%2Ftemp_giv%2Fgiv_banner_7_coisas.jpg?alt=media&token=3b17aa2f-feb6-46d0-8ee9-28405dca88d5',
-    'https://firebasestorage.googleapis.com/v0/b/pullup-life.appspot.com/o/marketing%2Ftemp_giv%2Fgiv_banner_o_prazer.jpg?alt=media&token=66484516-8339-4569-97cd-62cc1b1c89ba',
-  ];
+class Home extends StatefulWidget {
+  @override
+  _HomeState createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
+  @override
+  void initState() {
+    super.initState();
+    homeBloc.fetchContent();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBarBuilder().setTitle('Início').build(),
-      body: ListView(
-        children: <Widget>[
-          _buildCarouselContainer(),
-          Spacing.vertical(Dimens.grid(15)),
-          _buildSectionHeader(context,  'Perto de você'),
-          _buildItemList(context, Product.getMockList(6, prefix: "")),
-          _buildSectionHeader(context,  'Livros - Brasília -DF'),
-          _buildItemList(context, Product.getMockList(6, prefix: "2")),
-          _buildSectionHeader(context,  'Roupas femininas - Brasília -DF'),
-          _buildItemList(context, Product.getMockList(6, prefix: "1")),
-        ],
-      ),
+      body: StreamBuilder(
+          stream: homeBloc.content,
+          builder: (context, AsyncSnapshot<HomeContent> snapshot) {
+            if (snapshot.hasData) {
+              return _buildMainListView(context, snapshot.data);
+            } else if (snapshot.hasError) {
+              return Center(child: Text(snapshot.error.toString()));
+            }
+            return Center(child: CircularProgressIndicator());
+          }),
     );
+  }
+
+  @override
+  void dispose() {
+    homeBloc.dispose();
+    super.dispose();
+  }
+
+  ListView _buildMainListView(BuildContext context, HomeContent content) {
+    return ListView(
+      children: _buildContent(context, content),
+    );
+  }
+
+  List<Widget> _buildContent(BuildContext context, HomeContent content) {
+    final categories = content.productCategories;
+    final heroItems = content.heroItems;
+
+    var widgets = <Widget>[
+      _buildCarouselContainer(heroItems),
+      Spacing.vertical(Dimens.grid(15))
+    ];
+
+    categories.forEach((category){
+      widgets.add(_buildSectionHeader(context, category.title));
+      widgets.add(_buildItemList(context, category.products));
+    });
+
+    return widgets;
   }
 
   Widget _buildItemList(BuildContext context, List<Product> products) {
@@ -116,22 +151,22 @@ class Home extends StatelessWidget {
       );
   }
 
-  Container _buildCarouselContainer() {
+  Container _buildCarouselContainer(List<CarouselItem> heroItems) {
     return Container(
-      child: _buildCarousel(),
+      child: _buildCarousel(heroItems),
       height: 156.0,
     );
   }
 
-  Carousel _buildCarousel() {
+  Carousel _buildCarousel(List<CarouselItem> heroItems) {
     return Carousel(
-      children: _buildImageList(),
+      children: _buildImageList(heroItems),
       displayDuration: Duration(seconds: 10),
     );
   }
 
-  List<Widget> _buildImageList() =>
-      imgList.map((url) => _buildFadeInImage(url)).toList();
+  List<Widget> _buildImageList(List<CarouselItem> heroItems) =>
+      heroItems.map((item) => _buildFadeInImage(item.imageUrl)).toList();
 
   CachedNetworkImage _buildFadeInImage(String url) {
     return CachedNetworkImage(

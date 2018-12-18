@@ -6,7 +6,7 @@ class Product {
 
   Product({this.title, this.location, this.description, this.imageUrls});
 
-  static List<Product> getMockList(int quantity, {prefix = "2"}) {
+  static List<Product> getMockList(int quantity, {prefix = ""}) {
     final List<Product> list = [];
     for (var i = 0; i < quantity; i++) {
       list.add(

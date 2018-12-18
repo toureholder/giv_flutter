@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:giv_flutter/model/product/Product.dart';
+import 'package:giv_flutter/model/product/product.dart';
 import 'package:giv_flutter/util/presentation/app_bar_builder.dart';
 import 'package:giv_flutter/util/presentation/dots_indicator.dart';
 import 'package:cached_network_image/cached_network_image.dart';
