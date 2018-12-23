@@ -15,11 +15,11 @@ class ProductCategory {
       ),
       ProductCategory(
           title: "Livros - Brasília, DF",
-          products: Product.getMockList(6, prefix: "2")
+          products: Product.getMockList(6)
       ),
       ProductCategory(
           title: "Roupas femininas - Brasília, DF",
-          products: Product.getMockList(6, prefix: "9")
+          products: Product.getMockList(6)
       )
     ];
   }

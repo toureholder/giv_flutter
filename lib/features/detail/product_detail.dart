@@ -41,6 +41,7 @@ class ProductDetail extends StatelessWidget {
   }
 
   Padding _userRow() {
+    final user = product.user;
     return Padding(
         padding: EdgeInsets.only(left: Dimens.default_horizontal_margin, right: Dimens.default_horizontal_margin),
         child: Row(
@@ -51,12 +52,12 @@ class ProductDetail extends StatelessWidget {
                 fit: BoxFit.cover,
                 width: 32.0,
                 height: 32.0,
-                imageUrl: "https://randomuser.me/api/portraits/women/17.jpg",
+                imageUrl: user.avatarUrl,
               ),
             ),
             Spacing.horizontal(Dimens.grid(6)),
             Text(
-              'Mariano Angelino',
+              user.name,
               style: CustomTypography.body2,
             )
           ],
@@ -108,7 +109,7 @@ class ProductDetail extends StatelessWidget {
           child: new Center(
             child: new DotsIndicator(
               controller: _pageController,
-              itemCount: 5,
+              itemCount: product.imageUrls.length,
               onPageSelected: (int page) {
                 _pageController.animateToPage(
                   page,
