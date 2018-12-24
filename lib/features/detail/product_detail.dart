@@ -1,13 +1,13 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:giv_flutter/features/detail/photo_view_page.dart';
 import 'package:giv_flutter/model/product/product.dart';
 import 'package:giv_flutter/util/presentation/app_bar_builder.dart';
-import 'package:giv_flutter/util/presentation/dots_indicator.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:giv_flutter/util/presentation/buttons.dart';
 import 'package:giv_flutter/util/presentation/dimens.dart';
+import 'package:giv_flutter/util/presentation/image_carousel.dart';
 import 'package:giv_flutter/util/presentation/spacing.dart';
 import 'package:giv_flutter/util/presentation/typography.dart';
-import 'package:giv_flutter/util/presentation/buttons.dart';
-import 'package:giv_flutter/features/detail/photo_view_page.dart';
 
 class ProductDetail extends StatelessWidget {
   final Product product;
@@ -19,7 +19,7 @@ class ProductDetail extends StatelessWidget {
     return Scaffold(
       appBar: AppBarBuilder().build(),
       body: ListView(children: <Widget>[
-        _carouselWithIndicator(context),
+        _imageCarousel(context, product.imageUrls),
         _textPadding(Text(product.title, style: CustomTypography.headline6)),
         _textPadding(Text(product.location, style: CustomTypography.subtitle2)),
         _iWantItButton(context),
@@ -75,63 +75,14 @@ class ProductDetail extends StatelessWidget {
     );
   }
 
-  Stack _carouselWithIndicator(BuildContext context) {
+  Widget _imageCarousel(BuildContext context, List<String> imageUrls) {
     final _pageController = PageController();
-    return new Stack(
-      children: <Widget>[
-        _imageCarousel(context, _pageController),
-        _dotIndicator(_pageController)
-      ],
-    );
-  }
-
-  Container _imageCarousel(BuildContext context, PageController _pageController) {
-    return new Container(
-        height: 300.0,
-        color: Colors.blue,
-        child: new PageView(
-          controller: _pageController,
-          children: _buildImageList(context, product.imageUrls),
-        ));
-  }
-
-  Positioned _dotIndicator(PageController _pageController) {
-    final _kDuration = const Duration(milliseconds: 300);
-    final _kCurve = Curves.ease;
-
-    return new Positioned(
-        bottom: 0.0,
-        left: 0.0,
-        right: 0.0,
-        child: new Container(
-          color: Colors.grey[800].withOpacity(0.25),
-          padding: const EdgeInsets.all(10.0),
-          child: new Center(
-            child: new DotsIndicator(
-              controller: _pageController,
-              itemCount: product.imageUrls.length,
-              onPageSelected: (int page) {
-                _pageController.animateToPage(
-                  page,
-                  duration: _kDuration,
-                  curve: _kCurve,
-                );
-              },
-            ),
-          ),
-        ));
-  }
-
-  List<Widget> _buildImageList(BuildContext context, List<String> imgList) =>
-      imgList.map((url) => _buildFadeInImage(context, url)).toList();
-
-  Widget _buildFadeInImage(BuildContext context, String url) {
-    return GestureDetector(
-      onTap: (){_pushPhotoView(context, url);},
-      child: CachedNetworkImage(
-          placeholder: Image.asset('images/placeholder_home_banner_image.jpg'),
-          fit: BoxFit.cover,
-          imageUrl: url),
+    return ImageCarousel(
+      imageUrls: imageUrls,
+      height: 300.0,
+      pageController: _pageController,
+      onTap: _pushPhotoView,
+      withIndicator: true,
     );
   }
 
