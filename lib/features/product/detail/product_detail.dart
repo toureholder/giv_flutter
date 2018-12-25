@@ -81,7 +81,10 @@ class ProductDetail extends StatelessWidget {
       imageUrls: imageUrls,
       height: 300.0,
       pageController: _pageController,
-      onTap: _pushPhotoView,
+      onTap: () {
+        int index = _pageController.page.toInt();
+        _pushPhotoView(context, imageUrls[index]);
+      },
       withIndicator: true,
     );
   }

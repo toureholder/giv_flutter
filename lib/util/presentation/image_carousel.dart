@@ -26,10 +26,7 @@ class ImageCarousel extends StatelessWidget {
       Container(
           height: height,
           color: (backgroundColor == null) ? Colors.grey[100] : backgroundColor,
-          child: new PageView(
-            controller: pageController,
-            children: _buildImageList(context, imageUrls),
-          )
+          child: _buildPageView(context),
       ),
     ];
 
@@ -40,12 +37,25 @@ class ImageCarousel extends StatelessWidget {
     return Stack(children: widgets);
   }
 
-  List<Widget> _buildImageList(BuildContext context, List<String> imgList) =>
-      imgList.map((url) => _buildFadeInImage(context, url)).toList();
+  PageView _buildPageView(BuildContext context) {
+    var configuration = createLocalImageConfiguration(context);
+    _preLoadNextImage(configuration, 0);
 
-  Widget _buildFadeInImage(BuildContext context, String url) {
+    return PageView(
+          controller: pageController,
+          children: _buildImageList(imageUrls),
+          onPageChanged: (int page) {
+            _preLoadNextImage(configuration, page);
+          },
+        );
+  }
+
+  List<Widget> _buildImageList(List<String> imgList) =>
+      imgList.map((url) => _buildFadeInImage(url)).toList();
+
+  Widget _buildFadeInImage(String url) {
     return GestureDetector(
-      onTap: () { onTap(context, url); },
+      onTap: () { onTap(); },
       child: CachedNetworkImage(
           placeholder: Image.asset('images/placeholder_home_banner_image.jpg'),
           fit: BoxFit.cover,
@@ -78,5 +88,12 @@ class ImageCarousel extends StatelessWidget {
             ),
           ),
         ));
+  }
+
+  void _preLoadNextImage(ImageConfiguration configuration, int page) {
+    final nextPage = page + 1;
+    if (nextPage < imageUrls.length) {
+      CachedNetworkImageProvider(imageUrls[nextPage])..resolve(configuration);
+    }
   }
 }
