@@ -1,5 +1,5 @@
-import 'package:photo_view/photo_view.dart';
 import 'package:flutter/material.dart';
+import 'package:photo_view/photo_view.dart';
 
 class PhotoViewPage extends StatelessWidget {
   final String imageUrl;
@@ -16,7 +16,7 @@ class PhotoViewPage extends StatelessWidget {
       body: Container(
         color: Colors.black,
         child: PhotoView(
-            minScale: PhotoViewComputedScale.contained * 0.5,
+            minScale: PhotoViewComputedScale.contained * 1,
             maxScale: PhotoViewComputedScale.covered * 5.0,
             imageProvider: NetworkImage(imageUrl)
         ),

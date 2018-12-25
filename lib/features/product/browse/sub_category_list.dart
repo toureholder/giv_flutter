@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:giv_flutter/features/browse/search_result.dart';
+import 'package:giv_flutter/features/product/browse/search_result.dart';
 import 'package:giv_flutter/util/presentation/app_bar_builder.dart';
 
 class SubCategoryList extends StatelessWidget {

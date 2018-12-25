@@ -1,9 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:giv_flutter/features/product/detail/product_detail.dart';
 import 'package:giv_flutter/model/product/product.dart';
 import 'package:giv_flutter/util/presentation/app_bar_builder.dart';
 import 'package:giv_flutter/util/presentation/dimens.dart';
-import 'package:giv_flutter/features/detail/product_detail.dart';
 
 class SearchResult extends StatelessWidget {
   final String title;

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:giv_flutter/features/browse/sub_category_list.dart';
+import 'package:giv_flutter/features/product/browse/sub_category_list.dart';
 import 'package:giv_flutter/util/presentation/custom_icons_icons.dart';
 import 'package:giv_flutter/util/presentation/dimens.dart';
 

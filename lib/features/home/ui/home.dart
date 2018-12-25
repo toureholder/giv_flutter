@@ -2,7 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel/carousel.dart';
 import 'package:flutter/material.dart';
 import 'package:giv_flutter/custom/content_stream_builder.dart';
-import 'package:giv_flutter/features/detail/product_detail.dart';
+import 'package:giv_flutter/features/product/detail/product_detail.dart';
 import 'package:giv_flutter/features/home/bloc/home_bloc.dart';
 import 'package:giv_flutter/features/home/model/home_content.dart';
 import 'package:giv_flutter/model/carousel/carousel_item.dart';
