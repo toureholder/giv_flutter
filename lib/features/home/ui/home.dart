@@ -9,6 +9,7 @@ import 'package:giv_flutter/model/carousel/carousel_item.dart';
 import 'package:giv_flutter/model/product/product.dart';
 import 'package:giv_flutter/util/presentation/app_bar_builder.dart';
 import 'package:giv_flutter/util/presentation/dimens.dart';
+import 'package:giv_flutter/util/presentation/rounded_corners.dart';
 import 'package:giv_flutter/util/presentation/spacing.dart';
 
 class Home extends StatefulWidget {
@@ -67,7 +68,7 @@ class _HomeState extends State<Home> {
     return Padding(
       padding: EdgeInsets.only(top: Dimens.grid(4), bottom: Dimens.grid(16)),
       child: SizedBox(
-            height: 120.0,
+            height: Dimens.home_product_image_dimension,
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
               itemCount: products.length,
@@ -88,11 +89,19 @@ class _HomeState extends State<Home> {
         padding: EdgeInsets.only(
             left: Dimens.default_horizontal_margin,
             right: isLastItem ? Dimens.default_horizontal_margin : 0.0),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(5.0),
+        child: RoundedCorners(
           child: CachedNetworkImage(
+              placeholder: RoundedCorners(
+                child: Container(
+                  height: Dimens.home_product_image_dimension,
+                  width: Dimens.home_product_image_dimension,
+                  decoration: BoxDecoration(
+                    color: Colors.grey[200]
+                  ),
+                ),
+              ),
               fit: BoxFit.cover,
-              width: 120.0,
+              width: Dimens.home_product_image_dimension,
               imageUrl: product.imageUrls.first,
           ),
         ),
@@ -146,8 +155,8 @@ class _HomeState extends State<Home> {
       );
   }
 
-  Container _buildCarouselContainer(List<CarouselItem> heroItems) {
-    return Container(
+  SizedBox _buildCarouselContainer(List<CarouselItem> heroItems) {
+    return SizedBox(
       child: _buildCarousel(heroItems),
       height: 156.0,
     );
@@ -165,7 +174,11 @@ class _HomeState extends State<Home> {
 
   CachedNetworkImage _buildFadeInImage(String url) {
     return CachedNetworkImage(
-        placeholder: Image.asset('images/placeholder_home_banner_image.jpg'),
+        placeholder: Container(
+          decoration: BoxDecoration(
+              color: Colors.grey[200]
+          ),
+        ),
         fit: BoxFit.cover,
         imageUrl: url);
   }

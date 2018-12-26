@@ -57,7 +57,6 @@ class ImageCarousel extends StatelessWidget {
     return GestureDetector(
       onTap: () { onTap(); },
       child: CachedNetworkImage(
-          placeholder: Image.asset('images/placeholder_home_banner_image.jpg'),
           fit: BoxFit.cover,
           imageUrl: url),
     );

@@ -4,6 +4,7 @@ import 'package:giv_flutter/features/product/detail/product_detail.dart';
 import 'package:giv_flutter/model/product/product.dart';
 import 'package:giv_flutter/util/presentation/app_bar_builder.dart';
 import 'package:giv_flutter/util/presentation/dimens.dart';
+import 'package:giv_flutter/util/presentation/rounded_corners.dart';
 
 class SearchResult extends StatelessWidget {
   final String title;
@@ -108,14 +109,20 @@ class SearchResult extends StatelessWidget {
   }
 
   Widget _productImage(Product product) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(5.0),
+    return RoundedCorners(
       child: CachedNetworkImage(
-            placeholder:
-                Image.asset('images/placeholder_home_banner_image.jpg'),
-            fit: BoxFit.cover,
-            height: 128.0,
-            imageUrl: product.imageUrls.first),
+          placeholder: RoundedCorners(
+            child: Container(
+              height: Dimens.home_product_image_dimension,
+              width: Dimens.home_product_image_dimension,
+              decoration: BoxDecoration(
+                  color: Colors.grey[200]
+              ),
+            ),
+          ),
+          fit: BoxFit.cover,
+          height: Dimens.search_result_image_height,
+          imageUrl: product.imageUrls.first),
     );
   }
 
