@@ -1,14 +1,14 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:carousel/carousel.dart';
 import 'package:flutter/material.dart';
 import 'package:giv_flutter/custom/content_stream_builder.dart';
-import 'package:giv_flutter/features/product/detail/product_detail.dart';
 import 'package:giv_flutter/features/home/bloc/home_bloc.dart';
 import 'package:giv_flutter/features/home/model/home_content.dart';
+import 'package:giv_flutter/features/product/detail/product_detail.dart';
 import 'package:giv_flutter/model/carousel/carousel_item.dart';
 import 'package:giv_flutter/model/product/product.dart';
 import 'package:giv_flutter/util/presentation/app_bar_builder.dart';
 import 'package:giv_flutter/util/presentation/dimens.dart';
+import 'package:giv_flutter/util/presentation/image_carousel.dart';
 import 'package:giv_flutter/util/presentation/rounded_corners.dart';
 import 'package:giv_flutter/util/presentation/spacing.dart';
 
@@ -155,32 +155,16 @@ class _HomeState extends State<Home> {
       );
   }
 
-  SizedBox _buildCarouselContainer(List<CarouselItem> heroItems) {
-    return SizedBox(
-      child: _buildCarousel(heroItems),
+  Widget _buildCarouselContainer(List<CarouselItem> heroItems) {
+    final _pageController = PageController();
+    return ImageCarousel(
+      imageUrls: heroItems.map((item) => item.imageUrl).toList(),
       height: 156.0,
+      pageController: _pageController,
+      onTap: () {},
+      autoAdvance: true,
+      loop: true,
     );
-  }
-
-  Carousel _buildCarousel(List<CarouselItem> heroItems) {
-    return Carousel(
-      children: _buildImageList(heroItems),
-      displayDuration: Duration(seconds: 10),
-    );
-  }
-
-  List<Widget> _buildImageList(List<CarouselItem> heroItems) =>
-      heroItems.map((item) => _buildFadeInImage(item.imageUrl)).toList();
-
-  CachedNetworkImage _buildFadeInImage(String url) {
-    return CachedNetworkImage(
-        placeholder: Container(
-          decoration: BoxDecoration(
-              color: Colors.grey[200]
-          ),
-        ),
-        fit: BoxFit.cover,
-        imageUrl: url);
   }
 
   void _pushProductDetail(BuildContext context, Product product) {
