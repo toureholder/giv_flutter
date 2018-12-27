@@ -18,10 +18,13 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  HomeBloc _homeBloc;
+
   @override
   void initState() {
     super.initState();
-    homeBloc.fetchContent();
+    _homeBloc = HomeBloc();
+    _homeBloc.fetchContent();
   }
 
   @override
@@ -29,7 +32,7 @@ class _HomeState extends State<Home> {
     return Scaffold(
       appBar: AppBarBuilder().setTitle('Início').build(),
       body: ContentStreamBuilder(context,
-          stream: homeBloc.content,
+          stream: _homeBloc.content,
           onHasData: _buildMainListView
       ),
     );
@@ -37,7 +40,7 @@ class _HomeState extends State<Home> {
 
   @override
   void dispose() {
-    homeBloc.dispose();
+    _homeBloc.dispose();
     super.dispose();
   }
 
