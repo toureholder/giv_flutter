@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:giv_flutter/features/base/model/base_page.dart';
 import 'package:giv_flutter/features/home/ui/home.dart';
-import 'package:giv_flutter/features/product/browse/search.dart';
+import 'package:giv_flutter/features/search/ui/search.dart';
 import 'package:giv_flutter/util/presentation/custom_icons_icons.dart';
 import 'package:giv_flutter/util/presentation/themes.dart';
 

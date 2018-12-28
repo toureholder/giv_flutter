@@ -24,7 +24,7 @@ class SearchResult extends StatelessWidget {
   }
 
   List<Widget> _buildResultsGrid(BuildContext context) {
-    var products = Product.getMockList(13);
+    var products = Product.getMockList();
     var widgets = <Widget>[];
 
     widgets.add(_buildResultsHeader(products.length)); // Add Header

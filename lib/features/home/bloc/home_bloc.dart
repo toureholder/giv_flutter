@@ -27,7 +27,6 @@ class HomeBloc {
     } catch (err) {
       _contentPublishSubject.sink.addError(err);
     }
-
   }
 }
 

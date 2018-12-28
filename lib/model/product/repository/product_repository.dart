@@ -6,4 +6,7 @@ class ProductRepository {
 
   Future<List<ProductCategory>> getFeaturedProductsCategories() =>
       productApi.getFeaturedProductsCategories();
+
+  Future<List<ProductCategory>> getSearchCategories() =>
+      productApi.getSearchCategories();
 }

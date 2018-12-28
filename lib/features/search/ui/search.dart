@@ -1,34 +1,50 @@
 import 'package:flutter/material.dart';
+import 'package:giv_flutter/util/data/content_stream_builder.dart';
 import 'package:giv_flutter/features/product/browse/sub_category_list.dart';
+import 'package:giv_flutter/features/search/bloc/search_bloc.dart';
+import 'package:giv_flutter/model/product/product_category.dart';
 import 'package:giv_flutter/util/presentation/custom_icons_icons.dart';
 import 'package:giv_flutter/util/presentation/dimens.dart';
 
-class Search extends StatelessWidget {
-  final List<String> categories = [
-    'Livros',
-    'Roupa',
-    'Eletrodomésticos',
-    'Eletrônicos',
-    'Esportes e lazer',
-    'Música e hobbies',
-    'Serviços'
-  ];
+class Search extends StatefulWidget {
+  @override
+  _SearchState createState() => _SearchState();
+}
+
+class _SearchState extends State<Search> {
+  SearchBloc _searchBloc;
+
+  @override
+  void initState() {
+    super.initState();
+    _searchBloc = SearchBloc();
+    _searchBloc.fetchCategories();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ListView(
-        children: <Widget>[
-          _buildSearchFieldContainer(),
-          ListView.builder(
-              shrinkWrap: true,
-              itemCount: categories.length,
-              itemBuilder: (context, i) {
-                return _buildListItem(context, categories[i]);
-              }
-          )
-        ],
+      body: ContentStreamBuilder(
+        stream: _searchBloc.categories,
+        onHasData: (data) {
+          return _buildMainListView(context, data);
+        },
       ),
+    );
+  }
+
+  ListView _buildMainListView(BuildContext context, List<ProductCategory> categories) {
+    return ListView(
+      children: <Widget>[
+        _buildSearchFieldContainer(),
+        ListView.builder(
+            shrinkWrap: true,
+            itemCount: categories.length,
+            itemBuilder: (context, i) {
+              return _buildListItem(context, categories[i].title);
+            }
+        )
+      ],
     );
   }
 

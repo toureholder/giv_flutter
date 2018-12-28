@@ -3,14 +3,13 @@ import 'package:flutter/material.dart';
 class ContentStreamBuilder<T> extends StreamBuilder<T> {
   final Function onHasData;
   final Stream<T> stream;
-  final BuildContext context;
 
-  ContentStreamBuilder(this.context, {this.stream, this.onHasData}) :
+  ContentStreamBuilder({@required this.stream, @required this.onHasData}) :
         super(
           stream: stream,
           builder: (context, AsyncSnapshot<T> snapshot) {
             if (snapshot.hasData) {
-              return onHasData(context, snapshot.data);
+              return onHasData(snapshot.data);
             } else if (snapshot.hasError) {
               return Center(child: Text(snapshot.error.toString()));
             } else {

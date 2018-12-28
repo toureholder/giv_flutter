@@ -16,11 +16,13 @@ class Product {
     this.user
   });
 
-  static List<Product> getMockList(int quantity) {
+  static List<Product> getMockList({int quantity}) {
     final faker = new Faker();
     final List<Product> list = [];
 
-    for (var i = 0; i < quantity; i++) {
+    int size = quantity ?? faker.randomGenerator.integer(6, min: 3);
+
+    for (var i = 0; i < size; i++) {
       final numberOfImages = faker.randomGenerator.integer(8, min: 1);
       final imageIds = faker.randomGenerator.numbers(1000, numberOfImages);
       final imageUrls = imageIds.map((id) {

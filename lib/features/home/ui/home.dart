@@ -1,6 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:giv_flutter/custom/content_stream_builder.dart';
+import 'package:giv_flutter/util/data/content_stream_builder.dart';
 import 'package:giv_flutter/features/home/bloc/home_bloc.dart';
 import 'package:giv_flutter/features/home/model/home_content.dart';
 import 'package:giv_flutter/features/product/detail/product_detail.dart';
@@ -31,9 +31,11 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBarBuilder().setTitle('Início').build(),
-      body: ContentStreamBuilder(context,
+      body: ContentStreamBuilder(
           stream: _homeBloc.content,
-          onHasData: _buildMainListView
+          onHasData: (data) {
+            return _buildMainListView(context, data);
+          }
       ),
     );
   }
