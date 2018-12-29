@@ -1,20 +1,30 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:giv_flutter/base/base_state.dart';
 import 'package:giv_flutter/features/product/detail/product_detail.dart';
 import 'package:giv_flutter/model/product/product.dart';
+import 'package:giv_flutter/model/product/product_category.dart';
 import 'package:giv_flutter/util/presentation/app_bar_builder.dart';
 import 'package:giv_flutter/util/presentation/dimens.dart';
 import 'package:giv_flutter/util/presentation/rounded_corners.dart';
 
-class SearchResult extends StatelessWidget {
-  final String title;
 
-  const SearchResult({Key key, this.title}) : super(key: key);
+class SearchResult extends StatefulWidget {
+  final ProductCategory category;
+
+  const SearchResult({Key key, this.category}) : super(key: key);
 
   @override
+  _SearchResultState createState() => _SearchResultState();
+}
+
+class _SearchResultState extends BaseState<SearchResult> {
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
+
     return Scaffold(
-        appBar: AppBarBuilder().setTitle(title).build(),
+        appBar: AppBarBuilder().setTitle(widget.category.title).build(),
         body: ListView(
           padding: EdgeInsets.symmetric(
               horizontal: Dimens.grid(4),
@@ -81,7 +91,7 @@ class SearchResult extends StatelessWidget {
   Widget _buildGridCell(BuildContext context, Product product) {
     return GestureDetector(
       onTap: () {
-        _pushProductDetail(context, product);
+        navigation.push(ProductDetail(product: product));
       },
       child: Container(
         padding: EdgeInsets.all(Dimens.grid(6)),
@@ -139,16 +149,6 @@ class SearchResult extends StatelessWidget {
               label: Text('Distrito Federal'))
         ],
       ),
-    );
-  }
-
-  void _pushProductDetail(BuildContext context, Product product) {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (BuildContext context) {
-              return ProductDetail(product: product);
-            })
     );
   }
 }

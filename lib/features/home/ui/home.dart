@@ -1,11 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:giv_flutter/util/data/content_stream_builder.dart';
+import 'package:giv_flutter/base/base_state.dart';
 import 'package:giv_flutter/features/home/bloc/home_bloc.dart';
 import 'package:giv_flutter/features/home/model/home_content.dart';
 import 'package:giv_flutter/features/product/detail/product_detail.dart';
 import 'package:giv_flutter/model/carousel/carousel_item.dart';
 import 'package:giv_flutter/model/product/product.dart';
+import 'package:giv_flutter/util/data/content_stream_builder.dart';
 import 'package:giv_flutter/util/presentation/app_bar_builder.dart';
 import 'package:giv_flutter/util/presentation/dimens.dart';
 import 'package:giv_flutter/util/presentation/image_carousel.dart';
@@ -17,7 +18,7 @@ class Home extends StatefulWidget {
   _HomeState createState() => _HomeState();
 }
 
-class _HomeState extends State<Home> {
+class _HomeState extends BaseState<Home> {
   HomeBloc _homeBloc;
 
   @override
@@ -29,6 +30,8 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
+
     return Scaffold(
       appBar: AppBarBuilder().setTitle('Início').build(),
       body: ContentStreamBuilder(
@@ -88,7 +91,7 @@ class _HomeState extends State<Home> {
   Widget _buildItem(BuildContext context, Product product, {isLastItem = false}) {
     return GestureDetector(
       onTap: () {
-        _pushProductDetail(context, product);
+        navigation.push(ProductDetail(product: product));
       },
       child: Container(
         padding: EdgeInsets.only(
@@ -169,16 +172,6 @@ class _HomeState extends State<Home> {
       onTap: () {},
       autoAdvance: true,
       loop: true,
-    );
-  }
-
-  void _pushProductDetail(BuildContext context, Product product) {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (BuildContext context) {
-              return ProductDetail(product: product);
-            })
     );
   }
 }

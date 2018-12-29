@@ -1,44 +1,41 @@
 import 'package:flutter/material.dart';
-import 'package:giv_flutter/features/product/browse/search_result.dart';
+import 'package:giv_flutter/base/base_state.dart';
+import 'package:giv_flutter/model/product/product_category.dart';
 import 'package:giv_flutter/util/presentation/app_bar_builder.dart';
 
-class SubCategoryList extends StatelessWidget {
-  final String title;
+class SubCategoryList extends StatefulWidget {
+  final ProductCategory category;
 
-  const SubCategoryList({Key key, this.title}) : super(key: key);
+  const SubCategoryList({Key key, this.category}) : super(key: key);
 
   @override
+  _SubCategoryListState createState() => _SubCategoryListState();
+}
+
+class _SubCategoryListState extends BaseState<SubCategoryList> {
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
+
     return Scaffold(
-      appBar: AppBarBuilder().setTitle(title).build(),
+      appBar: AppBarBuilder().setTitle(widget.category.title).build(),
       body: ListView(
-        children: <Widget>[
-          _buildListItem(context, 'Tudo de livros'),
-          _buildListItem(context, 'Economia'),
-          _buildListItem(context, 'Romance'),
-          _buildListItem(context, 'Auto-ajuda'),
-          _buildListItem(context, 'Em inglês'),
-        ],
+        children: _buildList(context, widget.category.subCategories),
       ),
     );
   }
 
-  ListTile _buildListItem(BuildContext context, String title) {
-    return ListTile(
-      title: Text(title),
-      onTap: () {
-        _pushSearchResult(context, title);
-      },
-    );
+  List<Widget> _buildList(
+      BuildContext context, List<ProductCategory> categories) {
+    return categories.map((it) => _buildListItem(context, it)).toList();
   }
 
-  void _pushSearchResult(BuildContext context, String title) {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (BuildContext context) {
-              return SearchResult(title: title);
-            })
+  ListTile _buildListItem(BuildContext context, ProductCategory category) {
+    return ListTile(
+      title: Text(category.title),
+      onTap: () {
+        category.goToSubCategoryOrResult(navigation);
+      },
     );
   }
 }

@@ -1,4 +1,7 @@
+import 'package:giv_flutter/features/product/browse/search_result.dart';
+import 'package:giv_flutter/features/product/browse/sub_category_list.dart';
 import 'package:giv_flutter/model/product/product.dart';
+import 'package:giv_flutter/util/navigation/navigation.dart';
 import 'package:meta/meta.dart';
 
 class ProductCategory {
@@ -12,6 +15,14 @@ class ProductCategory {
     @required this.title,
     this.products,
     this.subCategories});
+
+  void goToSubCategoryOrResult(Navigation navigation) {
+    if (subCategories?.isNotEmpty ?? false) {
+      navigation.push(SubCategoryList(category: this));
+    } else {
+      navigation.push(SearchResult(category: this));
+    }
+  }
 
   static List<ProductCategory> homeMock() {
     return [

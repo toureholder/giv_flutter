@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:giv_flutter/util/data/content_stream_builder.dart';
-import 'package:giv_flutter/features/product/browse/sub_category_list.dart';
+import 'package:giv_flutter/base/base_state.dart';
 import 'package:giv_flutter/features/search/bloc/search_bloc.dart';
 import 'package:giv_flutter/model/product/product_category.dart';
+import 'package:giv_flutter/util/data/content_stream_builder.dart';
 import 'package:giv_flutter/util/presentation/custom_icons_icons.dart';
 import 'package:giv_flutter/util/presentation/dimens.dart';
 
@@ -11,7 +11,7 @@ class Search extends StatefulWidget {
   _SearchState createState() => _SearchState();
 }
 
-class _SearchState extends State<Search> {
+class _SearchState extends BaseState<Search> {
   SearchBloc _searchBloc;
 
   @override
@@ -23,6 +23,8 @@ class _SearchState extends State<Search> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
+
     return Scaffold(
       body: ContentStreamBuilder(
         stream: _searchBloc.categories,
@@ -41,7 +43,7 @@ class _SearchState extends State<Search> {
             shrinkWrap: true,
             itemCount: categories.length,
             itemBuilder: (context, i) {
-              return _buildListItem(context, categories[i].title);
+              return _buildListItem(context, categories[i]);
             }
         )
       ],
@@ -71,23 +73,13 @@ class _SearchState extends State<Search> {
     );
   }
 
-  ListTile _buildListItem(BuildContext context, String title) {
+  ListTile _buildListItem(BuildContext context, ProductCategory category) {
     return ListTile(
-      title: Text(title),
+      title: Text(category.title),
       trailing: Icon(Icons.chevron_right),
       onTap: () {
-        _pushSubCategoryList(context, title);
+        category.goToSubCategoryOrResult(navigation);
       },
-    );
-  }
-
-  void _pushSubCategoryList(BuildContext context, String title) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-          builder: (BuildContext context) {
-            return SubCategoryList(title: title);
-          })
     );
   }
 }

@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:giv_flutter/base/base_state.dart';
 import 'package:giv_flutter/model/product/product.dart';
 import 'package:giv_flutter/util/presentation/app_bar_builder.dart';
 import 'package:giv_flutter/util/presentation/buttons.dart';
@@ -9,13 +10,28 @@ import 'package:giv_flutter/util/presentation/photo_view_page.dart';
 import 'package:giv_flutter/util/presentation/spacing.dart';
 import 'package:giv_flutter/util/presentation/typography.dart';
 
-class ProductDetail extends StatelessWidget {
+class ProductDetail extends StatefulWidget {
   final Product product;
 
   const ProductDetail({Key key, this.product}) : super(key: key);
 
   @override
+  _ProductDetailState createState() => _ProductDetailState();
+}
+
+class _ProductDetailState extends BaseState<ProductDetail> {
+  Product product;
+
+  @override
+  void initState() {
+    super.initState();
+    product = widget.product;
+  }
+
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
+
     return Scaffold(
       appBar: AppBarBuilder().build(),
       body: ListView(children: <Widget>[
@@ -43,7 +59,9 @@ class ProductDetail extends StatelessWidget {
   Padding _userRow() {
     final user = product.user;
     return Padding(
-        padding: EdgeInsets.only(left: Dimens.default_horizontal_margin, right: Dimens.default_horizontal_margin),
+        padding: EdgeInsets.only(
+            left: Dimens.default_horizontal_margin,
+            right: Dimens.default_horizontal_margin),
         child: Row(
           children: <Widget>[
             ClipRRect(
@@ -83,19 +101,9 @@ class ProductDetail extends StatelessWidget {
       pageController: _pageController,
       onTap: () {
         int index = _pageController.page.toInt();
-        _pushPhotoView(context, imageUrls[index]);
+        navigation.push(PhotoViewPage(imageUrl: imageUrls[index]));
       },
       withIndicator: true,
-    );
-  }
-
-  void _pushPhotoView(BuildContext context, String imageUrl) {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (BuildContext context) {
-              return PhotoViewPage(imageUrl: imageUrl,);
-            })
     );
   }
 }
