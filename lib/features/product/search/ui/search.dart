@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:giv_flutter/base/base_state.dart';
-import 'package:giv_flutter/features/search/bloc/search_bloc.dart';
+import 'package:giv_flutter/features/product/search/bloc/search_bloc.dart';
 import 'package:giv_flutter/model/product/product_category.dart';
 import 'package:giv_flutter/util/data/content_stream_builder.dart';
 import 'package:giv_flutter/util/presentation/custom_icons_icons.dart';
