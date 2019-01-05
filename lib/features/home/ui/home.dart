@@ -33,7 +33,7 @@ class _HomeState extends BaseState<Home> {
     super.build(context);
 
     return Scaffold(
-      appBar: AppBarBuilder().setTitle('Início').build(),
+      appBar: AppBarBuilder().setTitle(string('home_title')).build(),
       body: ContentStreamBuilder(
           stream: _homeBloc.content,
           onHasData: (data) {
@@ -129,7 +129,7 @@ class _HomeState extends BaseState<Home> {
           ),
           FlatButton(
             onPressed: (){},
-            child: Text('MAIS'),
+            child: Text(string('common_more').toUpperCase()),
           ),
         ],
       ),

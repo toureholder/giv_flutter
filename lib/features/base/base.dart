@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:giv_flutter/base/base_state.dart';
 import 'package:giv_flutter/features/base/model/base_page.dart';
 import 'package:giv_flutter/features/home/ui/home.dart';
 import 'package:giv_flutter/features/product/search/ui/search.dart';
@@ -10,34 +11,16 @@ class Base extends StatefulWidget {
   _BaseState createState() => new _BaseState();
 }
 
-class _BaseState extends State<Base> {
+class _BaseState extends BaseState<Base> {
   int _currentIndex = 0;
-
-  final List<BasePage> _pages = [
-    BasePage(
-        child: Home(),
-        icon: CustomIcons.ib_le_house,
-        iconText: 'Início'),
-    BasePage(
-        child: Search(),
-        icon: CustomIcons.ib_le_magnifying_glass,
-        iconText: 'Busca'),
-    BasePage(
-        child: Home(),
-        icon: CustomIcons.ib_b_trust,
-        iconText: 'Anunciar'),
-    BasePage(
-        child: Home(),
-        icon: CustomIcons.ib_le_chatv2,
-        iconText: 'Mensagens'),
-    BasePage(
-        child: Home(),
-        icon: CustomIcons.ib_b_team,
-        iconText: 'Projetos'),
-  ];
+  List<BasePage> _pages;
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
+
+    _setupPages();
+
     return new Scaffold(
       body: _pages[_currentIndex].child,
       bottomNavigationBar: Themes.ofPrimaryBlue(_buildBottomNavigationBar()),
@@ -73,5 +56,30 @@ class _BaseState extends State<Base> {
     setState(() {
       _currentIndex = index;
     });
+  }
+
+  void _setupPages() {
+    _pages = [
+      BasePage(
+          child: Home(),
+          icon: CustomIcons.ib_le_house,
+          iconText: string('base_page_title_home')),
+      BasePage(
+          child: Search(),
+          icon: CustomIcons.ib_le_magnifying_glass,
+          iconText: string('base_page_title_search')),
+      BasePage(
+          child: Home(),
+          icon: CustomIcons.ib_b_trust,
+          iconText: string('base_page_title_post')),
+      BasePage(
+          child: Home(),
+          icon: CustomIcons.ib_le_chatv2,
+          iconText: string('base_page_title_messages')),
+      BasePage(
+          child: Home(),
+          icon: CustomIcons.ib_b_team,
+          iconText: string('base_page_title_projects')),
+    ];
   }
 }

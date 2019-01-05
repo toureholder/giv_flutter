@@ -64,7 +64,7 @@ class _SearchState extends BaseState<Search> {
     return TextField(
       decoration: InputDecoration(
           border: InputBorder.none,
-          hintText: 'Busque no Giv',
+          hintText: string('search_hint'),
           hintStyle: TextStyle(color: Colors.grey),
           icon: Icon(
             CustomIcons.ib_le_magnifying_glass,

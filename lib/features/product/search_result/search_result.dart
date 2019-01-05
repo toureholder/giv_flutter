@@ -142,7 +142,7 @@ class _SearchResultState extends BaseState<SearchResult> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          Text('$quantity Resultados'),
+          Text(string('search_result_x_results', formatArg: '$quantity')),
           RaisedButton.icon(
               onPressed: () {},
               icon: Icon(Icons.location_on, color: Colors.grey),

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:giv_flutter/config/i18n/l10n.dart';
+import 'package:giv_flutter/config/i18n/string_localizations.dart';
 import 'package:giv_flutter/features/base/base.dart';
 
 void main() {
@@ -13,7 +16,14 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return new MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
+      onGenerateTitle: (BuildContext context) =>
+          StringLocalizations.of(context).get('app_name'),
+      localizationsDelegates: [
+        const StringLocalizationsDelegate(),
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ],
+      supportedLocales: L10n.supportedLocales,
       theme: new ThemeData(
         primaryColor: Colors.white,
       ),
