@@ -20,7 +20,7 @@ class Product {
     final faker = new Faker();
     final List<Product> list = [];
 
-    int size = quantity ?? faker.randomGenerator.integer(6, min: 3);
+    int size = quantity ?? faker.randomGenerator.integer(20, min: 3);
 
     for (var i = 0; i < size; i++) {
       final numberOfImages = faker.randomGenerator.integer(8, min: 1);

@@ -3,8 +3,7 @@ import 'package:giv_flutter/base/base_state.dart';
 import 'package:giv_flutter/features/product/categories/bloc/categories_bloc.dart';
 import 'package:giv_flutter/model/product/product_category.dart';
 import 'package:giv_flutter/util/data/content_stream_builder.dart';
-import 'package:giv_flutter/util/presentation/custom_icons_icons.dart';
-import 'package:giv_flutter/util/presentation/dimens.dart';
+import 'package:giv_flutter/util/presentation/search_teaser_app_bar.dart';
 
 class Categories extends StatefulWidget {
   @override
@@ -12,13 +11,19 @@ class Categories extends StatefulWidget {
 }
 
 class _CategoriesState extends BaseState<Categories> {
-  CategoriesBloc _searchBloc;
+  CategoriesBloc _categoriesBloc;
 
   @override
   void initState() {
     super.initState();
-    _searchBloc = CategoriesBloc();
-    _searchBloc.fetchCategories();
+    _categoriesBloc = CategoriesBloc();
+    _categoriesBloc.fetchCategories();
+  }
+
+  @override
+  void dispose() {
+    _categoriesBloc.dispose();
+    super.dispose();
   }
 
   @override
@@ -27,7 +32,7 @@ class _CategoriesState extends BaseState<Categories> {
 
     return Scaffold(
       body: ContentStreamBuilder(
-        stream: _searchBloc.categories,
+        stream: _categoriesBloc.categories,
         onHasData: (data) {
           return _buildMainListView(context, data);
         },
@@ -35,41 +40,18 @@ class _CategoriesState extends BaseState<Categories> {
     );
   }
 
-  ListView _buildMainListView(BuildContext context, List<ProductCategory> categories) {
+  ListView _buildMainListView(
+      BuildContext context, List<ProductCategory> categories) {
     return ListView(
       children: <Widget>[
-        _buildSearchFieldContainer(),
+        SearchTeaserAppBar(leading: Icon(Icons.search)),
         ListView.builder(
             shrinkWrap: true,
             itemCount: categories.length,
             itemBuilder: (context, i) {
               return _buildListItem(context, categories[i]);
-            }
-        )
+            })
       ],
-    );
-  }
-
-  Container _buildSearchFieldContainer() {
-    return Container(
-            color: Colors.white,
-            height: kToolbarHeight,
-            child: _buildSearchField(),
-            padding: EdgeInsets.symmetric(horizontal: Dimens.default_horizontal_margin),
-            alignment: Alignment(0.0, 0.0),
-        );
-  }
-
-  TextField _buildSearchField() {
-    return TextField(
-      decoration: InputDecoration(
-          border: InputBorder.none,
-          hintText: string('search_hint'),
-          hintStyle: TextStyle(color: Colors.grey),
-          icon: Icon(
-            CustomIcons.ib_le_magnifying_glass,
-            color: Colors.grey,
-          )),
     );
   }
 

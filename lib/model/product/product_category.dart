@@ -1,4 +1,4 @@
-import 'package:giv_flutter/features/product/search_result/search_result.dart';
+import 'package:giv_flutter/features/product/search_result/ui/search_result.dart';
 import 'package:giv_flutter/features/product/categories/ui/sub_categories.dart';
 import 'package:giv_flutter/model/product/product.dart';
 import 'package:giv_flutter/util/navigation/navigation.dart';

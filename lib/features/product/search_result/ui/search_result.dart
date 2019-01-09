@@ -2,39 +2,72 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:giv_flutter/base/base_state.dart';
 import 'package:giv_flutter/features/product/detail/product_detail.dart';
+import 'package:giv_flutter/features/product/search_result/bloc/search_result_bloc.dart';
 import 'package:giv_flutter/model/product/product.dart';
 import 'package:giv_flutter/model/product/product_category.dart';
+import 'package:giv_flutter/util/data/content_stream_builder.dart';
 import 'package:giv_flutter/util/presentation/app_bar_builder.dart';
 import 'package:giv_flutter/util/presentation/dimens.dart';
 import 'package:giv_flutter/util/presentation/rounded_corners.dart';
-
+import 'package:giv_flutter/util/presentation/search_teaser_app_bar.dart';
 
 class SearchResult extends StatefulWidget {
   final ProductCategory category;
+  final String searchQuery;
 
-  const SearchResult({Key key, this.category}) : super(key: key);
+  const SearchResult({Key key, this.category, this.searchQuery})
+      : super(key: key);
 
   @override
   _SearchResultState createState() => _SearchResultState();
 }
 
 class _SearchResultState extends BaseState<SearchResult> {
+  SearchResultBloc _searchResultBloc;
+
+  @override
+  void initState() {
+    super.initState();
+    _searchResultBloc = SearchResultBloc();
+    _searchResultBloc.fetchProducts(
+        categoryId: widget?.category?.id, searchQuery: widget.searchQuery);
+  }
+
+  @override
+  void dispose() {
+    _searchResultBloc.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
 
+    var title = widget.category?.title ?? widget.searchQuery;
+
+    var appBar = widget.category == null
+        ? SearchTeaserAppBar(q: widget.searchQuery)
+        : AppBarBuilder().setTitle(title).build();
+
     return Scaffold(
-        appBar: AppBarBuilder().setTitle(widget.category.title).build(),
-        body: ListView(
-          padding: EdgeInsets.symmetric(
-              horizontal: Dimens.grid(4),
-              vertical: Dimens.grid(8)) ,
-          children: _buildResultsGrid(context),
+        appBar: appBar,
+        body: ContentStreamBuilder(
+          stream: _searchResultBloc.products,
+          onHasData: (data) {
+            return _buildMainListView(context, data);
+          },
         ));
   }
 
-  List<Widget> _buildResultsGrid(BuildContext context) {
-    var products = Product.getMockList();
+  ListView _buildMainListView(BuildContext context, List<Product> products) {
+    return ListView(
+      padding: EdgeInsets.symmetric(
+          horizontal: Dimens.grid(4), vertical: Dimens.grid(8)),
+      children: _buildResultsGrid(context, products),
+    );
+  }
+
+  List<Widget> _buildResultsGrid(BuildContext context, List<Product> products) {
     var widgets = <Widget>[];
 
     widgets.add(_buildResultsHeader(products.length)); // Add Header
@@ -112,9 +145,9 @@ class _SearchResultState extends BaseState<SearchResult> {
     return Container(
       padding: EdgeInsets.only(top: Dimens.grid(6)),
       child: Text(
-          product.title,
-          style: Theme.of(context).textTheme.caption,
-        ),
+        product.title,
+        style: Theme.of(context).textTheme.caption,
+      ),
     );
   }
 
@@ -125,9 +158,7 @@ class _SearchResultState extends BaseState<SearchResult> {
             child: Container(
               height: Dimens.home_product_image_dimension,
               width: Dimens.home_product_image_dimension,
-              decoration: BoxDecoration(
-                  color: Colors.grey[200]
-              ),
+              decoration: BoxDecoration(color: Colors.grey[200]),
             ),
           ),
           fit: BoxFit.cover,
