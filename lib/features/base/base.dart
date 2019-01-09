@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:giv_flutter/base/base_state.dart';
 import 'package:giv_flutter/features/base/model/base_page.dart';
 import 'package:giv_flutter/features/home/ui/home.dart';
-import 'package:giv_flutter/features/product/search/ui/search.dart';
+import 'package:giv_flutter/features/product/categories/ui/categories.dart';
 import 'package:giv_flutter/util/presentation/custom_icons_icons.dart';
 import 'package:giv_flutter/util/presentation/themes.dart';
 
@@ -65,7 +65,7 @@ class _BaseState extends BaseState<Base> {
           icon: CustomIcons.ib_le_house,
           iconText: string('base_page_title_home')),
       BasePage(
-          child: Search(),
+          child: Categories(),
           icon: CustomIcons.ib_le_magnifying_glass,
           iconText: string('base_page_title_search')),
       BasePage(

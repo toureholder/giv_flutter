@@ -2,7 +2,7 @@ import 'package:giv_flutter/model/product/product_category.dart';
 import 'package:giv_flutter/model/product/repository/product_repository.dart';
 import 'package:rxdart/rxdart.dart';
 
-class SearchBloc {
+class CategoriesBloc {
   final _productRepository = ProductRepository();
 
   final _categoriesPublishSubject = PublishSubject<List<ProductCategory>>();

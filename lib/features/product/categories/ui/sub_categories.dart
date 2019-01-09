@@ -3,16 +3,16 @@ import 'package:giv_flutter/base/base_state.dart';
 import 'package:giv_flutter/model/product/product_category.dart';
 import 'package:giv_flutter/util/presentation/app_bar_builder.dart';
 
-class SubCategoryList extends StatefulWidget {
+class SubCategories extends StatefulWidget {
   final ProductCategory category;
 
-  const SubCategoryList({Key key, this.category}) : super(key: key);
+  const SubCategories({Key key, this.category}) : super(key: key);
 
   @override
-  _SubCategoryListState createState() => _SubCategoryListState();
+  _SubCategoriesState createState() => _SubCategoriesState();
 }
 
-class _SubCategoryListState extends BaseState<SubCategoryList> {
+class _SubCategoriesState extends BaseState<SubCategories> {
   @override
   Widget build(BuildContext context) {
     super.build(context);

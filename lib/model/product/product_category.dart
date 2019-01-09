@@ -1,5 +1,5 @@
 import 'package:giv_flutter/features/product/search_result/search_result.dart';
-import 'package:giv_flutter/features/product/sub_category_list/sub_category_list.dart';
+import 'package:giv_flutter/features/product/categories/ui/sub_categories.dart';
 import 'package:giv_flutter/model/product/product.dart';
 import 'package:giv_flutter/util/navigation/navigation.dart';
 import 'package:meta/meta.dart';
@@ -18,7 +18,7 @@ class ProductCategory {
 
   void goToSubCategoryOrResult(Navigation navigation) {
     if (subCategories?.isNotEmpty ?? false) {
-      navigation.push(SubCategoryList(category: this));
+      navigation.push(SubCategories(category: this));
     } else {
       navigation.push(SearchResult(category: this));
     }

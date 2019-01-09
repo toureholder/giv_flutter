@@ -1,23 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:giv_flutter/base/base_state.dart';
-import 'package:giv_flutter/features/product/search/bloc/search_bloc.dart';
+import 'package:giv_flutter/features/product/categories/bloc/categories_bloc.dart';
 import 'package:giv_flutter/model/product/product_category.dart';
 import 'package:giv_flutter/util/data/content_stream_builder.dart';
 import 'package:giv_flutter/util/presentation/custom_icons_icons.dart';
 import 'package:giv_flutter/util/presentation/dimens.dart';
 
-class Search extends StatefulWidget {
+class Categories extends StatefulWidget {
   @override
-  _SearchState createState() => _SearchState();
+  _CategoriesState createState() => _CategoriesState();
 }
 
-class _SearchState extends BaseState<Search> {
-  SearchBloc _searchBloc;
+class _CategoriesState extends BaseState<Categories> {
+  CategoriesBloc _searchBloc;
 
   @override
   void initState() {
     super.initState();
-    _searchBloc = SearchBloc();
+    _searchBloc = CategoriesBloc();
     _searchBloc.fetchCategories();
   }
 
