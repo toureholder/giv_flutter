@@ -7,7 +7,7 @@ import 'package:giv_flutter/features/product/detail/product_detail.dart';
 import 'package:giv_flutter/model/carousel/carousel_item.dart';
 import 'package:giv_flutter/model/product/product.dart';
 import 'package:giv_flutter/util/data/content_stream_builder.dart';
-import 'package:giv_flutter/util/presentation/app_bar_builder.dart';
+import 'package:giv_flutter/util/presentation/custom_app_bar.dart';
 import 'package:giv_flutter/util/presentation/dimens.dart';
 import 'package:giv_flutter/util/presentation/image_carousel.dart';
 import 'package:giv_flutter/util/presentation/rounded_corners.dart';
@@ -33,7 +33,7 @@ class _HomeState extends BaseState<Home> {
     super.build(context);
 
     return Scaffold(
-      appBar: AppBarBuilder().setTitle(string('home_title')).build(),
+      appBar: CustomAppBar(title: string('home_title')),
       body: ContentStreamBuilder(
           stream: _homeBloc.content,
           onHasData: (data) {

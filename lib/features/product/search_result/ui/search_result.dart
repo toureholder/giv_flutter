@@ -6,7 +6,7 @@ import 'package:giv_flutter/features/product/search_result/bloc/search_result_bl
 import 'package:giv_flutter/model/product/product.dart';
 import 'package:giv_flutter/model/product/product_category.dart';
 import 'package:giv_flutter/util/data/content_stream_builder.dart';
-import 'package:giv_flutter/util/presentation/app_bar_builder.dart';
+import 'package:giv_flutter/util/presentation/custom_app_bar.dart';
 import 'package:giv_flutter/util/presentation/dimens.dart';
 import 'package:giv_flutter/util/presentation/rounded_corners.dart';
 import 'package:giv_flutter/util/presentation/search_teaser_app_bar.dart';
@@ -47,7 +47,7 @@ class _SearchResultState extends BaseState<SearchResult> {
 
     var appBar = widget.category == null
         ? SearchTeaserAppBar(q: widget.searchQuery)
-        : AppBarBuilder().setTitle(title).build();
+        : CustomAppBar(title: title);
 
     return Scaffold(
         appBar: appBar,

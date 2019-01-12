@@ -2,8 +2,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:giv_flutter/base/base_state.dart';
 import 'package:giv_flutter/model/product/product.dart';
-import 'package:giv_flutter/util/presentation/app_bar_builder.dart';
 import 'package:giv_flutter/util/presentation/buttons.dart';
+import 'package:giv_flutter/util/presentation/custom_app_bar.dart';
 import 'package:giv_flutter/util/presentation/dimens.dart';
 import 'package:giv_flutter/util/presentation/image_carousel.dart';
 import 'package:giv_flutter/util/presentation/photo_view_page.dart';
@@ -33,7 +33,7 @@ class _ProductDetailState extends BaseState<ProductDetail> {
     super.build(context);
 
     return Scaffold(
-      appBar: AppBarBuilder().build(),
+      appBar: CustomAppBar(),
       body: ListView(children: <Widget>[
         _imageCarousel(context, product.imageUrls),
         _textPadding(Text(product.title, style: CustomTypography.headline6)),
