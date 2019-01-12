@@ -1,5 +1,6 @@
-import 'package:giv_flutter/model/product/product.dart';
+import 'package:giv_flutter/model/location/location.dart';
 import 'package:giv_flutter/model/product/product_category.dart';
+import 'package:giv_flutter/model/product/product_search_result.dart';
 import 'package:giv_flutter/model/product/repository/api/product_api.dart';
 
 class ProductRepository {
@@ -11,9 +12,15 @@ class ProductRepository {
   Future<List<ProductCategory>> getSearchCategories() =>
       productApi.getSearchCategories();
 
-  Future<List<Product>> getProductsByCategory(int categoryId) =>
-      productApi.getProductsByCategory(categoryId);
+  Future<ProductSearchResult> getProductsByCategory(
+          {int categoryId, Location location, bool isHardFilter = true}) =>
+      productApi.getProductsByCategory(
+          categoryId: categoryId,
+          location: location,
+          isHardFilter: isHardFilter);
 
-  Future<List<Product>> getProductsBySearchQuery(String q) =>
-      productApi.getProductsBySearchQuery(q);
+  Future<ProductSearchResult> getProductsBySearchQuery(
+          {String q, Location location, bool isHardFilter = true}) =>
+      productApi.getProductsBySearchQuery(
+          q: q, location: location, isHardFilter: isHardFilter);
 }

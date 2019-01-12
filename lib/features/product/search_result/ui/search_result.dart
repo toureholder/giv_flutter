@@ -2,10 +2,14 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:giv_flutter/base/base_state.dart';
 import 'package:giv_flutter/features/product/detail/product_detail.dart';
+import 'package:giv_flutter/features/product/filters/ui/location_filter.dart';
 import 'package:giv_flutter/features/product/search_result/bloc/search_result_bloc.dart';
+import 'package:giv_flutter/model/location/location.dart';
 import 'package:giv_flutter/model/product/product.dart';
 import 'package:giv_flutter/model/product/product_category.dart';
+import 'package:giv_flutter/model/product/product_search_result.dart';
 import 'package:giv_flutter/util/data/content_stream_builder.dart';
+import 'package:giv_flutter/util/data/stream_event.dart';
 import 'package:giv_flutter/util/presentation/custom_app_bar.dart';
 import 'package:giv_flutter/util/presentation/dimens.dart';
 import 'package:giv_flutter/util/presentation/rounded_corners.dart';
@@ -52,26 +56,30 @@ class _SearchResultState extends BaseState<SearchResult> {
     return Scaffold(
         appBar: appBar,
         body: ContentStreamBuilder(
-          stream: _searchResultBloc.products,
-          onHasData: (data) {
-            return _buildMainListView(context, data);
+          stream: _searchResultBloc.result,
+          onHasData: (StreamEvent<ProductSearchResult> event) {
+            return event.isLoading()
+                ? Center(child: CircularProgressIndicator())
+                : _buildMainListView(context, event.data);
           },
         ));
   }
 
-  ListView _buildMainListView(BuildContext context, List<Product> products) {
+  ListView _buildMainListView(
+      BuildContext context, ProductSearchResult result) {
     return ListView(
       padding: EdgeInsets.symmetric(
           horizontal: Dimens.grid(4), vertical: Dimens.grid(8)),
-      children: _buildResultsGrid(context, products),
+      children: _buildResultsGrid(context, result),
     );
   }
 
-  List<Widget> _buildResultsGrid(BuildContext context, List<Product> products) {
+  List<Widget> _buildResultsGrid(
+      BuildContext context, ProductSearchResult result) {
     var widgets = <Widget>[];
 
-    widgets.add(_buildResultsHeader(products.length)); // Add Header
-    widgets.addAll(_buildCustomGrid(context, products)); // Add Grid
+    widgets.add(_buildResultsHeader(result)); // Add Header
+    widgets.addAll(_buildCustomGrid(context, result.products)); // Add Grid
 
     return widgets;
   }
@@ -167,19 +175,36 @@ class _SearchResultState extends BaseState<SearchResult> {
     );
   }
 
-  Container _buildResultsHeader(int quantity) {
+  Container _buildResultsHeader(ProductSearchResult result) {
+    final quantity = result.products.length;
+    final buttonText = result.location?.name ?? string('action_filter');
+
     return Container(
       padding: EdgeInsets.symmetric(horizontal: Dimens.grid(6)),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           Text(string('search_result_x_results', formatArg: '$quantity')),
-          RaisedButton.icon(
-              onPressed: () {},
-              icon: Icon(Icons.location_on, color: Colors.grey),
-              label: Text('Distrito Federal'))
+          FlatButton.icon(
+              color: Colors.grey[200],
+              onPressed: () {
+                _navigateToLocationFilter(result.location);
+              },
+              icon: Icon(Icons.tune, color: Colors.grey),
+              label: Text(buttonText))
         ],
       ),
     );
+  }
+
+  _navigateToLocationFilter(Location location) async {
+    final result = await navigation.push(LocationFilter(location: location));
+
+    if (result == null) return;
+
+    _searchResultBloc.fetchProducts(
+        categoryId: widget?.category?.id,
+        searchQuery: widget.searchQuery,
+        locationFilter: result);
   }
 }

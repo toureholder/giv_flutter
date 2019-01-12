@@ -6,9 +6,9 @@ class Navigation {
 
   Navigation(this.context);
 
-  void push(Widget page, { bool hasAnimation = true }) {
+  Future<T> push<T extends Object>(Widget page, { bool hasAnimation = true }) {
     var route = hasAnimation ? _pageRoute(page) : _noAnimationPageRoute(page);
-    Navigator.push(context, route);
+    return Navigator.push(context, route);
   }
 
   void pushReplacement(Widget page, { bool hasAnimation = true }) {

@@ -33,12 +33,12 @@ class ProductCategory {
       ),
       ProductCategory(
           id: 35,
-          title: "Livros - Brasília, DF",
+          title: "Livros",
           products: Product.getMockList()
       ),
       ProductCategory(
           id: 36,
-          title: "Roupas femininas - Brasília, DF",
+          title: "Roupas femininas",
           products: Product.getMockList()
       )
     ];

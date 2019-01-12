@@ -1,8 +1,8 @@
-import 'package:giv_flutter/model/product/product.dart';
+import 'package:giv_flutter/model/location/location.dart';
 import 'package:giv_flutter/model/product/product_category.dart';
+import 'package:giv_flutter/model/product/product_search_result.dart';
 
 class ProductApi {
-
   Future<List<ProductCategory>> getFeaturedProductsCategories() async {
     await Future.delayed(Duration(seconds: 2));
     return ProductCategory.homeMock();
@@ -13,13 +13,15 @@ class ProductApi {
     return ProductCategory.browseMock();
   }
 
-  Future<List<Product>> getProductsByCategory(int categoryId) async {
+  Future<ProductSearchResult> getProductsByCategory(
+      {int categoryId, Location location, bool isHardFilter = true}) async {
     await Future.delayed(Duration(seconds: 2));
-    return Product.getMockList();
+    return ProductSearchResult.mock();
   }
 
-  Future<List<Product>> getProductsBySearchQuery(String q) async {
+  Future<ProductSearchResult> getProductsBySearchQuery(
+      {String q, Location location, bool isHardFilter = true}) async {
     await Future.delayed(Duration(seconds: 2));
-    return Product.getMockList();
+    return ProductSearchResult.mock();
   }
 }

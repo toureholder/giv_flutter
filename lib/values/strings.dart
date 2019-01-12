@@ -38,6 +38,38 @@ class Strings {
     "search_result_x_results": {
       "en": "%1s Results",
       "pt": "%1s Resultados"
+    },
+    "action_filter": {
+      "en": "Filter",
+      "pt": "Filtrar"
+    },
+    "filters_title": {
+      "en": "Filters",
+      "pt": "Filtros"
+    },
+    "common_country": {
+      "en": "Country",
+      "pt": "País"
+    },
+    "common_state": {
+      "en": "State",
+      "pt": "Estado"
+    },
+    "common_city": {
+      "en": "City",
+      "pt": "Cidade"
+    },
+    "filters_subtitle_nearby": {
+      "en": "Nearby",
+      "pt": "Perto de mim"
+    },
+    "common_loading": {
+      "en": "Loading...",
+      "pt": "Carregando..."
+    },
+    "location_filter_title": {
+      "en": "Location",
+      "pt": "Perto de mim"
     }
   };
 }

@@ -6,6 +6,7 @@ import 'package:giv_flutter/features/home/model/home_content.dart';
 import 'package:giv_flutter/features/product/detail/product_detail.dart';
 import 'package:giv_flutter/model/carousel/carousel_item.dart';
 import 'package:giv_flutter/model/product/product.dart';
+import 'package:giv_flutter/model/product/product_category.dart';
 import 'package:giv_flutter/util/data/content_stream_builder.dart';
 import 'package:giv_flutter/util/presentation/custom_app_bar.dart';
 import 'package:giv_flutter/util/presentation/dimens.dart';
@@ -65,7 +66,7 @@ class _HomeState extends BaseState<Home> {
     ];
 
     categories.forEach((category){
-      widgets.add(_buildSectionHeader(context, category.title));
+      widgets.add(_buildSectionHeader(context, category));
       widgets.add(_buildItemList(context, category.products));
     });
 
@@ -117,18 +118,20 @@ class _HomeState extends BaseState<Home> {
     );
   }
 
-  Container _buildSectionHeader(BuildContext context, String title) {
+  Container _buildSectionHeader(BuildContext context, ProductCategory category) {
     return Container(
       padding: EdgeInsets.fromLTRB(Dimens.default_horizontal_margin, 0.0, 0.0, 0.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           Text(
-            title,
+            category.title,
             style: Theme.of(context).textTheme.subhead,
           ),
           FlatButton(
-            onPressed: (){},
+            onPressed: (){
+              category.goToSubCategoryOrResult(navigation);
+            },
             child: Text(string('common_more').toUpperCase()),
           ),
         ],

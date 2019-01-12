@@ -4,6 +4,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:giv_flutter/config/i18n/l10n.dart';
 import 'package:giv_flutter/config/i18n/string_localizations.dart';
 import 'package:giv_flutter/features/base/base.dart';
+import 'package:giv_flutter/features/splash/splash.dart';
 
 void main() {
   debugPaintSizeEnabled = false;
@@ -27,7 +28,7 @@ class MyApp extends StatelessWidget {
       theme: new ThemeData(
         primaryColor: Colors.white,
       ),
-      home: new Base(),
+      home: new Splash(),
     );
   }
 }

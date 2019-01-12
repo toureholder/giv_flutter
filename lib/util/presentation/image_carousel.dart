@@ -130,9 +130,7 @@ class _ImageCarouselState extends State<ImageCarousel> {
 
   void _initAutoAdvanceTimer() {
     _cancelAutoAdvanceTimer();
-    _autoAdvanceTimer = Timer(Duration(seconds: 6), (){
-      _advanceToNextPage();
-    });
+    _autoAdvanceTimer = Timer(Duration(seconds: 6), _advanceToNextPage);
   }
 
   void _cancelAutoAdvanceTimer() {
