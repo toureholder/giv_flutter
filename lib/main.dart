@@ -3,7 +3,6 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:giv_flutter/config/i18n/l10n.dart';
 import 'package:giv_flutter/config/i18n/string_localizations.dart';
-import 'package:giv_flutter/features/base/base.dart';
 import 'package:giv_flutter/features/splash/splash.dart';
 
 void main() {
@@ -27,6 +26,7 @@ class MyApp extends StatelessWidget {
       supportedLocales: L10n.supportedLocales,
       theme: new ThemeData(
         primaryColor: Colors.white,
+          backgroundColor: Colors.blue
       ),
       home: new Splash(),
     );

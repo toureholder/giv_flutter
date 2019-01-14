@@ -9,6 +9,7 @@ import 'package:giv_flutter/model/product/product.dart';
 import 'package:giv_flutter/model/product/product_category.dart';
 import 'package:giv_flutter/util/data/content_stream_builder.dart';
 import 'package:giv_flutter/util/presentation/custom_app_bar.dart';
+import 'package:giv_flutter/util/presentation/custom_scaffold.dart';
 import 'package:giv_flutter/util/presentation/dimens.dart';
 import 'package:giv_flutter/util/presentation/image_carousel.dart';
 import 'package:giv_flutter/util/presentation/rounded_corners.dart';
@@ -33,7 +34,7 @@ class _HomeState extends BaseState<Home> {
   Widget build(BuildContext context) {
     super.build(context);
 
-    return Scaffold(
+    return CustomScaffold(
       appBar: CustomAppBar(title: string('home_title')),
       body: ContentStreamBuilder(
           stream: _homeBloc.content,

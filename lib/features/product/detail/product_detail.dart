@@ -4,6 +4,7 @@ import 'package:giv_flutter/base/base_state.dart';
 import 'package:giv_flutter/model/product/product.dart';
 import 'package:giv_flutter/util/presentation/buttons.dart';
 import 'package:giv_flutter/util/presentation/custom_app_bar.dart';
+import 'package:giv_flutter/util/presentation/custom_scaffold.dart';
 import 'package:giv_flutter/util/presentation/dimens.dart';
 import 'package:giv_flutter/util/presentation/image_carousel.dart';
 import 'package:giv_flutter/util/presentation/photo_view_page.dart';
@@ -32,7 +33,7 @@ class _ProductDetailState extends BaseState<ProductDetail> {
   Widget build(BuildContext context) {
     super.build(context);
 
-    return Scaffold(
+    return CustomScaffold(
       appBar: CustomAppBar(),
       body: ListView(children: <Widget>[
         _imageCarousel(context, product.imageUrls),

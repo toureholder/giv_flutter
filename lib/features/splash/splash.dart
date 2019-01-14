@@ -3,6 +3,7 @@ import 'package:giv_flutter/base/base_state.dart';
 import 'package:giv_flutter/config/preferences/prefs.dart';
 import 'package:giv_flutter/features/base/base.dart';
 import 'package:giv_flutter/model/location/location.dart';
+import 'package:giv_flutter/util/presentation/custom_scaffold.dart';
 
 class Splash extends StatefulWidget {
   @override
@@ -20,7 +21,7 @@ class _SplashState extends BaseState<Splash> {
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return Scaffold(
+    return CustomScaffold(
       body: Center(
         child: Text(string('app_name')),
       ),

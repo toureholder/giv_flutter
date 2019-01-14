@@ -11,6 +11,7 @@ import 'package:giv_flutter/model/product/product_search_result.dart';
 import 'package:giv_flutter/util/data/content_stream_builder.dart';
 import 'package:giv_flutter/util/data/stream_event.dart';
 import 'package:giv_flutter/util/presentation/custom_app_bar.dart';
+import 'package:giv_flutter/util/presentation/custom_scaffold.dart';
 import 'package:giv_flutter/util/presentation/dimens.dart';
 import 'package:giv_flutter/util/presentation/rounded_corners.dart';
 import 'package:giv_flutter/util/presentation/search_teaser_app_bar.dart';
@@ -53,7 +54,7 @@ class _SearchResultState extends BaseState<SearchResult> {
         ? SearchTeaserAppBar(q: widget.searchQuery)
         : CustomAppBar(title: title);
 
-    return Scaffold(
+    return CustomScaffold(
         appBar: appBar,
         body: ContentStreamBuilder(
           stream: _searchResultBloc.result,

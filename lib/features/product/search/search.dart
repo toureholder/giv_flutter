@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:giv_flutter/base/base_state.dart';
 import 'package:giv_flutter/features/product/search_result/ui/search_result.dart';
+import 'package:giv_flutter/util/presentation/custom_scaffold.dart';
 import 'package:giv_flutter/util/presentation/material_search.dart';
 
 class Search extends StatefulWidget {
@@ -17,7 +18,7 @@ class _SearchState extends BaseState<Search> {
   Widget build(BuildContext context) {
     super.build(context);
 
-    return Scaffold(
+    return CustomScaffold(
       body: MaterialSearch<String>(
         placeholder: string('search_hint'),
         results: [],

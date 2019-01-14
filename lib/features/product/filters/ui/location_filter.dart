@@ -8,6 +8,7 @@ import 'package:giv_flutter/util/data/content_stream_builder.dart';
 import 'package:giv_flutter/util/data/stream_event.dart';
 import 'package:giv_flutter/util/presentation/buttons.dart';
 import 'package:giv_flutter/util/presentation/custom_app_bar.dart';
+import 'package:giv_flutter/util/presentation/custom_scaffold.dart';
 import 'package:giv_flutter/util/presentation/dimens.dart';
 
 class LocationFilter extends StatefulWidget {
@@ -41,7 +42,7 @@ class _LocationFilterState extends BaseState<LocationFilter> {
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return Scaffold(
+    return CustomScaffold(
       appBar: CustomAppBar(title: string('location_filter_title')),
       body: ContentStreamBuilder(
         stream: _locationFilterBloc.listStream,

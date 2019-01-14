@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:giv_flutter/util/presentation/custom_scaffold.dart';
 import 'package:meta/meta.dart';
 
 typedef String FormFieldFormatter<T>(T v);
@@ -184,7 +185,7 @@ class _MaterialSearchState<T> extends State<MaterialSearch> {
 
     IconThemeData iconTheme = Theme.of(context).iconTheme.copyWith(color: widget.iconColor);
 
-    return new Scaffold(
+    return new CustomScaffold(
       appBar: new AppBar(
         leading: widget.leading,
         backgroundColor: widget.barBackgroundColor,

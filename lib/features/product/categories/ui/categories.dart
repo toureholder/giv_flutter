@@ -3,6 +3,7 @@ import 'package:giv_flutter/base/base_state.dart';
 import 'package:giv_flutter/features/product/categories/bloc/categories_bloc.dart';
 import 'package:giv_flutter/model/product/product_category.dart';
 import 'package:giv_flutter/util/data/content_stream_builder.dart';
+import 'package:giv_flutter/util/presentation/custom_scaffold.dart';
 import 'package:giv_flutter/util/presentation/search_teaser_app_bar.dart';
 
 class Categories extends StatefulWidget {
@@ -30,7 +31,7 @@ class _CategoriesState extends BaseState<Categories> {
   Widget build(BuildContext context) {
     super.build(context);
 
-    return Scaffold(
+    return CustomScaffold(
       body: ContentStreamBuilder(
         stream: _categoriesBloc.categories,
         onHasData: (data) {

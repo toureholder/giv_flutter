@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:giv_flutter/base/base_state.dart';
 import 'package:giv_flutter/model/product/product_category.dart';
 import 'package:giv_flutter/util/presentation/custom_app_bar.dart';
+import 'package:giv_flutter/util/presentation/custom_scaffold.dart';
 
 class SubCategories extends StatefulWidget {
   final ProductCategory category;
@@ -17,7 +18,7 @@ class _SubCategoriesState extends BaseState<SubCategories> {
   Widget build(BuildContext context) {
     super.build(context);
 
-    return Scaffold(
+    return CustomScaffold(
       appBar: CustomAppBar(title: widget.category.title),
       body: ListView(
         children: _buildList(context, widget.category.subCategories),

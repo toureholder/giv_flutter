@@ -4,6 +4,7 @@ import 'package:giv_flutter/features/base/model/base_page.dart';
 import 'package:giv_flutter/features/home/ui/home.dart';
 import 'package:giv_flutter/features/product/categories/ui/categories.dart';
 import 'package:giv_flutter/util/presentation/custom_icons_icons.dart';
+import 'package:giv_flutter/util/presentation/custom_scaffold.dart';
 import 'package:giv_flutter/util/presentation/themes.dart';
 
 class Base extends StatefulWidget {
@@ -21,7 +22,7 @@ class _BaseState extends BaseState<Base> {
 
     _setupPages();
 
-    return new Scaffold(
+    return CustomScaffold(
       body: _pages[_currentIndex].child,
       bottomNavigationBar: Themes.ofPrimaryBlue(_buildBottomNavigationBar()),
     );
