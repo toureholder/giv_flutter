@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:giv_flutter/base/base_state.dart';
 import 'package:giv_flutter/features/product/search/search.dart';
+import 'package:giv_flutter/util/presentation/typography.dart';
 
 class SearchTeaserAppBar extends StatefulWidget implements PreferredSizeWidget {
   final Widget leading;
   final String q;
 
-  const SearchTeaserAppBar({
-    Key key, this.leading, this.q}) : super(key: key);
+  const SearchTeaserAppBar({Key key, this.leading, this.q}) : super(key: key);
 
   @override
   _SearchTeaserAppBarState createState() => _SearchTeaserAppBarState();
@@ -27,12 +27,17 @@ class _SearchTeaserAppBarState extends BaseState<SearchTeaserAppBar> {
           Stack(alignment: AlignmentDirectional.centerStart, children: <Widget>[
         TextField(
           decoration: new InputDecoration.collapsed(
-              hintText: widget.q ?? string('search_hint')),
-          style: Theme.of(context).textTheme.title,
+              hintText: widget.q ?? string('search_hint'),
+              hintStyle: CustomTypography.titleHint),
+          style: CustomTypography.title,
         ),
         GestureDetector(
           onTap: () {
-            navigation.push(Search(initialText: widget.q,), hasAnimation: false);
+            navigation.push(
+                Search(
+                  initialText: widget.q,
+                ),
+                hasAnimation: false);
           },
           child: Container(
             color: Colors.transparent,

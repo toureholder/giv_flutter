@@ -37,10 +37,10 @@ class _ProductDetailState extends BaseState<ProductDetail> {
       appBar: CustomAppBar(),
       body: ListView(children: <Widget>[
         _imageCarousel(context, product.imageUrls),
-        _textPadding(Text(product.title, style: CustomTypography.headline6)),
-        _textPadding(Text(product.location, style: CustomTypography.subtitle2)),
+        _textPadding(H6Text(product.title)),
+        _textPadding(Subtitle(product.location, weight: SyntheticFontWeight.semiBold,)),
         _iWantItButton(context),
-        _textPadding(Text(product.description, style: CustomTypography.body2)),
+        _textPadding(Body2Text(product.description)),
         Spacing.vertical(Dimens.grid(8)),
         Divider(),
         Spacing.vertical(Dimens.grid(8)),
@@ -53,7 +53,7 @@ class _ProductDetailState extends BaseState<ProductDetail> {
   Padding _iWantItButton(BuildContext context) {
     return Padding(
         padding: EdgeInsets.all(Dimens.default_horizontal_margin),
-        child: CustomButton.primary(context, text: "EU QUERO", onPressed: (){}),
+        child: CustomButton.primary(context, text: string('i_want_it'), onPressed: (){}),
       );
   }
 
@@ -75,10 +75,7 @@ class _ProductDetailState extends BaseState<ProductDetail> {
               ),
             ),
             Spacing.horizontal(Dimens.grid(6)),
-            Text(
-              user.name,
-              style: CustomTypography.body2,
-            )
+            Body2Text(user.name)
           ],
         ),
       );

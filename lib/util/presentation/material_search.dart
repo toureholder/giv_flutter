@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:giv_flutter/util/presentation/custom_scaffold.dart';
+import 'package:giv_flutter/util/presentation/typography.dart';
 import 'package:meta/meta.dart';
 
 typedef String FormFieldFormatter<T>(T v);
@@ -194,9 +195,11 @@ class _MaterialSearchState<T> extends State<MaterialSearch> {
         title: new TextField(
           controller: _controller,
           autofocus: true,
-          decoration: new InputDecoration.collapsed(hintText: widget.placeholder),
+          decoration: new InputDecoration.collapsed(
+              hintText: widget.placeholder,
+              hintStyle: CustomTypography.titleHint),
           textInputAction: widget.textInputAction,
-          style: Theme.of(context).textTheme.title,
+          style: CustomTypography.title,
           onSubmitted: (String value) {
             if (widget.onSubmit != null) {
               widget.onSubmit(value);

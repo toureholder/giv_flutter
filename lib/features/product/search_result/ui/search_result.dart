@@ -15,6 +15,8 @@ import 'package:giv_flutter/util/presentation/custom_scaffold.dart';
 import 'package:giv_flutter/util/presentation/dimens.dart';
 import 'package:giv_flutter/util/presentation/rounded_corners.dart';
 import 'package:giv_flutter/util/presentation/search_teaser_app_bar.dart';
+import 'package:giv_flutter/util/presentation/spacing.dart';
+import 'package:giv_flutter/util/presentation/typography.dart';
 
 class SearchResult extends StatefulWidget {
   final ProductCategory category;
@@ -152,11 +154,8 @@ class _SearchResultState extends BaseState<SearchResult> {
 
   Widget _productTitle(Product product, BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(top: Dimens.grid(6)),
-      child: Text(
-        product.title,
-        style: Theme.of(context).textTheme.caption,
-      ),
+      padding: EdgeInsets.only(top: Dimens.grid(4)),
+      child: Body2Text(product.title),
     );
   }
 
@@ -185,14 +184,23 @@ class _SearchResultState extends BaseState<SearchResult> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          Text(string('search_result_x_results', formatArg: '$quantity')),
-          FlatButton.icon(
-              color: Colors.grey[200],
-              onPressed: () {
-                _navigateToLocationFilter(result.location);
-              },
-              icon: Icon(Icons.tune, color: Colors.grey),
-              label: Text(buttonText))
+          BodyText(string('search_result_x_results', formatArg: '$quantity')),
+          Spacing.horizontal(Dimens.default_horizontal_margin),
+          Flexible(
+            child: FlatButton.icon(
+                color: Colors.grey[200],
+                onPressed: () {
+                  _navigateToLocationFilter(result.location);
+                },
+                icon: Icon(Icons.tune, color: Colors.grey),
+                label: Flexible(
+                  child: Text(
+                    buttonText,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                )),
+          )
         ],
       ),
     );

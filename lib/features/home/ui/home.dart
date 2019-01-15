@@ -14,6 +14,7 @@ import 'package:giv_flutter/util/presentation/dimens.dart';
 import 'package:giv_flutter/util/presentation/image_carousel.dart';
 import 'package:giv_flutter/util/presentation/rounded_corners.dart';
 import 'package:giv_flutter/util/presentation/spacing.dart';
+import 'package:giv_flutter/util/presentation/typography.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -125,10 +126,7 @@ class _HomeState extends BaseState<Home> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          Text(
-            category.title,
-            style: Theme.of(context).textTheme.subhead,
-          ),
+          Subtitle(category.title, weight: SyntheticFontWeight.semiBold,),
           FlatButton(
             onPressed: (){
               category.goToSubCategoryOrResult(navigation);

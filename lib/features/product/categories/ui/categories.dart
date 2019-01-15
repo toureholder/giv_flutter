@@ -5,6 +5,7 @@ import 'package:giv_flutter/model/product/product_category.dart';
 import 'package:giv_flutter/util/data/content_stream_builder.dart';
 import 'package:giv_flutter/util/presentation/custom_scaffold.dart';
 import 'package:giv_flutter/util/presentation/search_teaser_app_bar.dart';
+import 'package:giv_flutter/util/presentation/typography.dart';
 
 class Categories extends StatefulWidget {
   @override
@@ -58,7 +59,7 @@ class _CategoriesState extends BaseState<Categories> {
 
   ListTile _buildListItem(BuildContext context, ProductCategory category) {
     return ListTile(
-      title: Text(category.title),
+      title: BodyText(category.title),
       trailing: Icon(Icons.chevron_right),
       onTap: () {
         category.goToSubCategoryOrResult(navigation);
