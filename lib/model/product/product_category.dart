@@ -24,6 +24,8 @@ class ProductCategory {
     }
   }
 
+  bool get hasSubCategories => subCategories?.isNotEmpty ?? false;
+
   static List<ProductCategory> homeMock() {
     return [
       ProductCategory(
