@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:giv_flutter/base/base_state.dart';
 import 'package:giv_flutter/features/home/bloc/home_bloc.dart';
 import 'package:giv_flutter/features/home/model/home_content.dart';
+import 'package:giv_flutter/features/home/ui/home_carousel.dart';
 import 'package:giv_flutter/features/product/detail/product_detail.dart';
 import 'package:giv_flutter/model/carousel/carousel_item.dart';
 import 'package:giv_flutter/model/product/product.dart';
@@ -11,11 +12,10 @@ import 'package:giv_flutter/util/data/content_stream_builder.dart';
 import 'package:giv_flutter/util/presentation/buttons.dart';
 import 'package:giv_flutter/util/presentation/custom_app_bar.dart';
 import 'package:giv_flutter/util/presentation/custom_scaffold.dart';
-import 'package:giv_flutter/values/dimens.dart';
-import 'package:giv_flutter/util/presentation/image_carousel.dart';
 import 'package:giv_flutter/util/presentation/rounded_corners.dart';
 import 'package:giv_flutter/util/presentation/spacing.dart';
 import 'package:giv_flutter/util/presentation/typography.dart';
+import 'package:giv_flutter/values/dimens.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -145,8 +145,8 @@ class _HomeState extends BaseState<Home> {
 
   Widget _buildCarouselContainer(List<CarouselItem> heroItems) {
     final _pageController = PageController();
-    return ImageCarousel(
-      imageUrls: heroItems.map((item) => item.imageUrl).toList(),
+    return HomeCarousel(
+      items: heroItems,
       height: 156.0,
       pageController: _pageController,
       onTap: () {},
