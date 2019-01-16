@@ -18,9 +18,7 @@ class CustomTypography {
       fontSize: 14.0, fontWeight: FontWeight.w600, letterSpacing: 0.1);
 
   static TextStyle body = base.copyWith(
-      fontSize: 16.0,
-      fontWeight: FontWeight.w400,
-      letterSpacing: 0.5);
+      fontSize: 16.0, fontWeight: FontWeight.w400, letterSpacing: 0.5);
 
   static TextStyle body2 = base.copyWith(
       fontSize: 14.0,
@@ -71,8 +69,7 @@ class Title extends BaseText {
   final SyntheticFontWeight weight;
 
   Title(this.data, {Key key, this.weight})
-      : super(data,
-      textStyle: CustomTypography.title, syntheticWeight: weight);
+      : super(data, textStyle: CustomTypography.title, syntheticWeight: weight);
 }
 
 class Subtitle extends BaseText {
@@ -98,8 +95,7 @@ class BodyText extends BaseText {
   final SyntheticFontWeight weight;
 
   BodyText(this.data, {Key key, this.weight})
-      : super(data,
-      textStyle: CustomTypography.body, syntheticWeight: weight);
+      : super(data, textStyle: CustomTypography.body, syntheticWeight: weight);
 }
 
 class Body2Text extends BaseText {
@@ -107,6 +103,5 @@ class Body2Text extends BaseText {
   final SyntheticFontWeight weight;
 
   Body2Text(this.data, {Key key, this.weight})
-      : super(data,
-      textStyle: CustomTypography.body2, syntheticWeight: weight);
+      : super(data, textStyle: CustomTypography.body2, syntheticWeight: weight);
 }

@@ -10,6 +10,7 @@ import 'package:giv_flutter/model/product/product_category.dart';
 import 'package:giv_flutter/model/product/product_search_result.dart';
 import 'package:giv_flutter/util/data/content_stream_builder.dart';
 import 'package:giv_flutter/util/data/stream_event.dart';
+import 'package:giv_flutter/util/presentation/buttons.dart';
 import 'package:giv_flutter/util/presentation/custom_app_bar.dart';
 import 'package:giv_flutter/util/presentation/custom_scaffold.dart';
 import 'package:giv_flutter/values/dimens.dart';
@@ -36,8 +37,7 @@ class _SearchResultState extends BaseState<SearchResult> {
   void initState() {
     super.initState();
     _searchResultBloc = SearchResultBloc();
-    _searchResultBloc.fetchProducts(
-        categoryId: widget?.category?.id, searchQuery: widget.searchQuery);
+    _fetchProducts();
   }
 
   @override
@@ -187,19 +187,14 @@ class _SearchResultState extends BaseState<SearchResult> {
           BodyText(string('search_result_x_results', formatArg: '$quantity')),
           Spacing.horizontal(Dimens.default_horizontal_margin),
           Flexible(
-            child: FlatButton.icon(
-                color: Colors.grey[200],
-                onPressed: () {
-                  _navigateToLocationFilter(result.location);
-                },
-                icon: Icon(Icons.tune, color: Colors.grey),
-                label: Flexible(
-                  child: Text(
-                    buttonText,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                )),
+            child: GreyIconButton(
+              onPressed: () {
+                _navigateToLocationFilter(result.location);
+              },
+              text: buttonText,
+              isFlexible: true,
+              icon: Icon(Icons.tune, color: Colors.grey),
+            ),
           )
         ],
       ),
@@ -208,12 +203,14 @@ class _SearchResultState extends BaseState<SearchResult> {
 
   _navigateToLocationFilter(Location location) async {
     final result = await navigation.push(LocationFilter(location: location));
-
     if (result == null) return;
+    _fetchProducts(locationFilter: result);
+  }
 
+  _fetchProducts({Location locationFilter}) {
     _searchResultBloc.fetchProducts(
         categoryId: widget?.category?.id,
         searchQuery: widget.searchQuery,
-        locationFilter: result);
+        locationFilter: locationFilter);
   }
 }

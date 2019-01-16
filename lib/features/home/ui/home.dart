@@ -8,6 +8,7 @@ import 'package:giv_flutter/model/carousel/carousel_item.dart';
 import 'package:giv_flutter/model/product/product.dart';
 import 'package:giv_flutter/model/product/product_category.dart';
 import 'package:giv_flutter/util/data/content_stream_builder.dart';
+import 'package:giv_flutter/util/presentation/buttons.dart';
 import 'package:giv_flutter/util/presentation/custom_app_bar.dart';
 import 'package:giv_flutter/util/presentation/custom_scaffold.dart';
 import 'package:giv_flutter/values/dimens.dart';
@@ -41,8 +42,7 @@ class _HomeState extends BaseState<Home> {
           stream: _homeBloc.content,
           onHasData: (data) {
             return _buildMainListView(context, data);
-          }
-      ),
+          }),
     );
   }
 
@@ -67,7 +67,7 @@ class _HomeState extends BaseState<Home> {
       Spacing.vertical(Dimens.grid(15))
     ];
 
-    categories.forEach((category){
+    categories.forEach((category) {
       widgets.add(_buildSectionHeader(context, category));
       widgets.add(_buildItemList(context, category.products));
     });
@@ -79,19 +79,21 @@ class _HomeState extends BaseState<Home> {
     return Padding(
       padding: EdgeInsets.only(top: Dimens.grid(4), bottom: Dimens.grid(16)),
       child: SizedBox(
-            height: Dimens.home_product_image_dimension,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: products.length,
-              itemBuilder: (context, i) {
-                return _buildItem(context, products[i], isLastItem: i == products.length - 1);
-              },
-            ),
-          ),
+        height: Dimens.home_product_image_dimension,
+        child: ListView.builder(
+          scrollDirection: Axis.horizontal,
+          itemCount: products.length,
+          itemBuilder: (context, i) {
+            return _buildItem(context, products[i],
+                isLastItem: i == products.length - 1);
+          },
+        ),
+      ),
     );
   }
 
-  Widget _buildItem(BuildContext context, Product product, {isLastItem = false}) {
+  Widget _buildItem(BuildContext context, Product product,
+      {isLastItem = false}) {
     return GestureDetector(
       onTap: () {
         navigation.push(ProductDetail(product: product));
@@ -102,67 +104,43 @@ class _HomeState extends BaseState<Home> {
             right: isLastItem ? Dimens.default_horizontal_margin : 0.0),
         child: RoundedCorners(
           child: CachedNetworkImage(
-              placeholder: RoundedCorners(
-                child: Container(
-                  height: Dimens.home_product_image_dimension,
-                  width: Dimens.home_product_image_dimension,
-                  decoration: BoxDecoration(
-                    color: Colors.grey[200]
-                  ),
-                ),
+            placeholder: RoundedCorners(
+              child: Container(
+                height: Dimens.home_product_image_dimension,
+                width: Dimens.home_product_image_dimension,
+                decoration: BoxDecoration(color: Colors.grey[200]),
               ),
-              fit: BoxFit.cover,
-              width: Dimens.home_product_image_dimension,
-              imageUrl: product.imageUrls.first,
+            ),
+            fit: BoxFit.cover,
+            width: Dimens.home_product_image_dimension,
+            imageUrl: product.imageUrls.first,
           ),
         ),
       ),
     );
   }
 
-  Container _buildSectionHeader(BuildContext context, ProductCategory category) {
+  Container _buildSectionHeader(
+      BuildContext context, ProductCategory category) {
     return Container(
-      padding: EdgeInsets.fromLTRB(Dimens.default_horizontal_margin, 0.0, 0.0, 0.0),
+      padding:
+          EdgeInsets.fromLTRB(Dimens.default_horizontal_margin, 0.0, 0.0, 0.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          Subtitle(category.title, weight: SyntheticFontWeight.semiBold,),
-          FlatButton(
-            onPressed: (){
+          Subtitle(
+            category.title,
+            weight: SyntheticFontWeight.semiBold,
+          ),
+          SmallFlatPrimaryButton(
+            onPressed: () {
               category.goToSubCategoryOrResult(navigation);
             },
-            child: Text(string('common_more').toUpperCase()),
+            text: string('common_more'),
           ),
         ],
       ),
     );
-  }
-
-  Container _buildSeeMoreComponent() {
-    return Container(
-        decoration: BoxDecoration(
-            color: Colors.blueGrey,
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(15.0),
-              bottomLeft: Radius.circular(15.0),
-            )),
-        padding: EdgeInsets.fromLTRB(
-            Dimens.grid(8),
-            Dimens.grid(2),
-            Dimens.grid(6),
-            Dimens.grid(2)
-        ),
-        child: Row(
-          children: <Widget>[
-            Text(
-              'MAIS',
-              style: TextStyle(color: Colors.white, fontSize: 12.0),
-            ),
-            Spacing.horizontal(1.0),
-            Icon(Icons.chevron_right, color: Colors.white, size: Dimens.grid(6),)
-          ],
-        ),
-      );
   }
 
   Widget _buildCarouselContainer(List<CarouselItem> heroItems) {

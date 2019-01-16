@@ -237,8 +237,7 @@ class _LocationFilterState extends BaseState<LocationFilter> {
     return Padding(
       padding:
           EdgeInsets.symmetric(horizontal: Dimens.default_horizontal_margin),
-      child: CustomButton.primary(context,
-          text: string('action_filter'), onPressed: onPressed),
+      child: PrimaryButton(text: string('action_filter'), onPressed: onPressed),
     );
   }
 }

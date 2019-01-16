@@ -74,6 +74,10 @@ class Strings {
     "i_want_it": {
       "en": "I WANT IT",
       "pt": "EU QUERO"
+    },
+    "home_see_more": {
+      "en": "View all",
+      "pt": "Veja mais"
     }
   };
 }

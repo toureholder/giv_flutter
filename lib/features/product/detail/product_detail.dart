@@ -38,7 +38,10 @@ class _ProductDetailState extends BaseState<ProductDetail> {
       body: ListView(children: <Widget>[
         _imageCarousel(context, product.imageUrls),
         _textPadding(H6Text(product.title)),
-        _textPadding(Subtitle(product.location, weight: SyntheticFontWeight.semiBold,)),
+        _textPadding(Subtitle(
+          product.location,
+          weight: SyntheticFontWeight.semiBold,
+        )),
         _iWantItButton(context),
         _textPadding(Body2Text(product.description)),
         Spacing.vertical(Dimens.grid(8)),
@@ -52,33 +55,33 @@ class _ProductDetailState extends BaseState<ProductDetail> {
 
   Padding _iWantItButton(BuildContext context) {
     return Padding(
-        padding: EdgeInsets.all(Dimens.default_horizontal_margin),
-        child: CustomButton.primary(context, text: string('i_want_it'), onPressed: (){}),
-      );
+      padding: EdgeInsets.all(Dimens.default_horizontal_margin),
+      child: PrimaryButton(text: string('i_want_it'), onPressed: () {}),
+    );
   }
 
   Padding _userRow() {
     final user = product.user;
     return Padding(
-        padding: EdgeInsets.only(
-            left: Dimens.default_horizontal_margin,
-            right: Dimens.default_horizontal_margin),
-        child: Row(
-          children: <Widget>[
-            ClipRRect(
-              borderRadius: BorderRadius.circular(100.0),
-              child: CachedNetworkImage(
-                fit: BoxFit.cover,
-                width: 32.0,
-                height: 32.0,
-                imageUrl: user.avatarUrl,
-              ),
+      padding: EdgeInsets.only(
+          left: Dimens.default_horizontal_margin,
+          right: Dimens.default_horizontal_margin),
+      child: Row(
+        children: <Widget>[
+          ClipRRect(
+            borderRadius: BorderRadius.circular(100.0),
+            child: CachedNetworkImage(
+              fit: BoxFit.cover,
+              width: 32.0,
+              height: 32.0,
+              imageUrl: user.avatarUrl,
             ),
-            Spacing.horizontal(Dimens.grid(6)),
-            Body2Text(user.name)
-          ],
-        ),
-      );
+          ),
+          Spacing.horizontal(Dimens.grid(6)),
+          Body2Text(user.name)
+        ],
+      ),
+    );
   }
 
   Padding _textPadding(Widget widget) {
