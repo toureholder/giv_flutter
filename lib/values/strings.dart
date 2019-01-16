@@ -72,8 +72,8 @@ class Strings {
       "pt": "Perto de mim"
     },
     "i_want_it": {
-      "en": "I want it",
-      "pt": "Eu quero"
+      "en": "I WANT IT",
+      "pt": "EU QUERO"
     }
   };
 }

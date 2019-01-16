@@ -5,7 +5,7 @@ import 'package:giv_flutter/model/product/product.dart';
 import 'package:giv_flutter/util/presentation/buttons.dart';
 import 'package:giv_flutter/util/presentation/custom_app_bar.dart';
 import 'package:giv_flutter/util/presentation/custom_scaffold.dart';
-import 'package:giv_flutter/util/presentation/dimens.dart';
+import 'package:giv_flutter/values/dimens.dart';
 import 'package:giv_flutter/util/presentation/image_carousel.dart';
 import 'package:giv_flutter/util/presentation/photo_view_page.dart';
 import 'package:giv_flutter/util/presentation/spacing.dart';

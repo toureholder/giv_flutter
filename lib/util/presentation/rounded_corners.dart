@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:giv_flutter/util/presentation/dimens.dart';
+import 'package:giv_flutter/values/dimens.dart';
 
 class RoundedCorners extends StatelessWidget {
   final Widget child;

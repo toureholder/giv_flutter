@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:giv_flutter/base/base_state.dart';
 import 'package:giv_flutter/features/product/search/search.dart';
 import 'package:giv_flutter/util/presentation/custom_app_bar.dart';
-import 'package:giv_flutter/util/presentation/dimens.dart';
+import 'package:giv_flutter/values/dimens.dart';
 import 'package:giv_flutter/util/presentation/typography.dart';
 
 class SearchTeaserAppBar extends StatefulWidget implements PreferredSizeWidget {
