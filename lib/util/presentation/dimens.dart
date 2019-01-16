@@ -7,6 +7,7 @@ class Dimens {
 
   static const double home_product_image_dimension = GRID * 60;
   static const double search_result_image_height = GRID * 64;
+  static const double app_bar_bottom_border_height = 1.0;
 
   static double grid(int times) {
     return GRID * times;

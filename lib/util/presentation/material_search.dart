@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:giv_flutter/util/presentation/custom_app_bar.dart';
 import 'package:giv_flutter/util/presentation/custom_scaffold.dart';
 import 'package:giv_flutter/util/presentation/typography.dart';
 import 'package:meta/meta.dart';
@@ -216,6 +217,7 @@ class _MaterialSearchState<T> extends State<MaterialSearch> {
             }
           ),
         ],
+        bottom: AppBarBottomBorder(),
       ),
       body: _loading
         ? new Center(

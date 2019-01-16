@@ -33,6 +33,7 @@ class _CategoriesState extends BaseState<Categories> {
     super.build(context);
 
     return CustomScaffold(
+      appBar: SearchTeaserAppBar(leading: Icon(Icons.search)),
       body: ContentStreamBuilder(
         stream: _categoriesBloc.categories,
         onHasData: (data) {
@@ -44,16 +45,11 @@ class _CategoriesState extends BaseState<Categories> {
 
   ListView _buildMainListView(
       BuildContext context, List<ProductCategory> categories) {
-    return ListView(
-      children: <Widget>[
-        SearchTeaserAppBar(leading: Icon(Icons.search)),
-        ListView.builder(
-            shrinkWrap: true,
-            itemCount: categories.length,
-            itemBuilder: (context, i) {
-              return CategoryListTile(category: categories[i]);
-            })
-      ],
-    );
+    return ListView.builder(
+        shrinkWrap: true,
+        itemCount: categories.length,
+        itemBuilder: (context, i) {
+          return CategoryListTile(category: categories[i]);
+        });
   }
 }
