@@ -42,8 +42,10 @@ class BaseText extends StatelessWidget {
   final SyntheticFontWeight syntheticWeight;
   final TextStyle textStyle;
   final Color color;
+  final List<Shadow> shadows;
 
-  const BaseText(this.data, {Key key, this.syntheticWeight, this.textStyle, this.color})
+  const BaseText(this.data,
+      {Key key, this.syntheticWeight, this.textStyle, this.color, this.shadows})
       : super(key: key);
 
   @override
@@ -54,8 +56,10 @@ class BaseText extends StatelessWidget {
       finalFontWeight = map[syntheticWeight];
 
     var finalTextStyle = textStyle.copyWith(
-        fontWeight: finalFontWeight,
-        color: color ?? textStyle.color);
+      fontWeight: finalFontWeight,
+      color: color ?? textStyle.color,
+      shadows: shadows,
+    );
 
     return Text(data, style: finalTextStyle);
   }
@@ -65,54 +69,94 @@ class H6Text extends BaseText {
   final String data;
   final SyntheticFontWeight weight;
   final Color color;
+  final List<Shadow> shadows;
 
-  H6Text(this.data, {Key key, this.weight, this.color})
-      : super(data, textStyle: CustomTypography.h6, syntheticWeight: weight, color: color);
+  H6Text(this.data, {Key key, this.weight, this.color, this.shadows})
+      : super(
+          data,
+          textStyle: CustomTypography.h6,
+          syntheticWeight: weight,
+          color: color,
+          shadows: shadows,
+        );
 }
 
 class Title extends BaseText {
   final String data;
   final SyntheticFontWeight weight;
   final Color color;
+  final List<Shadow> shadows;
 
-  Title(this.data, {Key key, this.weight, this.color})
-      : super(data, textStyle: CustomTypography.title, syntheticWeight: weight, color: color);
+  Title(this.data, {Key key, this.weight, this.color, this.shadows})
+      : super(
+          data,
+          textStyle: CustomTypography.title,
+          syntheticWeight: weight,
+          color: color,
+          shadows: shadows,
+        );
 }
 
 class Subtitle extends BaseText {
   final String data;
   final SyntheticFontWeight weight;
   final Color color;
+  final List<Shadow> shadows;
 
-  Subtitle(this.data, {Key key, this.weight, this.color})
-      : super(data,
-            textStyle: CustomTypography.subtitle1, syntheticWeight: weight, color: color);
+  Subtitle(this.data, {Key key, this.weight, this.color, this.shadows})
+      : super(
+          data,
+          textStyle: CustomTypography.subtitle1,
+          syntheticWeight: weight,
+          color: color,
+          shadows: shadows,
+        );
 }
 
 class Subtitle2 extends BaseText {
   final String data;
   final SyntheticFontWeight weight;
   final Color color;
+  final List<Shadow> shadows;
 
-  Subtitle2(this.data, {Key key, this.weight, this.color})
-      : super(data,
-            textStyle: CustomTypography.subtitle2, syntheticWeight: weight, color: color);
+  Subtitle2(this.data, {Key key, this.weight, this.color, this.shadows})
+      : super(
+          data,
+          textStyle: CustomTypography.subtitle2,
+          syntheticWeight: weight,
+          color: color,
+          shadows: shadows,
+        );
 }
 
 class BodyText extends BaseText {
   final String data;
   final SyntheticFontWeight weight;
   final Color color;
+  final List<Shadow> shadows;
 
-  BodyText(this.data, {Key key, this.weight, this.color})
-      : super(data, textStyle: CustomTypography.body, syntheticWeight: weight, color: color);
+  BodyText(this.data, {Key key, this.weight, this.color, this.shadows})
+      : super(
+          data,
+          textStyle: CustomTypography.body,
+          syntheticWeight: weight,
+          color: color,
+          shadows: shadows,
+        );
 }
 
 class Body2Text extends BaseText {
   final String data;
   final SyntheticFontWeight weight;
   final Color color;
+  final List<Shadow> shadows;
 
-  Body2Text(this.data, {Key key, this.weight, this.color})
-      : super(data, textStyle: CustomTypography.body2, syntheticWeight: weight, color: color);
+  Body2Text(this.data, {Key key, this.weight, this.color, this.shadows})
+      : super(
+          data,
+          textStyle: CustomTypography.body2,
+          syntheticWeight: weight,
+          color: color,
+          shadows: shadows,
+        );
 }

@@ -4,6 +4,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:giv_flutter/model/carousel/carousel_item.dart';
 import 'package:giv_flutter/util/presentation/dots_indicator.dart';
+import 'package:giv_flutter/util/presentation/gradients.dart';
+import 'package:giv_flutter/util/presentation/shadows.dart';
 import 'package:giv_flutter/util/presentation/typography.dart';
 import 'package:giv_flutter/values/dimens.dart';
 
@@ -92,15 +94,7 @@ class _HomeCarouselState extends State<HomeCarousel> {
         ),
         Container(
           decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.bottomLeft,
-              end: Alignment.topRight,
-              stops: [0.1, 0.75],
-              colors: [
-                Color(0x59000000),
-                Color(0x00FFFFFF)
-              ]
-            )
+            gradient: Gradients.carousel(),
           ),
         ),
         Positioned(
@@ -109,8 +103,12 @@ class _HomeCarouselState extends State<HomeCarousel> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              H6Text(item.title, color: Colors.white,),
-              Body2Text(item.caption, color: Colors.white,)
+              H6Text(item.title, color: Colors.white, shadows: <Shadow>[
+                Shadows.text(),
+              ],),
+              Body2Text(item.caption, color: Colors.white, shadows: <Shadow>[
+                Shadows.text(),
+              ],)
             ],
           ),
         )
