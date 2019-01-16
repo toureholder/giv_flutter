@@ -5,16 +5,17 @@ import 'package:giv_flutter/features/home/ui/home.dart';
 import 'package:giv_flutter/features/product/categories/ui/categories.dart';
 import 'package:giv_flutter/util/presentation/custom_icons_icons.dart';
 import 'package:giv_flutter/util/presentation/custom_scaffold.dart';
-import 'package:giv_flutter/util/presentation/themes.dart';
 
 class Base extends StatefulWidget {
   @override
-  _BaseState createState() => new _BaseState();
+  _BaseState createState() => _BaseState();
 }
 
 class _BaseState extends BaseState<Base> {
   int _currentIndex = 0;
   List<BasePage> _pages;
+
+  BasePage get _currentPage => _pages[_currentIndex];
 
   @override
   Widget build(BuildContext context) {
@@ -23,25 +24,37 @@ class _BaseState extends BaseState<Base> {
     _setupPages();
 
     return CustomScaffold(
-      body: _pages[_currentIndex].child,
-      bottomNavigationBar: Themes.ofPrimaryBlue(_buildBottomNavigationBar()),
+      body: _currentPage.child,
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {},
+        child: Icon(Icons.add),
+      ),
+      floatingActionButtonLocation:
+      FloatingActionButtonLocation.centerDocked,
+      bottomNavigationBar: _buildBottomNavigationBar(),
     );
   }
 
-  BottomNavigationBar _buildBottomNavigationBar() {
-    return BottomNavigationBar(
-      type: BottomNavigationBarType.fixed,
-      currentIndex: _currentIndex,
-      items: _buildBottomNavigationBarList(),
-      onTap: onTabTapped,
+  Widget _buildBottomNavigationBar() {
+    return Theme(
+      data: ThemeData(primarySwatch: Colors.blue),
+      child: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+        currentIndex: _currentIndex,
+        items: _buildBottomNavigationBarList(),
+        onTap: onTabTapped,
+      ),
     );
   }
 
   BottomNavigationBarItem _buildBottomNavigationBarItem(
-      IconData icon, String text) {
+      IconData iconData, String text) {
+
+    final icon = iconData == null ? Container() : Icon(iconData);
+
     return BottomNavigationBarItem(
-        icon: new Icon(icon),
-        title: new Text(
+        icon: icon,
+        title: Text(
           text,
           style: TextStyle(fontSize: 12.0),
         ));
@@ -54,6 +67,8 @@ class _BaseState extends BaseState<Base> {
   }
 
   void onTabTapped(int index) {
+    if (_currentPage?.child == null) return;
+
     setState(() {
       _currentIndex = index;
     });
@@ -69,10 +84,7 @@ class _BaseState extends BaseState<Base> {
           child: Categories(),
           icon: CustomIcons.ib_le_magnifying_glass,
           iconText: string('base_page_title_search')),
-      BasePage(
-          child: Home(),
-          icon: CustomIcons.ib_b_trust,
-          iconText: string('base_page_title_post')),
+      BasePage.empty(),
       BasePage(
           child: Home(),
           icon: CustomIcons.ib_le_chatv2,

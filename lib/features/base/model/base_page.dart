@@ -6,4 +6,6 @@ class BasePage {
   final String iconText;
 
   BasePage({this.child, this.icon, this.iconText});
+
+  BasePage.empty() : child = null, icon = null, iconText = '';
 }

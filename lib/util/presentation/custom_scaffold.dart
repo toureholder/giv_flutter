@@ -5,13 +5,17 @@ class CustomScaffold extends StatefulWidget {
   final Widget body;
   final Color backgroundColor;
   final Widget bottomNavigationBar;
+  final Widget floatingActionButton;
+  final FloatingActionButtonLocation floatingActionButtonLocation;
 
   const CustomScaffold({
     Key key,
     this.appBar,
     this.body,
     this.backgroundColor = Colors.white,
-    this.bottomNavigationBar
+    this.bottomNavigationBar,
+    this.floatingActionButton,
+    this.floatingActionButtonLocation,
   })
       : super(key: key);
 
@@ -27,6 +31,8 @@ class _CustomScaffoldState extends State<CustomScaffold> {
       body: widget.body,
       backgroundColor: widget.backgroundColor,
       bottomNavigationBar: widget.bottomNavigationBar,
+      floatingActionButton: widget.floatingActionButton,
+      floatingActionButtonLocation: widget.floatingActionButtonLocation,
     );
   }
 }
