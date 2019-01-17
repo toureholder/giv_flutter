@@ -5,6 +5,7 @@ import 'package:giv_flutter/features/home/bloc/home_bloc.dart';
 import 'package:giv_flutter/features/home/model/home_content.dart';
 import 'package:giv_flutter/features/home/ui/home_carousel.dart';
 import 'package:giv_flutter/features/product/detail/product_detail.dart';
+import 'package:giv_flutter/features/product/search_result/ui/search_result.dart';
 import 'package:giv_flutter/model/carousel/carousel_item.dart';
 import 'package:giv_flutter/model/product/product.dart';
 import 'package:giv_flutter/model/product/product_category.dart';
@@ -18,6 +19,10 @@ import 'package:giv_flutter/util/presentation/typography.dart';
 import 'package:giv_flutter/values/dimens.dart';
 
 class Home extends StatefulWidget {
+  final HomeListener listener;
+
+  const Home({Key key, this.listener}) : super(key: key);
+
   @override
   _HomeState createState() => _HomeState();
 }
@@ -71,6 +76,8 @@ class _HomeState extends BaseState<Home> {
       widgets.add(_buildSectionHeader(context, category));
       widgets.add(_buildItemList(context, category.products));
     });
+
+    widgets.add(Spacing.vertical(Dimens.default_vertical_margin));
 
     return widgets;
   }
@@ -149,9 +156,21 @@ class _HomeState extends BaseState<Home> {
       items: heroItems,
       height: 156.0,
       pageController: _pageController,
-      onTap: () {},
+      onTap: (CarouselItem item) {
+        if (item.actionId != null) {
+          widget.listener.invokeActionById(item.actionId);
+        }
+
+        if (item.productCategory != null) {
+          navigation.push(SearchResult(category: item.productCategory));
+        }
+      },
       autoAdvance: true,
       loop: true,
     );
   }
+}
+
+abstract class HomeListener {
+  void invokeActionById(String actionId);
 }

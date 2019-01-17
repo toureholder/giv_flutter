@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:giv_flutter/base/base_state.dart';
 import 'package:giv_flutter/features/base/model/base_page.dart';
 import 'package:giv_flutter/features/home/ui/home.dart';
+import 'package:giv_flutter/features/post/post.dart';
 import 'package:giv_flutter/features/product/categories/ui/categories.dart';
 import 'package:giv_flutter/util/presentation/custom_icons_icons.dart';
 import 'package:giv_flutter/util/presentation/custom_scaffold.dart';
@@ -9,9 +10,12 @@ import 'package:giv_flutter/util/presentation/custom_scaffold.dart';
 class Base extends StatefulWidget {
   @override
   _BaseState createState() => _BaseState();
+
+  static String actionIdSearch = 'SEARCH';
+  static String actionIdPost = 'POST';
 }
 
-class _BaseState extends BaseState<Base> {
+class _BaseState extends BaseState<Base> implements HomeListener {
   int _currentIndex = 0;
   List<BasePage> _pages;
 
@@ -26,7 +30,7 @@ class _BaseState extends BaseState<Base> {
     return CustomScaffold(
       body: _currentPage.child,
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: _goToPostPage,
         child: Icon(Icons.add),
       ),
       floatingActionButtonLocation:
@@ -42,7 +46,7 @@ class _BaseState extends BaseState<Base> {
         type: BottomNavigationBarType.fixed,
         currentIndex: _currentIndex,
         items: _buildBottomNavigationBarList(),
-        onTap: onTabTapped,
+        onTap: _onTabTapped,
       ),
     );
   }
@@ -66,7 +70,11 @@ class _BaseState extends BaseState<Base> {
     }).toList();
   }
 
-  void onTabTapped(int index) {
+  void _goToPostPage() {
+    navigation.push(Post());
+  }
+
+  void _onTabTapped(int index) {
     if (_currentPage?.child == null) return;
 
     setState(() {
@@ -77,7 +85,7 @@ class _BaseState extends BaseState<Base> {
   void _setupPages() {
     _pages = [
       BasePage(
-          child: Home(),
+          child: Home(listener: this),
           icon: CustomIcons.ib_le_house,
           iconText: string('base_page_title_home')),
       BasePage(
@@ -94,5 +102,18 @@ class _BaseState extends BaseState<Base> {
           icon: CustomIcons.ib_b_team,
           iconText: string('base_page_title_projects')),
     ];
+  }
+
+  @override
+  void invokeActionById(String actionId) {
+    if (actionId == Base.actionIdSearch) {
+      _onTabTapped(1);
+      return;
+    }
+
+    if (actionId == Base.actionIdPost) {
+      _goToPostPage();
+      return;
+    }
   }
 }

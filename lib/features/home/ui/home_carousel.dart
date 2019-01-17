@@ -19,17 +19,17 @@ class HomeCarousel extends StatefulWidget {
   final bool autoAdvance;
   final bool loop;
 
-  HomeCarousel(
-      {Key key,
-      this.items,
-      this.height,
-      this.pageController,
-      this.onTap,
-      this.backgroundColor,
-      this.withIndicator,
-      this.autoAdvance,
-      this.loop})
-      : super(key: key);
+  HomeCarousel({
+    Key key,
+    this.items,
+    this.height,
+    this.pageController,
+    this.onTap,
+    this.backgroundColor,
+    this.withIndicator,
+    this.autoAdvance,
+    this.loop,
+  }) : super(key: key);
 
   @override
   _HomeCarouselState createState() => _HomeCarouselState();
@@ -84,12 +84,14 @@ class _HomeCarouselState extends State<HomeCarousel> {
   Widget _buildItem(CarouselItem item) {
     return GestureDetector(
       onTap: () {
-        widget.onTap();
+        widget.onTap(item);
       },
       child: Stack(children: <Widget>[
         Row(
           children: <Widget>[
-            Expanded(child: CachedNetworkImage(fit: BoxFit.cover, imageUrl: item.imageUrl)),
+            Expanded(
+                child: CachedNetworkImage(
+                    fit: BoxFit.cover, imageUrl: item.imageUrl)),
           ],
         ),
         Container(
@@ -103,12 +105,20 @@ class _HomeCarouselState extends State<HomeCarousel> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              H6Text(item.title, color: Colors.white, shadows: <Shadow>[
-                Shadows.text(),
-              ],),
-              Body2Text(item.caption, color: Colors.white, shadows: <Shadow>[
-                Shadows.text(),
-              ],)
+              H6Text(
+                item.title,
+                color: Colors.white,
+                shadows: <Shadow>[
+                  Shadows.text(),
+                ],
+              ),
+              Body2Text(
+                item.caption,
+                color: Colors.white,
+                shadows: <Shadow>[
+                  Shadows.text(),
+                ],
+              )
             ],
           ),
         )
@@ -159,7 +169,7 @@ class _HomeCarouselState extends State<HomeCarousel> {
 
   void _initAutoAdvanceTimer() {
     _cancelAutoAdvanceTimer();
-    _autoAdvanceTimer = Timer(Duration(seconds: 6), _advanceToNextPage);
+    _autoAdvanceTimer = Timer(Duration(seconds: 5), _advanceToNextPage);
   }
 
   void _cancelAutoAdvanceTimer() {
