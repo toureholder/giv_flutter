@@ -29,12 +29,12 @@ class _BaseState extends BaseState<Base> implements HomeListener {
 
     return CustomScaffold(
       body: _currentPage.child,
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: FloatingActionButton.extended(
         onPressed: _goToPostPage,
-        child: Icon(Icons.add),
+        icon: Icon(Icons.add),
+        label: Text(string('shared_action_create_ad')),
       ),
-      floatingActionButtonLocation:
-      FloatingActionButtonLocation.centerDocked,
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: _buildBottomNavigationBar(),
     );
   }
@@ -53,7 +53,6 @@ class _BaseState extends BaseState<Base> implements HomeListener {
 
   BottomNavigationBarItem _buildBottomNavigationBarItem(
       IconData iconData, String text) {
-
     final icon = iconData == null ? Container() : Icon(iconData);
 
     return BottomNavigationBarItem(
@@ -74,8 +73,14 @@ class _BaseState extends BaseState<Base> implements HomeListener {
     navigation.push(Post());
   }
 
+  void _goToSearchPage() {
+    int searchPageIndex =
+        _pages.indexWhere((page) => page.actionId == Base.actionIdSearch);
+    _onTabTapped(searchPageIndex);
+  }
+
   void _onTabTapped(int index) {
-    if (_currentPage?.child == null) return;
+    if (_pages[index]?.child == null) return;
 
     setState(() {
       _currentIndex = index;
@@ -88,26 +93,21 @@ class _BaseState extends BaseState<Base> implements HomeListener {
           child: Home(listener: this),
           icon: CustomIcons.ib_le_house,
           iconText: string('base_page_title_home')),
-      BasePage(
-          child: Categories(),
-          icon: CustomIcons.ib_le_magnifying_glass,
-          iconText: string('base_page_title_search')),
+      BasePage.empty(),
       BasePage.empty(),
       BasePage(
-          child: Home(),
-          icon: CustomIcons.ib_le_chatv2,
-          iconText: string('base_page_title_messages')),
-      BasePage(
-          child: Home(),
-          icon: CustomIcons.ib_b_team,
-          iconText: string('base_page_title_projects')),
+        child: Categories(),
+        icon: CustomIcons.ib_le_magnifying_glass,
+        iconText: string('base_page_title_search'),
+        actionId: Base.actionIdSearch,
+      ),
     ];
   }
 
   @override
   void invokeActionById(String actionId) {
     if (actionId == Base.actionIdSearch) {
-      _onTabTapped(1);
+      _goToSearchPage();
       return;
     }
 

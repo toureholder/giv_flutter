@@ -42,12 +42,32 @@ class _HomeState extends BaseState<Home> {
     super.build(context);
 
     return CustomScaffold(
-      appBar: CustomAppBar(title: string('home_title')),
+      appBar: CustomAppBar(
+        title: string('home_title'),
+        actions: <Widget>[_buildAppBarActionsRow()],
+      ),
       body: ContentStreamBuilder(
           stream: _homeBloc.content,
           onHasData: (data) {
             return _buildMainListView(context, data);
           }),
+    );
+  }
+
+  Row _buildAppBarActionsRow() {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: <Widget>[
+        _buildSignInButton(),
+      ],
+    );
+  }
+
+  MediumFlatPrimaryButton _buildSignInButton() {
+    return MediumFlatPrimaryButton(
+      onPressed: () {},
+      text: string('common_sign_in'),
     );
   }
 

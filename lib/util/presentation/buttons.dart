@@ -56,7 +56,28 @@ class SmallFlatPrimaryButton extends StatelessWidget {
   final VoidCallback onPressed;
   final String text;
 
-  const SmallFlatPrimaryButton({Key key, this.onPressed, this.text}) : super(key: key);
+  const SmallFlatPrimaryButton({Key key, this.onPressed, this.text})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return FlatButton(
+      onPressed: onPressed,
+      child: Text(
+        text,
+        style:
+            TextStyle(fontSize: 14.0, letterSpacing: 0.1, color: Colors.blue),
+      ),
+    );
+  }
+}
+
+class MediumFlatPrimaryButton extends StatelessWidget {
+  final VoidCallback onPressed;
+  final String text;
+
+  const MediumFlatPrimaryButton({Key key, this.onPressed, this.text})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -65,9 +86,11 @@ class SmallFlatPrimaryButton extends StatelessWidget {
       child: Text(
         text,
         style: TextStyle(
-            fontSize: 14.0, letterSpacing: 0.1, color: Colors.blue),
+            fontSize: 15.0,
+            letterSpacing: 0.1,
+            color: Colors.blue,
+            fontWeight: FontWeight.bold),
       ),
     );
   }
 }
-

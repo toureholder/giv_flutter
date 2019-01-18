@@ -78,6 +78,14 @@ class Strings {
     "home_see_more": {
       "en": "View all",
       "pt": "Veja mais"
+    },
+    "shared_action_create_ad": {
+      "en": "Donate stuff",
+      "pt": "Anunciar"
+    },
+    "common_sign_in": {
+      "en": "Sign in",
+      "pt": "Entrar"
     }
   };
 }

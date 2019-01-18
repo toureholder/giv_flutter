@@ -4,8 +4,10 @@ import 'package:giv_flutter/values/dimens.dart';
 
 class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
   final String title;
+  final List<Widget> actions;
 
-  const CustomAppBar({Key key, this.title = ""}) : super(key: key);
+  const CustomAppBar({Key key, this.title = "", this.actions})
+      : super(key: key);
 
   @override
   _CustomAppBarState createState() => _CustomAppBarState();
@@ -25,6 +27,7 @@ class _CustomAppBarState extends BaseState<CustomAppBar> {
           style: TextStyle(color: Colors.black87),
         ),
         elevation: 0.0,
+        actions: widget.actions,
         bottom: AppBarBottomBorder());
   }
 }

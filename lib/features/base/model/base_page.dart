@@ -4,8 +4,9 @@ class BasePage {
   final Widget child;
   final IconData icon;
   final String iconText;
+  final String actionId;
 
-  BasePage({this.child, this.icon, this.iconText});
+  BasePage({this.child, this.icon, this.iconText, this.actionId});
 
-  BasePage.empty() : child = null, icon = null, iconText = '';
+  BasePage.empty() : child = null, icon = null, iconText = '', actionId = null;
 }

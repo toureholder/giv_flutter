@@ -26,7 +26,7 @@ class Product {
       final numberOfImages = faker.randomGenerator.integer(8, min: 1);
       final imageIds = faker.randomGenerator.numbers(1000, numberOfImages);
       final imageUrls = imageIds.map((id) {
-        return "https://picsum.photos/1000/1000/?image=$id";
+        return "https://picsum.photos/500/500/?image=$id";
       }).toList();
 
       list.add(
