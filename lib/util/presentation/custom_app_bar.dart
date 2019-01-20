@@ -28,6 +28,8 @@ class _CustomAppBarState extends BaseState<CustomAppBar> {
         ),
         elevation: 0.0,
         actions: widget.actions,
+        backgroundColor: Colors.white,
+        iconTheme: IconThemeData(color: Colors.black),
         bottom: AppBarBottomBorder());
   }
 }

@@ -83,9 +83,45 @@ class Strings {
       "en": "Donate stuff",
       "pt": "Anunciar"
     },
-    "common_sign_in": {
+    "shared_action_sign_in": {
       "en": "Sign in",
       "pt": "Entrar"
+    },
+    "sign_in_continue_with_facebook": {
+      "en": "Continue with Facebook",
+      "pt": "Continuar com Facebook"
+    },
+    "sign_in_sign_up": {
+      "en": "Sign up",
+      "pt": "Criar conta"
+    },
+    "sign_in_log_in": {
+      "en": "Log in",
+      "pt": "Entrar"
+    },
+    "sign_in_form_name": {
+      "en": "Name",
+      "pt": "Nome"
+    },
+    "sign_in_form_email": {
+      "en": "E-mail",
+      "pt": "Email"
+    },
+    "sign_in_form_password": {
+      "en": "Password",
+      "pt": "Senha"
+    },
+    "sign_in_already_have_an_acount": {
+      "en": "Already have an account?",
+      "pt": "Já tem uma conta?"
+    },
+    "sign_in_forgot_password": {
+      "en": "Forgot your password?",
+      "pt": "Esqueceu sua senha?"
+    },
+    "sign_in_dont_have_an_account": {
+      "en": "Don't have an account yet?",
+      "pt": "Ainda não tem uma conta?"
     }
   };
 }

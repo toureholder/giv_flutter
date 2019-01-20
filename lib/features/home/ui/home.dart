@@ -6,6 +6,7 @@ import 'package:giv_flutter/features/home/model/home_content.dart';
 import 'package:giv_flutter/features/home/ui/home_carousel.dart';
 import 'package:giv_flutter/features/product/detail/product_detail.dart';
 import 'package:giv_flutter/features/product/search_result/ui/search_result.dart';
+import 'package:giv_flutter/features/sign_in/ui/sign_in.dart';
 import 'package:giv_flutter/model/carousel/carousel_item.dart';
 import 'package:giv_flutter/model/product/product.dart';
 import 'package:giv_flutter/model/product/product_category.dart';
@@ -66,8 +67,10 @@ class _HomeState extends BaseState<Home> {
 
   MediumFlatPrimaryButton _buildSignInButton() {
     return MediumFlatPrimaryButton(
-      onPressed: () {},
-      text: string('common_sign_in'),
+      onPressed: () {
+        navigation.push(SignIn());
+      },
+      text: string('shared_action_sign_in'),
     );
   }
 

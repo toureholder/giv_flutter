@@ -4,7 +4,6 @@ import 'package:giv_flutter/features/base/model/base_page.dart';
 import 'package:giv_flutter/features/home/ui/home.dart';
 import 'package:giv_flutter/features/post/post.dart';
 import 'package:giv_flutter/features/product/categories/ui/categories.dart';
-import 'package:giv_flutter/util/presentation/custom_icons_icons.dart';
 import 'package:giv_flutter/util/presentation/custom_scaffold.dart';
 
 class Base extends StatefulWidget {
@@ -91,13 +90,13 @@ class _BaseState extends BaseState<Base> implements HomeListener {
     _pages = [
       BasePage(
           child: Home(listener: this),
-          icon: CustomIcons.ib_le_house,
+          icon: Icons.home,
           iconText: string('base_page_title_home')),
       BasePage.empty(),
       BasePage.empty(),
       BasePage(
         child: Categories(),
-        icon: CustomIcons.ib_le_magnifying_glass,
+        icon: Icons.search,
         iconText: string('base_page_title_search'),
         actionId: Base.actionIdSearch,
       ),
