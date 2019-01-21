@@ -35,4 +35,10 @@ class Validator {
       message = string('validation_message_password_min_length');
     return message;
   }
+
+  String required(String value) {
+    String message;
+    if (value.isEmpty) message = string('validation_message_required');
+    return message;
+  }
 }

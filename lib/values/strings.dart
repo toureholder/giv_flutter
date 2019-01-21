@@ -150,6 +150,10 @@ class Strings {
     "common_ok": {
       "en": "OK",
       "pt": "OK"
+    },
+    "validation_message_required": {
+      "en": "Please fill in this field",
+      "pt": "Por favor preencha este campo"
     }
   };
 }
