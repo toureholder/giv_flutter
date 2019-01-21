@@ -20,18 +20,25 @@ class MainButtonTheme extends StatelessWidget {
 class PrimaryButton extends StatelessWidget {
   final VoidCallback onPressed;
   final String text;
+  final bool isLoading;
 
-  const PrimaryButton({Key key, this.onPressed, this.text}) : super(key: key);
+  const PrimaryButton(
+      {Key key, this.onPressed, this.text, this.isLoading = false})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final child = isLoading ? ButtonProgressIndicator() : Text(text);
+    final finalOnPressed = isLoading ? null : onPressed;
+
     return MainButtonTheme(
       child: FlatButton(
         color: Theme.of(context).accentColor,
         textColor: Colors.white,
-        disabledColor: Colors.grey[200],
-        onPressed: onPressed,
-        child: Text(text),
+        disabledColor: isLoading ? Theme.of(context).accentColor : Colors.grey[200],
+        disabledTextColor: Colors.white,
+        onPressed: finalOnPressed,
+        child: child,
       ),
     );
   }
@@ -42,30 +49,43 @@ class CustomIconButton extends StatelessWidget {
   final String text;
   final Icon icon;
   final Color color;
+  final bool isLoading;
 
   const CustomIconButton(
-      {Key key, this.onPressed, this.text, this.icon, this.color})
+      {Key key,
+      this.onPressed,
+      this.text,
+      this.icon,
+      this.color,
+      this.isLoading})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final child = isLoading
+        ? ButtonProgressIndicator()
+        : Stack(
+            children: <Widget>[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text(text),
+                ],
+              ),
+              Positioned(left: 10.0, child: icon)
+            ],
+          );
+
+    final finalOnPressed = isLoading ? null : onPressed;
+
     return MainButtonTheme(
       child: FlatButton(
         color: color,
         textColor: Colors.white,
-        disabledColor: Colors.grey[200],
-        onPressed: onPressed,
-        child: Stack(
-          children: <Widget>[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Text(text),
-              ],
-            ),
-            Positioned(left: 10.0, child: icon)
-          ],
-        ),
+        disabledColor: isLoading ? color : Colors.grey[200],
+        disabledTextColor: Colors.white,
+        onPressed: finalOnPressed,
+        child: child,
       ),
     );
   }
@@ -143,8 +163,9 @@ class GreyIconButton extends StatelessWidget {
 class FacebookButton extends StatelessWidget {
   final VoidCallback onPressed;
   final String text;
+  final bool isLoading;
 
-  const FacebookButton({Key key, this.onPressed, this.text}) : super(key: key);
+  const FacebookButton({Key key, this.onPressed, this.text, this.isLoading = false}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -156,6 +177,7 @@ class FacebookButton extends StatelessWidget {
         size: 18.0,
       ),
       text: text,
+      isLoading: isLoading,
     );
   }
 }
@@ -199,6 +221,19 @@ class MediumFlatPrimaryButton extends StatelessWidget {
             color: Colors.blue,
             fontWeight: FontWeight.bold),
       ),
+    );
+  }
+}
+
+class ButtonProgressIndicator extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 26.0,
+      height: 26.0,
+      child: CircularProgressIndicator(
+          strokeWidth: 3.0,
+          valueColor: AlwaysStoppedAnimation<Color>(Colors.white)),
     );
   }
 }
