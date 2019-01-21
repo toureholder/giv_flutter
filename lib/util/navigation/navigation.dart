@@ -6,12 +6,19 @@ class Navigation {
 
   Navigation(this.context);
 
-  Future<T> push<T extends Object>(Widget page, { bool hasAnimation = true }) {
+  Future<T> push<T extends Object>(Widget page,
+      {bool hasAnimation = true, bool clearStack = false}) {
     var route = hasAnimation ? _pageRoute(page) : _noAnimationPageRoute(page);
-    return Navigator.push(context, route);
+
+    if (clearStack) {
+      return Navigator.pushAndRemoveUntil(
+          context, route, (Route<dynamic> route) => false);
+    } else {
+      return Navigator.push(context, route);
+    }
   }
 
-  void pushReplacement(Widget page, { bool hasAnimation = true }) {
+  void pushReplacement(Widget page, {bool hasAnimation = true}) {
     var route = hasAnimation ? _pageRoute(page) : _noAnimationPageRoute(page);
     Navigator.pushReplacement(context, route);
   }

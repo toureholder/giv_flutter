@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:giv_flutter/base/base_state.dart';
 import 'package:giv_flutter/model/product/product.dart';
 import 'package:giv_flutter/util/presentation/buttons.dart';
+import 'package:giv_flutter/util/presentation/cirucluar_network_image.dart';
 import 'package:giv_flutter/util/presentation/custom_app_bar.dart';
 import 'package:giv_flutter/util/presentation/custom_scaffold.dart';
 import 'package:giv_flutter/values/dimens.dart';
@@ -70,12 +71,7 @@ class _ProductDetailState extends BaseState<ProductDetail> {
         children: <Widget>[
           ClipRRect(
             borderRadius: BorderRadius.circular(100.0),
-            child: CachedNetworkImage(
-              fit: BoxFit.cover,
-              width: 32.0,
-              height: 32.0,
-              imageUrl: user.avatarUrl,
-            ),
+            child: CircularNetworkImage(imageUrl: user.avatarUrl),
           ),
           Spacing.horizontal(Dimens.grid(6)),
           Body2Text(user.name)

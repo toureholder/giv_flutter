@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:giv_flutter/base/base_state.dart';
+import 'package:giv_flutter/config/preferences/prefs.dart';
 import 'package:giv_flutter/features/home/bloc/home_bloc.dart';
 import 'package:giv_flutter/features/home/model/home_content.dart';
 import 'package:giv_flutter/features/home/ui/home_carousel.dart';
@@ -10,8 +11,10 @@ import 'package:giv_flutter/features/sign_in/ui/sign_in.dart';
 import 'package:giv_flutter/model/carousel/carousel_item.dart';
 import 'package:giv_flutter/model/product/product.dart';
 import 'package:giv_flutter/model/product/product_category.dart';
+import 'package:giv_flutter/model/user/user.dart';
 import 'package:giv_flutter/util/data/content_stream_builder.dart';
 import 'package:giv_flutter/util/presentation/buttons.dart';
+import 'package:giv_flutter/util/presentation/cirucluar_network_image.dart';
 import 'package:giv_flutter/util/presentation/custom_app_bar.dart';
 import 'package:giv_flutter/util/presentation/custom_scaffold.dart';
 import 'package:giv_flutter/util/presentation/rounded_corners.dart';
@@ -60,8 +63,28 @@ class _HomeState extends BaseState<Home> {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
-        _buildSignInButton(),
+        FutureBuilder<User>(
+          future: Prefs.getUser(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.done) {
+              if (snapshot.hasData) {
+                return _userAvatar(snapshot.data.avatarUrl);
+              } else {
+                return _buildSignInButton();
+              }
+            } else {
+              return Container();
+            }
+          },
+        ),
       ],
+    );
+  }
+
+  Padding _userAvatar(String imageUrl) {
+    return Padding(
+      padding: const EdgeInsets.only(right: Dimens.default_horizontal_margin),
+      child: CircularNetworkImage(imageUrl: imageUrl),
     );
   }
 

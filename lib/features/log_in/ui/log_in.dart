@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:giv_flutter/base/base_state.dart';
+import 'package:giv_flutter/features/base/base.dart';
 import 'package:giv_flutter/features/log_in/bloc/log_in_bloc.dart';
 import 'package:giv_flutter/features/sign_up/ui/sign_up.dart';
 import 'package:giv_flutter/model/user/log_in_request.dart';
@@ -8,6 +9,7 @@ import 'package:giv_flutter/util/data/stream_event.dart';
 import 'package:giv_flutter/util/form/email_form_field.dart';
 import 'package:giv_flutter/util/form/password_form_field.dart';
 import 'package:giv_flutter/util/form/validator.dart';
+import 'package:giv_flutter/util/navigation/navigation.dart';
 import 'package:giv_flutter/util/presentation/buttons.dart';
 import 'package:giv_flutter/util/presentation/custom_app_bar.dart';
 import 'package:giv_flutter/util/presentation/custom_scaffold.dart';
@@ -134,5 +136,7 @@ class _LogInState extends BaseState<LogIn> {
     }
   }
 
-  void _onLoginSuccess() {}
+  void _onLoginSuccess() {
+    Navigation(context).push(Base(), clearStack: true);
+  }
 }
