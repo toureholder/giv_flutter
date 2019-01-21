@@ -122,6 +122,34 @@ class Strings {
     "sign_in_dont_have_an_account": {
       "en": "Don't have an account yet?",
       "pt": "Ainda não tem uma conta?"
+    },
+    "validation_message_name_required": {
+      "en": "Don't forget to fill in your name",
+      "pt": "Não se esequeça de preencher seu nome"
+    },
+    "validation_message_email_required": {
+      "en": "We need a valid email address :)",
+      "pt": "Precisamos que você informe um e-mail válido :)"
+    },
+    "validation_message_password_min_length": {
+      "en": "Your password should be at least 6 characters long",
+      "pt": "Sua senha deve ter no mínimo 6 caractéres"
+    },
+    "sign_in_verify_email_title": {
+      "en": "We sent you an email",
+      "pt": "Te enviamos um e-mail"
+    },
+    "sign_in_verify_email_message": {
+      "en": "You'll soon receive an email with a link to activate your account.",
+      "pt": "Você vai receber um email com um link para ativar sua conta."
+    },
+    "sign_in_verify_email_message_login": {
+      "en": "Please check your mailbox for an email with a link to activate your account.",
+      "pt": "Por favor ative sua conta com o link que enviamos por e-mail."
+    },
+    "common_ok": {
+      "en": "OK",
+      "pt": "OK"
     }
   };
 }

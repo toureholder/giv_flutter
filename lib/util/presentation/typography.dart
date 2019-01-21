@@ -43,9 +43,15 @@ class BaseText extends StatelessWidget {
   final TextStyle textStyle;
   final Color color;
   final List<Shadow> shadows;
+  final TextAlign textAlign;
 
   const BaseText(this.data,
-      {Key key, this.syntheticWeight, this.textStyle, this.color, this.shadows})
+      {Key key,
+      this.syntheticWeight,
+      this.textStyle,
+      this.color,
+      this.shadows,
+      this.textAlign})
       : super(key: key);
 
   @override
@@ -61,7 +67,7 @@ class BaseText extends StatelessWidget {
       shadows: shadows,
     );
 
-    return Text(data, style: finalTextStyle);
+    return Text(data, style: finalTextStyle, textAlign: textAlign);
   }
 }
 
@@ -134,15 +140,16 @@ class BodyText extends BaseText {
   final SyntheticFontWeight weight;
   final Color color;
   final List<Shadow> shadows;
+  final TextAlign textAlign;
 
-  BodyText(this.data, {Key key, this.weight, this.color, this.shadows})
-      : super(
-          data,
-          textStyle: CustomTypography.body,
-          syntheticWeight: weight,
-          color: color,
-          shadows: shadows,
-        );
+  BodyText(this.data,
+      {Key key, this.weight, this.color, this.shadows, this.textAlign})
+      : super(data,
+            textStyle: CustomTypography.body,
+            syntheticWeight: weight,
+            color: color,
+            shadows: shadows,
+            textAlign: textAlign);
 }
 
 class Body2Text extends BaseText {

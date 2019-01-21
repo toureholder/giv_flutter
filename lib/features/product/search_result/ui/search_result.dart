@@ -61,7 +61,7 @@ class _SearchResultState extends BaseState<SearchResult> {
         body: ContentStreamBuilder(
           stream: _searchResultBloc.result,
           onHasData: (StreamEvent<ProductSearchResult> event) {
-            return event.isLoading()
+            return event.isLoading
                 ? Center(child: CircularProgressIndicator())
                 : _buildMainListView(context, event.data);
           },

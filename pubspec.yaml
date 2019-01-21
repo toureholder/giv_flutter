@@ -20,6 +20,7 @@ dependencies:
 
   cached_network_image: ^0.5.0
   faker: ^1.0.0
+  flutter_svg: ^0.10.2
   photo_view: ^0.0.10
   rxdart: ^0.20.0
   shared_preferences: ^0.4.3
@@ -45,9 +46,10 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  #  assets:
-  #    - images/placeholder_home_banner.jpg
-  #    - images/placeholder_home_banner_image.png
+  assets:
+    - images/icons8_pastel_sent_100.png
+    - images/icons8_pastel_sent_64.png
+    - images/mailbox.svg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.io/assets-and-images/#resolution-aware.

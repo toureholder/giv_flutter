@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:giv_flutter/base/base_state.dart';
 import 'package:giv_flutter/features/sign_up/ui/sign_up.dart';
-import 'package:giv_flutter/util/form/password_forn_field.dart';
+import 'package:giv_flutter/util/form/password_form_field.dart';
 import 'package:giv_flutter/util/presentation/buttons.dart';
 import 'package:giv_flutter/util/presentation/custom_app_bar.dart';
 import 'package:giv_flutter/util/presentation/custom_scaffold.dart';
