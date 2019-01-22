@@ -26,6 +26,9 @@ class CustomTypography {
       letterSpacing: 0.25,
       height: 1.25);
 
+  static TextStyle caption = base.copyWith(
+    fontSize: 12.0, fontWeight: FontWeight.w400, letterSpacing: 0.4);
+
   static Map<SyntheticFontWeight, FontWeight> weightMap = {
     SyntheticFontWeight.semiBold: FontWeight.w600,
     SyntheticFontWeight.bold: FontWeight.w700,
@@ -166,4 +169,21 @@ class Body2Text extends BaseText {
           color: color,
           shadows: shadows,
         );
+}
+
+class Caption extends BaseText {
+  final String data;
+  final SyntheticFontWeight weight;
+  final Color color;
+  final List<Shadow> shadows;
+  final TextAlign textAlign;
+
+  Caption(this.data,
+      {Key key, this.weight, this.color, this.shadows, this.textAlign})
+      : super(data,
+      textStyle: CustomTypography.caption,
+      syntheticWeight: weight,
+      color: color,
+      shadows: shadows,
+      textAlign: textAlign);
 }

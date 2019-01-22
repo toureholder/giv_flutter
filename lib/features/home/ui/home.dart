@@ -7,6 +7,7 @@ import 'package:giv_flutter/features/home/model/home_content.dart';
 import 'package:giv_flutter/features/home/ui/home_carousel.dart';
 import 'package:giv_flutter/features/product/detail/product_detail.dart';
 import 'package:giv_flutter/features/product/search_result/ui/search_result.dart';
+import 'package:giv_flutter/features/settings/ui/settings.dart';
 import 'package:giv_flutter/features/sign_in/ui/sign_in.dart';
 import 'package:giv_flutter/model/carousel/carousel_item.dart';
 import 'package:giv_flutter/model/product/product.dart';
@@ -84,7 +85,12 @@ class _HomeState extends BaseState<Home> {
   Padding _userAvatar(String imageUrl) {
     return Padding(
       padding: const EdgeInsets.only(right: Dimens.default_horizontal_margin),
-      child: CircularNetworkImage(imageUrl: imageUrl),
+      child: GestureDetector(
+        child: CircularNetworkImage(imageUrl: imageUrl),
+        onTap: () {
+          navigation.push(Settings());
+        },
+      ),
     );
   }
 

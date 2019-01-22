@@ -4,14 +4,18 @@ import 'package:giv_flutter/values/dimens.dart';
 
 class MainButtonTheme extends StatelessWidget {
   final Widget child;
+  final bool fillWidth;
 
-  const MainButtonTheme({Key key, this.child}) : super(key: key);
+  const MainButtonTheme({Key key, this.child, this.fillWidth = true})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    var minWidth = fillWidth ? double.maxFinite : 88.0;
+
     return ButtonTheme(
       height: Dimens.button_flat_height,
-      minWidth: double.infinity,
+      minWidth: minWidth,
       child: child,
     );
   }
@@ -33,9 +37,10 @@ class PrimaryButton extends StatelessWidget {
 
     return MainButtonTheme(
       child: FlatButton(
-        color: Theme.of(context).accentColor,
+        color: Theme.of(context).primaryColor,
         textColor: Colors.white,
-        disabledColor: isLoading ? Theme.of(context).accentColor : Colors.grey[200],
+        disabledColor:
+            isLoading ? Theme.of(context).accentColor : Colors.grey[200],
         disabledTextColor: Colors.white,
         onPressed: finalOnPressed,
         child: child,
@@ -115,12 +120,15 @@ class WhiteButton extends StatelessWidget {
 class GreyButton extends StatelessWidget {
   final VoidCallback onPressed;
   final String text;
+  final bool fillWidth;
 
-  const GreyButton({Key key, this.onPressed, this.text}) : super(key: key);
+  const GreyButton({Key key, this.onPressed, this.text, this.fillWidth = true})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return MainButtonTheme(
+      fillWidth: fillWidth,
       child: FlatButton(
         color: Colors.grey[300],
         textColor: Colors.black,
@@ -165,7 +173,9 @@ class FacebookButton extends StatelessWidget {
   final String text;
   final bool isLoading;
 
-  const FacebookButton({Key key, this.onPressed, this.text, this.isLoading = false}) : super(key: key);
+  const FacebookButton(
+      {Key key, this.onPressed, this.text, this.isLoading = false})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:giv_flutter/base/base_state.dart';
+import 'package:giv_flutter/config/config.dart';
 import 'package:giv_flutter/features/log_in/ui/log_in.dart';
 import 'package:giv_flutter/features/sign_in/ui/mailbox_image.dart';
 import 'package:giv_flutter/features/sign_in/ui/sign_in_full_page_message.dart';
@@ -94,6 +95,7 @@ class _SignUpState extends BaseState<SignUp> {
           focusNode: _nameFocus,
           nextFocus: _emailFocus,
           controller: _nameController,
+          maxLength: Config.maxLengthName,
         ),
         Spacing.vertical(Dimens.default_vertical_margin),
         EmailFormField(

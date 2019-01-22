@@ -60,7 +60,7 @@ class _LogInState extends BaseState<LogIn> {
       body: StreamBuilder(
           stream: _logInBloc.responseStream,
           builder:
-              (context, AsyncSnapshot<StreamEvent<LogInResponse>> snapshot) {
+              (context, snapshot) {
             var isLoading = snapshot?.data?.isLoading ?? false;
             return _buildSingleChildScrollView(isLoading);
           }),

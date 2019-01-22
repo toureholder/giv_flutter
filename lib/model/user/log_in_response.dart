@@ -10,5 +10,5 @@ class LogInResponse {
   LogInResponse.mock()
       : firebaseAuthToken = 'd393n39dn',
         longLivedToken = 'j9d3nf4fn',
-        user = User.mock();
+        user = User.newUser();
 }

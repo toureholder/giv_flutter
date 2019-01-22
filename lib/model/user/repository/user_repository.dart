@@ -3,6 +3,7 @@ import 'package:giv_flutter/model/user/log_in_request.dart';
 import 'package:giv_flutter/model/user/log_in_response.dart';
 import 'package:giv_flutter/model/user/repository/api/user_api.dart';
 import 'package:giv_flutter/model/user/sign_up_request.dart';
+import 'package:giv_flutter/model/user/user.dart';
 
 class UserRepository {
   final userApi = UserApi();
@@ -10,4 +11,8 @@ class UserRepository {
   Future<ApiResponse> signUp(SignUpRequest request) => userApi.signUp(request);
 
   Future<LogInResponse> login(LogInRequest request) => userApi.login(request);
+
+  Future<User> getMe() => userApi.getMe();
+
+  Future<User> updateMe(User user) => userApi.updateMe(user);
 }

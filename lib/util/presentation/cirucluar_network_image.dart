@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 
 class CircularNetworkImage extends StatelessWidget {
   final String imageUrl;
+  final double width;
+  final double height;
 
-  const CircularNetworkImage({Key key, this.imageUrl}) : super(key: key);
+  const CircularNetworkImage({Key key, this.imageUrl, this.width = 32.0, this.height = 32.0}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -12,8 +14,8 @@ class CircularNetworkImage extends StatelessWidget {
       borderRadius: BorderRadius.circular(100.0),
       child: CachedNetworkImage(
         fit: BoxFit.cover,
-        width: 32.0,
-        height: 32.0,
+        width: width,
+        height: height,
         imageUrl: imageUrl,
       ),
     );

@@ -160,8 +160,88 @@ class Strings {
       "pt": "Por favor preencha este campo"
     },
     "whatsapp_message_interested": {
-      "en": "Hi! I'm interested in the $formatItem that you listed on Giv :)",
-      "pt": "Oi! Estou interessado no $formatItem que você anunciou no Giv :)"
+      "en": "Hello! I'm interested in the $formatItem that you listed on Giv :)",
+      "pt": "Olá! Estou interessado no $formatItem que você anunciou no Giv :)"
+    },
+    "settings_title": {
+      "en": "Settings",
+      "pt": "Configurações"
+    },
+    "settings_section_account": {
+      "en": "Account",
+      "pt": "Conta"
+    },
+    "settings_section_profile": {
+      "en": "Profile",
+      "pt": "Perfil"
+    },
+    "settings_phone_number": {
+      "en": "WhatsApp phone number",
+      "pt": "Telefone WhatsApp"
+    },
+    "settings_phone_number_edit_text_hint": {
+      "en": "61 912345678",
+      "pt": "61 912345678"
+    },
+    "settings_phone_number_empty_state": {
+      "en": "Tap to add a mobile phone number",
+      "pt": "Toque para adicionar um telefone móvel"
+    },
+    "settings_name": {
+      "en": "Name",
+      "pt": "Nome"
+    },
+    "settings_name_empty_state": {
+      "en": "What's your name?",
+      "pt": "Como você se chama?"
+    },
+    "settings_bio": {
+      "en": "Bio",
+      "pt": "Bio"
+    },
+    "settings_bio_empty_state": {
+      "en": "Add a few words about yourself",
+      "pt": "Fale um pouco sobre você"
+    },
+    "settings_logout": {
+      "en": "Logout",
+      "pt": "Sair"
+    },
+    "settings_edit_bio_hint": {
+      "en": "You can add a few lines about yourself to your public profile.",
+      "pt": "Você pode adicionar algumas linhas sobre você ao seu perfil público."
+    },
+    "settings_edit_name_hint": {
+      "en": "What's your name?",
+      "pt": "Como você se chama?"
+    },
+    "settings_edit_phone_number_hint": {
+      "en": "People interested in your donations will use WhatsApp to get in touch with you. ",
+      "pt": "Pessoas interessadas nos seus anúncios vão usar o WhatsApp para entrar em contato contigo."
+    },
+    "settings_edit_phone_number_test_button": {
+      "en": "Test",
+      "pt": "Testar"
+    },
+    "settings_edit_phone_number_test_message": {
+      "en": "If WhatsApp opened a chat with yourself, that means that the number is correct! Now you can go back to the app to save it.",
+      "pt": "Se o WhatsApp abriu um chat com você mesmo (hehe), significa que o número está certo! Volte para o aplicativo para salvá-lo."
+    },
+    "shared_action_save": {
+      "en": "Save",
+      "pt": "Salvar"
+    },
+    "logout_confirmation_title": {
+      "en": "Log out?",
+      "pt": "Sair?"
+    },
+    "logout_confirmation_accept_button": {
+      "en": "Log out",
+      "pt": "Sair"
+    },
+    "shared_action_cancel": {
+      "en": "Cancel",
+      "pt": "Cancelar"
     }
   };
 }

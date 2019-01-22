@@ -9,6 +9,7 @@ class CustomTextFormField extends StatefulWidget {
   final FocusNode nextFocus;
   final TextInputAction textInputAction;
   final TextEditingController controller;
+  final int maxLength;
 
   const CustomTextFormField(
       {Key key,
@@ -18,7 +19,8 @@ class CustomTextFormField extends StatefulWidget {
       this.focusNode,
       this.nextFocus,
       this.textInputAction = TextInputAction.next,
-      this.controller})
+      this.controller,
+      this.maxLength})
       : super(key: key);
 
   @override
@@ -48,7 +50,7 @@ class _CustomTextFormFieldState
       onFieldSubmitted: (_) {
         formUtil.passFocus(focusNode, widget.nextFocus);
       },
-      maxLength: 50,
+      maxLength: widget.maxLength,
     );
   }
 }
