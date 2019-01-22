@@ -19,7 +19,6 @@ class LogInBloc {
   }
 
   login(LogInRequest request) async {
-    print(request.email);
     try {
       _responsePublishSubject.sink.add(StreamEvent.loading());
       var response = await _userRepository.login(request);

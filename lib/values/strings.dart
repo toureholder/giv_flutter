@@ -1,4 +1,8 @@
+import 'package:giv_flutter/config/i18n/string_localizations.dart';
+
 class Strings {
+  static String formatItem = StringLocalizations.formatItemSymbol;
+
   static Map<String, Map<String, String>> map = {
     "app_name": {
       "en": "Giv"
@@ -36,8 +40,8 @@ class Strings {
       "pt": "Busque no Giv"
     },
     "search_result_x_results": {
-      "en": "%1s Results",
-      "pt": "%1s Resultados"
+      "en": "$formatItem Results",
+      "pt": "$formatItem Resultados"
     },
     "action_filter": {
       "en": "Filter",
@@ -72,8 +76,8 @@ class Strings {
       "pt": "Perto de mim"
     },
     "i_want_it": {
-      "en": "I WANT IT",
-      "pt": "EU QUERO"
+      "en": "I want it",
+      "pt": "Eu quero"
     },
     "home_see_more": {
       "en": "View all",
@@ -154,6 +158,10 @@ class Strings {
     "validation_message_required": {
       "en": "Please fill in this field",
       "pt": "Por favor preencha este campo"
+    },
+    "whatsapp_message_interested": {
+      "en": "Hi! I'm interested in the $formatItem that you listed on Giv :)",
+      "pt": "Oi! Estou interessado no $formatItem que você anunciou no Giv :)"
     }
   };
 }

@@ -15,13 +15,13 @@ class StringLocalizations {
 
   static Map<String, Map<String, String>> _localizedValues = Strings.map;
 
-  static const formatSymbol = '%1s';
+  static const formatItemSymbol = '%1s';
 
   String get(String key, {String formatArg}) {
     var localizedString = _getLocalizedValue(key);
 
     return formatArg != null
-        ? localizedString.replaceAll(formatSymbol, formatArg)
+        ? localizedString.replaceAll(formatItemSymbol, formatArg)
         : localizedString;
   }
 
