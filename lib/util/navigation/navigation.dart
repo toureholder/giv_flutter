@@ -18,6 +18,9 @@ class Navigation {
     }
   }
 
+  bool pop<T extends Object>([ T result ]) => Navigator.of(context).pop(result);
+
+
   void pushReplacement(Widget page, {bool hasAnimation = true}) {
     var route = hasAnimation ? _pageRoute(page) : _noAnimationPageRoute(page);
     Navigator.pushReplacement(context, route);

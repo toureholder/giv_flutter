@@ -10,6 +10,7 @@ class Base extends StatefulWidget {
   @override
   _BaseState createState() => _BaseState();
 
+  static String actionIdHome = 'HOME';
   static String actionIdSearch = 'SEARCH';
   static String actionIdPost = 'POST';
 }
@@ -26,15 +27,18 @@ class _BaseState extends BaseState<Base> implements HomeListener {
 
     _setupPages();
 
-    return CustomScaffold(
-      body: _currentPage.child,
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: _goToPostPage,
-        icon: Icon(Icons.add),
-        label: Text(string('shared_action_create_ad')),
+    return WillPopScope(
+      onWillPop: _onBackPressed,
+      child: CustomScaffold(
+        body: _currentPage.child,
+        floatingActionButton: FloatingActionButton.extended(
+          onPressed: _goToPostPage,
+          icon: Icon(Icons.add),
+          label: Text(string('shared_action_create_ad')),
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        bottomNavigationBar: _buildBottomNavigationBar(),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      bottomNavigationBar: _buildBottomNavigationBar(),
     );
   }
 
@@ -73,9 +77,13 @@ class _BaseState extends BaseState<Base> implements HomeListener {
   }
 
   void _goToSearchPage() {
-    int searchPageIndex =
-        _pages.indexWhere((page) => page.actionId == Base.actionIdSearch);
-    _onTabTapped(searchPageIndex);
+    int index = _getIndexByActionId(Base.actionIdSearch);
+    _onTabTapped(index);
+  }
+
+  void _goToHomePage() {
+    int index = _getIndexByActionId(Base.actionIdHome);
+    _onTabTapped(index);
   }
 
   void _onTabTapped(int index) {
@@ -91,7 +99,8 @@ class _BaseState extends BaseState<Base> implements HomeListener {
       BasePage(
           child: Home(listener: this),
           icon: Icons.home,
-          iconText: string('base_page_title_home')),
+          iconText: string('base_page_title_home'),
+          actionId: Base.actionIdHome),
       BasePage.empty(),
       BasePage.empty(),
       BasePage(
@@ -101,6 +110,16 @@ class _BaseState extends BaseState<Base> implements HomeListener {
         actionId: Base.actionIdSearch,
       ),
     ];
+  }
+
+  Future<bool> _onBackPressed() async {
+    final homeIndex = _getIndexByActionId(Base.actionIdHome);
+    if (_currentIndex != homeIndex) {
+      _goToHomePage();
+      return false;
+    } else {
+      return true;
+    }
   }
 
   @override
@@ -115,4 +134,7 @@ class _BaseState extends BaseState<Base> implements HomeListener {
       return;
     }
   }
+
+  int _getIndexByActionId(String actionId) =>
+      _pages.indexWhere((it) => it.actionId == actionId);
 }
