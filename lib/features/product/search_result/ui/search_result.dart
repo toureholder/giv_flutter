@@ -171,13 +171,13 @@ class _SearchResultState extends BaseState<SearchResult> {
           ),
           fit: BoxFit.cover,
           height: Dimens.search_result_image_height,
-          imageUrl: product.imageUrls.first),
+          imageUrl: product.images.first.url),
     );
   }
 
   Container _buildResultsHeader(ProductSearchResult result) {
     final quantity = result.products.length;
-    final buttonText = result.location?.name ?? string('action_filter');
+    final buttonText = result.location?.shortName ?? string('action_filter');
 
     return Container(
       padding: EdgeInsets.symmetric(horizontal: Dimens.grid(6)),

@@ -4,10 +4,17 @@ import 'package:giv_flutter/features/product/categories/bloc/categories_bloc.dar
 import 'package:giv_flutter/features/product/categories/ui/category_list_tile.dart';
 import 'package:giv_flutter/model/product/product_category.dart';
 import 'package:giv_flutter/util/data/content_stream_builder.dart';
+import 'package:giv_flutter/util/presentation/custom_app_bar.dart';
 import 'package:giv_flutter/util/presentation/custom_scaffold.dart';
 import 'package:giv_flutter/util/presentation/search_teaser_app_bar.dart';
 
 class Categories extends StatefulWidget {
+  final bool showSearch;
+  final bool returnChoice;
+
+  const Categories({Key key, this.showSearch = true, this.returnChoice = false})
+      : super(key: key);
+
   @override
   _CategoriesState createState() => _CategoriesState();
 }
@@ -32,8 +39,12 @@ class _CategoriesState extends BaseState<Categories> {
   Widget build(BuildContext context) {
     super.build(context);
 
+    var appBar = widget.showSearch
+        ? SearchTeaserAppBar(leading: Icon(Icons.search))
+        : CustomAppBar(title: string('page_title_categories'));
+
     return CustomScaffold(
-      appBar: SearchTeaserAppBar(leading: Icon(Icons.search)),
+      appBar: appBar,
       body: ContentStreamBuilder(
         stream: _categoriesBloc.categories,
         onHasData: (data) {
@@ -49,7 +60,10 @@ class _CategoriesState extends BaseState<Categories> {
         shrinkWrap: true,
         itemCount: categories.length,
         itemBuilder: (context, i) {
-          return CategoryListTile(category: categories[i]);
+          return CategoryListTile(
+            category: categories[i],
+            returnChoice: widget.returnChoice,
+          );
         });
   }
 }

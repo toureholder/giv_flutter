@@ -2,57 +2,103 @@ import 'package:faker/faker.dart';
 import 'package:giv_flutter/model/location/location_part.dart';
 
 class Location {
-  String cityId;
-  String stateId;
-  String countryId;
-  String name;
+  City city;
+  State state;
+  Country country;
 
-  Location({this.cityId, this.stateId, this.countryId, this.name});
+  Location({this.city, this.state, this.country});
+
+  String get shortName => city?.name ?? state?.name ?? country?.name;
+
+  String get mediumName {
+    final array = <String>[];
+
+    if (city.isComplete) array.add(city.name);
+    if (state.isComplete) array.add(state.name);
+
+    return array.join(', ');
+  }
+
+  String get longName {
+    final array = <String>[];
+
+    if (city.isComplete) array.add(city.name);
+    if (state.isComplete) array.add(state.name);
+    if (country.isComplete) array.add(country.name);
+
+    return array.join(', ');
+  }
 
   // Serialization
 
-  static final String cityIdKey = 'cityId';
-  static final String stateIdKey = 'stateId';
-  static final String countryIdKey = 'countryId';
+  static final String cityKey = 'city';
+  static final String stateKey = 'state';
+  static final String countryKey = 'country';
   static final String nameKey = 'name';
+  static final String idKey = 'id';
 
-  Location.fromJson(Map<String, dynamic> json)
-      : cityId = json[cityIdKey],
-        stateId = json[stateIdKey],
-        countryId = json[countryIdKey],
-        name = json[nameKey];
+  factory Location.fromJson(Map<String, dynamic> json) {
+    final country = json.containsKey(countryKey)
+        ? Country(
+            id: json[countryKey][idKey],
+            name: json[countryKey][nameKey],
+          )
+        : null;
 
-  static Location mock() => Location(
-      cityId: '6324222',
-      stateId: '3463504',
-      countryId: '3469034',
-      name: 'Brasília');
+    final state = json.containsKey(stateKey)
+        ? State(
+            id: json[stateKey][idKey],
+            name: json[stateKey][nameKey],
+          )
+        : null;
+
+    final city = json.containsKey(cityKey)
+        ? City(
+            id: json[cityKey][idKey],
+            name: json[cityKey][nameKey],
+          )
+        : null;
+
+    return Location(country: country, state: state, city: city);
+  }
+
+  Location.mock()
+      : country = Country(id: '3469034', name: 'Brasil'),
+        state = State(id: '3463504', name: 'Distrito Federal'),
+        city = City(id: '6324222', name: 'Brasília');
 
   Map<String, dynamic> toJson() => {
-        cityIdKey: cityId,
-        stateIdKey: stateId,
-        countryIdKey: countryId,
-        nameKey: name
+        cityKey: {idKey: city?.id, nameKey: city?.name},
+        stateKey: {idKey: state?.id, nameKey: state?.name},
+        countryKey: {idKey: country?.id, nameKey: country?.name},
       };
 
   Location copy() => Location.fromJson(toJson());
 
   bool equals(Location location) {
-    return countryId == location.countryId &&
-        stateId == location.stateId &&
-        cityId == location.cityId;
+    if (location == null) return this == null;
+
+    return country?.id == location.country?.id &&
+        state?.id == location.state?.id &&
+        city?.id == location.city?.id;
   }
+
+  bool get isComplete =>
+      (country?.isComplete ?? false) &
+      (state?.isComplete ?? false) &
+      (city?.isComplete ?? false);
 
   static List<Country> mockCountries() {
     final faker = new Faker();
     final List<Country> list = [];
+
+    list.add(Country(id: '3469034', name: 'Brasil'));
 
     for (var i = 0; i < 200; i++) {
       list.add(Country(
           id: faker.randomGenerator.string(6), name: faker.address.country()));
     }
 
-    list.add(Country(id: '3469034', name: 'Brasil'));
     return list;
   }
 
@@ -60,12 +106,13 @@ class Location {
     final faker = new Faker();
     final List<State> list = [];
 
+    list.add(State(id: '3463504', name: 'Distrito Federal'));
+
     for (var i = 0; i < 200; i++) {
       list.add(State(
           id: faker.randomGenerator.string(6), name: faker.address.city()));
     }
 
-    list.add(State(id: '3463504', name: 'Distrito Federal'));
     return list;
   }
 
@@ -73,13 +120,14 @@ class Location {
     final faker = new Faker();
     final List<City> list = [];
 
+    list.add(City(id: '6324222', name: 'Brasília'));
+
     for (var i = 0; i < 200; i++) {
       list.add(City(
           id: faker.randomGenerator.string(6),
           name: faker.address.neighborhood()));
     }
 
-    list.add(City(id: '6324222', name: 'Brasília'));
     return list;
   }
 }

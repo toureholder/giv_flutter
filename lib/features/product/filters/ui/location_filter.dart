@@ -9,12 +9,16 @@ import 'package:giv_flutter/util/data/stream_event.dart';
 import 'package:giv_flutter/util/presentation/buttons.dart';
 import 'package:giv_flutter/util/presentation/custom_app_bar.dart';
 import 'package:giv_flutter/util/presentation/custom_scaffold.dart';
+import 'package:giv_flutter/util/presentation/spacing.dart';
 import 'package:giv_flutter/values/dimens.dart';
 
 class LocationFilter extends StatefulWidget {
   final Location location;
+  final bool requireFullLocation;
 
-  const LocationFilter({Key key, this.location}) : super(key: key);
+  const LocationFilter(
+      {Key key, this.location, this.requireFullLocation = false})
+      : super(key: key);
 
   @override
   _LocationFilterState createState() => _LocationFilterState();
@@ -28,7 +32,7 @@ class _LocationFilterState extends BaseState<LocationFilter> {
   @override
   void initState() {
     super.initState();
-    _currentLocation = widget.location.copy();
+    _currentLocation = widget.location?.copy() ?? Location();
     _locationFilterBloc = LocationFilterBloc();
     _locationFilterBloc.fetchLocationLists(_currentLocation);
   }
@@ -48,18 +52,9 @@ class _LocationFilterState extends BaseState<LocationFilter> {
         stream: _locationFilterBloc.listStream,
         onHasData: (LocationList data) {
           _locationList = data;
-          return _buildStack(context);
+          return _buildMainListView(context);
         },
       ),
-    );
-  }
-
-  Stack _buildStack(BuildContext context) {
-    return Stack(
-      children: <Widget>[
-        _buildMainListView(context),
-        _buildActionPositioned(context)
-      ],
     );
   }
 
@@ -77,6 +72,8 @@ class _LocationFilterState extends BaseState<LocationFilter> {
               _buildCountriesDropdown(context, _locationList.countries),
               _statesDropdownStreamBuilder(),
               _citiesDropdownStreamBuilder(),
+              Spacing.vertical(Dimens.grid(16)),
+              _buildPrimaryButton(context)
             ],
           ),
         )
@@ -119,12 +116,14 @@ class _LocationFilterState extends BaseState<LocationFilter> {
           hint: Text(string('common_country')),
           isExpanded: true,
           value: countries?.firstWhere((it) {
-            return it.id == _currentLocation.countryId;
+            return it.id == _currentLocation.country?.id;
           }, orElse: () => null),
           items: menuItems,
           onChanged: (LocationPart.Country country) {
             setState(() {
-              _currentLocation = Location(countryId: country.id);
+              _currentLocation = Location(
+                  country:
+                      LocationPart.Country(id: country.id, name: country.name));
             });
             _locationFilterBloc.fetchStates(country.id);
           },
@@ -155,13 +154,14 @@ class _LocationFilterState extends BaseState<LocationFilter> {
           hint: Text(hintText),
           isExpanded: true,
           value: states?.firstWhere((it) {
-            return it.id == _currentLocation.stateId;
+            return it.id == _currentLocation.state?.id;
           }, orElse: () => null),
           items: menuItems,
           onChanged: (LocationPart.State state) {
             setState(() {
-              _currentLocation.stateId = state.id;
-              _currentLocation.cityId = null;
+              _currentLocation.state =
+                  LocationPart.State(id: state.id, name: state.name);
+              _currentLocation.city = null;
             });
             _locationFilterBloc.fetchCities(state.id);
           },
@@ -192,12 +192,13 @@ class _LocationFilterState extends BaseState<LocationFilter> {
           hint: Text(hintText),
           isExpanded: true,
           value: cities?.firstWhere((it) {
-            return it.id == _currentLocation.cityId;
+            return it.id == _currentLocation.city?.id;
           }, orElse: () => null),
           items: menuItems,
-          onChanged: (city) {
+          onChanged: (LocationPart.City city) {
             setState(() {
-              _currentLocation.cityId = city.id;
+              _currentLocation.city =
+                  LocationPart.City(id: city.id, name: city.name);
             });
           },
         ),
@@ -205,39 +206,26 @@ class _LocationFilterState extends BaseState<LocationFilter> {
     );
   }
 
-  Positioned _buildActionPositioned(BuildContext context) {
-    return Positioned(
-      bottom: 0.0,
-      left: 0.0,
-      right: 0.0,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          Divider(
-            height: 1.0,
-          ),
-          Container(
-            color: Colors.white,
-            height: 80.0,
-            alignment: Alignment.center,
-            child: _buildPrimaryButton(context),
-          )
-        ],
-      ),
-    );
+  Widget _buildPrimaryButton(BuildContext context) {
+    var onPressed = _hasChangedLocation() && _isLocationValid()
+        ? returnCurrentLocation
+        : null;
+
+    var res =
+        widget.requireFullLocation ? 'shared_action_save' : 'action_filter';
+
+    return PrimaryButton(text: string(res), onPressed: onPressed);
   }
 
-  Widget _buildPrimaryButton(BuildContext context) {
-    var onPressed = _currentLocation.equals(widget.location)
-        ? null
-        : () {
-            Navigator.pop(context, _currentLocation);
-          };
+  bool _hasChangedLocation() =>
+      !_currentLocation.equals(widget.location) &&
+      !_currentLocation.equals(Location());
 
-    return Padding(
-      padding:
-          EdgeInsets.symmetric(horizontal: Dimens.default_horizontal_margin),
-      child: PrimaryButton(text: string('action_filter'), onPressed: onPressed),
-    );
+  bool _isLocationValid() {
+    return widget.requireFullLocation ? _currentLocation.isComplete : true;
+  }
+
+  void returnCurrentLocation() {
+    Navigator.pop(context, _currentLocation);
   }
 }

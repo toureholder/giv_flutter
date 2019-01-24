@@ -98,4 +98,8 @@ class ProductCategory {
       )
     ];
   }
+
+  static String getCategoryListTitles(List<ProductCategory> categories) =>
+      categories.map((it) => it.title).join(', ');
+
 }

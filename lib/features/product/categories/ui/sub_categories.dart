@@ -7,8 +7,10 @@ import 'package:giv_flutter/util/presentation/custom_scaffold.dart';
 
 class SubCategories extends StatefulWidget {
   final ProductCategory category;
+  final bool returnChoice;
 
-  const SubCategories({Key key, this.category}) : super(key: key);
+  const SubCategories({Key key, this.category, this.returnChoice = false})
+      : super(key: key);
 
   @override
   _SubCategoriesState createState() => _SubCategoriesState();
@@ -29,6 +31,11 @@ class _SubCategoriesState extends BaseState<SubCategories> {
 
   List<Widget> _buildList(
       BuildContext context, List<ProductCategory> categories) {
-    return categories.map((it) => CategoryListTile(category: it)).toList();
+    return categories
+        .map((it) => CategoryListTile(
+              category: it,
+              returnChoice: widget.returnChoice,
+            ))
+        .toList();
   }
 }

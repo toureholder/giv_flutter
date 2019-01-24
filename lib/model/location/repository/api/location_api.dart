@@ -23,8 +23,8 @@ class LocationApi {
     await Future.delayed(Duration(seconds: 2));
     var lists = LocationList();
     lists.countries = Location.mockCountries();
-    if (location.countryId != null) lists.states = Location.mockStates();
-    if (location.stateId != null) lists.cities = Location.mockCities();
+    if (location.country != null) lists.states = Location.mockStates();
+    if (location.state != null) lists.cities = Location.mockCities();
     return lists;
   }
 }

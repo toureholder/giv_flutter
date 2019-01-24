@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:giv_flutter/base/base_state.dart';
+import 'package:giv_flutter/model/image/image.dart' as CustomImage;
 import 'package:giv_flutter/model/product/product.dart';
 import 'package:giv_flutter/util/presentation/buttons.dart';
 import 'package:giv_flutter/util/presentation/cirucluar_network_image.dart';
@@ -37,10 +38,10 @@ class _ProductDetailState extends BaseState<ProductDetail> {
     return CustomScaffold(
       appBar: CustomAppBar(),
       body: ListView(children: <Widget>[
-        _imageCarousel(context, _product.imageUrls),
+        _imageCarousel(context, _product.images),
         _textPadding(H6Text(_product.title)),
         _textPadding(Subtitle(
-          _product.location,
+          _product.location?.mediumName ?? '',
           weight: SyntheticFontWeight.semiBold,
         )),
         _iWantItButton(context),
@@ -100,15 +101,18 @@ class _ProductDetailState extends BaseState<ProductDetail> {
     );
   }
 
-  Widget _imageCarousel(BuildContext context, List<String> imageUrls) {
+  Widget _imageCarousel(BuildContext context, List<CustomImage.Image> images) {
     final _pageController = PageController();
+
+    final imageUrls = images.map((it) => it.url).toList();
+
     return ImageCarousel(
       imageUrls: imageUrls,
       height: 300.0,
       pageController: _pageController,
       onTap: () {
         int index = _pageController.page.toInt();
-        navigation.push(PhotoViewPage(imageUrl: imageUrls[index]));
+        navigation.push(PhotoViewPage(image: images[index]));
       },
       withIndicator: true,
     );

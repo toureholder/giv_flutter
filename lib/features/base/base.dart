@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:giv_flutter/base/base_state.dart';
 import 'package:giv_flutter/features/base/model/base_page.dart';
 import 'package:giv_flutter/features/home/ui/home.dart';
-import 'package:giv_flutter/features/post/post.dart';
+import 'package:giv_flutter/features/listing/ui/new_listing.dart';
 import 'package:giv_flutter/features/product/categories/ui/categories.dart';
 import 'package:giv_flutter/util/presentation/custom_scaffold.dart';
 
@@ -73,7 +73,7 @@ class _BaseState extends BaseState<Base> implements HomeListener {
   }
 
   void _goToPostPage() {
-    navigation.push(Post());
+    navigation.push(NewListing());
   }
 
   void _goToSearchPage() {

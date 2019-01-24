@@ -172,7 +172,7 @@ class _HomeState extends BaseState<Home> {
             ),
             fit: BoxFit.cover,
             width: Dimens.home_product_image_dimension,
-            imageUrl: product.imageUrls.first,
+            imageUrl: product.images.first.url,
           ),
         ),
       ),

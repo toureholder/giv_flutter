@@ -73,7 +73,7 @@ class Strings {
     },
     "location_filter_title": {
       "en": "Location",
-      "pt": "Perto de mim"
+      "pt": "Localização"
     },
     "i_want_it": {
       "en": "I want it",
@@ -242,6 +242,122 @@ class Strings {
     "shared_action_cancel": {
       "en": "Cancel",
       "pt": "Cancelar"
+    },
+    "new_listing_title": {
+      "en": "New listing",
+      "pt": "Novo anúncio"
+    },
+    "new_listing_section_title_photos": {
+      "en": "Beautiful photos of the product",
+      "pt": "Lindas fotos do produto"
+    },
+    "new_listing_section_title_about": {
+      "en": "About the product",
+      "pt": "Sobre o produto"
+    },
+    "new_listing_action_create": {
+      "en": "Create listing",
+      "pt": "Criar anúncio"
+    },
+    "new_listing_tile_name": {
+      "en": "Title",
+      "pt": "Títle"
+    },
+    "new_listing_tile_name_empty_state": {
+      "en": "Tap to give your listing a title",
+      "pt": "Toque para adicionar o título do anúncio"
+    },
+    "new_listing_tile_description": {
+      "en": "Description",
+      "pt": "Descriçao"
+    },
+    "new_listing_tile_description_empty_state": {
+      "en": "Describe what you are donating",
+      "pt": "Fale um pouco sobre o que você está doando"
+    },
+    "new_listing_tile_category": {
+      "en": "Category",
+      "pt": "Categoria"
+    },
+    "new_listing_tile_category_empty_state": {
+      "en": "Choose up to 3 categories ;)",
+      "pt": "Você pode escolher até 3 categorias ;)"
+    },
+    "new_listing_tile_location": {
+      "en": "Location",
+      "pt": "Localização"
+    },
+    "new_listing_tile_location_empty_state": {
+      "en": "Where can this donation be picked up?",
+      "pt": "Onde esta doação pode ser retirada?"
+    },
+    "new_listing_tile_phone_number_empty_state": {
+      "en": "Add a mobile phone number",
+      "pt": "Adicoine o número do seu célular"
+    },
+    "new_listing_images_hint": {
+      "en": "Don't forget to add some photos :)",
+      "pt": "Não se esqueça de adicionar alumgas fotos :)"
+    },
+    "new_listing_edit_title_hint": {
+      "en": "Give you listing a title",
+      "pt": "Dê um título para seu anúncio"
+    },
+    "new_listing_edit_description_hint": {
+      "en": "Add a few lines about the level of wear and tear of the donation and anything else you find relevant :)",
+      "pt": "Fale um pouco sobre o estado de conservação da doação e qualquer outra coisa que achar relevante :)"
+    },
+    "page_title_categories": {
+      "en": "Categories",
+      "pt": "Categorias"
+    },
+    "edit_categories_title": {
+      "en": "Edit categories",
+      "pt": "Editar categorias"
+    },
+    "edit_categories_add_text": {
+      "en": "Add a category",
+      "pt": "Adicione uma categoria"
+    },
+    "edit_categories_add_limit_warning": {
+      "en": "You can choose up to 3 categories",
+      "pt": "Você pode escolher até 3 categorias"
+    },
+    "image_picker_modal_title": {
+      "en": "Add a new image",
+      "pt": "Nova imagem"
+    },
+    "image_picker_modal_camera": {
+      "en": "Camera",
+      "pt": "Câmera"
+    },
+    "image_picker_modal_gallery": {
+      "en": "Gallery",
+      "pt": "Galeria"
+    },
+    "image_picker_modal_remove": {
+      "en": "Remove image",
+      "pt": "Remover foto"
+    },
+    "new_listing_uploading": {
+      "en": "Creating listing...",
+      "pt": "Criando anúncio..."
+    },
+    "new_listing_cancel_confirmation_title": {
+      "en": "Cancel?",
+      "pt": "Cancelar?"
+    },
+    "new_listing_cancel_confirmation_message": {
+      "en": "Your progress will not be saved. Are you sure you want to cancel?",
+      "pt": "Seu progresso não será salvo. Quer mesmo cancelar?"
+    },
+    "common_yes": {
+      "en": "Yes",
+      "pt": "Sim"
+    },
+    "common_no": {
+      "en": "No",
+      "pt": "Não"
     }
   };
 }

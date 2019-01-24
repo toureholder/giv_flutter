@@ -3,6 +3,11 @@ class LocationPart {
   final String name;
 
   LocationPart({this.id, this.name});
+
+  bool get isComplete =>
+      this != null &&
+      (id != null && id.isNotEmpty) &&
+      (name != null && name.isNotEmpty);
 }
 
 class Country extends LocationPart {

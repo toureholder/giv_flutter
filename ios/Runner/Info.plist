@@ -42,6 +42,13 @@
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
 
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>This app requires access to the photo library so users can add images to their donation listings.</string>
+    <key>NSMicrophoneUsageDescription</key>
+    <string>This app does not require access to the microphone.</string>
+    <key>NSCameraUsageDescription</key>
+    <string>This app requires access to the camera so users can add images to their donation listings.</string>
+
     <!-- Facebook Login configuration -->
     <key>CFBundleURLTypes</key>
     <array>

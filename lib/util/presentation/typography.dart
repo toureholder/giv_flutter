@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 class CustomTypography {
-  static TextStyle base = TextStyle(color: Color(0xFF252525));
+  static Color baseColor = Color(0xFF252525);
+
+  static TextStyle base = TextStyle(color: baseColor);
 
   static TextStyle h6 = base.copyWith(
       fontSize: 20.0, fontWeight: FontWeight.w500, letterSpacing: 0.15);
@@ -27,7 +29,7 @@ class CustomTypography {
       height: 1.25);
 
   static TextStyle caption = base.copyWith(
-    fontSize: 12.0, fontWeight: FontWeight.w400, letterSpacing: 0.4);
+      fontSize: 12.0, fontWeight: FontWeight.w400, letterSpacing: 0.4);
 
   static Map<SyntheticFontWeight, FontWeight> weightMap = {
     SyntheticFontWeight.semiBold: FontWeight.w600,
@@ -160,15 +162,16 @@ class Body2Text extends BaseText {
   final SyntheticFontWeight weight;
   final Color color;
   final List<Shadow> shadows;
+  final TextAlign textAlign;
 
-  Body2Text(this.data, {Key key, this.weight, this.color, this.shadows})
-      : super(
-          data,
-          textStyle: CustomTypography.body2,
-          syntheticWeight: weight,
-          color: color,
-          shadows: shadows,
-        );
+  Body2Text(this.data,
+      {Key key, this.weight, this.color, this.shadows, this.textAlign})
+      : super(data,
+            textStyle: CustomTypography.body2,
+            syntheticWeight: weight,
+            color: color,
+            shadows: shadows,
+            textAlign: textAlign);
 }
 
 class Caption extends BaseText {
@@ -181,9 +184,9 @@ class Caption extends BaseText {
   Caption(this.data,
       {Key key, this.weight, this.color, this.shadows, this.textAlign})
       : super(data,
-      textStyle: CustomTypography.caption,
-      syntheticWeight: weight,
-      color: color,
-      shadows: shadows,
-      textAlign: textAlign);
+            textStyle: CustomTypography.caption,
+            syntheticWeight: weight,
+            color: color,
+            shadows: shadows,
+            textAlign: textAlign);
 }

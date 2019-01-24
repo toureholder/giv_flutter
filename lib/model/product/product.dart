@@ -1,20 +1,49 @@
 import 'package:faker/faker.dart';
+import 'package:giv_flutter/model/image/image.dart';
+import 'package:giv_flutter/model/location/location.dart';
+import 'package:giv_flutter/model/product/product_category.dart';
 import 'package:giv_flutter/model/user/user.dart';
 
 class Product {
-  final String title;
-  final String location;
-  final String description;
-  final List<String> imageUrls;
-  final User user;
+  String title;
+  Location location;
+  String description;
+  List<Image> images;
+  User user;
+  List<ProductCategory> categories;
 
-  Product({
-    this.title,
-    this.location,
-    this.description,
-    this.imageUrls,
-    this.user
-  });
+  Product(
+      {this.title,
+      this.location,
+      this.description,
+      this.images,
+      this.user,
+      this.categories});
+
+  bool get isNotEmpty {
+    return title != null ||
+        description != null ||
+        (images != null && images.isNotEmpty) ||
+        (categories != null && categories.isNotEmpty);
+  }
+
+  static Product mock() {
+    final faker = new Faker();
+
+    final numberOfImages = faker.randomGenerator.integer(8, min: 1);
+    final imageIds = faker.randomGenerator.numbers(1000, numberOfImages);
+    final images = imageIds.map((id) {
+      return Image(url: "https://picsum.photos/500/500/?image=$id");
+    }).toList();
+
+    return Product(
+        title: faker.food.dish(),
+        location: Location.mock(),
+        description:
+            'Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. The quick brown fox jumps over the lazy dog. ',
+        images: images,
+        user: User.mock());
+  }
 
   static List<Product> getMockList({int quantity}) {
     final faker = new Faker();
@@ -23,21 +52,7 @@ class Product {
     int size = quantity ?? faker.randomGenerator.integer(20, min: 3);
 
     for (var i = 0; i < size; i++) {
-      final numberOfImages = faker.randomGenerator.integer(8, min: 1);
-      final imageIds = faker.randomGenerator.numbers(1000, numberOfImages);
-      final imageUrls = imageIds.map((id) {
-        return "https://picsum.photos/500/500/?image=$id";
-      }).toList();
-
-      list.add(
-        Product(
-          title: faker.food.dish(),
-          location: "${faker.address.city()}, ${faker.address.country()}",
-          description: 'Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. The quick brown fox jumps over the lazy dog. ',
-          imageUrls: imageUrls,
-          user: User.mock()
-        )
-      );
+      list.add(Product.mock());
     }
     return list;
   }
