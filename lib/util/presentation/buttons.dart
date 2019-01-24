@@ -132,7 +132,8 @@ class GreyButton extends StatelessWidget {
       child: FlatButton(
         color: Colors.grey[300],
         textColor: Colors.black,
-        disabledTextColor: Colors.grey[200],
+        disabledColor: Colors.grey[200],
+        disabledTextColor: Colors.white,
         onPressed: onPressed,
         child: Text(text),
       ),

@@ -21,6 +21,7 @@ dependencies:
   cached_network_image: ^0.5.0
   country_code_picker: ^1.1.1
   faker: ^1.0.0
+  flutter_facebook_login: ^1.2.0
   flutter_svg: ^0.10.2
   photo_view: ^0.0.10
   rxdart: ^0.20.0

@@ -1,6 +1,7 @@
 import 'package:giv_flutter/model/api_response/api_response.dart';
 import 'package:giv_flutter/model/user/log_in_request.dart';
 import 'package:giv_flutter/model/user/log_in_response.dart';
+import 'package:giv_flutter/model/user/log_in_with_provider.dart';
 import 'package:giv_flutter/model/user/repository/api/user_api.dart';
 import 'package:giv_flutter/model/user/sign_up_request.dart';
 import 'package:giv_flutter/model/user/user.dart';
@@ -11,6 +12,9 @@ class UserRepository {
   Future<ApiResponse> signUp(SignUpRequest request) => userApi.signUp(request);
 
   Future<LogInResponse> login(LogInRequest request) => userApi.login(request);
+
+  Future<LogInResponse> loginWithProvider(LogInWithProviderRequest request) =>
+      userApi.loginWithProvider(request);
 
   Future<User> getMe() => userApi.getMe();
 
