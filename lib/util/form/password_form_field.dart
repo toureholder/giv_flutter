@@ -46,7 +46,7 @@ class _PasswordFormFieldState extends CustomFormFieldState<PasswordFormField> {
                   _isPasswordVisible = !_isPasswordVisible;
                 });
               })),
-      obscureText: _isPasswordVisible,
+      obscureText: !_isPasswordVisible,
       keyboardType: TextInputType.text,
       validator: widget.validator,
       autovalidate: autovalidate,

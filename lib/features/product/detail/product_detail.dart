@@ -65,7 +65,8 @@ class _ProductDetailState extends BaseState<ProductDetail> {
           text: string('i_want_it'),
           onPressed: () {
             if (user.phoneNumber != null)
-              Util.openWhatsApp(user.phoneNumber, message);
+              Util.openWhatsApp(
+                  '${user.countryCallingCode}${user.phoneNumber}', message);
           }),
     );
   }

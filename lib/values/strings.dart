@@ -129,7 +129,7 @@ class Strings {
     },
     "validation_message_name_required": {
       "en": "Don't forget to fill in your name",
-      "pt": "Não se esequeça de preencher seu nome"
+      "pt": "Não se esqueça de preencher seu nome"
     },
     "validation_message_email_required": {
       "en": "We need a valid email address :)",
@@ -137,7 +137,7 @@ class Strings {
     },
     "validation_message_password_min_length": {
       "en": "Your password should be at least 6 characters long",
-      "pt": "Sua senha deve ter no mínimo 6 caractéres"
+      "pt": "Sua senha deve ter no mínimo 6 caracteres"
     },
     "sign_in_verify_email_title": {
       "en": "We sent you an email",
