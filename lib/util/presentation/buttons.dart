@@ -184,7 +184,7 @@ class FacebookButton extends StatelessWidget {
       color: Color(0xFF3B5998),
       onPressed: onPressed,
       icon: Icon(
-        CustomIcons.facebook,
+        CustomIcons.facebook_1,
         size: 18.0,
       ),
       text: text,

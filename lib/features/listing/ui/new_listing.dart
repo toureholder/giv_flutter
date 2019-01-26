@@ -8,6 +8,7 @@ import 'package:giv_flutter/features/listing/bloc/new_listing_bloc.dart';
 import 'package:giv_flutter/features/listing/ui/edit_categories.dart';
 import 'package:giv_flutter/features/listing/ui/edit_description.dart';
 import 'package:giv_flutter/features/listing/ui/edit_title.dart';
+import 'package:giv_flutter/features/listing/ui/my_listings.dart';
 import 'package:giv_flutter/features/product/categories/ui/categories.dart';
 import 'package:giv_flutter/features/product/filters/ui/location_filter.dart';
 import 'package:giv_flutter/features/settings/ui/edit_phone_number.dart';
@@ -59,6 +60,9 @@ class _NewListingState extends BaseState<NewListing> {
     _newListingBloc = NewListingBloc();
     _newListingBloc.loadUser();
     _newListingBloc.loadLocation();
+    _newListingBloc.uploadStatusStream.listen((StreamEvent<double> event) {
+      if (event.isReady) _onUploadSuccess();
+    });
   }
 
   @override
@@ -637,6 +641,10 @@ class _NewListingState extends BaseState<NewListing> {
       print('Send to server');
       _newListingBloc.upload(_product);
     }
+  }
+
+  _onUploadSuccess() {
+    navigation.pushReplacement(MyListings());
   }
 
   Future<bool> _onWillPop() {

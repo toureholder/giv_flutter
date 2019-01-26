@@ -88,7 +88,7 @@ class _HomeState extends BaseState<Home> {
       child: GestureDetector(
         child: CircularNetworkImage(imageUrl: imageUrl),
         onTap: () {
-          navigation.push(Settings());
+          navigation.push(Settings(avatarUrl: imageUrl,));
         },
       ),
     );

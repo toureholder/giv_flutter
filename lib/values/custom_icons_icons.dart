@@ -12,10 +12,18 @@
 ///       - asset: fonts/CustomIcons.ttf
 ///
 /// 
-/// * Font Awesome, Copyright (C) 2016 by Dave Gandy
-///         Author:    Dave Gandy
-///         License:   SIL ()
-///         Homepage:  http://fortawesome.github.com/Font-Awesome/
+/// * Typicons, (c) Stephen Hutchings 2012
+///         Author:    Stephen Hutchings
+///         License:   SIL (http://scripts.sil.org/OFL)
+///         Homepage:  http://typicons.com/
+/// * Zocial, Copyright (C) 2012 by Sam Collins
+///         Author:    Sam Collins
+///         License:   MIT (http://opensource.org/licenses/mit-license.php)
+///         Homepage:  http://zocial.smcllns.com/
+/// * Web Symbols, Copyright (c) 2011 by Just Be Nice studio. All rights reserved.
+///         Author:    Just Be Nice studio
+///         License:   SIL (http://scripts.sil.org/OFL)
+///         Homepage:  http://www.justbenicestudio.com/
 ///
 import 'package:flutter/widgets.dart';
 
@@ -24,5 +32,7 @@ class CustomIcons {
 
   static const _kFontFam = 'CustomIcons';
 
-  static const IconData facebook = const IconData(0xf09a, fontFamily: _kFontFam);
+  static const IconData gift = const IconData(0xe800, fontFamily: _kFontFam);
+  static const IconData facebook_1 = const IconData(0xe801, fontFamily: _kFontFam);
+  static const IconData logout = const IconData(0xe802, fontFamily: _kFontFam);
 }

@@ -204,7 +204,7 @@ class Strings {
       "pt": "Fale um pouco sobre você"
     },
     "settings_logout": {
-      "en": "Logout",
+      "en": "Log out",
       "pt": "Sair"
     },
     "settings_edit_bio_hint": {
@@ -358,6 +358,15 @@ class Strings {
     "common_no": {
       "en": "No",
       "pt": "Não"
+    },
+    "common_me": {
+      "en": "Me",
+      "pt": "Eu"
+    },
+    "me_listings": {
+      "en": "My listings",
+      "pt": "Meus anúncios"
     }
+
   };
 }
