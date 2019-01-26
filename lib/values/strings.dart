@@ -366,7 +366,14 @@ class Strings {
     "me_listings": {
       "en": "My listings",
       "pt": "Meus anúncios"
+    },
+    "common_help": {
+      "en": "Help",
+      "pt": "Quero ajuda"
+    },
+    "help_message": {
+      "en": "Hi! I'm using Giv and I need some help :)",
+      "pt": "Oi! Eu estou usando o Giv e eu queria uma ajuda :)"
     }
-
   };
 }

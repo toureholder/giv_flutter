@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:giv_flutter/base/base_state.dart';
+import 'package:giv_flutter/config/config.dart';
 import 'package:giv_flutter/config/preferences/prefs.dart';
 import 'package:giv_flutter/features/base/base.dart';
 import 'package:giv_flutter/features/listing/ui/my_listings.dart';
@@ -7,6 +8,7 @@ import 'package:giv_flutter/features/settings/ui/profile.dart';
 import 'package:giv_flutter/util/presentation/cirucluar_network_image.dart';
 import 'package:giv_flutter/util/presentation/custom_app_bar.dart';
 import 'package:giv_flutter/util/presentation/custom_scaffold.dart';
+import 'package:giv_flutter/util/util.dart';
 import 'package:giv_flutter/values/custom_icons_icons.dart';
 import 'package:giv_flutter/values/dimens.dart';
 
@@ -39,7 +41,10 @@ class _SettingsState extends BaseState<Settings> {
             height: 1.0,
           ),
           SettingsListTile(
-            leading: Icon(CustomIcons.gift, size: Dimens.settings_tile_icon_size,),
+            leading: Padding(
+              padding: const EdgeInsets.only(left: 4.0),
+              child: Icon(CustomIcons.gift, size: Dimens.settings_tile_icon_size,),
+            ),
             text: string('me_listings'),
             onTap: () {
               navigation.push(MyListings());
@@ -49,7 +54,19 @@ class _SettingsState extends BaseState<Settings> {
             height: 1.0,
           ),
           SettingsListTile(
-            leading: Icon(CustomIcons.logout, size: Dimens.settings_tile_icon_size,),
+            leading: Icon(Icons.help,),
+            text: string('common_help'),
+            onTap: _whatsAppCustomerService,
+            hideTrailing: true,
+          ),
+          Divider(
+            height: 1.0,
+          ),
+          SettingsListTile(
+            leading: Padding(
+              padding: const EdgeInsets.only(left: 4.0),
+              child: Icon(CustomIcons.logout, size: Dimens.settings_tile_icon_size,),
+            ),
             text: string('settings_logout'),
             onTap: _confirmLogout,
             hideTrailing: true,
@@ -89,6 +106,10 @@ class _SettingsState extends BaseState<Settings> {
   void _logout() async {
     await Prefs.clear();
     navigation.push(Base(), clearStack: true);
+  }
+
+  void _whatsAppCustomerService() {
+    Util.openWhatsApp(Config.customerServiceNumber, string('help_message'));
   }
 }
 
