@@ -25,9 +25,10 @@ class PrimaryButton extends StatelessWidget {
   final VoidCallback onPressed;
   final String text;
   final bool isLoading;
+  final bool fillWidth;
 
   const PrimaryButton(
-      {Key key, this.onPressed, this.text, this.isLoading = false})
+      {Key key, this.onPressed, this.text, this.isLoading = false, this.fillWidth = true})
       : super(key: key);
 
   @override
@@ -45,6 +46,7 @@ class PrimaryButton extends StatelessWidget {
         onPressed: finalOnPressed,
         child: child,
       ),
+      fillWidth: fillWidth,
     );
   }
 }
@@ -230,6 +232,29 @@ class MediumFlatPrimaryButton extends StatelessWidget {
             fontSize: 15.0,
             letterSpacing: 0.1,
             color: Colors.blue,
+            fontWeight: FontWeight.bold),
+      ),
+    );
+  }
+}
+
+class MediumFlatDangerButton extends StatelessWidget {
+  final VoidCallback onPressed;
+  final String text;
+
+  const MediumFlatDangerButton({Key key, this.onPressed, this.text})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return FlatButton(
+      onPressed: onPressed,
+      child: Text(
+        text,
+        style: TextStyle(
+            fontSize: 15.0,
+            letterSpacing: 0.1,
+            color: Colors.red,
             fontWeight: FontWeight.bold),
       ),
     );

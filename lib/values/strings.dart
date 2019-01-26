@@ -374,6 +374,18 @@ class Strings {
     "help_message": {
       "en": "Hi! I'm using Giv and I need some help :)",
       "pt": "Oi! Eu estou usando o Giv e eu queria uma ajuda :)"
+    },
+    "my_listings_empty_state": {
+      "en": "You haven't made any donations yet.",
+      "pt": "Você ainda não criou nenhum anúncio."
+    },
+    "common_delete": {
+      "en": "Delete",
+      "pt": "Remover"
+    },
+    "common_edit": {
+      "en": "Edit",
+      "pt": "Editar"
     }
   };
 }

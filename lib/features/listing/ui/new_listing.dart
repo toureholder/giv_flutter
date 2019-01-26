@@ -605,12 +605,12 @@ class _NewListingState extends BaseState<NewListing> {
     final result = await navigation.push(PhotoViewPage(
       image: image,
       actions: <Widget>[
-        IconButton(
-          icon: Icon(Icons.delete),
+        MediumFlatDangerButton(
+          text: string('common_delete'),
           onPressed: () {
             navigation.pop(actionDelete);
           },
-        )
+        ),
       ],
     ));
 

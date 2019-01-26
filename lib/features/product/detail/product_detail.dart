@@ -15,8 +15,10 @@ import 'package:giv_flutter/values/dimens.dart';
 
 class ProductDetail extends StatefulWidget {
   final Product product;
+  final bool isMine;
 
-  const ProductDetail({Key key, this.product}) : super(key: key);
+  const ProductDetail({Key key, this.product, this.isMine = false})
+      : super(key: key);
 
   @override
   _ProductDetailState createState() => _ProductDetailState();
@@ -36,7 +38,16 @@ class _ProductDetailState extends BaseState<ProductDetail> {
     super.build(context);
 
     return CustomScaffold(
-      appBar: CustomAppBar(),
+      appBar: CustomAppBar(
+        actions: widget.isMine
+            ? <Widget>[
+                MediumFlatPrimaryButton(
+                  text: string('common_edit'),
+                  onPressed: () {},
+                )
+              ]
+            : null,
+      ),
       body: ListView(children: <Widget>[
         _imageCarousel(context, _product.images),
         _textPadding(H6Text(_product.title)),
@@ -55,7 +66,9 @@ class _ProductDetailState extends BaseState<ProductDetail> {
     );
   }
 
-  Padding _iWantItButton(BuildContext context) {
+  Widget _iWantItButton(BuildContext context) {
+    if (widget.isMine) return Container();
+
     final user = _product.user;
     final message =
         string('whatsapp_message_interested', formatArg: _product.title);

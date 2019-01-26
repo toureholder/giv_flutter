@@ -1,4 +1,5 @@
 import 'package:giv_flutter/model/location/location.dart';
+import 'package:giv_flutter/model/product/product.dart';
 import 'package:giv_flutter/model/product/product_category.dart';
 import 'package:giv_flutter/model/product/product_search_result.dart';
 import 'package:giv_flutter/model/product/repository/api/product_api.dart';
@@ -23,4 +24,6 @@ class ProductRepository {
           {String q, Location location, bool isHardFilter = true}) =>
       productApi.getProductsBySearchQuery(
           q: q, location: location, isHardFilter: isHardFilter);
+
+  Future<List<Product>> getMyProducts() => productApi.getMyProducts();
 }
