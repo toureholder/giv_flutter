@@ -12,11 +12,13 @@ import 'package:giv_flutter/features/listing/ui/my_listings.dart';
 import 'package:giv_flutter/features/product/categories/ui/categories.dart';
 import 'package:giv_flutter/features/product/filters/ui/location_filter.dart';
 import 'package:giv_flutter/features/settings/ui/edit_phone_number.dart';
+import 'package:giv_flutter/features/sign_in/ui/sign_in.dart';
 import 'package:giv_flutter/model/location/location.dart';
 import 'package:giv_flutter/model/product/product.dart';
 import 'package:giv_flutter/model/product/product_category.dart';
 import 'package:giv_flutter/model/user/user.dart';
 import 'package:giv_flutter/util/data/stream_event.dart';
+import 'package:giv_flutter/util/navigation/navigation.dart';
 import 'package:giv_flutter/util/presentation/bottom_sheet.dart';
 import 'package:giv_flutter/util/presentation/buttons.dart';
 import 'package:giv_flutter/util/presentation/custom_app_bar.dart';
@@ -58,8 +60,21 @@ class _NewListingState extends BaseState<NewListing> {
     _product = widget.product ?? Product();
     _product.images = _product.images ?? <CustomImage.Image>[];
     _newListingBloc = NewListingBloc();
-    _newListingBloc.loadUser();
+    _listenToUserStream();
     _newListingBloc.loadLocation();
+    _listenToUploadStream();
+  }
+
+  void _listenToUserStream() {
+    _newListingBloc.userStream.listen((NewListingBlocUser blocUser) {
+      if (blocUser?.user == null)
+        Navigation(context).pushReplacement(SignIn(redirect: NewListing()));
+    });
+
+    _newListingBloc.loadUser();
+  }
+
+  void _listenToUploadStream() {
     _newListingBloc.uploadStatusStream.listen((StreamEvent<double> event) {
       if (event.isReady) _onUploadSuccess();
     });

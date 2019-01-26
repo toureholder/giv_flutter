@@ -1,21 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:giv_flutter/base/base_state.dart';
-import 'package:giv_flutter/features/base/base.dart';
 import 'package:giv_flutter/features/log_in/bloc/log_in_bloc.dart';
 import 'package:giv_flutter/features/log_in/ui/log_in.dart';
 import 'package:giv_flutter/features/sign_up/ui/sign_up.dart';
 import 'package:giv_flutter/model/user/log_in_response.dart';
 import 'package:giv_flutter/model/user/log_in_with_provider.dart';
 import 'package:giv_flutter/util/data/stream_event.dart';
-import 'package:giv_flutter/util/navigation/navigation.dart';
 import 'package:giv_flutter/util/presentation/buttons.dart';
 import 'package:giv_flutter/util/presentation/custom_scaffold.dart';
 import 'package:giv_flutter/util/presentation/spacing.dart';
 import 'package:giv_flutter/util/presentation/typography.dart';
 import 'package:giv_flutter/values/dimens.dart';
-import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 
 class SignIn extends StatefulWidget {
+  final Widget redirect;
+
+  const SignIn({Key key, this.redirect}) : super(key: key);
+
   @override
   _SignInState createState() => _SignInState();
 }
@@ -28,7 +30,7 @@ class _SignInState extends BaseState<SignIn> {
     super.initState();
     _logInBloc = LogInBloc();
     _logInBloc.responseStream.listen((StreamEvent<LogInResponse> event) {
-      if (event.isReady) _onLoginSuccess();
+      if (event.isReady) onLoginSuccess(widget.redirect);
     });
   }
 
@@ -98,17 +100,17 @@ class _SignInState extends BaseState<SignIn> {
   GreyButton _buildLoginButton(bool isFacebookLoading) {
     final onPressed = isFacebookLoading ? null : _goToLogIn;
     return GreyButton(
-          text: string('sign_in_log_in'),
-          onPressed: onPressed,
-        );
+      text: string('sign_in_log_in'),
+      onPressed: onPressed,
+    );
   }
 
   PrimaryButton _buildSignUpButton(bool isFacebookLoading) {
     final onPressed = isFacebookLoading ? null : _goToSignUp;
     return PrimaryButton(
-          text: string('sign_in_sign_up'),
-          onPressed: onPressed,
-        );
+      text: string('sign_in_sign_up'),
+      onPressed: onPressed,
+    );
   }
 
   void _goToSignUp() {
@@ -116,7 +118,7 @@ class _SignInState extends BaseState<SignIn> {
   }
 
   void _goToLogIn() {
-    navigation.push(LogIn());
+    navigation.pushReplacement(LogIn(redirect: widget.redirect,));
   }
 
   void _facebookLogin() async {
@@ -127,9 +129,8 @@ class _SignInState extends BaseState<SignIn> {
       case FacebookLoginStatus.loggedIn:
         print('result.accessToken.token: ${result.accessToken.token}');
         _logInBloc.loginWithProvider(LogInWithProviderRequest(
-          accessToken: result.accessToken.token,
-          provider: LogInWithProviderRequest.facebook
-        ));
+            accessToken: result.accessToken.token,
+            provider: LogInWithProviderRequest.facebook));
         break;
       case FacebookLoginStatus.cancelledByUser:
         print('FacebookLoginStatus.cancelledByUser');
@@ -138,9 +139,5 @@ class _SignInState extends BaseState<SignIn> {
         print('result.errorMessage: ${result.errorMessage}');
         break;
     }
-  }
-
-  void _onLoginSuccess() {
-    Navigation(context).push(Base(), clearStack: true);
   }
 }
