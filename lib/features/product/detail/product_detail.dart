@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:giv_flutter/base/base_state.dart';
+import 'package:giv_flutter/features/listing/ui/new_listing.dart';
 import 'package:giv_flutter/model/image/image.dart' as CustomImage;
 import 'package:giv_flutter/model/product/product.dart';
 import 'package:giv_flutter/util/presentation/buttons.dart';
@@ -43,7 +44,9 @@ class _ProductDetailState extends BaseState<ProductDetail> {
             ? <Widget>[
                 MediumFlatPrimaryButton(
                   text: string('common_edit'),
-                  onPressed: () {},
+                  onPressed: () {
+                    navigation.pushReplacement(NewListing(product: widget.product,));
+                  },
                 )
               ]
             : null,

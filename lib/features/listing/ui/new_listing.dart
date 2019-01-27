@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:giv_flutter/base/base_state.dart';
 import 'package:giv_flutter/config/config.dart';
+import 'package:giv_flutter/features/base/base.dart';
 import 'package:giv_flutter/features/listing/bloc/new_listing_bloc.dart';
 import 'package:giv_flutter/features/listing/ui/edit_categories.dart';
 import 'package:giv_flutter/features/listing/ui/edit_description.dart';
@@ -12,6 +13,7 @@ import 'package:giv_flutter/features/listing/ui/my_listings.dart';
 import 'package:giv_flutter/features/product/categories/ui/categories.dart';
 import 'package:giv_flutter/features/product/filters/ui/location_filter.dart';
 import 'package:giv_flutter/features/settings/ui/edit_phone_number.dart';
+import 'package:giv_flutter/features/settings/ui/settings.dart';
 import 'package:giv_flutter/features/sign_in/ui/sign_in.dart';
 import 'package:giv_flutter/model/location/location.dart';
 import 'package:giv_flutter/model/product/product.dart';
@@ -53,10 +55,12 @@ class _NewListingState extends BaseState<NewListing> {
   bool _isInformationValid = false;
   bool _areImagesValid = true;
   User _user;
+  bool _isEditing = false;
 
   @override
   void initState() {
     super.initState();
+    _isEditing = widget.product != null;
     _product = widget.product ?? Product();
     _product.images = _product.images ?? <CustomImage.Image>[];
     _newListingBloc = NewListingBloc();
@@ -90,11 +94,13 @@ class _NewListingState extends BaseState<NewListing> {
   Widget build(BuildContext context) {
     super.build(context);
 
+    final title = _isEditing ? 'edit_listing_title' : 'new_listing_title';
+
     return WillPopScope(
       onWillPop: _onWillPop,
       child: CustomScaffold(
         appBar: CustomAppBar(
-          title: string('new_listing_title'),
+          title: string(title),
         ),
         body: _uploadStatusStreamBuilder(),
       ),
@@ -137,6 +143,7 @@ class _NewListingState extends BaseState<NewListing> {
     return ListView(
       controller: _listViewController,
       children: <Widget>[
+        _activeTile(),
         _sectionTitle(string('new_listing_section_title_photos')),
         _emptyImagesErrorMessage(),
         _buildImageList(context),
@@ -159,6 +166,47 @@ class _NewListingState extends BaseState<NewListing> {
         _locationStreamBuilder(),
         Spacing.vertical(Dimens.bottom_action_button_container_height +
             Dimens.default_vertical_margin),
+      ],
+    );
+  }
+
+  Widget _activeTile() {
+    if (!_isEditing) return Container();
+
+    final isActive = _product.isActive;
+    final title =
+        isActive ? 'edit_listing_is_active' : 'edit_listing_is_inactive';
+    final subtitle = isActive
+        ? 'edit_listing_is_active_hint'
+        : 'edit_listing_is_inactive_hint';
+
+    return Column(
+      children: <Widget>[
+        SwitchListTile(
+          value: _product.isActive,
+          onChanged: (bool value) {
+            setState(() {
+              _product.isActive = value;
+            });
+          },
+          title: Padding(
+            padding: const EdgeInsets.only(top: 8.0),
+            child: BodyText(
+              string(title),
+              weight: SyntheticFontWeight.semiBold,
+            ),
+          ),
+          subtitle: Padding(
+            padding: const EdgeInsets.only(bottom: 8.0),
+            child: Body2Text(
+              string(subtitle),
+              color: Colors.grey,
+            ),
+          ),
+        ),
+        Divider(
+          height: 1.0,
+        )
       ],
     );
   }
@@ -283,6 +331,9 @@ class _NewListingState extends BaseState<NewListing> {
   }
 
   Widget _buildProgressIndicator(double value) {
+    final text =
+        _isEditing ? 'edit_listing_uploading' : 'new_listing_uploading';
+
     return Padding(
       padding:
           EdgeInsets.symmetric(horizontal: Dimens.default_horizontal_margin),
@@ -305,7 +356,7 @@ class _NewListingState extends BaseState<NewListing> {
             left: 0.0,
             child: Center(
               child: Body2Text(
-                string('new_listing_uploading'),
+                string(text),
                 weight: SyntheticFontWeight.semiBold,
               ),
             ),
@@ -316,11 +367,13 @@ class _NewListingState extends BaseState<NewListing> {
   }
 
   Widget _buildPrimaryButton() {
+    final text =
+        _isEditing ? 'edit_listing_action_save' : 'new_listing_action_create';
+
     return Padding(
       padding:
           EdgeInsets.symmetric(horizontal: Dimens.default_horizontal_margin),
-      child: PrimaryButton(
-          text: string('new_listing_action_create'), onPressed: _submitForm),
+      child: PrimaryButton(text: string(text), onPressed: _submitForm),
     );
   }
 
@@ -616,7 +669,9 @@ class _NewListingState extends BaseState<NewListing> {
 
     if (result as String == actionDelete) {
       setState(() {
-        _product.images.removeWhere((it) => it.file?.path == image.file?.path);
+        _product.images.removeWhere((it) =>
+            ((it.file?.path != null && it.file?.path == image.file?.path) ||
+                (it.url != null && it.url == image.url)));
       });
     }
   }
@@ -659,18 +714,27 @@ class _NewListingState extends BaseState<NewListing> {
   }
 
   _onUploadSuccess() {
-    navigation.pushReplacement(MyListings());
+    if (_isEditing) {
+      navigation.push(Base(), hasAnimation: false, clearStack: true);
+      navigation.push(Settings(), hasAnimation: false);
+      navigation.push(MyListings(), hasAnimation: false);
+    } else {
+      navigation.pushReplacement(MyListings());
+    }
   }
 
   Future<bool> _onWillPop() {
+    final message = _isEditing
+        ? 'edit_listing_cancel_confirmation_message'
+        : 'new_listing_cancel_confirmation_message';
+
     return _product.isNotEmpty
         ? showDialog(
               context: context,
               builder: (context) => AlertDialog(
                     title:
                         Text(string('new_listing_cancel_confirmation_title')),
-                    content:
-                        Text(string('new_listing_cancel_confirmation_message')),
+                    content: Text(string(message)),
                     actions: <Widget>[
                       FlatButton(
                         onPressed: () => Navigator.of(context).pop(false),

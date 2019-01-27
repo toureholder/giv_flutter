@@ -75,10 +75,7 @@ class _ProductGridState extends BaseState<ProductGrid> {
   Widget _buildGridCell(BuildContext context, Product product) {
     return GestureDetector(
       onTap: () {
-        navigation.push(ProductDetail(
-          product: product,
-          isMine: widget.isMine,
-        ));
+        _goToProductDetail(product);
       },
       child: Container(
         padding: EdgeInsets.all(Dimens.grid(6)),
@@ -116,5 +113,12 @@ class _ProductGridState extends BaseState<ProductGrid> {
           height: Dimens.search_result_image_height,
           imageUrl: product.images.first.url),
     );
+  }
+
+  _goToProductDetail (Product product) {
+   navigation.push(ProductDetail(
+      product: product,
+      isMine: widget.isMine,
+    ));
   }
 }

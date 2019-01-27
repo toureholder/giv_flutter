@@ -38,7 +38,15 @@ class _MyListingsState extends BaseState<MyListings> {
     super.build(context);
 
     return CustomScaffold(
-      appBar: CustomAppBar(title: string('me_listings')),
+      appBar: CustomAppBar(
+        title: string('me_listings'),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.add),
+            onPressed: _createNewListing,
+          )
+        ],
+      ),
       body: ContentStreamBuilder(
         stream: _myListingsBloc.productsStream,
         onHasData: (data) {
@@ -61,25 +69,25 @@ class _MyListingsState extends BaseState<MyListings> {
 
   Container _buildEmptyState() {
     return Container(
-          padding: EdgeInsets.symmetric(horizontal: Dimens.grid(32)),
-          alignment: Alignment.center,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Body2Text(
-                string('my_listings_empty_state'),
-                color: Colors.grey,
-                textAlign: TextAlign.center,
-              ),
-              Spacing.vertical(Dimens.default_vertical_margin),
-              PrimaryButton(
-                text: string('shared_action_create_ad'),
-                onPressed: _createNewListing,
-                fillWidth: false,
-              )
-            ],
+      padding: EdgeInsets.symmetric(horizontal: Dimens.grid(32)),
+      alignment: Alignment.center,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Body2Text(
+            string('my_listings_empty_state'),
+            color: Colors.grey,
+            textAlign: TextAlign.center,
           ),
-        );
+          Spacing.vertical(Dimens.default_vertical_margin),
+          PrimaryButton(
+            text: string('shared_action_create_ad'),
+            onPressed: _createNewListing,
+            fillWidth: false,
+          )
+        ],
+      ),
+    );
   }
 
   _createNewListing() {

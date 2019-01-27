@@ -247,6 +247,10 @@ class Strings {
       "en": "New listing",
       "pt": "Novo anúncio"
     },
+    "edit_listing_title": {
+      "en": "Edit listing",
+      "pt": "Editar anúncio"
+    },
     "new_listing_section_title_photos": {
       "en": "Beautiful photos of the product",
       "pt": "Lindas fotos do produto"
@@ -258,6 +262,10 @@ class Strings {
     "new_listing_action_create": {
       "en": "Create listing",
       "pt": "Criar anúncio"
+    },
+    "edit_listing_action_save": {
+      "en": "Save",
+      "pt": "Salvar"
     },
     "new_listing_tile_name": {
       "en": "Title",
@@ -343,6 +351,10 @@ class Strings {
       "en": "Creating listing...",
       "pt": "Criando anúncio..."
     },
+    "edit_listing_uploading": {
+      "en": "Saving...",
+      "pt": "Salvando..."
+    },
     "new_listing_cancel_confirmation_title": {
       "en": "Cancel?",
       "pt": "Cancelar?"
@@ -350,6 +362,10 @@ class Strings {
     "new_listing_cancel_confirmation_message": {
       "en": "Your progress will not be saved. Are you sure you want to cancel?",
       "pt": "Seu progresso não será salvo. Quer mesmo cancelar?"
+    },
+    "edit_listing_cancel_confirmation_message": {
+      "en": "Your changes will not be saved. Are you sure you want to cancel?",
+      "pt": "Suas alterações não serão salvas. Quer mesmo cancelar?"
     },
     "common_yes": {
       "en": "Yes",
@@ -386,6 +402,22 @@ class Strings {
     "common_edit": {
       "en": "Edit",
       "pt": "Editar"
+    },
+    "edit_listing_is_active_hint": {
+      "en": "This listing is visible to other users",
+      "pt": "Este anúncio está visvível para outros usuários"
+    },
+    "edit_listing_is_inactive_hint": {
+      "en": "This listing is not visile to other users",
+      "pt": "Este anúncio está invisvível para outros usuários"
+    },
+    "edit_listing_is_active": {
+      "en": "Active",
+      "pt": "Ativo"
+    },
+    "edit_listing_is_inactive": {
+      "en": "Inactive",
+      "pt": "Inativo"
     }
   };
 }

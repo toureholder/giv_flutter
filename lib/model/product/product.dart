@@ -11,6 +11,7 @@ class Product {
   List<Image> images;
   User user;
   List<ProductCategory> categories;
+  bool isActive;
 
   Product(
       {this.title,
@@ -18,7 +19,8 @@ class Product {
       this.description,
       this.images,
       this.user,
-      this.categories});
+      this.categories,
+      this.isActive = true});
 
   bool get isNotEmpty {
     return title != null ||
@@ -42,6 +44,12 @@ class Product {
         description:
             'Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. The quick brown fox jumps over the lazy dog. ',
         images: images,
+        categories: [
+          ProductCategory(
+            id: 20,
+            title: "Música e hobbies",
+          )
+        ],
         user: User.mock());
   }
 
