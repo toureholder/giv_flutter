@@ -14,11 +14,7 @@ class SignInFullPageMessage extends StatefulWidget {
   final String buttonText;
 
   const SignInFullPageMessage(
-      {Key key,
-      this.heroWidget,
-      this.title,
-      this.message,
-      this.buttonText})
+      {Key key, this.heroWidget, this.title, this.message, this.buttonText})
       : super(key: key);
 
   @override
@@ -57,6 +53,7 @@ class _SignInFullPageMessageState extends BaseState<SignInFullPageMessage> {
                 onPressed: () {
                   navigation.pushReplacement(LogIn());
                 },
+                fillWidth: false,
               )
             ],
           ),

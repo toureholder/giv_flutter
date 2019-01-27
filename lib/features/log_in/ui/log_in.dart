@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:giv_flutter/base/base_state.dart';
+import 'package:giv_flutter/config/config.dart';
 import 'package:giv_flutter/features/log_in/bloc/log_in_bloc.dart';
+import 'package:giv_flutter/features/log_in/ui/login_assistance.dart';
 import 'package:giv_flutter/features/sign_up/ui/sign_up.dart';
 import 'package:giv_flutter/model/user/log_in_request.dart';
 import 'package:giv_flutter/model/user/log_in_response.dart';
@@ -13,6 +15,7 @@ import 'package:giv_flutter/util/presentation/custom_app_bar.dart';
 import 'package:giv_flutter/util/presentation/custom_scaffold.dart';
 import 'package:giv_flutter/util/presentation/spacing.dart';
 import 'package:giv_flutter/util/presentation/typography.dart';
+import 'package:giv_flutter/util/util.dart';
 import 'package:giv_flutter/values/dimens.dart';
 
 class LogIn extends StatefulWidget {
@@ -61,8 +64,7 @@ class _LogInState extends BaseState<LogIn> {
       ),
       body: StreamBuilder(
           stream: _logInBloc.responseStream,
-          builder:
-              (context, snapshot) {
+          builder: (context, snapshot) {
             var isLoading = snapshot?.data?.isLoading ?? false;
             return _buildSingleChildScrollView(isLoading);
           }),
@@ -106,17 +108,29 @@ class _LogInState extends BaseState<LogIn> {
           isLoading: isLoading,
           onPressed: _handleSubmit,
         ),
+        Spacing.vertical(Dimens.default_vertical_margin),
+        TextFlatButton(
+          text: string('log_in_forgot_password'),
+          onPressed: _goToForgotPassword,
+        ),
+        TextFlatButton(
+          text: string('log_in_didnt_get_verification_email'),
+          onPressed: _goToResendActivation,
+        ),
+        TextFlatButton(
+          text: string('log_in_help_me'),
+          onPressed: _requestHelp,
+        ),
         Spacing.vertical(Dimens.sign_in_submit_button_margin_top),
-        Center(
+        GestureDetector(
+          onTap: _goToSignUp,
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               Body2Text(string('sign_in_dont_have_an_account')),
               MediumFlatPrimaryButton(
                 text: string('sign_in_sign_up'),
-                onPressed: () {
-                  navigation.pushReplacement(SignUp());
-                },
+                onPressed: _goToSignUp,
               )
             ],
           ),
@@ -132,9 +146,39 @@ class _LogInState extends BaseState<LogIn> {
 
     if (_formKey.currentState.validate()) {
       _logInBloc.login(LogInRequest(
-          email: _emailController.text,
-          password: _passwordController.text
-      ));
+          email: _emailController.text, password: _passwordController.text));
     }
+  }
+
+  void _goToForgotPassword() {
+    navigation.push(LoginAssistance(
+      page: LoginAssistancePage(
+          type: LoginAssistanceType.forgotPassword,
+          title: string('log_in_forgot_password'),
+          instructions: string('log_in_forgot_password_instructions'),
+          successTitle: string('forgot_password_success_title'),
+          successMessage: string('forgot_password_success_message')),
+    ));
+  }
+
+  void _goToResendActivation() {
+    navigation.push(LoginAssistance(
+      page: LoginAssistancePage(
+          type: LoginAssistanceType.forgotPassword,
+          title: string('log_in_didnt_get_verification_email'),
+          instructions:
+              string('log_in_didnt_get_verification_email_instructions'),
+          successTitle: string('sign_in_verify_email_title'),
+          successMessage: string('sign_in_verify_email_message')),
+    ));
+  }
+
+  void _goToSignUp() {
+    navigation.pushReplacement(SignUp());
+  }
+
+  void _requestHelp() {
+    Util.openWhatsApp(
+        Config.customerServiceNumber, string('log_in_help_me_chat_message'));
   }
 }

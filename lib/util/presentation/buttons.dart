@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:giv_flutter/util/presentation/typography.dart';
 import 'package:giv_flutter/values/custom_icons_icons.dart';
 import 'package:giv_flutter/values/dimens.dart';
 
@@ -256,6 +257,25 @@ class MediumFlatDangerButton extends StatelessWidget {
             letterSpacing: 0.1,
             color: Colors.red,
             fontWeight: FontWeight.bold),
+      ),
+    );
+  }
+}
+
+class TextFlatButton extends StatelessWidget {
+  final VoidCallback onPressed;
+  final String text;
+
+  const TextFlatButton({Key key, this.onPressed, this.text})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return FlatButton(
+      onPressed: onPressed,
+      child: Text(
+        text,
+        style: CustomTypography.body2,
       ),
     );
   }

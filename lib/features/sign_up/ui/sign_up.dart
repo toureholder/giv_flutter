@@ -18,6 +18,7 @@ import 'package:giv_flutter/util/presentation/custom_app_bar.dart';
 import 'package:giv_flutter/util/presentation/custom_scaffold.dart';
 import 'package:giv_flutter/util/presentation/spacing.dart';
 import 'package:giv_flutter/util/presentation/typography.dart';
+import 'package:giv_flutter/util/util.dart';
 import 'package:giv_flutter/values/dimens.dart';
 
 class SignUp extends StatefulWidget {
@@ -118,17 +119,21 @@ class _SignUpState extends BaseState<SignUp> {
           isLoading: isLoading,
           onPressed: _handleSubmit,
         ),
+        Spacing.vertical(Dimens.default_vertical_margin),
+        TextFlatButton(
+          text: string('log_in_help_me'),
+          onPressed: _requestHelp,
+        ),
         Spacing.vertical(Dimens.sign_in_submit_button_margin_top),
-        Center(
+        GestureDetector(
+          onTap: _goToLogin,
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               Body2Text(string('sign_in_already_have_an_acount')),
               MediumFlatPrimaryButton(
                 text: string('sign_in_log_in'),
-                onPressed: () {
-                  navigation.pushReplacement(LogIn());
-                },
+                onPressed: _goToLogin,
               )
             ],
           ),
@@ -144,10 +149,9 @@ class _SignUpState extends BaseState<SignUp> {
 
     if (_formKey.currentState.validate()) {
       _signUpBloc.signUp(SignUpRequest(
-        name: _nameController.text,
-        email: _emailController.text,
-        password: _passwordController.text
-      ));
+          name: _nameController.text,
+          email: _emailController.text,
+          password: _passwordController.text));
     }
   }
 
@@ -158,5 +162,14 @@ class _SignUpState extends BaseState<SignUp> {
       message: string('sign_in_verify_email_message'),
       buttonText: string('common_ok'),
     ));
+  }
+
+  void _goToLogin() {
+    navigation.pushReplacement(LogIn());
+  }
+
+  void _requestHelp() {
+    Util.openWhatsApp(
+        Config.customerServiceNumber, string('sign_up_help_me_chat_message'));
   }
 }

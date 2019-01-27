@@ -151,6 +151,14 @@ class Strings {
       "en": "Please check your mailbox for an email with a link to activate your account.",
       "pt": "Por favor ative sua conta com o link que enviamos por e-mail."
     },
+    "forgot_password_success_title": {
+      "en": "We sent you an email",
+      "pt": "Te enviamos um e-mail"
+    },
+    "forgot_password_success_message": {
+      "en": "You'll soon receive an email with instructions to reset your password.",
+      "pt": "Você vai receber um email com instruções para recuperar sua senha."
+    },
     "common_ok": {
       "en": "OK",
       "pt": "OK"
@@ -418,6 +426,38 @@ class Strings {
     "edit_listing_is_inactive": {
       "en": "Inactive",
       "pt": "Inativo"
+    },
+    "log_in_forgot_password": {
+      "en": "Forgot your password?",
+      "pt": "Esqueceu sua senha?"
+    },
+    "log_in_didnt_get_verification_email": {
+      "en": "Did not receive the activation email?",
+      "pt": "Não recebeu o e-mail para ativar sua conta?"
+    },
+    "log_in_forgot_password_instructions": {
+      "en": "Enter your email address and we'll send you instructions to reset your password.",
+      "pt": "Informe o e-mail usado para acessar sua conta e te enivaremos instruções para alterar sua senha."
+    },
+    "log_in_didnt_get_verification_email_instructions": {
+      "en": "Enter your email address and we'll resend you the link to activate your account.",
+      "pt": "Informe o e-mail usado para acessar sua conta e te enivaremos um link para ativar sua conta."
+    },
+    "common_send": {
+      "en": "Send",
+      "pt": "Enviar"
+    },
+    "log_in_help_me": {
+      "en": "Do you need help?",
+      "pt": "Precisa de ajuda?"
+    },
+    "log_in_help_me_chat_message": {
+      "en": "Hello! I need help logging in to Giv.",
+      "pt": "Olá! Preciso de ajuda para acessar minha conta do Giv."
+    },
+    "sign_up_help_me_chat_message": {
+      "en": "Hello! I need help creating my Giv account.",
+      "pt": "Olá! Preciso de ajuda para criar minha conta no Giv."
     }
   };
 }

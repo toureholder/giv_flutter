@@ -2,6 +2,7 @@ import 'package:giv_flutter/model/api_response/api_response.dart';
 import 'package:giv_flutter/model/user/log_in_request.dart';
 import 'package:giv_flutter/model/user/log_in_response.dart';
 import 'package:giv_flutter/model/user/log_in_with_provider.dart';
+import 'package:giv_flutter/model/user/login_assistance_request.dart';
 import 'package:giv_flutter/model/user/sign_up_request.dart';
 import 'package:giv_flutter/model/user/user.dart';
 
@@ -19,6 +20,16 @@ class UserApi {
   Future<LogInResponse> loginWithProvider(LogInWithProviderRequest request) async {
     await Future.delayed(Duration(seconds: 4));
     return LogInResponse.mock();
+  }
+
+  Future<ApiResponse> forgotPassword(LoginAssistanceRequest request) async {
+    await Future.delayed(Duration(seconds: 4));
+    return ApiResponse.mock();
+  }
+
+  Future<ApiResponse> resendActivation(LoginAssistanceRequest request) async {
+    await Future.delayed(Duration(seconds: 4));
+    return ApiResponse.mock();
   }
 
   Future<User> getMe() async {
