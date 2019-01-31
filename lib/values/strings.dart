@@ -458,6 +458,22 @@ class Strings {
     "sign_up_help_me_chat_message": {
       "en": "Hello! I need help creating my Giv account.",
       "pt": "Olá! Preciso de ajuda para criar minha conta no Giv."
+    },
+    "error_generic_title": {
+      "en": "Something went wrong",
+      "pt": "Houve um problema"
+    },
+    "error_generic_message": {
+      "en": "Please try again later.",
+      "pt": "Por favor tente novamente mais tarde."
+    },
+    "error_generic_report_message": {
+      "en": "Hi! I was using Giv and something went wrong when ...",
+      "pt": "Oi! Eu estava usando o Giv e deu ruim quando ..."
+    },
+    "action_report": {
+      "en": "Report",
+      "pt": "Reportar"
     }
   };
 }

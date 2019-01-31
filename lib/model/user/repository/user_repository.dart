@@ -6,11 +6,13 @@ import 'package:giv_flutter/model/user/login_assistance_request.dart';
 import 'package:giv_flutter/model/user/repository/api/user_api.dart';
 import 'package:giv_flutter/model/user/sign_up_request.dart';
 import 'package:giv_flutter/model/user/user.dart';
+import 'package:giv_flutter/util/network/http_response.dart';
 
 class UserRepository {
   final userApi = UserApi();
 
-  Future<ApiResponse> signUp(SignUpRequest request) => userApi.signUp(request);
+  Future<HttpResponse<ApiResponse>> signUp(SignUpRequest request) =>
+      userApi.signUp(request);
 
   Future<LogInResponse> login(LogInRequest request) => userApi.login(request);
 

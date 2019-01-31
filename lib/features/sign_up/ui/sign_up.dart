@@ -7,12 +7,12 @@ import 'package:giv_flutter/features/sign_in/ui/sign_in_full_page_message.dart';
 import 'package:giv_flutter/features/sign_up/bloc/sign_up_bloc.dart';
 import 'package:giv_flutter/model/api_response/api_response.dart';
 import 'package:giv_flutter/model/user/sign_up_request.dart';
-import 'package:giv_flutter/util/data/stream_event.dart';
 import 'package:giv_flutter/util/form/custom_text_form_field.dart';
 import 'package:giv_flutter/util/form/email_form_field.dart';
 import 'package:giv_flutter/util/form/password_form_field.dart';
 import 'package:giv_flutter/util/form/validator.dart';
 import 'package:giv_flutter/util/navigation/navigation.dart';
+import 'package:giv_flutter/util/network/http_response.dart';
 import 'package:giv_flutter/util/presentation/buttons.dart';
 import 'package:giv_flutter/util/presentation/custom_app_bar.dart';
 import 'package:giv_flutter/util/presentation/custom_scaffold.dart';
@@ -42,8 +42,8 @@ class _SignUpState extends BaseState<SignUp> {
   void initState() {
     super.initState();
     _signUpBloc = SignUpBloc();
-    _signUpBloc.responseStream.listen((StreamEvent<ApiResponse> event) {
-      if (event.isReady) _onSignUpSuccess();
+    _signUpBloc.responseStream.listen((HttpResponse<ApiResponse> httpResponse) {
+      if (httpResponse.isReady) _onSignUpResponse(httpResponse);
     });
   }
 
@@ -65,7 +65,8 @@ class _SignUpState extends BaseState<SignUp> {
       ),
       body: StreamBuilder(
           stream: _signUpBloc.responseStream,
-          builder: (context, AsyncSnapshot<StreamEvent<ApiResponse>> snapshot) {
+          builder:
+              (context, AsyncSnapshot<HttpResponse<ApiResponse>> snapshot) {
             var isLoading = snapshot?.data?.isLoading ?? false;
             return _buildSingleChildScrollView(isLoading);
           }),
@@ -151,11 +152,21 @@ class _SignUpState extends BaseState<SignUp> {
       _signUpBloc.signUp(SignUpRequest(
           name: _nameController.text,
           email: _emailController.text,
-          password: _passwordController.text));
+          password: _passwordController.text,
+          localeString: localeString));
     }
   }
 
-  void _onSignUpSuccess() {
+  void _onSignUpResponse(HttpResponse<ApiResponse> httpResponse) {
+    if (httpResponse.status == HttpStatus.created) {
+      _onSignUpResponseSuccess();
+      return;
+    }
+
+    showGenericErrorDialog();
+  }
+
+  void _onSignUpResponseSuccess() {
     Navigation(context).pushReplacement(SignInFullPageMessage(
       heroWidget: MailboxImage(),
       title: string('sign_in_verify_email_title'),

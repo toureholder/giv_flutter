@@ -1,3 +1,5 @@
+import 'package:flutter/widgets.dart';
+import 'package:giv_flutter/config/config.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Util {
@@ -14,7 +16,31 @@ class Util {
 
   static openWhatsApp(String number, String message) async {
     var chatUrl = getClickToChatUrl(number, message);
-    print(chatUrl);
     await launchURL(chatUrl);
+  }
+
+  static customerService(String message) async {
+    openWhatsApp(Config.customerServiceNumber, message);
+  }
+
+  static String getCurrentLocaleString(BuildContext context) {
+    final locale = Localizations.localeOf(context);
+    if (locale == null) return null;
+
+    final buffer = new StringBuffer();
+
+    final languageCode = locale.languageCode;
+    final countryCode = locale.countryCode;
+
+    if (languageCode != null && languageCode.isNotEmpty) {
+      buffer.write(languageCode);
+    }
+
+    if (countryCode != null && countryCode.isNotEmpty) {
+      buffer.write('-');
+      buffer.write(countryCode);
+    }
+
+    return buffer.toString();
   }
 }
