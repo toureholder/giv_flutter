@@ -15,7 +15,7 @@ import 'package:giv_flutter/model/product/product_category.dart';
 import 'package:giv_flutter/model/user/user.dart';
 import 'package:giv_flutter/util/data/content_stream_builder.dart';
 import 'package:giv_flutter/util/presentation/buttons.dart';
-import 'package:giv_flutter/util/presentation/cirucluar_network_image.dart';
+import 'package:giv_flutter/util/presentation/avatar_network_image.dart';
 import 'package:giv_flutter/util/presentation/custom_app_bar.dart';
 import 'package:giv_flutter/util/presentation/custom_scaffold.dart';
 import 'package:giv_flutter/util/presentation/rounded_corners.dart';
@@ -86,7 +86,7 @@ class _HomeState extends BaseState<Home> {
     return Padding(
       padding: const EdgeInsets.only(right: Dimens.default_horizontal_margin),
       child: GestureDetector(
-        child: CircularNetworkImage(imageUrl: imageUrl),
+        child: AvatarNetworkImage(imageUrl: imageUrl),
         onTap: () {
           navigation.push(Settings());
         },

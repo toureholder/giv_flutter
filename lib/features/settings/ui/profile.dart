@@ -7,7 +7,7 @@ import 'package:giv_flutter/features/settings/ui/edit_phone_number.dart';
 import 'package:giv_flutter/model/user/user.dart';
 import 'package:giv_flutter/util/data/content_stream_builder.dart';
 import 'package:giv_flutter/util/data/stream_event.dart';
-import 'package:giv_flutter/util/presentation/cirucluar_network_image.dart';
+import 'package:giv_flutter/util/presentation/avatar_network_image.dart';
 import 'package:giv_flutter/util/presentation/custom_app_bar.dart';
 import 'package:giv_flutter/util/presentation/custom_scaffold.dart';
 import 'package:giv_flutter/util/presentation/typography.dart';
@@ -121,7 +121,7 @@ class _ProfileState extends BaseState<Profile> {
         padding: EdgeInsets.all(Dimens.default_horizontal_margin),
         child: Row(
           children: <Widget>[
-            CircularNetworkImage(
+            AvatarNetworkImage(
               imageUrl: user.avatarUrl,
               width: 64.0,
               height: 64.0,

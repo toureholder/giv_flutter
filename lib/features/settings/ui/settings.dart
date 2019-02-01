@@ -9,7 +9,7 @@ import 'package:giv_flutter/features/settings/ui/profile.dart';
 import 'package:giv_flutter/model/user/user.dart';
 import 'package:giv_flutter/util/data/content_stream_builder.dart';
 import 'package:giv_flutter/util/data/stream_event.dart';
-import 'package:giv_flutter/util/presentation/cirucluar_network_image.dart';
+import 'package:giv_flutter/util/presentation/avatar_network_image.dart';
 import 'package:giv_flutter/util/presentation/custom_app_bar.dart';
 import 'package:giv_flutter/util/presentation/custom_scaffold.dart';
 import 'package:giv_flutter/util/util.dart';
@@ -50,7 +50,7 @@ class _SettingsState extends BaseState<Settings> {
     return ListView(
       children: <Widget>[
         SettingsListTile(
-          leading: CircularNetworkImage(imageUrl: user.avatarUrl),
+          leading: AvatarNetworkImage(imageUrl: user.avatarUrl),
           text: string('settings_section_profile'),
           onTap: () {
             navigation.push(Profile());
