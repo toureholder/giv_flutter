@@ -6,7 +6,7 @@ class SignUpRequest {
 
   SignUpRequest({this.name, this.email, this.password, this.localeString});
 
-  Map<String, String> toHttpPostBody() => {
+  Map<String, String> toHttpRequestBody() => {
     'name': name,
     'unconfirmed_email': email,
     'password': password,

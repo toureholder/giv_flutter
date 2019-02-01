@@ -1,5 +1,5 @@
 class Config {
-  static const baseUrl = 'https://6302d31b.ngrok.io';
+  static const baseUrl = 'https://20d1cacf.ngrok.io';
   static const defaultCountryCallingCode = '55';
   static const maxLengthName = 50;
   static const maxLengthBio = 140;

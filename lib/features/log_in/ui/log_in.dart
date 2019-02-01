@@ -4,12 +4,12 @@ import 'package:giv_flutter/config/config.dart';
 import 'package:giv_flutter/features/log_in/bloc/log_in_bloc.dart';
 import 'package:giv_flutter/features/log_in/ui/login_assistance.dart';
 import 'package:giv_flutter/features/sign_up/ui/sign_up.dart';
-import 'package:giv_flutter/model/user/log_in_request.dart';
-import 'package:giv_flutter/model/user/log_in_response.dart';
-import 'package:giv_flutter/util/data/stream_event.dart';
+import 'package:giv_flutter/model/user/repository/api/request/log_in_request.dart';
+import 'package:giv_flutter/model/user/repository/api/response/log_in_response.dart';
 import 'package:giv_flutter/util/form/email_form_field.dart';
 import 'package:giv_flutter/util/form/password_form_field.dart';
 import 'package:giv_flutter/util/form/validator.dart';
+import 'package:giv_flutter/util/network/http_response.dart';
 import 'package:giv_flutter/util/presentation/buttons.dart';
 import 'package:giv_flutter/util/presentation/custom_app_bar.dart';
 import 'package:giv_flutter/util/presentation/custom_scaffold.dart';
@@ -41,8 +41,9 @@ class _LogInState extends BaseState<LogIn> {
   void initState() {
     super.initState();
     _logInBloc = LogInBloc();
-    _logInBloc.responseStream.listen((StreamEvent<LogInResponse> event) {
-      if (event.isReady) onLoginSuccess(widget.redirect);
+    _logInBloc.responseStream
+        .listen((HttpResponse<LogInResponse> httpResponse) {
+      if (httpResponse.isReady) onLoginResponse(httpResponse, widget.redirect);
     });
   }
 
@@ -64,7 +65,8 @@ class _LogInState extends BaseState<LogIn> {
       ),
       body: StreamBuilder(
           stream: _logInBloc.responseStream,
-          builder: (context, snapshot) {
+          builder:
+              (context, AsyncSnapshot<HttpResponse<LogInResponse>> snapshot) {
             var isLoading = snapshot?.data?.isLoading ?? false;
             return _buildSingleChildScrollView(isLoading);
           }),

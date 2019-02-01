@@ -6,7 +6,7 @@ import 'package:giv_flutter/features/sign_in/ui/mailbox_image.dart';
 import 'package:giv_flutter/features/sign_in/ui/sign_in_full_page_message.dart';
 import 'package:giv_flutter/features/sign_up/bloc/sign_up_bloc.dart';
 import 'package:giv_flutter/model/api_response/api_response.dart';
-import 'package:giv_flutter/model/user/sign_up_request.dart';
+import 'package:giv_flutter/model/user/repository/api/request/sign_up_request.dart';
 import 'package:giv_flutter/util/form/custom_text_form_field.dart';
 import 'package:giv_flutter/util/form/email_form_field.dart';
 import 'package:giv_flutter/util/form/password_form_field.dart';

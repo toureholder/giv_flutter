@@ -4,7 +4,7 @@ import 'package:giv_flutter/features/log_in/bloc/log_in_bloc.dart';
 import 'package:giv_flutter/features/sign_in/ui/mailbox_image.dart';
 import 'package:giv_flutter/features/sign_in/ui/sign_in_full_page_message.dart';
 import 'package:giv_flutter/model/api_response/api_response.dart';
-import 'package:giv_flutter/model/user/login_assistance_request.dart';
+import 'package:giv_flutter/model/user/repository/api/request/login_assistance_request.dart';
 import 'package:giv_flutter/util/data/stream_event.dart';
 import 'package:giv_flutter/util/form/email_form_field.dart';
 import 'package:giv_flutter/util/navigation/navigation.dart';

@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:giv_flutter/config/i18n/string_localizations.dart';
 import 'package:giv_flutter/features/base/base.dart';
 import 'package:giv_flutter/util/navigation/navigation.dart';
+import 'package:giv_flutter/util/network/http_response.dart';
 import 'package:giv_flutter/util/util.dart';
 
 class BaseState<T extends StatefulWidget> extends State<T> {
@@ -16,6 +17,28 @@ class BaseState<T extends StatefulWidget> extends State<T> {
     string = GetLocalizedStringFunction(context);
     localeString = Util.getCurrentLocaleString(context);
     return null;
+  }
+
+  void onLoginResponse(HttpResponse response, Widget redirect) {
+    switch(response.status) {
+      case HttpStatus.ok:
+        onLoginSuccess(redirect);
+        break;
+      case HttpStatus.unprocessableEntity:
+        showInformationDialog(
+            title: string('log_in_error_bad_credentials_title'),
+            content: string('log_in_error_bad_credentials_message')
+        );
+        break;
+      case HttpStatus.notAcceptable:
+        showInformationDialog(
+            title: string('log_in_error_not_activated_title'),
+            content: string('log_in_error_not_activated_message')
+        );
+        break;
+      default:
+        showGenericErrorDialog();
+    }
   }
 
   void onLoginSuccess(Widget redirect) {
@@ -42,6 +65,25 @@ class BaseState<T extends StatefulWidget> extends State<T> {
                         string('error_generic_report_message'));
                     Navigation(context).pop();
                   }),
+              FlatButton(
+                  child: Text(string('common_ok')),
+                  onPressed: () {
+                    Navigation(context).pop();
+                  })
+            ],
+          );
+        });
+  }
+
+  void showInformationDialog({String title, String content}) {
+    showDialog(
+        context: context,
+        barrierDismissible: true,
+        builder: (context) {
+          return AlertDialog(
+            title: Text(title),
+            content: Text(content),
+            actions: <Widget>[
               FlatButton(
                   child: Text(string('common_ok')),
                   onPressed: () {

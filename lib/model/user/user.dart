@@ -1,14 +1,22 @@
 import 'package:faker/faker.dart';
 
 class User {
+  int id;
   String name;
   String avatarUrl;
   String phoneNumber;
   String countryCallingCode;
   String bio;
 
-  User({this.name, this.avatarUrl, this.phoneNumber, this.countryCallingCode, this.bio});
+  User(
+      {this.id,
+      this.name,
+      this.avatarUrl,
+      this.phoneNumber,
+      this.countryCallingCode,
+      this.bio});
 
+  static final String idKey = 'id';
   static final String nameKey = 'name';
   static final String avatarUrlKey = 'avatarUrl';
   static final String phoneNumberKey = 'phoneNumber';
@@ -24,11 +32,20 @@ class User {
       };
 
   User.fromJson(Map<String, dynamic> json)
-      : name = json[nameKey],
+      : id = json[idKey],
+        name = json[nameKey],
         avatarUrl = json[avatarUrlKey],
         phoneNumber = json[phoneNumberKey],
         countryCallingCode = json[countryCallingCodeKey],
         bio = json[bioKey];
+
+  User.fromNetwork(Map<String, dynamic> json)
+      : id = json['id'],
+        name = json['name'],
+        avatarUrl = json['image_url'],
+        phoneNumber = json['phone_number'],
+        countryCallingCode = json['country_calling_code'],
+        bio = json['bio'];
 
   User copy() => User.fromJson(toJson());
 

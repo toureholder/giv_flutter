@@ -443,6 +443,22 @@ class Strings {
       "en": "Enter your email address and we'll resend you the link to activate your account.",
       "pt": "Informe o e-mail usado para acessar sua conta e te enivaremos um link para ativar sua conta."
     },
+    "log_in_error_bad_credentials_title": {
+      "en": "Oops",
+      "pt": "Ops"
+    },
+    "log_in_error_bad_credentials_message": {
+      "en": "Wrong email or password.",
+      "pt": "Verifique seu email e senha e tente novamente."
+    },
+    "log_in_error_not_activated_title": {
+      "en": "Almost there...",
+      "pt": "Quase lá..."
+    },
+    "log_in_error_not_activated_message": {
+      "en": "Please check your mailbox for an email with a link to activate your account.",
+      "pt": "Por favor ative sua conta com o link que enviamos por e-mail."
+    },
     "common_send": {
       "en": "Send",
       "pt": "Enviar"

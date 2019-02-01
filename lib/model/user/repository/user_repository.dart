@@ -1,10 +1,10 @@
 import 'package:giv_flutter/model/api_response/api_response.dart';
-import 'package:giv_flutter/model/user/log_in_request.dart';
-import 'package:giv_flutter/model/user/log_in_response.dart';
-import 'package:giv_flutter/model/user/log_in_with_provider.dart';
-import 'package:giv_flutter/model/user/login_assistance_request.dart';
+import 'package:giv_flutter/model/user/repository/api/request/log_in_request.dart';
+import 'package:giv_flutter/model/user/repository/api/response/log_in_response.dart';
+import 'package:giv_flutter/model/user/repository/api/request/log_in_with_provider_request.dart';
+import 'package:giv_flutter/model/user/repository/api/request/login_assistance_request.dart';
 import 'package:giv_flutter/model/user/repository/api/user_api.dart';
-import 'package:giv_flutter/model/user/sign_up_request.dart';
+import 'package:giv_flutter/model/user/repository/api/request/sign_up_request.dart';
 import 'package:giv_flutter/model/user/user.dart';
 import 'package:giv_flutter/util/network/http_response.dart';
 
@@ -14,9 +14,11 @@ class UserRepository {
   Future<HttpResponse<ApiResponse>> signUp(SignUpRequest request) =>
       userApi.signUp(request);
 
-  Future<LogInResponse> login(LogInRequest request) => userApi.login(request);
+  Future<HttpResponse<LogInResponse>> login(LogInRequest request) =>
+      userApi.login(request);
 
-  Future<LogInResponse> loginWithProvider(LogInWithProviderRequest request) =>
+  Future<HttpResponse<LogInResponse>> loginWithProvider(
+          LogInWithProviderRequest request) =>
       userApi.loginWithProvider(request);
 
   Future<User> getMe() => userApi.getMe();

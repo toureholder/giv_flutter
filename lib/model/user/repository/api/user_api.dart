@@ -1,11 +1,11 @@
 import 'dart:convert';
 
 import 'package:giv_flutter/model/api_response/api_response.dart';
-import 'package:giv_flutter/model/user/log_in_request.dart';
-import 'package:giv_flutter/model/user/log_in_response.dart';
-import 'package:giv_flutter/model/user/log_in_with_provider.dart';
-import 'package:giv_flutter/model/user/login_assistance_request.dart';
-import 'package:giv_flutter/model/user/sign_up_request.dart';
+import 'package:giv_flutter/model/user/repository/api/request/log_in_request.dart';
+import 'package:giv_flutter/model/user/repository/api/response/log_in_response.dart';
+import 'package:giv_flutter/model/user/repository/api/request/log_in_with_provider_request.dart';
+import 'package:giv_flutter/model/user/repository/api/request/login_assistance_request.dart';
+import 'package:giv_flutter/model/user/repository/api/request/sign_up_request.dart';
 import 'package:giv_flutter/model/user/user.dart';
 import 'package:giv_flutter/util/network/base_api.dart';
 import 'package:giv_flutter/util/network/http_response.dart';
@@ -16,7 +16,7 @@ class UserApi extends BaseApi {
     HttpStatus status;
     try {
       final response =
-          await http.post('$baseUrl/signup', body: request.toHttpPostBody());
+          await http.post('$baseUrl/signup', body: request.toHttpRequestBody());
 
       status = HttpResponse.codeMap[response.statusCode];
       final data = ApiResponse.fromNetwork(jsonDecode(response.body));
@@ -28,15 +28,27 @@ class UserApi extends BaseApi {
     }
   }
 
-  Future<LogInResponse> login(LogInRequest request) async {
-    await Future.delayed(Duration(seconds: 4));
-    return LogInResponse.mock();
+  Future<HttpResponse<LogInResponse>> login(LogInRequest request) async {
+    HttpStatus status;
+    try {
+      final response = await http.post('$baseUrl/auth/login',
+          body: request.toHttpRequestBody());
+
+      status = HttpResponse.codeMap[response.statusCode];
+      final data = LogInResponse.fromNetwork(jsonDecode(response.body));
+
+      return HttpResponse<LogInResponse>(status: status, data: data);
+    } catch (error) {
+      return HttpResponse<LogInResponse>(
+          status: status, message: error.toString());
+    }
   }
 
-  Future<LogInResponse> loginWithProvider(
+  Future<HttpResponse<LogInResponse>> loginWithProvider(
       LogInWithProviderRequest request) async {
     await Future.delayed(Duration(seconds: 4));
-    return LogInResponse.mock();
+    return HttpResponse<LogInResponse>(
+        status: HttpStatus.ok, data: LogInResponse.mock());
   }
 
   Future<ApiResponse> forgotPassword(LoginAssistanceRequest request) async {

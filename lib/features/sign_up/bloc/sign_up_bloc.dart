@@ -1,6 +1,6 @@
 import 'package:giv_flutter/model/api_response/api_response.dart';
 import 'package:giv_flutter/model/user/repository/user_repository.dart';
-import 'package:giv_flutter/model/user/sign_up_request.dart';
+import 'package:giv_flutter/model/user/repository/api/request/sign_up_request.dart';
 import 'package:giv_flutter/util/network/http_response.dart';
 import 'package:rxdart/rxdart.dart';
 
