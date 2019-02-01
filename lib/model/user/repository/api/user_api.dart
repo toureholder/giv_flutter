@@ -46,9 +46,19 @@ class UserApi extends BaseApi {
 
   Future<HttpResponse<LogInResponse>> loginWithProvider(
       LogInWithProviderRequest request) async {
-    await Future.delayed(Duration(seconds: 4));
-    return HttpResponse<LogInResponse>(
-        status: HttpStatus.ok, data: LogInResponse.mock());
+    HttpStatus status;
+    try {
+      final response = await http.post('$baseUrl/auth/provider',
+          body: request.toHttpRequestBody());
+
+      status = HttpResponse.codeMap[response.statusCode];
+      final data = LogInResponse.fromNetwork(jsonDecode(response.body));
+
+      return HttpResponse<LogInResponse>(status: status, data: data);
+    } catch (error) {
+      return HttpResponse<LogInResponse>(
+          status: status, message: error.toString());
+    }
   }
 
   Future<ApiResponse> forgotPassword(LoginAssistanceRequest request) async {

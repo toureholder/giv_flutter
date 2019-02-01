@@ -4,9 +4,9 @@ import 'package:giv_flutter/base/base_state.dart';
 import 'package:giv_flutter/features/log_in/bloc/log_in_bloc.dart';
 import 'package:giv_flutter/features/log_in/ui/log_in.dart';
 import 'package:giv_flutter/features/sign_up/ui/sign_up.dart';
-import 'package:giv_flutter/model/user/repository/api/response/log_in_response.dart';
 import 'package:giv_flutter/model/user/repository/api/request/log_in_with_provider_request.dart';
-import 'package:giv_flutter/util/data/stream_event.dart';
+import 'package:giv_flutter/model/user/repository/api/response/log_in_response.dart';
+import 'package:giv_flutter/util/network/http_response.dart';
 import 'package:giv_flutter/util/presentation/buttons.dart';
 import 'package:giv_flutter/util/presentation/custom_scaffold.dart';
 import 'package:giv_flutter/util/presentation/spacing.dart';
@@ -29,8 +29,9 @@ class _SignInState extends BaseState<SignIn> {
   void initState() {
     super.initState();
     _logInBloc = LogInBloc();
-    _logInBloc.responseStream.listen((StreamEvent<LogInResponse> event) {
-      if (event.isReady) onLoginSuccess(widget.redirect);
+    _logInBloc.responseStream
+        .listen((HttpResponse<LogInResponse> httpResponse) {
+      if (httpResponse.isReady) onLoginResponse(httpResponse, widget.redirect);
     });
   }
 
@@ -118,7 +119,9 @@ class _SignInState extends BaseState<SignIn> {
   }
 
   void _goToLogIn() {
-    navigation.pushReplacement(LogIn(redirect: widget.redirect,));
+    navigation.pushReplacement(LogIn(
+      redirect: widget.redirect,
+    ));
   }
 
   void _facebookLogin() async {
@@ -130,7 +133,8 @@ class _SignInState extends BaseState<SignIn> {
         print('result.accessToken.token: ${result.accessToken.token}');
         _logInBloc.loginWithProvider(LogInWithProviderRequest(
             accessToken: result.accessToken.token,
-            provider: LogInWithProviderRequest.facebook));
+            provider: LogInWithProviderRequest.facebook,
+            localeString: localeString));
         break;
       case FacebookLoginStatus.cancelledByUser:
         print('FacebookLoginStatus.cancelledByUser');
