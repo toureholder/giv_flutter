@@ -26,7 +26,7 @@ class _ProfileState extends BaseState<Profile> {
   void initState() {
     super.initState();
     _settingsBloc = SettingsBloc();
-    _settingsBloc.loadUser();
+    _settingsBloc.loadUserFromPrefs();
   }
 
   @override
@@ -152,20 +152,20 @@ class _ProfileState extends BaseState<Profile> {
     final result = await navigation.push(EditBio(
       user: _user,
     ));
-    if (result != null) _settingsBloc.loadUser();
+    if (result != null) _settingsBloc.loadUserFromPrefs();
   }
 
   void _editName() async {
     final result = await navigation.push(EditName(
       user: _user,
     ));
-    if (result != null) _settingsBloc.loadUser();
+    if (result != null) _settingsBloc.loadUserFromPrefs();
   }
 
   void _editPhoneNumber() async {
     final result = await navigation.push(EditPhoneNumber(
       user: _user,
     ));
-    if (result != null) _settingsBloc.loadUser();
+    if (result != null) _settingsBloc.loadUserFromPrefs();
   }
 }

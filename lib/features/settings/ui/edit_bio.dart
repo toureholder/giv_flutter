@@ -3,7 +3,7 @@ import 'package:giv_flutter/base/base_state.dart';
 import 'package:giv_flutter/config/config.dart';
 import 'package:giv_flutter/features/settings/bloc/settings_bloc.dart';
 import 'package:giv_flutter/model/user/user.dart';
-import 'package:giv_flutter/util/data/stream_event.dart';
+import 'package:giv_flutter/util/network/http_response.dart';
 import 'package:giv_flutter/util/presentation/buttons.dart';
 import 'package:giv_flutter/util/presentation/custom_app_bar.dart';
 import 'package:giv_flutter/util/presentation/custom_scaffold.dart';
@@ -29,14 +29,20 @@ class _EditBioState extends BaseState<EditBio> {
     super.initState();
     _settingsBloc = SettingsBloc();
 
-    _settingsBloc.userStream.listen((StreamEvent<User> event) {
-      if (event.isReady) _onUpdateSuccess(event.data);
+    _settingsBloc.userUpdateStream.listen((HttpResponse<User> httpResponse) {
+      if (httpResponse.isReady) onUpdateUserResponse(httpResponse);
     });
 
     _controller = widget.user?.bio == null
         ? TextEditingController()
         : TextEditingController.fromValue(
             new TextEditingValue(text: widget.user.bio));
+  }
+
+  @override
+  void dispose() {
+    _settingsBloc.dispose();
+    super.dispose();
   }
 
   @override
@@ -47,7 +53,7 @@ class _EditBioState extends BaseState<EditBio> {
         title: string('settings_bio'),
       ),
       body: StreamBuilder(
-          stream: _settingsBloc.userStream,
+          stream: _settingsBloc.userUpdateStream,
           builder: (context, snapshot) {
             var isLoading = snapshot?.data?.isLoading ?? false;
             return _buildSingleChildScrollView(isLoading);
@@ -101,12 +107,10 @@ class _EditBioState extends BaseState<EditBio> {
       return;
     }
 
-    var userUpdate = widget.user.copy();
-    userUpdate.bio = _controller.text.isEmpty? null : _controller.text;
-    _settingsBloc.updateUser(userUpdate);
-  }
+    final update = {
+      User.bioKey: _controller.text
+    };
 
-  void _onUpdateSuccess(User user) {
-    Navigator.pop(context, user);
+    _settingsBloc.updateUser(update);
   }
 }

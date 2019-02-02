@@ -28,7 +28,7 @@ class _SettingsState extends BaseState<Settings> {
   void initState() {
     super.initState();
     _settingsBloc = SettingsBloc();
-    _settingsBloc.loadUser();
+    _settingsBloc.loadUserFromPrefs();
   }
 
   @override

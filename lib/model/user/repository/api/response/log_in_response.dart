@@ -7,10 +7,10 @@ class LogInResponse {
 
   LogInResponse(this.firebaseAuthToken, this.longLivedToken, this.user);
 
-  LogInResponse.fromNetwork(Map<String, dynamic> json)
+  LogInResponse.fromJson(Map<String, dynamic> json)
       : firebaseAuthToken = json['firebse_auth_token'],
         longLivedToken = json['long_lived_token'],
-        user = User.fromNetwork(json['user']);
+        user = User.fromJson(json['user']);
 
   LogInResponse.mock()
       : firebaseAuthToken = 'd393n39dn',

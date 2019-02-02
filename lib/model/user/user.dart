@@ -18,9 +18,9 @@ class User {
 
   static final String idKey = 'id';
   static final String nameKey = 'name';
-  static final String avatarUrlKey = 'avatarUrl';
-  static final String phoneNumberKey = 'phoneNumber';
-  static final String countryCallingCodeKey = 'countryCallingCode';
+  static final String avatarUrlKey = 'image_url';
+  static final String phoneNumberKey = 'phone_number';
+  static final String countryCallingCodeKey = 'country_calling_code';
   static final String bioKey = 'bio';
 
   Map<String, dynamic> toJson() => {
@@ -38,14 +38,6 @@ class User {
         phoneNumber = json[phoneNumberKey],
         countryCallingCode = json[countryCallingCodeKey],
         bio = json[bioKey];
-
-  User.fromNetwork(Map<String, dynamic> json)
-      : id = json['id'],
-        name = json['name'],
-        avatarUrl = json['image_url'],
-        phoneNumber = json['phone_number'],
-        countryCallingCode = json['country_calling_code'],
-        bio = json['bio'];
 
   User copy() => User.fromJson(toJson());
 

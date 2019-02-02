@@ -2,19 +2,23 @@ import 'package:giv_flutter/config/preferences/prefs.dart';
 import 'package:giv_flutter/model/user/repository/user_repository.dart';
 import 'package:giv_flutter/model/user/user.dart';
 import 'package:giv_flutter/util/data/stream_event.dart';
+import 'package:giv_flutter/util/network/http_response.dart';
 import 'package:rxdart/rxdart.dart';
 
 class SettingsBloc {
   final _userPublishSubject = PublishSubject<StreamEvent<User>>();
+  final _userUpdatePublishSubject = PublishSubject<HttpResponse<User>>();
   final _userRepository = UserRepository();
 
   Observable<StreamEvent<User>> get userStream => _userPublishSubject.stream;
+  Observable<HttpResponse<User>> get userUpdateStream => _userUpdatePublishSubject.stream;
 
   dispose() {
     _userPublishSubject.close();
+    _userUpdatePublishSubject.close();
   }
 
-  loadUser() async {
+  loadUserFromPrefs() async {
     try {
       var user = await Prefs.getUser();
       _userPublishSubject.sink.add(StreamEvent<User>(data: user));
@@ -23,17 +27,18 @@ class SettingsBloc {
     }
   }
 
-  updateUser(User user) async {
+  updateUser(Map<String, dynamic> userUpdate) async {
     try {
-      _userPublishSubject.sink.add(StreamEvent.loading());
+      _userUpdatePublishSubject.sink.add(HttpResponse.loading());
 
-      var userResponse = await _userRepository.updateMe(user);
+      var response = await _userRepository.updateMe(userUpdate);
 
-      await Prefs.setUser(userResponse);
+      if (response.data != null)
+        await Prefs.setUser(response.data);
 
-      _userPublishSubject.sink.add(StreamEvent<User>(data: userResponse));
+      _userUpdatePublishSubject.sink.add(response);
     } catch (error) {
-      _userPublishSubject.sink.addError(error);
+      _userUpdatePublishSubject.sink.addError(error);
     }
   }
 }

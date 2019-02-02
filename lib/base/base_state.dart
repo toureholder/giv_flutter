@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:giv_flutter/config/i18n/string_localizations.dart';
 import 'package:giv_flutter/features/base/base.dart';
+import 'package:giv_flutter/model/user/user.dart';
 import 'package:giv_flutter/util/navigation/navigation.dart';
 import 'package:giv_flutter/util/network/http_response.dart';
 import 'package:giv_flutter/util/util.dart';
@@ -22,7 +23,7 @@ class BaseState<T extends StatefulWidget> extends State<T> {
   void onLoginResponse(HttpResponse response, Widget redirect) {
     switch(response.status) {
       case HttpStatus.ok:
-        onLoginSuccess(redirect);
+        _onLoginSuccess(redirect);
         break;
       case HttpStatus.unprocessableEntity:
         showInformationDialog(
@@ -41,12 +42,25 @@ class BaseState<T extends StatefulWidget> extends State<T> {
     }
   }
 
-  void onLoginSuccess(Widget redirect) {
+  void _onLoginSuccess(Widget redirect) {
     if (redirect == null) {
       Navigation(context).push(Base(), clearStack: true);
     } else {
       Navigation(context).pushReplacement(redirect);
     }
+  }
+
+  void onUpdateUserResponse(HttpResponse<User> response) {
+    if (response.status == HttpStatus.ok) {
+      _onUpdateUserSuccess(response.data);
+      return;
+    }
+
+    showGenericErrorDialog();
+  }
+
+  void _onUpdateUserSuccess(User user) {
+    Navigator.pop(context, user);
   }
 
   void showGenericErrorDialog() {

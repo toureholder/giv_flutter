@@ -21,9 +21,9 @@ class UserRepository {
           LogInWithProviderRequest request) =>
       userApi.loginWithProvider(request);
 
-  Future<User> getMe() => userApi.getMe();
+  Future<HttpResponse<User>> getMe() => userApi.getMe();
 
-  Future<User> updateMe(User user) => userApi.updateMe(user);
+  Future<HttpResponse<User>> updateMe(Map<String, dynamic> userUpdate) => userApi.updateMe(userUpdate);
 
   Future<ApiResponse> forgotPassword(LoginAssistanceRequest request) =>
       userApi.forgotPassword(request);

@@ -1,11 +1,10 @@
 import 'package:giv_flutter/config/preferences/prefs.dart';
 import 'package:giv_flutter/model/api_response/api_response.dart';
 import 'package:giv_flutter/model/user/repository/api/request/log_in_request.dart';
-import 'package:giv_flutter/model/user/repository/api/response/log_in_response.dart';
 import 'package:giv_flutter/model/user/repository/api/request/log_in_with_provider_request.dart';
 import 'package:giv_flutter/model/user/repository/api/request/login_assistance_request.dart';
+import 'package:giv_flutter/model/user/repository/api/response/log_in_response.dart';
 import 'package:giv_flutter/model/user/repository/user_repository.dart';
-import 'package:giv_flutter/model/user/token_store.dart';
 import 'package:giv_flutter/util/data/stream_event.dart';
 import 'package:giv_flutter/util/network/http_response.dart';
 import 'package:rxdart/rxdart.dart';
@@ -90,8 +89,10 @@ class LogInBloc {
 
   Future<void> _saveToPreferences(LogInResponse response) async {
     await Prefs.setUser(response.user);
-    await Prefs.setTokens(TokenStore(
-        firebaseAuthToken: response.longLivedToken,
-        longLivedToken: response.longLivedToken));
+
+    await Future.wait([
+      Prefs.setServerToken(response.longLivedToken),
+      Prefs.setFirebaseToken(response.firebaseAuthToken)
+    ]);
   }
 }

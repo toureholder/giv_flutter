@@ -58,22 +58,27 @@ class Prefs {
 
   // Tokens
 
-  static final String _tokenStoreKey = 'tokens';
+  static final String _serverTokenKey = 'server_token';
 
-  static Future<TokenStore> getTokens() async {
+  static Future<String> getServerToken() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-
-    String jsonString = prefs.getString(_tokenStoreKey);
-
-    try {
-      return TokenStore.fromJson(jsonDecode(jsonString));
-    } catch (error) {
-      return null;
-    }
+    return prefs.getString(_serverTokenKey);
   }
 
-  static Future<bool> setTokens(TokenStore tokens) async {
+  static Future<bool> setServerToken(String token) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.setString(_tokenStoreKey, json.encode(tokens.toJson()));
+    return prefs.setString(_serverTokenKey, token);
+  }
+
+  static final String _firebaseTokenKey = 'firebase_token';
+
+  static Future<String> getFirebaseToken() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString(_firebaseTokenKey);
+  }
+
+  static Future<bool> setFirebaseToken(String token) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.setString(_firebaseTokenKey, token);
   }
 }

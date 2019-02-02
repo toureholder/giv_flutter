@@ -5,6 +5,6 @@ class ApiResponse {
 
   ApiResponse.mock() : message = "Success";
 
-  ApiResponse.fromNetwork(Map<String, dynamic> json)
+  ApiResponse.fromJson(Map<String, dynamic> json)
       : message = json['message'];
 }

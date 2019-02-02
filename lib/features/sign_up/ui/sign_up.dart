@@ -158,6 +158,8 @@ class _SignUpState extends BaseState<SignUp> {
   }
 
   void _onSignUpResponse(HttpResponse<ApiResponse> httpResponse) {
+    //TODO: Handle 409 (email taken)
+
     if (httpResponse.status == HttpStatus.created) {
       _onSignUpResponseSuccess();
       return;

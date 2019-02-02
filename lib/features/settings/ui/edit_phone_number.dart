@@ -1,9 +1,10 @@
+import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:giv_flutter/base/base_state.dart';
 import 'package:giv_flutter/config/config.dart';
 import 'package:giv_flutter/features/settings/bloc/settings_bloc.dart';
 import 'package:giv_flutter/model/user/user.dart';
-import 'package:giv_flutter/util/data/stream_event.dart';
+import 'package:giv_flutter/util/network/http_response.dart';
 import 'package:giv_flutter/util/presentation/buttons.dart';
 import 'package:giv_flutter/util/presentation/custom_app_bar.dart';
 import 'package:giv_flutter/util/presentation/custom_scaffold.dart';
@@ -11,7 +12,6 @@ import 'package:giv_flutter/util/presentation/spacing.dart';
 import 'package:giv_flutter/util/presentation/typography.dart';
 import 'package:giv_flutter/util/util.dart';
 import 'package:giv_flutter/values/dimens.dart';
-import 'package:country_code_picker/country_code_picker.dart';
 
 class EditPhoneNumber extends StatefulWidget {
   final User user;
@@ -33,8 +33,8 @@ class _EditPhoneNumberState extends BaseState<EditPhoneNumber> {
     super.initState();
     _settingsBloc = SettingsBloc();
 
-    _settingsBloc.userStream.listen((StreamEvent<User> event) {
-      if (event.isReady) _onUpdateSuccess(event.data);
+    _settingsBloc.userUpdateStream.listen((HttpResponse<User> httpResponse) {
+      if (httpResponse.isReady) onUpdateUserResponse(httpResponse);
     });
 
     _controller = widget.user?.phoneNumber == null
@@ -51,7 +51,7 @@ class _EditPhoneNumberState extends BaseState<EditPhoneNumber> {
         title: string('settings_phone_number'),
       ),
       body: StreamBuilder(
-          stream: _settingsBloc.userStream,
+          stream: _settingsBloc.userUpdateStream,
           builder: (context, snapshot) {
             var isLoading = snapshot?.data?.isLoading ?? false;
             return _buildSingleChildScrollView(isLoading);
@@ -139,11 +139,13 @@ class _EditPhoneNumberState extends BaseState<EditPhoneNumber> {
     var userUpdate = widget.user.copy();
     userUpdate.countryCallingCode = _selectedCode;
     userUpdate.phoneNumber = _controller.text;
-    _settingsBloc.updateUser(userUpdate);
-  }
 
-  void _onUpdateSuccess(User user) {
-    Navigator.pop(context, user);
+    final update = {
+      User.countryCallingCodeKey: _selectedCode,
+      User.phoneNumberKey: _controller.text
+    };
+
+    _settingsBloc.updateUser(update);
   }
 
   void _onCountryChange(CountryCode countryCode) {
