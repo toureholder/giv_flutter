@@ -115,20 +115,31 @@ class _ProfileState extends BaseState<Profile> {
   }
 
   Widget _avatar(User user) {
-    return Material(
-      color: Colors.white,
-      child: Padding(
-        padding: EdgeInsets.all(Dimens.default_horizontal_margin),
-        child: Row(
-          children: <Widget>[
-            AvatarNetworkImage(
-              imageUrl: user.avatarUrl,
-              width: 64.0,
-              height: 64.0,
+    return Row(
+      mainAxisSize: MainAxisSize.max,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        Stack(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(28.0),
+              child: AvatarNetworkImage(
+                imageUrl: user.avatarUrl,
+                width: 154.0,
+                height: 154.0,
+              ),
             ),
+            Positioned(
+                bottom: 16.0,
+                right: 16.0,
+                child: FloatingActionButton(
+                  onPressed: () {},
+                  child: Icon(Icons.camera_alt),
+                  elevation: 2.0,
+                ))
           ],
         ),
-      ),
+      ],
     );
   }
 
