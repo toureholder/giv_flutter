@@ -4,7 +4,7 @@ import 'package:giv_flutter/features/listing/ui/new_listing.dart';
 import 'package:giv_flutter/model/image/image.dart' as CustomImage;
 import 'package:giv_flutter/model/product/product.dart';
 import 'package:giv_flutter/util/presentation/buttons.dart';
-import 'package:giv_flutter/util/presentation/avatar_network_image.dart';
+import 'package:giv_flutter/util/presentation/avatar_image.dart';
 import 'package:giv_flutter/util/presentation/custom_app_bar.dart';
 import 'package:giv_flutter/util/presentation/custom_scaffold.dart';
 import 'package:giv_flutter/util/presentation/image_carousel.dart';
@@ -98,7 +98,7 @@ class _ProductDetailState extends BaseState<ProductDetail> {
         children: <Widget>[
           ClipRRect(
             borderRadius: BorderRadius.circular(100.0),
-            child: AvatarNetworkImage(imageUrl: user.avatarUrl),
+            child: AvatarImage(image: CustomImage.Image(url: user.avatarUrl)),
           ),
           Spacing.horizontal(Dimens.grid(6)),
           Body2Text(user.name)

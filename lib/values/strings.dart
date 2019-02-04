@@ -490,6 +490,18 @@ class Strings {
     "action_report": {
       "en": "Report",
       "pt": "Reportar"
+    },
+    "profile_image_picker_modal_title": {
+      "en": "Profile picture",
+      "pt": "Foto de perfil"
+    },
+    "profile_cancel_upload_confirmation_title": {
+      "en": "Cancel upload?",
+      "pt": "Cancelar upload?"
+    },
+    "profile_cancel_upload_confirmation_message": {
+      "en": "Your new picture is still being uploaded. Are you sure you want to cancel?",
+      "pt": "A nova foto ainda não foi salva. Quer mesmo cancelar?"
     }
   };
 }

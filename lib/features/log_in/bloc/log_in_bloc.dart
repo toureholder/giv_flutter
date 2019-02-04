@@ -8,6 +8,7 @@ import 'package:giv_flutter/model/user/repository/user_repository.dart';
 import 'package:giv_flutter/util/data/stream_event.dart';
 import 'package:giv_flutter/util/network/http_response.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class LogInBloc {
   final _userRepository = UserRepository();
@@ -19,6 +20,8 @@ class LogInBloc {
 
   final _resendActivationPublishSubject =
       PublishSubject<StreamEvent<ApiResponse>>();
+
+  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
   Observable<HttpResponse<LogInResponse>> get responseStream =>
       _loginPublishSubject.stream;
@@ -92,7 +95,8 @@ class LogInBloc {
 
     await Future.wait([
       Prefs.setServerToken(response.longLivedToken),
-      Prefs.setFirebaseToken(response.firebaseAuthToken)
+      Prefs.setFirebaseToken(response.firebaseAuthToken),
+      _firebaseAuth.signInWithCustomToken(token: response.firebaseAuthToken)
     ]);
   }
 }

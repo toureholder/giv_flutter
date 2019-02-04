@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:giv_flutter/base/base_state.dart';
 import 'package:giv_flutter/config/config.dart';
@@ -9,12 +10,13 @@ import 'package:giv_flutter/features/settings/ui/profile.dart';
 import 'package:giv_flutter/model/user/user.dart';
 import 'package:giv_flutter/util/data/content_stream_builder.dart';
 import 'package:giv_flutter/util/data/stream_event.dart';
-import 'package:giv_flutter/util/presentation/avatar_network_image.dart';
+import 'package:giv_flutter/util/presentation/avatar_image.dart';
 import 'package:giv_flutter/util/presentation/custom_app_bar.dart';
 import 'package:giv_flutter/util/presentation/custom_scaffold.dart';
 import 'package:giv_flutter/util/util.dart';
 import 'package:giv_flutter/values/custom_icons_icons.dart';
 import 'package:giv_flutter/values/dimens.dart';
+import 'package:giv_flutter/model/image/image.dart' as CustomImage;
 
 class Settings extends StatefulWidget {
   @override
@@ -50,11 +52,9 @@ class _SettingsState extends BaseState<Settings> {
     return ListView(
       children: <Widget>[
         SettingsListTile(
-          leading: AvatarNetworkImage(imageUrl: user.avatarUrl),
+          leading: AvatarImage(image: CustomImage.Image(url: user.avatarUrl)),
           text: string('settings_section_profile'),
-          onTap: () {
-            navigation.push(Profile());
-          },
+          onTap: _goToProfile,
         ),
         Divider(
           height: 1.0,
@@ -129,11 +129,18 @@ class _SettingsState extends BaseState<Settings> {
 
   void _logout() async {
     await Prefs.clear();
+    final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+    _firebaseAuth.signOut();
     navigation.push(Base(), clearStack: true);
   }
 
   void _whatsAppCustomerService() {
     Util.openWhatsApp(Config.customerServiceNumber, string('help_message'));
+  }
+
+  void _goToProfile () async {
+    await navigation.push(Profile());
+    _settingsBloc.loadUserFromPrefs();
   }
 }
 

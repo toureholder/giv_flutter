@@ -8,4 +8,5 @@ class Image {
 
   bool get hasUrl => url != null;
   bool get hasFile => file != null;
+  bool get isEmpty => (url == null && file == null);
 }

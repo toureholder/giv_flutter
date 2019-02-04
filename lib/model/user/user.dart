@@ -24,6 +24,7 @@ class User {
   static final String bioKey = 'bio';
 
   Map<String, dynamic> toJson() => {
+        idKey: id,
         nameKey: name,
         avatarUrlKey: avatarUrl,
         phoneNumberKey: phoneNumber,
@@ -48,6 +49,7 @@ class User {
     final id = faker.randomGenerator.integer(99, min: 1);
 
     return User(
+        id: id,
         name: "${fakePerson.firstName()} ${fakePerson.lastName()}",
         avatarUrl: "https://randomuser.me/api/portraits/$gender/$id.jpg",
         phoneNumber: '61981178515',
@@ -61,6 +63,7 @@ class User {
     final id = faker.randomGenerator.integer(99, min: 1);
 
     return User(
+        id: id,
         name: "${fakePerson.firstName()} ${fakePerson.lastName()}",
         avatarUrl: "https://randomuser.me/api/portraits/$gender/$id.jpg");
   }

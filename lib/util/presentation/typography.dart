@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:giv_flutter/values/colors.dart';
 
 class CustomTypography {
-  static Color baseColor = Color(0xFF252525);
+  static Color baseColor = CustomColors.fontColor;
 
   static TextStyle base = TextStyle(color: baseColor);
 
