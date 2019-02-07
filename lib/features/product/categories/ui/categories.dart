@@ -7,6 +7,8 @@ import 'package:giv_flutter/util/data/content_stream_builder.dart';
 import 'package:giv_flutter/util/presentation/custom_app_bar.dart';
 import 'package:giv_flutter/util/presentation/custom_scaffold.dart';
 import 'package:giv_flutter/util/presentation/search_teaser_app_bar.dart';
+import 'package:giv_flutter/util/presentation/spacing.dart';
+import 'package:giv_flutter/values/dimens.dart';
 
 class Categories extends StatefulWidget {
   final bool showSearch;
@@ -58,12 +60,12 @@ class _CategoriesState extends BaseState<Categories> {
       BuildContext context, List<ProductCategory> categories) {
     return ListView.builder(
         shrinkWrap: true,
-        itemCount: categories.length,
+        itemCount: categories.length + 1,
         itemBuilder: (context, i) {
-          return CategoryListTile(
+          return i < categories.length ? CategoryListTile(
             category: categories[i],
             returnChoice: widget.returnChoice,
-          );
+          ) : Spacing.vertical(Dimens.default_vertical_margin);
         });
   }
 }

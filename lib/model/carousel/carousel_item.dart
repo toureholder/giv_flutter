@@ -30,7 +30,7 @@ class CarouselItem {
         imageUrl: 'https://picsum.photos/400/300/?image=1073',
         title: 'Melhore seu inglês',
         caption: 'Veja os livros sendo doados',
-        productCategory: ProductCategory(id: 5, title: "Livros em inglês"),
+        productCategory: ProductCategory(id: 5, simpleName: "Livros em inglês"),
       ),
       CarouselItem(
         imageUrl: 'https://picsum.photos/400/300/?image=535',

@@ -53,7 +53,7 @@ class _SettingsState extends BaseState<Settings> {
       children: <Widget>[
         SettingsListTile(
           leading: AvatarImage(image: CustomImage.Image(url: user.avatarUrl)),
-          text: string('settings_section_profile'),
+          text: string('profile_title'),
           onTap: _goToProfile,
         ),
         Divider(

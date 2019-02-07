@@ -8,7 +8,8 @@ class CategoryListTile extends StatefulWidget {
   final ProductCategory category;
   final bool returnChoice;
 
-  const CategoryListTile({Key key, this.category, this.returnChoice = false}) : super(key: key);
+  const CategoryListTile({Key key, this.category, this.returnChoice = false})
+      : super(key: key);
 
   @override
   _CategoryListTileState createState() => _CategoryListTileState();
@@ -24,18 +25,31 @@ class _CategoryListTileState extends BaseState<CategoryListTile> {
     final trailing =
         category.hasSubCategories ? Icon(Icons.chevron_right) : null;
 
-    final onTap = widget.returnChoice ? _returnChoice : _goToSubCategoryOrResult;
+    final onTap =
+        widget.returnChoice ? _returnChoice : _goToSubCategoryOrResult;
 
-    return ListTile(
-      title: BodyText(category.title),
-      trailing: trailing,
-      onTap: onTap,
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        ListTile(
+          title: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 18.0),
+            child: BodyText(category.simpleName),
+          ),
+          trailing: trailing,
+          onTap: onTap,
+        ),
+        Divider(height: 1.0,)
+      ],
     );
   }
 
   void _returnChoice() async {
     if (widget.category?.subCategories?.isNotEmpty ?? false) {
-      final result = await navigation.push(SubCategories(category: widget.category, returnChoice: true,));
+      final result = await navigation.push(SubCategories(
+        category: widget.category,
+        returnChoice: true,
+      ));
       if (result != null) navigation.pop(result);
       return;
     }

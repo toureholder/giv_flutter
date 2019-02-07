@@ -61,7 +61,7 @@ class _ProfileState extends BaseState<Profile> {
       onWillPop: _onWillPop,
       child: CustomScaffold(
         appBar: CustomAppBar(
-          title: string('settings_section_profile'),
+          title: string('profile_title'),
         ),
         body: ContentStreamBuilder(
           stream: _settingsBloc.userStream,

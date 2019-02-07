@@ -1,5 +1,6 @@
 import 'package:giv_flutter/model/product/product_category.dart';
 import 'package:giv_flutter/model/product/repository/product_repository.dart';
+import 'package:giv_flutter/util/network/http_response.dart';
 import 'package:rxdart/rxdart.dart';
 
 class CategoriesBloc {
@@ -16,8 +17,13 @@ class CategoriesBloc {
 
   fetchCategories() async {
     try {
-      var categories = await _productRepository.getSearchCategories();
-      _categoriesPublishSubject.sink.add(categories);
+      var response = await _productRepository.getSearchCategories();
+
+      final data = response.data;
+      if (response.status == HttpStatus.ok && data != null)
+        _categoriesPublishSubject.sink.add(data);
+      else
+        throw response.message;
     } catch (err) {
       _categoriesPublishSubject.sink.addError(err);
     }

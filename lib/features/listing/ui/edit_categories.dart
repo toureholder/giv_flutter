@@ -57,7 +57,7 @@ class _EditCategoriesState extends BaseState<EditCategories> {
   List<Widget> _buildList(BuildContext context) {
     final list = _editedList
         .map((it) => ListTile(
-              title: BodyText(it.title),
+              title: BodyText(it.canonicalName),
               trailing: IconButton(
                   icon: Icon(Icons.delete),
                   onPressed: () {

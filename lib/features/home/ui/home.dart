@@ -189,7 +189,7 @@ class _HomeState extends BaseState<Home> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           Subtitle(
-            category.title,
+            category.simpleName,
             weight: SyntheticFontWeight.semiBold,
           ),
           SmallFlatPrimaryButton(

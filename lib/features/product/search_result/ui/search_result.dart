@@ -47,7 +47,7 @@ class _SearchResultState extends BaseState<SearchResult> {
   Widget build(BuildContext context) {
     super.build(context);
 
-    var title = widget.category?.title ?? widget.searchQuery;
+    var title = widget.category?.simpleName ?? widget.searchQuery;
 
     var appBar = widget.category == null
         ? SearchTeaserAppBar(q: widget.searchQuery)

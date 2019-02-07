@@ -36,8 +36,8 @@ class Strings {
       "pt": "Projetos"
     },
     "search_hint": {
-      "en": "Search Giv",
-      "pt": "Busque no Giv"
+      "en": "Search Giv...",
+      "pt": "Busque no Giv..."
     },
     "search_result_x_results": {
       "en": "$formatItem Results",
@@ -175,13 +175,17 @@ class Strings {
       "en": "Settings",
       "pt": "Configurações"
     },
+    "profile_title": {
+      "en": "Profile",
+      "pt": "Perfil"
+    },
     "settings_section_account": {
       "en": "Account",
       "pt": "Conta"
     },
     "settings_section_profile": {
-      "en": "Profile",
-      "pt": "Perfil"
+      "en": "My info",
+      "pt": "Meus dados"
     },
     "settings_phone_number": {
       "en": "WhatsApp phone number",
@@ -261,7 +265,7 @@ class Strings {
     },
     "new_listing_section_title_photos": {
       "en": "Beautiful photos of the product",
-      "pt": "Lindas fotos do produto"
+      "pt": "Fotos maneiras do produto"
     },
     "new_listing_section_title_about": {
       "en": "About the product",
@@ -313,7 +317,7 @@ class Strings {
     },
     "new_listing_images_hint": {
       "en": "Don't forget to add some photos :)",
-      "pt": "Não se esqueça de adicionar alumgas fotos :)"
+      "pt": "Bota umas fotos aí ;)"
     },
     "new_listing_edit_title_hint": {
       "en": "Give you listing a title",
@@ -502,6 +506,10 @@ class Strings {
     "profile_cancel_upload_confirmation_message": {
       "en": "Your new picture is still being uploaded. Are you sure you want to cancel?",
       "pt": "A nova foto ainda não foi salva. Quer mesmo cancelar?"
+    },
+    "sub_categories_parent_category_prefix": {
+      "en": "All",
+      "pt": "Tudo de"
     }
   };
 }

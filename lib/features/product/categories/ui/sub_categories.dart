@@ -22,7 +22,7 @@ class _SubCategoriesState extends BaseState<SubCategories> {
     super.build(context);
 
     return CustomScaffold(
-      appBar: CustomAppBar(title: widget.category.title),
+      appBar: CustomAppBar(title: widget.category.simpleName),
       body: ListView(
         children: _buildList(context, widget.category.subCategories),
       ),
@@ -31,7 +31,19 @@ class _SubCategoriesState extends BaseState<SubCategories> {
 
   List<Widget> _buildList(
       BuildContext context, List<ProductCategory> categories) {
-    return categories
+
+    final parentWidget = widget.category;
+
+    final parentCategory = ProductCategory(
+      id: parentWidget.id,
+      simpleName: parentWidget.getNameAsParent(context),
+      canonicalName: parentWidget.canonicalName
+    );
+
+    final finalList = List<ProductCategory>.from(categories);
+    finalList.insert(0, parentCategory);
+
+    return finalList
         .map((it) => CategoryListTile(
               category: it,
               returnChoice: widget.returnChoice,

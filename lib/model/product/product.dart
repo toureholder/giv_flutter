@@ -47,7 +47,7 @@ class Product {
         categories: [
           ProductCategory(
             id: 20,
-            title: "Música e hobbies",
+            simpleName: "Música e hobbies",
           )
         ],
         user: User.mock());

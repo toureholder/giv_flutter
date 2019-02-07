@@ -3,6 +3,7 @@ import 'package:giv_flutter/model/product/product.dart';
 import 'package:giv_flutter/model/product/product_category.dart';
 import 'package:giv_flutter/model/product/product_search_result.dart';
 import 'package:giv_flutter/model/product/repository/api/product_api.dart';
+import 'package:giv_flutter/util/network/http_response.dart';
 
 class ProductRepository {
   final productApi = ProductApi();
@@ -10,7 +11,7 @@ class ProductRepository {
   Future<List<ProductCategory>> getFeaturedProductsCategories() =>
       productApi.getFeaturedProductsCategories();
 
-  Future<List<ProductCategory>> getSearchCategories() =>
+  Future<HttpResponse<List<ProductCategory>>> getSearchCategories() =>
       productApi.getSearchCategories();
 
   Future<ProductSearchResult> getProductsByCategory(
