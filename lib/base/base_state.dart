@@ -63,7 +63,9 @@ class BaseState<T extends StatefulWidget> extends State<T> {
     Navigator.pop(context, user);
   }
 
-  void showGenericErrorDialog() {
+  void showGenericErrorDialog({String message}) {
+    message = message ?? string('error_generic_report_message');
+
     showDialog(
         context: context,
         barrierDismissible: true,
@@ -75,8 +77,7 @@ class BaseState<T extends StatefulWidget> extends State<T> {
               FlatButton(
                   child: Text(string('action_report')),
                   onPressed: () {
-                    Util.customerService(
-                        string('error_generic_report_message'));
+                    Util.customerService(message);
                     Navigation(context).pop();
                   }),
               FlatButton(

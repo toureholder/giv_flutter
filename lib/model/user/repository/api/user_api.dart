@@ -87,7 +87,7 @@ class UserApi extends BaseApi {
   Future<HttpResponse<User>> updateMe(Map<String, dynamic> userUpdate) async {
     HttpStatus status;
     try {
-      final response = await put('$baseUrl/me', userUpdate);
+      final response = await patch('$baseUrl/me', userUpdate);
 
       status = HttpResponse.codeMap[response.statusCode];
       final data = User.fromJson(jsonDecode(response.body));

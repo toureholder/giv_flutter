@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:giv_flutter/config/config.dart';
@@ -9,32 +10,36 @@ class BaseApi {
   final String bearer = 'Bearer';
 
   Future<http.Response> delete(String url) async {
-    final headers = await _getHeaders();
+    final headers = await _getDefaultHeaders();
     return http.delete(url, headers: headers);
   }
 
   Future<http.Response> get(String url) async {
-    final headers = await _getHeaders();
+    final headers = await _getDefaultHeaders();
     return http.get(url, headers: headers);
   }
 
-  Future<http.Response> patch(String url, Map<String, dynamic> body) async {
-    final headers = await _getHeaders();
-    return http.patch(url, body: body, headers: headers);
-  }
+  Future<http.Response> patch(String url, Map<String, dynamic> body) =>
+      put(url, body);
 
   Future<http.Response> post(String url, Map<String, dynamic> body) async {
-    final headers = await _getHeaders();
-    return http.post(url, body: body, headers: headers);
+    final headers = await _getApplicationJsonContentTypeHeaders();
+    return http.post(url, body: json.encode(body), headers: headers);
   }
 
   Future<http.Response> put(String url, Map<String, dynamic> body) async {
-    final headers = await _getHeaders();
-    return http.put(url, body: body, headers: headers);
+    final headers = await _getApplicationJsonContentTypeHeaders();
+    return http.put(url, body: json.encode(body), headers: headers);
   }
 
-  Future<Map<String, String>> _getHeaders() async {
+  Future<Map<String, String>> _getDefaultHeaders() async {
     String token = await Prefs.getServerToken();
     return {HttpHeaders.authorizationHeader: '$bearer $token'};
+  }
+
+  Future<Map<String, String>> _getApplicationJsonContentTypeHeaders() async {
+    final headers = await _getDefaultHeaders();
+    headers.addAll({HttpHeaders.contentTypeHeader: 'application/json'});
+    return headers;
   }
 }

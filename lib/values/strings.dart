@@ -510,6 +510,10 @@ class Strings {
     "sub_categories_parent_category_prefix": {
       "en": "All",
       "pt": "Tudo de"
+    },
+    "error_upload_listing_report_message": {
+      "en": "Hi! I was using Giv and something went wrong when I tried to create a listing :/",
+      "pt": "Oi! Eu estava usando o Giv e deu ruim quando tentei criar um anúncio :/"
     }
   };
 }

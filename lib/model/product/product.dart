@@ -1,5 +1,9 @@
+import 'dart:io';
+
 import 'package:faker/faker.dart';
 import 'package:giv_flutter/model/image/image.dart';
+import 'package:giv_flutter/model/listing/listing_image.dart';
+import 'package:giv_flutter/model/listing/repository/api/request/create_listing_request.dart';
 import 'package:giv_flutter/model/location/location.dart';
 import 'package:giv_flutter/model/product/product_category.dart';
 import 'package:giv_flutter/model/user/user.dart';
@@ -28,6 +32,23 @@ class Product {
         (images != null && images.isNotEmpty) ||
         (categories != null && categories.isNotEmpty);
   }
+
+  CreateListingRequest toListingRequest(List<ListingImage> images) {
+    return CreateListingRequest(
+      title: title,
+      description: description,
+      geoNamesCityId: location.city.id,
+      geoNamesStateId: location.state.id,
+      geoNamesCountryId: location.country.id,
+      images: images,
+      categoryIds: categories.map((it) => it.id).toList()
+    );
+  }
+
+  List<File> get files => images
+      .where((image) => image.file != null)
+      .map((image) => image.file)
+      .toList();
 
   static Product mock() {
     final faker = new Faker();

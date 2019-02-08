@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:giv_flutter/base/base_state.dart';
 import 'package:giv_flutter/config/config.dart';
+import 'package:giv_flutter/config/i18n/string_localizations.dart';
 import 'package:giv_flutter/features/base/base.dart';
 import 'package:giv_flutter/features/listing/bloc/new_listing_bloc.dart';
 import 'package:giv_flutter/features/listing/ui/edit_categories.dart';
@@ -81,7 +82,7 @@ class _NewListingState extends BaseState<NewListing> {
   void _listenToUploadStream() {
     _newListingBloc.uploadStatusStream.listen((StreamEvent<double> event) {
       if (event.isReady) _onUploadSuccess();
-    });
+    }, onError: _handleUploadError);
   }
 
   @override
@@ -708,8 +709,9 @@ class _NewListingState extends BaseState<NewListing> {
 
   _submitForm() {
     if (_validateForm()) {
-      print('Send to server');
-      _newListingBloc.upload(_product);
+      print('submitting form...');
+
+      _newListingBloc.saveProduct(_product);
     }
   }
 
@@ -749,6 +751,12 @@ class _NewListingState extends BaseState<NewListing> {
             ) ??
             false
         : Future<bool>.value(true);
+  }
+
+  _handleUploadError(error) {
+    showGenericErrorDialog(
+        message: GetLocalizedStringFunction(context)(
+            'error_upload_listing_report_message'));
   }
 
   static const actionDelete = 'ACTION_DELETE';
