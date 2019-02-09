@@ -29,7 +29,7 @@ class ProductCategory {
         simpleName = json['simple_name'],
         canonicalName = json['canonical_name'],
         products = null,
-        subCategories = convertDynamicList(json['children']),
+        subCategories = fromDynamicList(json['children']),
         displayOrder = json['display_order'];
 
   void goToSubCategoryOrResult(Navigation navigation) {
@@ -50,10 +50,10 @@ class ProductCategory {
 
   static List<ProductCategory> parseList(String responseBody) {
     final parsed = json.decode(responseBody).cast<Map<String, dynamic>>();
-    return convertDynamicList(parsed);
+    return fromDynamicList(parsed);
   }
 
-  static List<ProductCategory> convertDynamicList(List<dynamic> list) {
+  static List<ProductCategory> fromDynamicList(List<dynamic> list) {
     return list
         .map<ProductCategory>((json) => ProductCategory.fromJson(json))
         .toList();

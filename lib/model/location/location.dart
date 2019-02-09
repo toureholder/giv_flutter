@@ -29,6 +29,19 @@ class Location {
     return array.join(', ');
   }
 
+  bool equals(Location location) {
+    if (location == null) return this == null;
+
+    return country?.id == location.country?.id &&
+        state?.id == location.state?.id &&
+        city?.id == location.city?.id;
+  }
+
+  bool get isComplete =>
+      (country?.isComplete ?? false) &
+      (state?.isComplete ?? false) &
+      (city?.isComplete ?? false);
+
   // Serialization
 
   static final String cityKey = 'city';
@@ -74,19 +87,6 @@ class Location {
       };
 
   Location copy() => Location.fromJson(toJson());
-
-  bool equals(Location location) {
-    if (location == null) return this == null;
-
-    return country?.id == location.country?.id &&
-        state?.id == location.state?.id &&
-        city?.id == location.city?.id;
-  }
-
-  bool get isComplete =>
-      (country?.isComplete ?? false) &
-      (state?.isComplete ?? false) &
-      (city?.isComplete ?? false);
 
   static List<Country> mockCountries() {
     final faker = new Faker();

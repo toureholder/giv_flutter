@@ -34,7 +34,17 @@ class _LocationFilterState extends BaseState<LocationFilter> {
     super.initState();
     _currentLocation = widget.location?.copy() ?? Location();
     _locationFilterBloc = LocationFilterBloc();
+    _listenForErrors();
     _locationFilterBloc.fetchLocationLists(_currentLocation);
+  }
+
+  void _listenForErrors() {
+    _locationFilterBloc.listStream
+        .listen((event) {}, onError: _handleNetworkError);
+    _locationFilterBloc.statesStream
+        .listen((event) {}, onError: _handleNetworkError);
+    _locationFilterBloc.citiesStream
+        .listen((event) {}, onError: _handleNetworkError);
   }
 
   @override
@@ -163,7 +173,8 @@ class _LocationFilterState extends BaseState<LocationFilter> {
                   LocationPart.State(id: state.id, name: state.name);
               _currentLocation.city = null;
             });
-            _locationFilterBloc.fetchCities(state.id);
+            _locationFilterBloc.fetchCities(
+                _currentLocation?.country?.id, state.id);
           },
         ),
       ),
@@ -227,5 +238,9 @@ class _LocationFilterState extends BaseState<LocationFilter> {
 
   void returnCurrentLocation() {
     Navigator.pop(context, _currentLocation);
+  }
+
+  _handleNetworkError(error) {
+    showGenericErrorDialog();
   }
 }

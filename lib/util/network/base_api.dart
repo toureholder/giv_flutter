@@ -14,9 +14,20 @@ class BaseApi {
     return http.delete(url, headers: headers);
   }
 
-  Future<http.Response> get(String url) async {
+  Future<http.Response> get(String url, {Map<String, dynamic> params}) async {
     final headers = await _getDefaultHeaders();
-    return http.get(url, headers: headers);
+
+    final urlBuffer = new StringBuffer(url);
+    if (params != null && params.isNotEmpty) {
+      urlBuffer.write('?');
+      List<String> paramsList = [];
+      params.forEach((String key, value) {
+        if (value != null) paramsList.add('$key=$value');
+      });
+      urlBuffer.write(paramsList.join('&'));
+    }
+
+    return http.get(urlBuffer.toString(), headers: headers);
   }
 
   Future<http.Response> patch(String url, Map<String, dynamic> body) =>

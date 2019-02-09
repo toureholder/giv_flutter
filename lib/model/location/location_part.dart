@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 class LocationPart {
   final String id;
   final String name;
@@ -11,13 +13,67 @@ class LocationPart {
 }
 
 class Country extends LocationPart {
-  Country({String id, String name}) : super(id: id, name: name);
+  final String id;
+  final String name;
+
+  Country({this.id, this.name}) : super(id: id, name: name);
+
+  Country.fromJson(Map<String, dynamic> json)
+      : id = '${json['id']}',
+        name = json['name'];
+
+  static List<Country> fromDynamicList(List<dynamic> list) {
+    return list
+        .map<Country>((json) => Country.fromJson(json))
+        .toList();
+  }
+
+  static List<Country> parseList(String responseBody) {
+    final parsed = json.decode(responseBody).cast<Map<String, dynamic>>();
+    return fromDynamicList(parsed);
+  }
 }
 
 class State extends LocationPart {
-  State({String id, String name}) : super(id: id, name: name);
+  final String id;
+  final String name;
+
+  State({this.id, this.name}) : super(id: id, name: name);
+
+  State.fromJson(Map<String, dynamic> json)
+      : id = '${json['id']}',
+        name = json['name'];
+
+  static List<State> fromDynamicList(List<dynamic> list) {
+    return list
+        .map<State>((json) => State.fromJson(json))
+        .toList();
+  }
+
+  static List<State> parseList(String responseBody) {
+    final parsed = json.decode(responseBody).cast<Map<String, dynamic>>();
+    return fromDynamicList(parsed);
+  }
 }
 
 class City extends LocationPart {
-  City({String id, String name}) : super(id: id, name: name);
+  final String id;
+  final String name;
+
+  City({this.id, this.name}) : super(id: id, name: name);
+
+  City.fromJson(Map<String, dynamic> json)
+      : id = '${json['id']}',
+        name = json['name'];
+
+  static List<City> fromDynamicList(List<dynamic> list) {
+    return list
+        .map<City>((json) => City.fromJson(json))
+        .toList();
+  }
+
+  static List<City> parseList(String responseBody) {
+    final parsed = json.decode(responseBody).cast<Map<String, dynamic>>();
+    return fromDynamicList(parsed);
+  }
 }
