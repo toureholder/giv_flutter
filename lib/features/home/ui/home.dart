@@ -5,7 +5,7 @@ import 'package:giv_flutter/config/preferences/prefs.dart';
 import 'package:giv_flutter/features/home/bloc/home_bloc.dart';
 import 'package:giv_flutter/features/home/model/home_content.dart';
 import 'package:giv_flutter/features/home/ui/home_carousel.dart';
-import 'package:giv_flutter/features/product/detail/product_detail.dart';
+import 'package:giv_flutter/features/product/detail/ui/product_detail.dart';
 import 'package:giv_flutter/features/product/search_result/ui/search_result.dart';
 import 'package:giv_flutter/features/settings/ui/settings.dart';
 import 'package:giv_flutter/features/sign_in/ui/sign_in.dart';

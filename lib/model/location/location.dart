@@ -8,6 +8,12 @@ class Location {
 
   Location({this.city, this.state, this.country});
 
+  Location.fromLocationPartIds(
+      {String countryId, String stateId, String cityId})
+      : country = Country(id: countryId),
+        state = State(id: stateId),
+        city = City(id: cityId);
+
   String get shortName => city?.name ?? state?.name ?? country?.name;
 
   String get mediumName {

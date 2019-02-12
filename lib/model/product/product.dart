@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:faker/faker.dart';
@@ -26,6 +27,28 @@ class Product {
       this.categories,
       this.isActive = true});
 
+  Product.fromJson(Map<String, dynamic> json)
+      : title = json['title'],
+        description = json['description'],
+        isActive = json['is_active'],
+        location = Location.fromLocationPartIds(
+            countryId: json['geonames_country_id'],
+            stateId: json['geonames_state_id'],
+            cityId: json['geonames_city_id']),
+        user = User.fromJson(json['user']),
+        categories = ProductCategory.fromDynamicList(json['categories']),
+        images = Image.fromListingImageList(
+            ListingImage.fromDynamicList(json['listing_images']));
+
+  static List<Product> fromDynamicList(List<dynamic> list) {
+    return list.map<Product>((json) => Product.fromJson(json)).toList();
+  }
+
+  static List<Product> parseList(String responseBody) {
+    final parsed = json.decode(responseBody).cast<Map<String, dynamic>>();
+    return fromDynamicList(parsed);
+  }
+
   bool get isNotEmpty {
     return title != null ||
         description != null ||
@@ -35,14 +58,13 @@ class Product {
 
   CreateListingRequest toListingRequest(List<ListingImage> images) {
     return CreateListingRequest(
-      title: title,
-      description: description,
-      geoNamesCityId: location.city.id,
-      geoNamesStateId: location.state.id,
-      geoNamesCountryId: location.country.id,
-      images: images,
-      categoryIds: categories.map((it) => it.id).toList()
-    );
+        title: title,
+        description: description,
+        geoNamesCityId: location.city.id,
+        geoNamesStateId: location.state.id,
+        geoNamesCountryId: location.country.id,
+        images: images,
+        categoryIds: categories.map((it) => it.id).toList());
   }
 
   List<File> get files => images

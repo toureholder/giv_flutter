@@ -1,5 +1,6 @@
 import 'package:giv_flutter/model/product/product.dart';
 import 'package:giv_flutter/model/product/repository/product_repository.dart';
+import 'package:giv_flutter/util/network/http_response.dart';
 import 'package:rxdart/rxdart.dart';
 
 class MyListingsBloc {
@@ -16,10 +17,14 @@ class MyListingsBloc {
 
   fetchMyProducts() async {
     try {
-      final List<Product> products = await _productRepository.getMyProducts();
-      _productsPublishSubject.sink.add(products);
+      final response = await _productRepository.getMyProducts();
+
+      if (response.status == HttpStatus.ok)
+        _productsPublishSubject.sink.add(response.data);
+      else
+        _productsPublishSubject.sink.addError(response.message);
     } catch (error) {
-      _productsPublishSubject.sink.add(error);
+      _productsPublishSubject.sink.addError(error);
     }
   }
 }

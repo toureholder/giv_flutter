@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:giv_flutter/base/base_state.dart';
-import 'package:giv_flutter/features/product/detail/product_detail.dart';
+import 'package:giv_flutter/features/product/detail/ui/product_detail.dart';
 import 'package:giv_flutter/model/product/product.dart';
 import 'package:giv_flutter/util/presentation/rounded_corners.dart';
 import 'package:giv_flutter/util/presentation/typography.dart';
@@ -48,6 +48,7 @@ class _ProductGridState extends BaseState<ProductGrid> {
   Row _newGridRow(BuildContext context, Product product,
       {bool isLastItem = false}) {
     var row = new Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         _newGridCell(context, product),
       ],
@@ -82,7 +83,6 @@ class _ProductGridState extends BaseState<ProductGrid> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisSize: MainAxisSize.min,
-          verticalDirection: VerticalDirection.down,
           children: <Widget>[
             _productImage(product),
             _productTitle(product, context)
@@ -95,7 +95,11 @@ class _ProductGridState extends BaseState<ProductGrid> {
   Widget _productTitle(Product product, BuildContext context) {
     return Container(
       padding: EdgeInsets.only(top: Dimens.grid(4)),
-      child: Body2Text(product.title),
+      child: Body2Text(
+        product.title,
+        maxLines: 2,
+        overflow: TextOverflow.ellipsis,
+      ),
     );
   }
 
@@ -115,8 +119,8 @@ class _ProductGridState extends BaseState<ProductGrid> {
     );
   }
 
-  _goToProductDetail (Product product) {
-   navigation.push(ProductDetail(
+  _goToProductDetail(Product product) {
+    navigation.push(ProductDetail(
       product: product,
       isMine: widget.isMine,
     ));

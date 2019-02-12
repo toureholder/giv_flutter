@@ -29,8 +29,10 @@ class ProductCategory {
         simpleName = json['simple_name'],
         canonicalName = json['canonical_name'],
         products = null,
-        subCategories = fromDynamicList(json['children']),
-        displayOrder = json['display_order'];
+        subCategories =
+            json['children'] == null ? null : fromDynamicList(json['children']),
+        displayOrder =
+            json['display_order'] == null ? null : json['display_order'];
 
   void goToSubCategoryOrResult(Navigation navigation) {
     if (subCategories?.isNotEmpty ?? false) {

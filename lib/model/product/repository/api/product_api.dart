@@ -38,8 +38,18 @@ class ProductApi extends BaseApi {
     return ProductSearchResult.mock();
   }
 
-  Future<List<Product>> getMyProducts() async {
-    await Future.delayed(Duration(seconds: 2));
-    return Product.getMockList();
+  Future<HttpResponse<List<Product>>> getMyProducts() async {
+    HttpStatus status;
+    try {
+      final response = await get('$baseUrl/me/listings');
+
+      status = HttpResponse.codeMap[response.statusCode];
+      final data = Product.parseList(response.body);
+
+      return HttpResponse<List<Product>>(status: status, data: data);
+    } catch (error) {
+      return HttpResponse<List<Product>>(
+          status: status, message: error.toString());
+    }
   }
 }

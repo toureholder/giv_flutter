@@ -71,4 +71,23 @@ class LocationApi extends BaseApi {
           status: status, message: error.toString());
     }
   }
+
+  Future<HttpResponse<Location>> getLocationDetails(Location location) async {
+    HttpStatus status;
+    try {
+      final response = await get('$baseUrl/locations/details', params: {
+        'country_id': location.country?.id,
+        'state_id': location.state?.id,
+        'city_id': location.city?.id
+      });
+
+      status = HttpResponse.codeMap[response.statusCode];
+      final data = Location.fromJson(jsonDecode(response.body));
+
+      return HttpResponse<Location>(status: status, data: data);
+    } catch (error) {
+      return HttpResponse<Location>(
+          status: status, message: error.toString());
+    }
+  }
 }

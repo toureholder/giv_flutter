@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:giv_flutter/base/base_state.dart';
 import 'package:giv_flutter/features/listing/ui/new_listing.dart';
+import 'package:giv_flutter/features/product/detail/bloc/product_detail_bloc.dart';
 import 'package:giv_flutter/model/image/image.dart' as CustomImage;
+import 'package:giv_flutter/model/location/location.dart';
 import 'package:giv_flutter/model/product/product.dart';
 import 'package:giv_flutter/util/presentation/buttons.dart';
 import 'package:giv_flutter/util/presentation/avatar_image.dart';
@@ -27,11 +29,14 @@ class ProductDetail extends StatefulWidget {
 
 class _ProductDetailState extends BaseState<ProductDetail> {
   Product _product;
+  ProductDetailBloc _productDetailBloc;
 
   @override
   void initState() {
     super.initState();
     _product = widget.product;
+    _productDetailBloc = ProductDetailBloc();
+    _productDetailBloc.fetchLocationDetails(_product.location);
   }
 
   @override
@@ -45,7 +50,9 @@ class _ProductDetailState extends BaseState<ProductDetail> {
                 MediumFlatPrimaryButton(
                   text: string('common_edit'),
                   onPressed: () {
-                    navigation.pushReplacement(NewListing(product: widget.product,));
+                    navigation.pushReplacement(NewListing(
+                      product: widget.product,
+                    ));
                   },
                 )
               ]
@@ -54,10 +61,7 @@ class _ProductDetailState extends BaseState<ProductDetail> {
       body: ListView(children: <Widget>[
         _imageCarousel(context, _product.images),
         _textPadding(H6Text(_product.title)),
-        _textPadding(Subtitle(
-          _product.location?.mediumName ?? '',
-          weight: SyntheticFontWeight.semiBold,
-        )),
+        _locationStreamBuilder(),
         _iWantItButton(context),
         _textPadding(Body2Text(_product.description)),
         Spacing.vertical(Dimens.grid(8)),
@@ -67,6 +71,35 @@ class _ProductDetailState extends BaseState<ProductDetail> {
         Spacing.vertical(Dimens.grid(16)),
       ]),
     );
+  }
+
+  Widget _locationStreamBuilder() {
+    return StreamBuilder<Location>(
+        stream: _productDetailBloc.locationStream,
+        builder: (context, AsyncSnapshot snapshot) {
+          return _locationWidget(snapshot.data);
+        });
+  }
+
+  Widget _locationWidget(Location location) {
+    Widget widget = location == null
+        ? Padding(
+            padding: EdgeInsets.only(
+              left: Dimens.default_horizontal_margin,
+              right: 200.0,
+              top: 29.0,
+              bottom: 4.0,
+            ),
+            child: LinearProgressIndicator(
+              valueColor: AlwaysStoppedAnimation<Color>(Colors.grey[200]),
+              backgroundColor: Colors.grey[100],
+            ))
+        : _textPadding(Subtitle(
+            location?.mediumName ?? '',
+            weight: SyntheticFontWeight.semiBold,
+          ));
+
+    return widget;
   }
 
   Widget _iWantItButton(BuildContext context) {

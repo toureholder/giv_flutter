@@ -19,4 +19,7 @@ class LocationRepository {
 
   Future<HttpResponse<LocationList>> getLocationList(Location location) =>
       locationApi.getLocationList(location);
+
+  Future<HttpResponse<Location>> getLocationDetails(Location location) =>
+      locationApi.getLocationDetails(location);
 }
