@@ -23,9 +23,9 @@ class Country extends LocationPart {
         name = json['name'];
 
   static List<Country> fromDynamicList(List<dynamic> list) {
-    return list
-        .map<Country>((json) => Country.fromJson(json))
-        .toList();
+    return (list == null)
+        ? []
+        : list.map<Country>((json) => Country.fromJson(json)).toList();
   }
 
   static List<Country> parseList(String responseBody) {
@@ -45,9 +45,9 @@ class State extends LocationPart {
         name = json['name'];
 
   static List<State> fromDynamicList(List<dynamic> list) {
-    return list
-        .map<State>((json) => State.fromJson(json))
-        .toList();
+    return (list == null)
+        ? []
+        : list.map<State>((json) => State.fromJson(json)).toList();
   }
 
   static List<State> parseList(String responseBody) {
@@ -67,9 +67,9 @@ class City extends LocationPart {
         name = json['name'];
 
   static List<City> fromDynamicList(List<dynamic> list) {
-    return list
-        .map<City>((json) => City.fromJson(json))
-        .toList();
+    return (list == null)
+        ? []
+        : list.map<City>((json) => City.fromJson(json)).toList();
   }
 
   static List<City> parseList(String responseBody) {
