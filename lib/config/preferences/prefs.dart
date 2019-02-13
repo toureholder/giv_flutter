@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:giv_flutter/model/location/location.dart';
-import 'package:giv_flutter/model/user/token_store.dart';
 import 'package:giv_flutter/model/user/user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -12,6 +11,15 @@ class Prefs {
   static Future<bool> clear() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.clear();
+  }
+
+  static logout() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await Future.wait([
+      prefs.remove(_userKey),
+      prefs.remove(_serverTokenKey),
+      prefs.remove(_firebaseTokenKey)
+    ]);
   }
 
   // Location

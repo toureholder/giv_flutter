@@ -128,7 +128,7 @@ class _SettingsState extends BaseState<Settings> {
   }
 
   void _logout() async {
-    await Prefs.clear();
+    await Prefs.logout();
     final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
     _firebaseAuth.signOut();
     navigation.push(Base(), clearStack: true);
