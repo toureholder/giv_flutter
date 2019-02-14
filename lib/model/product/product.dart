@@ -10,6 +10,7 @@ import 'package:giv_flutter/model/product/product_category.dart';
 import 'package:giv_flutter/model/user/user.dart';
 
 class Product {
+  int id;
   String title;
   Location location;
   String description;
@@ -19,7 +20,8 @@ class Product {
   bool isActive;
 
   Product(
-      {this.title,
+      {this.id,
+      this.title,
       this.location,
       this.description,
       this.images,
@@ -28,7 +30,8 @@ class Product {
       this.isActive = true});
 
   Product.fromJson(Map<String, dynamic> json)
-      : title = json['title'],
+      : id = json['id'],
+        title = json['title'],
         description = json['description'],
         isActive = json['is_active'],
         location = Location.fromLocationPartIds(
@@ -62,6 +65,7 @@ class Product {
     var categories = List<ProductCategory>.from(this.categories);
 
     return Product(
+        id: id,
         title: title,
         description: description,
         isActive: isActive,
@@ -76,21 +80,23 @@ class Product {
 
   CreateListingRequest toListingRequest(List<ListingImage> images) {
     return CreateListingRequest(
+        id: id,
         title: title,
         description: description,
         geoNamesCityId: location.city.id,
         geoNamesStateId: location.state.id,
         geoNamesCountryId: location.country.id,
         images: images,
-        categoryIds: categories.map((it) => it.id).toList());
+        categoryIds: categories.map((it) => it.id).toList(),
+        isActive: isActive);
   }
 
-  List<File> get files => images
+  List<File> get imageFiles => images
       .where((image) => image.file != null)
       .map((image) => image.file)
       .toList();
 
-  static Product mock() {
+  static Product mock(int id) {
     final faker = new Faker();
 
     final numberOfImages = faker.randomGenerator.integer(8, min: 1);
@@ -100,6 +106,7 @@ class Product {
     }).toList();
 
     return Product(
+        id: id ?? faker.randomGenerator.integer(99, min: 1),
         title: faker.food.dish(),
         location: Location.mock(),
         description:
@@ -121,7 +128,7 @@ class Product {
     int size = quantity ?? faker.randomGenerator.integer(20, min: 3);
 
     for (var i = 0; i < size; i++) {
-      list.add(Product.mock());
+      list.add(Product.mock(i + 1));
     }
     return list;
   }

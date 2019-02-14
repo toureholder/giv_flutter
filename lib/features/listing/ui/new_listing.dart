@@ -64,7 +64,7 @@ class _NewListingState extends BaseState<NewListing> {
     _isEditing = widget.product != null;
     _product = widget.product?.copy() ?? Product();
     _product.images = _product.images ?? <CustomImage.Image>[];
-    _newListingBloc = NewListingBloc();
+    _newListingBloc = NewListingBloc(_isEditing);
     _listenToUserStream();
     _newListingBloc.loadLocation(_product.location);
     _listenToUploadStream();

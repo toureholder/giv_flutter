@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:giv_flutter/model/listing/listing_image.dart';
 
 class CreateListingRequest {
+  final int id;
   final String title;
   final String description;
   final String geoNamesCityId;
@@ -10,18 +11,22 @@ class CreateListingRequest {
   final String geoNamesCountryId;
   final List<ListingImage> images;
   final List<int> categoryIds;
+  final bool isActive;
 
   CreateListingRequest(
-      {this.title,
+      {this.id,
+      this.title,
       this.description,
       this.geoNamesCityId,
       this.geoNamesStateId,
       this.geoNamesCountryId,
       this.images,
-      this.categoryIds});
+      this.categoryIds,
+      this.isActive = true});
 
   Map<String, dynamic> toHttpRequestBody() {
-    final listingImages = images.map((image) => image.toHttpRequestBody()).toList();
+    final listingImages =
+        images.map((image) => image.toHttpRequestBody()).toList();
     final listingCategoryIds = categoryIds;
 
     return {
@@ -31,7 +36,8 @@ class CreateListingRequest {
       'geonames_state_id': geoNamesStateId,
       'geonames_country_id': geoNamesCountryId,
       'listing_images': listingImages,
-      'category_ids': listingCategoryIds
+      'category_ids': listingCategoryIds,
+      'is_active': isActive,
     };
   }
 

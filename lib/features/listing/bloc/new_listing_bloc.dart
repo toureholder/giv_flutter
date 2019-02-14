@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:giv_flutter/config/preferences/prefs.dart';
+import 'package:giv_flutter/model/image/image.dart';
 import 'package:giv_flutter/model/listing/listing_image.dart';
 import 'package:giv_flutter/model/listing/repository/api/request/create_listing_request.dart';
 import 'package:giv_flutter/model/listing/repository/listing_repository.dart';
@@ -15,9 +16,11 @@ import 'package:rxdart/rxdart.dart';
 import 'package:giv_flutter/util/network/http_response.dart';
 
 class NewListingBloc {
+  final bool isEditing;
+
   final List<double> _uploadProgresses = [];
   var _successfulUploadCount = 0;
-  final List<ListingImage> _listingImages = [];
+  List<ListingImage> _listingImages;
   final List<StorageUploadTask> _uploadTasks = [];
   final List<StorageReference> _storageReferences = [];
   bool _hasSentRequest = false;
@@ -28,6 +31,8 @@ class NewListingBloc {
   final _userPublishSubject = PublishSubject<NewListingBlocUser>();
   final _locationPublishSubject = PublishSubject<Location>();
   final _uploadStatusPublishSubject = PublishSubject<StreamEvent<double>>();
+
+  NewListingBloc(this.isEditing);
 
   Observable<NewListingBlocUser> get userStream => _userPublishSubject.stream;
   Observable<Location> get locationStream => _locationPublishSubject.stream;
@@ -55,13 +60,11 @@ class NewListingBloc {
     try {
       if (location?.isComplete ?? false) {
         resolvedLocation = location;
-      }
-      else if (location == null) {
+      } else if (location == null) {
         resolvedLocation = await Prefs.getLocation();
       } else {
         var response = await _locationRepository.getLocationDetails(location);
-        if (response.status == HttpStatus.ok)
-          resolvedLocation = response.data;
+        if (response.status == HttpStatus.ok) resolvedLocation = response.data;
       }
       _locationPublishSubject.sink.add(resolvedLocation);
     } catch (error) {
@@ -71,13 +74,29 @@ class NewListingBloc {
 
   saveProduct(Product product) {
     _product = product;
-    _uploadImageFiles(product.files);
+    _handleImages(product.images);
   }
 
-  _uploadImageFiles(List<File> files) {
+  _handleImages(List<Image> images) {
     _updateProgressStream(0.0);
-    _startUploadTasks(files);
-    _listenToUploadTasks();
+
+    _listingImages = [];
+    for (var i = 0; i < images.length; i++) {
+      final image = images[i];
+      if (image.hasUrl)
+        _listingImages.add(ListingImage(position: i, url: image.url));
+      else if (image.hasFile) {
+        _uploadProgresses.add(0.0);
+        StorageReference ref = FirebaseStorageUtil.getListingPhotoRef();
+        _storageReferences.add(ref);
+        _uploadTasks.add(ref.putFile(image.file));
+      }
+    }
+
+    if (_uploadTasks.isNotEmpty)
+      _listenToUploadTasks();
+    else
+      _sendCreateRequest();
   }
 
   _updateProgressStream(double progress) {
@@ -85,15 +104,6 @@ class NewListingBloc {
         StreamEvent<double>(state: StreamEventState.loading, data: progress));
   }
 
-  _startUploadTasks(List<File> files) {
-    files.forEach((file) {
-      _uploadProgresses.add(0.0);
-      StorageReference ref = FirebaseStorageUtil.getListingPhotoRef();
-      _storageReferences.add(ref);
-      _uploadTasks.add(ref.putFile(file));
-    });
-  }
-  
   _listenToUploadTasks() {
     for (var i = 0; i < _uploadTasks.length; i++) {
       StorageUploadTask task = _uploadTasks[i];
@@ -130,9 +140,11 @@ class NewListingBloc {
     }
   }
 
+  // TODO: Find a way to determine original position of uploaded images. (Makes rearranging possible.)
   _createListingImages() async {
+    final beginAt = _listingImages.length;
     for (StorageReference ref in _storageReferences)
-      await _addListImage(ref, _storageReferences.indexOf(ref));
+      await _addListImage(ref, _storageReferences.indexOf(ref) + beginAt);
   }
 
   _addListImage(StorageReference ref, int position) async {
@@ -144,9 +156,12 @@ class NewListingBloc {
     CreateListingRequest request = _product.toListingRequest(_listingImages);
 
     try {
-      var response = await _listingRepository.create(request);
+      var response = isEditing
+          ? await _listingRepository.update(request)
+          : await _listingRepository.create(request);
 
-      if (response.status == HttpStatus.created)
+      if (response.status == HttpStatus.created ||
+          response.status == HttpStatus.ok)
         _uploadStatusPublishSubject.sink
             .add(StreamEvent<double>(state: StreamEventState.ready, data: 1.0));
       else

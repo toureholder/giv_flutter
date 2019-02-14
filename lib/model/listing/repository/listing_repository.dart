@@ -8,4 +8,7 @@ class ListingRepository {
 
   Future<HttpResponse<ApiModelResponse>> create(CreateListingRequest request) =>
       listingApi.create(request);
+
+  Future<HttpResponse<ApiModelResponse>> update(CreateListingRequest request) =>
+      listingApi.update(request);
 }
