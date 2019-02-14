@@ -416,12 +416,12 @@ class Strings {
       "pt": "Editar"
     },
     "edit_listing_is_active_hint": {
-      "en": "This listing is visible to other users",
-      "pt": "Este anúncio está visvível para outros usuários"
+      "en": "This listing will be visible to other users",
+      "pt": "Este anúncio estará visvível para outros usuários"
     },
     "edit_listing_is_inactive_hint": {
-      "en": "This listing is not visile to other users",
-      "pt": "Este anúncio está invisvível para outros usuários"
+      "en": "This listing will not be visile to other users",
+      "pt": "Este anúncio não estará visvível para outros usuários"
     },
     "edit_listing_is_active": {
       "en": "Active",

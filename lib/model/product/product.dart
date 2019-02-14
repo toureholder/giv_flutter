@@ -56,6 +56,24 @@ class Product {
         (categories != null && categories.isNotEmpty);
   }
 
+  Product copy() {
+    var images = List<Image>.from(this.images);
+
+    var categories = List<ProductCategory>.from(this.categories);
+
+    return Product(
+        title: title,
+        description: description,
+        isActive: isActive,
+        location: Location(
+            country: location?.country,
+            state: location?.state,
+            city: location?.city),
+        user: user,
+        images: images,
+        categories: categories);
+  }
+
   CreateListingRequest toListingRequest(List<ListingImage> images) {
     return CreateListingRequest(
         title: title,

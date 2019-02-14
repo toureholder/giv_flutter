@@ -1,5 +1,5 @@
 class Config {
-  static const baseUrl = 'https://giv-api-dev.herokuapp.com';
+  static const baseUrl = 'https://44c962ec.ngrok.io';
   static const defaultCountryCallingCode = '55';
   static const maxLengthName = 50;
   static const maxLengthBio = 140;

@@ -62,11 +62,11 @@ class _NewListingState extends BaseState<NewListing> {
   void initState() {
     super.initState();
     _isEditing = widget.product != null;
-    _product = widget.product ?? Product();
+    _product = widget.product?.copy() ?? Product();
     _product.images = _product.images ?? <CustomImage.Image>[];
     _newListingBloc = NewListingBloc();
     _listenToUserStream();
-    _newListingBloc.loadLocation();
+    _newListingBloc.loadLocation(_product.location);
     _listenToUploadStream();
   }
 
@@ -273,7 +273,7 @@ class _NewListingState extends BaseState<NewListing> {
     return StreamBuilder(
       stream: _newListingBloc.locationStream,
       builder: (context, snapshot) {
-        _product.location = _product.location ?? snapshot.data;
+        _product.location = snapshot.data;
         return _locationTile(_product.location);
       },
     );
@@ -569,9 +569,10 @@ class _NewListingState extends BaseState<NewListing> {
 
     if (result != null) {
       setState(() {
-        _product.location = result;
         _isLocationError = false;
       });
+
+      _newListingBloc.loadLocation(result);
     }
   }
 

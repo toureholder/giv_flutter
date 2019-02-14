@@ -6,6 +6,7 @@ import 'package:giv_flutter/model/listing/listing_image.dart';
 import 'package:giv_flutter/model/listing/repository/api/request/create_listing_request.dart';
 import 'package:giv_flutter/model/listing/repository/listing_repository.dart';
 import 'package:giv_flutter/model/location/location.dart';
+import 'package:giv_flutter/model/location/repository/location_repository.dart';
 import 'package:giv_flutter/model/product/product.dart';
 import 'package:giv_flutter/model/user/user.dart';
 import 'package:giv_flutter/util/data/stream_event.dart';
@@ -22,6 +23,7 @@ class NewListingBloc {
   bool _hasSentRequest = false;
   Product _product;
   final _listingRepository = ListingRepository();
+  final _locationRepository = LocationRepository();
 
   final _userPublishSubject = PublishSubject<NewListingBlocUser>();
   final _locationPublishSubject = PublishSubject<Location>();
@@ -47,10 +49,21 @@ class NewListingBloc {
     }
   }
 
-  loadLocation() async {
+  loadLocation(Location location) async {
+    Location resolvedLocation;
+
     try {
-      var location = await Prefs.getLocation();
-      _locationPublishSubject.sink.add(location);
+      if (location?.isComplete ?? false) {
+        resolvedLocation = location;
+      }
+      else if (location == null) {
+        resolvedLocation = await Prefs.getLocation();
+      } else {
+        var response = await _locationRepository.getLocationDetails(location);
+        if (response.status == HttpStatus.ok)
+          resolvedLocation = response.data;
+      }
+      _locationPublishSubject.sink.add(resolvedLocation);
     } catch (error) {
       _locationPublishSubject.sink.addError(error);
     }
