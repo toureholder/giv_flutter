@@ -7,8 +7,9 @@ import 'package:giv_flutter/util/presentation/typography.dart';
 class CategoryListTile extends StatefulWidget {
   final ProductCategory category;
   final bool returnChoice;
+  final List<int> hideThese;
 
-  const CategoryListTile({Key key, this.category, this.returnChoice = false})
+  const CategoryListTile({Key key, this.category, this.returnChoice = false, this.hideThese})
       : super(key: key);
 
   @override
@@ -49,6 +50,7 @@ class _CategoryListTileState extends BaseState<CategoryListTile> {
       final result = await navigation.push(SubCategories(
         category: widget.category,
         returnChoice: true,
+        hideThese: widget.hideThese,
       ));
       if (result != null) navigation.pop(result);
       return;

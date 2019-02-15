@@ -13,8 +13,13 @@ import 'package:giv_flutter/values/dimens.dart';
 class Categories extends StatefulWidget {
   final bool showSearch;
   final bool returnChoice;
+  final List<int> hideThese;
 
-  const Categories({Key key, this.showSearch = true, this.returnChoice = false})
+  const Categories(
+      {Key key,
+      this.showSearch = true,
+      this.returnChoice = false,
+      this.hideThese})
       : super(key: key);
 
   @override
@@ -58,14 +63,20 @@ class _CategoriesState extends BaseState<Categories> {
 
   ListView _buildMainListView(
       BuildContext context, List<ProductCategory> categories) {
+    if (widget.hideThese != null)
+      categories.removeWhere((it) => widget.hideThese.contains(it.id));
+
     return ListView.builder(
         shrinkWrap: true,
         itemCount: categories.length + 1,
         itemBuilder: (context, i) {
-          return i < categories.length ? CategoryListTile(
-            category: categories[i],
-            returnChoice: widget.returnChoice,
-          ) : Spacing.vertical(Dimens.default_vertical_margin);
+          return i < categories.length
+              ? CategoryListTile(
+                  category: categories[i],
+                  returnChoice: widget.returnChoice,
+                  hideThese: widget.hideThese,
+                )
+              : Spacing.vertical(Dimens.default_vertical_margin);
         });
   }
 }

@@ -105,6 +105,7 @@ class _EditCategoriesState extends BaseState<EditCategories> {
     final result = await navigation.push(Categories(
       showSearch: false,
       returnChoice: true,
+      hideThese: _editedList.map((it) => it.id).toList(),
     ));
 
     if (result != null) {
