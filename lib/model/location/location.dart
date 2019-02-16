@@ -57,6 +57,8 @@ class Location {
   static final String idKey = 'id';
 
   factory Location.fromJson(Map<String, dynamic> json) {
+    if (json == null) return null;
+
     final country = json.containsKey(countryKey) && json[countryKey] != null
         ? Country(
             id: json[countryKey][idKey],
@@ -83,8 +85,8 @@ class Location {
 
   Location.mock()
       : country = Country(id: '3469034', name: 'Brasil'),
-        state = State(id: '3463504', name: 'Distrito Federal'),
-        city = City(id: '6324222', name: 'Brasília');
+        state = State(id: '3462372', name: 'Goiás'),
+        city = City(id: '6323891', name: 'Abadiânia');
 
   Map<String, dynamic> toJson() => {
         cityKey: {idKey: city?.id, nameKey: city?.name},

@@ -21,19 +21,15 @@ class SearchResultBloc {
   fetchProducts(
       {int categoryId,
       String searchQuery,
-      Location locationFilter}) async {
+      Location locationFilter,
+      bool isHardFilter = false}) async {
     try {
       if (categoryId == null && searchQuery == null)
         throw FormatException('Expected categoryId or searchQuery');
 
       _searchResultPublishSubject.sink.add(StreamEvent.loading());
 
-      bool isHardFilter = true;
-
-      if (locationFilter == null) {
-        locationFilter = await Prefs.getLocation();
-        isHardFilter = false;
-      }
+      locationFilter = locationFilter ?? await Prefs.getLocation();
 
       var response = categoryId != null
           ? await _productRepository.getProductsByCategory(

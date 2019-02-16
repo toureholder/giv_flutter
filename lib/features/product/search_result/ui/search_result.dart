@@ -115,13 +115,14 @@ class _SearchResultState extends BaseState<SearchResult> {
   _navigateToLocationFilter(Location location) async {
     final result = await navigation.push(LocationFilter(location: location));
     if (result == null) return;
-    _fetchProducts(locationFilter: result);
+    _fetchProducts(locationFilter: result, isHardFilter: true);
   }
 
-  _fetchProducts({Location locationFilter}) {
+  _fetchProducts({Location locationFilter, bool isHardFilter}) {
     _searchResultBloc.fetchProducts(
         categoryId: widget?.category?.id,
         searchQuery: widget.searchQuery,
-        locationFilter: locationFilter);
+        locationFilter: locationFilter,
+        isHardFilter: isHardFilter);
   }
 }
