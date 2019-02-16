@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:giv_flutter/model/location/location.dart';
 import 'package:giv_flutter/model/product/product.dart';
 import 'package:giv_flutter/model/product/product_category.dart';
@@ -26,16 +28,33 @@ class ProductApi extends BaseApi {
     }
   }
 
-  Future<ProductSearchResult> getProductsByCategory(
-      {int categoryId, Location location, bool isHardFilter = true}) async {
-    await Future.delayed(Duration(seconds: 2));
-    return ProductSearchResult.mock();
+  Future<HttpResponse<ProductSearchResult>> getProductsByCategory(
+      {int categoryId, Location location, bool isHardFilter}) async {
+    HttpStatus status;
+    try {
+      final response =
+          await get('$baseUrl/listings/categories/$categoryId', params: {
+        'city_id': location?.city?.id,
+        'state_id': location?.state?.id,
+        'country_id': location?.country?.id,
+        'is_hard_filter': isHardFilter
+      });
+
+      status = HttpResponse.codeMap[response.statusCode];
+      final data = ProductSearchResult.fromJson(jsonDecode(response.body));
+
+      return HttpResponse<ProductSearchResult>(status: status, data: data);
+    } catch (error) {
+      return HttpResponse<ProductSearchResult>(
+          status: status, message: error.toString());
+    }
   }
 
-  Future<ProductSearchResult> getProductsBySearchQuery(
+  Future<HttpResponse<ProductSearchResult>> getProductsBySearchQuery(
       {String q, Location location, bool isHardFilter = true}) async {
     await Future.delayed(Duration(seconds: 2));
-    return ProductSearchResult.mock();
+    final data = ProductSearchResult.mock();
+    return HttpResponse<ProductSearchResult>(status: HttpStatus.ok, data: data);
   }
 
   Future<HttpResponse<List<Product>>> getMyProducts() async {

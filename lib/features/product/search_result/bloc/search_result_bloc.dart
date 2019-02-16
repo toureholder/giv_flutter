@@ -3,6 +3,7 @@ import 'package:giv_flutter/model/location/location.dart';
 import 'package:giv_flutter/model/product/product_search_result.dart';
 import 'package:giv_flutter/model/product/repository/product_repository.dart';
 import 'package:giv_flutter/util/data/stream_event.dart';
+import 'package:giv_flutter/util/network/http_response.dart';
 import 'package:rxdart/rxdart.dart';
 
 class SearchResultBloc {
@@ -34,7 +35,7 @@ class SearchResultBloc {
         isHardFilter = false;
       }
 
-      var result = categoryId != null
+      var response = categoryId != null
           ? await _productRepository.getProductsByCategory(
               categoryId: categoryId,
               location: locationFilter,
@@ -44,9 +45,12 @@ class SearchResultBloc {
               location: locationFilter,
               isHardFilter: isHardFilter);
 
-      _searchResultPublishSubject.sink.add(StreamEvent<ProductSearchResult>(
-        data: result
+      if (response.status == HttpStatus.ok)
+        _searchResultPublishSubject.sink.add(StreamEvent<ProductSearchResult>(
+        data: response.data
       ));
+      else
+        _searchResultPublishSubject.addError(response.message);
     } catch (error) {
       _searchResultPublishSubject.addError(error);
     }

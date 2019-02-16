@@ -57,21 +57,21 @@ class Location {
   static final String idKey = 'id';
 
   factory Location.fromJson(Map<String, dynamic> json) {
-    final country = json.containsKey(countryKey)
+    final country = json.containsKey(countryKey) && json[countryKey] != null
         ? Country(
             id: json[countryKey][idKey],
             name: json[countryKey][nameKey],
           )
         : null;
 
-    final state = json.containsKey(stateKey)
+    final state = json.containsKey(stateKey) && json[stateKey] != null
         ? State(
             id: json[stateKey][idKey],
             name: json[stateKey][nameKey],
           )
         : null;
 
-    final city = json.containsKey(cityKey)
+    final city = json.containsKey(cityKey) && json[cityKey] != null
         ? City(
             id: json[cityKey][idKey],
             name: json[cityKey][nameKey],

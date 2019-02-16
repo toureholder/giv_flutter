@@ -14,14 +14,14 @@ class ProductRepository {
   Future<HttpResponse<List<ProductCategory>>> getSearchCategories() =>
       productApi.getSearchCategories();
 
-  Future<ProductSearchResult> getProductsByCategory(
-          {int categoryId, Location location, bool isHardFilter = true}) =>
+  Future<HttpResponse<ProductSearchResult>> getProductsByCategory(
+          {int categoryId, Location location, bool isHardFilter}) =>
       productApi.getProductsByCategory(
           categoryId: categoryId,
           location: location,
           isHardFilter: isHardFilter);
 
-  Future<ProductSearchResult> getProductsBySearchQuery(
+  Future<HttpResponse<ProductSearchResult>> getProductsBySearchQuery(
           {String q, Location location, bool isHardFilter = true}) =>
       productApi.getProductsBySearchQuery(
           q: q, location: location, isHardFilter: isHardFilter);
