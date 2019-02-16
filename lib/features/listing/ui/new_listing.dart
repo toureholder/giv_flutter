@@ -66,7 +66,7 @@ class _NewListingState extends BaseState<NewListing> {
     _product.images = _product.images ?? <CustomImage.Image>[];
     _newListingBloc = NewListingBloc(_isEditing);
     _listenToUserStream();
-    _newListingBloc.loadLocation(_product.location);
+    _loadLocation();
     _listenToUploadStream();
   }
 
@@ -83,6 +83,11 @@ class _NewListingState extends BaseState<NewListing> {
     _newListingBloc.uploadStatusStream.listen((StreamEvent<double> event) {
       if (event.isReady) _onUploadSuccess();
     }, onError: _handleUploadError);
+  }
+
+  void _loadLocation() {
+    if (!(_product.location?.isComplete ?? false))
+      _newListingBloc.loadLocation(_product.location);
   }
 
   @override
@@ -269,7 +274,10 @@ class _NewListingState extends BaseState<NewListing> {
     );
   }
 
-  StreamBuilder<Location> _locationStreamBuilder() {
+  Widget _locationStreamBuilder() {
+    if (_product.location?.isComplete ?? false)
+      return _locationTile(_product.location);
+
     return StreamBuilder(
       stream: _newListingBloc.locationStream,
       builder: (context, snapshot) {
@@ -570,9 +578,8 @@ class _NewListingState extends BaseState<NewListing> {
     if (result != null) {
       setState(() {
         _isLocationError = false;
+        _product.location = result;
       });
-
-      _newListingBloc.loadLocation(result);
     }
   }
 

@@ -58,9 +58,7 @@ class NewListingBloc {
     Location resolvedLocation;
 
     try {
-      if (location?.isComplete ?? false) {
-        resolvedLocation = location;
-      } else if (location == null) {
+      if (location == null) {
         resolvedLocation = await Prefs.getLocation();
       } else {
         var response = await _locationRepository.getLocationDetails(location);

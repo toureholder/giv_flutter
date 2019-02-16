@@ -82,7 +82,9 @@ class _ProductDetailState extends BaseState<ProductDetail> {
   }
 
   Widget _locationWidget(Location location) {
-    Widget widget = location == null
+    if (location?.isComplete ?? false) widget.product?.location = location;
+
+    Widget locationWidget = location == null
         ? Padding(
             padding: EdgeInsets.only(
               left: Dimens.default_horizontal_margin,
@@ -99,7 +101,7 @@ class _ProductDetailState extends BaseState<ProductDetail> {
             weight: SyntheticFontWeight.semiBold,
           ));
 
-    return widget;
+    return locationWidget;
   }
 
   Widget _iWantItButton(BuildContext context) {
