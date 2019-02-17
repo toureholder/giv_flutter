@@ -11,8 +11,8 @@ class ProductRepository {
   Future<List<ProductCategory>> getFeaturedProductsCategories() =>
       productApi.getFeaturedProductsCategories();
 
-  Future<HttpResponse<List<ProductCategory>>> getSearchCategories() =>
-      productApi.getSearchCategories();
+  Future<HttpResponse<List<ProductCategory>>> getSearchCategories({bool fetchAll}) =>
+      productApi.getSearchCategories(fetchAll: fetchAll);
 
   Future<HttpResponse<ProductSearchResult>> getProductsByCategory(
           {int categoryId, Location location, bool isHardFilter}) =>

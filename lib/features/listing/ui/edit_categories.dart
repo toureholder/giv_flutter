@@ -106,6 +106,7 @@ class _EditCategoriesState extends BaseState<EditCategories> {
       showSearch: false,
       returnChoice: true,
       hideThese: _editedList.map((it) => it.id).toList(),
+      fetchAll: true,
     ));
 
     if (result != null) {

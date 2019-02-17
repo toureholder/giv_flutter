@@ -15,9 +15,9 @@ class CategoriesBloc {
     _categoriesPublishSubject.close();
   }
 
-  fetchCategories() async {
+  fetchCategories({bool fetchAll}) async {
     try {
-      var response = await _productRepository.getSearchCategories();
+      var response = await _productRepository.getSearchCategories(fetchAll: fetchAll);
 
       final data = response.data;
       if (response.status == HttpStatus.ok && data != null)

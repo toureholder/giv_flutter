@@ -13,10 +13,12 @@ class ProductApi extends BaseApi {
     return ProductCategory.homeMock();
   }
 
-  Future<HttpResponse<List<ProductCategory>>> getSearchCategories() async {
+  Future<HttpResponse<List<ProductCategory>>> getSearchCategories(
+      {bool fetchAll = false}) async {
     HttpStatus status;
     try {
-      final response = await get('$baseUrl/categories');
+      final response =
+          await get('$baseUrl/categories', params: {'has_listings': !fetchAll});
 
       status = HttpResponse.codeMap[response.statusCode];
       final data = ProductCategory.parseList(response.body);

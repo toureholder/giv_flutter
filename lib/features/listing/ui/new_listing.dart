@@ -599,6 +599,7 @@ class _NewListingState extends BaseState<NewListing> {
     final result = await navigation.push(Categories(
       showSearch: false,
       returnChoice: true,
+      fetchAll: true,
     ));
 
     if (result != null) {
