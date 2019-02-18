@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:giv_flutter/util/presentation/dots_indicator.dart';
+import 'package:giv_flutter/values/colors.dart';
 
 class ImageCarousel extends StatefulWidget {
   final List<String> imageUrls;
@@ -13,36 +14,44 @@ class ImageCarousel extends StatefulWidget {
   final bool withIndicator;
   final bool autoAdvance;
   final bool loop;
+  final bool isFaded;
 
   ImageCarousel(
       {Key key,
-        this.imageUrls,
-        this.height,
-        this.pageController,
-        this.onTap,
-        this.backgroundColor,
-        this.withIndicator,
-        this.autoAdvance,
-        this.loop
-      }) : super(key: key);
+      this.imageUrls,
+      this.height,
+      this.pageController,
+      this.onTap,
+      this.backgroundColor,
+      this.withIndicator,
+      this.autoAdvance,
+      this.loop,
+      this.isFaded = false})
+      : super(key: key);
 
   @override
   _ImageCarouselState createState() => _ImageCarouselState();
 }
 
 class _ImageCarouselState extends State<ImageCarousel> {
-
   Timer _autoAdvanceTimer;
   final _kDuration = const Duration(milliseconds: 300);
   final _kCurve = Curves.ease;
 
   @override
   Widget build(BuildContext context) {
+    final foregroundDecoration = widget.isFaded
+        ? BoxDecoration(color: CustomColors.inActiveForeground)
+        : null;
+
     List<Widget> widgets = [
       Container(
-          height: widget.height,
-          color: (widget.backgroundColor == null) ? Colors.grey[100] : widget.backgroundColor,
-          child: _buildPageView(context),
+        foregroundDecoration: foregroundDecoration,
+        height: widget.height,
+        color: (widget.backgroundColor == null)
+            ? Colors.grey[100]
+            : widget.backgroundColor,
+        child: _buildPageView(context),
       ),
     ];
 
@@ -64,12 +73,12 @@ class _ImageCarouselState extends State<ImageCarousel> {
     _handlePageChange(configuration, 0);
 
     return PageView(
-          controller: widget.pageController,
-          children: _buildImageList(widget.imageUrls),
-          onPageChanged: (int page) {
-            _handlePageChange(configuration, page);
-          },
-        );
+      controller: widget.pageController,
+      children: _buildImageList(widget.imageUrls),
+      onPageChanged: (int page) {
+        _handlePageChange(configuration, page);
+      },
+    );
   }
 
   List<Widget> _buildImageList(List<String> imgList) =>
@@ -77,10 +86,10 @@ class _ImageCarouselState extends State<ImageCarousel> {
 
   Widget _buildFadeInImage(String url) {
     return GestureDetector(
-      onTap: () { widget.onTap(); },
-      child: CachedNetworkImage(
-          fit: BoxFit.cover,
-          imageUrl: url),
+      onTap: () {
+        widget.onTap();
+      },
+      child: CachedNetworkImage(fit: BoxFit.cover, imageUrl: url),
     );
   }
 
@@ -114,14 +123,11 @@ class _ImageCarouselState extends State<ImageCarousel> {
     final pageCount = widget.imageUrls.length;
     if (pageCount == 1) return;
 
-    var controller =  widget.pageController;
+    var controller = widget.pageController;
     final nextPage = controller.page.toInt() + 1;
 
     if (nextPage < pageCount) {
-      controller.animateToPage(
-          nextPage,
-          duration: _kDuration,
-          curve: _kCurve);
+      controller.animateToPage(nextPage, duration: _kDuration, curve: _kCurve);
       return;
     }
 
@@ -147,7 +153,8 @@ class _ImageCarouselState extends State<ImageCarousel> {
   void _preLoadNextImage(ImageConfiguration configuration, int page) {
     final nextPage = page + 1;
     if (nextPage < widget.imageUrls.length) {
-      CachedNetworkImageProvider(widget.imageUrls[nextPage])..resolve(configuration);
+      CachedNetworkImageProvider(widget.imageUrls[nextPage])
+        ..resolve(configuration);
     }
   }
 }

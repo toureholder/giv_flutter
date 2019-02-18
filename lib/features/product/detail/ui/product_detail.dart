@@ -166,6 +166,7 @@ class _ProductDetailState extends BaseState<ProductDetail> {
         navigation.push(PhotoViewPage(image: images[index]));
       },
       withIndicator: true,
+      isFaded: !_product.isActive,
     );
   }
 }

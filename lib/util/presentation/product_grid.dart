@@ -5,6 +5,7 @@ import 'package:giv_flutter/features/product/detail/ui/product_detail.dart';
 import 'package:giv_flutter/model/product/product.dart';
 import 'package:giv_flutter/util/presentation/rounded_corners.dart';
 import 'package:giv_flutter/util/presentation/typography.dart';
+import 'package:giv_flutter/values/colors.dart';
 import 'package:giv_flutter/values/dimens.dart';
 
 class ProductGrid extends StatefulWidget {
@@ -74,12 +75,17 @@ class _ProductGridState extends BaseState<ProductGrid> {
   }
 
   Widget _buildGridCell(BuildContext context, Product product) {
+    final foregroundDecoration = product.isActive
+        ? null
+        : BoxDecoration(color: CustomColors.inActiveForeground);
+
     return GestureDetector(
       onTap: () {
         _goToProductDetail(product);
       },
       child: Container(
         padding: EdgeInsets.all(Dimens.grid(6)),
+        foregroundDecoration: foregroundDecoration,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisSize: MainAxisSize.min,
