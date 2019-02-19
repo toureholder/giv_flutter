@@ -1,6 +1,7 @@
 import 'package:giv_flutter/features/home/model/home_content.dart';
 import 'package:giv_flutter/model/carousel/carousel_item.dart';
 import 'package:giv_flutter/model/carousel/repository/carousel_repository.dart';
+import 'package:giv_flutter/model/product/product_category.dart';
 import 'package:giv_flutter/model/product/repository/product_repository.dart';
 import 'package:giv_flutter/util/network/http_response.dart';
 import 'package:rxdart/rxdart.dart';
@@ -11,8 +12,7 @@ class HomeBloc {
 
   final _contentPublishSubject = PublishSubject<HomeContent>();
 
-  Observable<HomeContent> get content =>
-      _contentPublishSubject.stream;
+  Observable<HomeContent> get content => _contentPublishSubject.stream;
 
   dispose() {
     _contentPublishSubject.close();
@@ -25,10 +25,15 @@ class HomeBloc {
         _productRepository.getFeaturedProductsCategories()
       ]);
 
-      HttpResponse<List<CarouselItem>> heroItemsResponse = results[0] as HttpResponse;
+      HttpResponse<List<CarouselItem>> heroItemsResponse = results[0];
+      HttpResponse<List<ProductCategory>> featuredCategoriesResponse =
+          results[1];
 
-      if (heroItemsResponse.status == HttpStatus.ok)
-        _contentPublishSubject.sink.add(HomeContent(heroItems: heroItemsResponse.data, productCategories: results[1]));
+      if (heroItemsResponse.status == HttpStatus.ok &&
+          featuredCategoriesResponse.status == HttpStatus.ok)
+        _contentPublishSubject.sink.add(HomeContent(
+            heroItems: heroItemsResponse.data,
+            productCategories: featuredCategoriesResponse.data));
       else
         _contentPublishSubject.sink.addError(heroItemsResponse);
     } catch (err) {
@@ -36,4 +41,3 @@ class HomeBloc {
     }
   }
 }
-

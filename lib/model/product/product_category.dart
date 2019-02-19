@@ -28,7 +28,9 @@ class ProductCategory {
       : id = json['id'],
         simpleName = json['simple_name'],
         canonicalName = json['canonical_name'],
-        products = null,
+        products = json['listings'] == null
+            ? null
+            : Product.fromDynamicList(json['listings']),
         subCategories =
             json['children'] == null ? null : fromDynamicList(json['children']),
         displayOrder =

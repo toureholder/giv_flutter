@@ -8,10 +8,11 @@ import 'package:giv_flutter/util/network/http_response.dart';
 class ProductRepository {
   final productApi = ProductApi();
 
-  Future<List<ProductCategory>> getFeaturedProductsCategories() =>
+  Future<HttpResponse<List<ProductCategory>>> getFeaturedProductsCategories() =>
       productApi.getFeaturedProductsCategories();
 
-  Future<HttpResponse<List<ProductCategory>>> getSearchCategories({bool fetchAll}) =>
+  Future<HttpResponse<List<ProductCategory>>> getSearchCategories(
+          {bool fetchAll}) =>
       productApi.getSearchCategories(fetchAll: fetchAll);
 
   Future<HttpResponse<ProductSearchResult>> getProductsByCategory(

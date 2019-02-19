@@ -8,9 +8,24 @@ import 'package:giv_flutter/util/network/base_api.dart';
 import 'package:giv_flutter/util/network/http_response.dart';
 
 class ProductApi extends BaseApi {
-  Future<List<ProductCategory>> getFeaturedProductsCategories() async {
-    await Future.delayed(Duration(seconds: 2));
-    return ProductCategory.homeMock();
+  Future<HttpResponse<List<ProductCategory>>> getFeaturedProductsCategories(
+      {Location location}) async {
+    HttpStatus status;
+    try {
+      final response = await get('$baseUrl/home/categories/featured', params: {
+        'city_id': location?.city?.id,
+        'state_id': location?.state?.id,
+        'country_id': location?.country?.id
+      });
+
+      status = HttpResponse.codeMap[response.statusCode];
+      final data = ProductCategory.parseList(response.body);
+
+      return HttpResponse<List<ProductCategory>>(status: status, data: data);
+    } catch (error) {
+      return HttpResponse<List<ProductCategory>>(
+          status: status, message: error.toString());
+    }
   }
 
   Future<HttpResponse<List<ProductCategory>>> getSearchCategories(
