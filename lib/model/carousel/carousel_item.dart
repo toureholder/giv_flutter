@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:giv_flutter/features/base/base.dart';
 import 'package:giv_flutter/model/product/product_category.dart';
 
@@ -17,6 +19,25 @@ class CarouselItem {
     this.productCategory,
     this.actionId,
   });
+
+  CarouselItem.fromJson(Map<String, dynamic> json)
+      : imageUrl = json['image_url'],
+        linkUrl = json['link_url'],
+        title = json['title'],
+        caption = json['caption'],
+        actionId = json['action_id'],
+        productCategory = json['category'] == null ? null : ProductCategory.fromJson(json['category']);
+
+  static List<CarouselItem> parseList(String responseBody) {
+    final parsed = json.decode(responseBody).cast<Map<String, dynamic>>();
+    return fromDynamicList(parsed);
+  }
+
+  static List<CarouselItem> fromDynamicList(List<dynamic> list) {
+    return list
+        .map<CarouselItem>((json) => CarouselItem.fromJson(json))
+        .toList();
+  }
 
   static List<CarouselItem> mockList() {
     return [

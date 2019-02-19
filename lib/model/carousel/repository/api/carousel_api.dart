@@ -1,9 +1,26 @@
 import 'package:giv_flutter/model/carousel/carousel_item.dart';
+import 'package:giv_flutter/model/location/location.dart';
+import 'package:giv_flutter/util/network/base_api.dart';
+import 'package:giv_flutter/util/network/http_response.dart';
 
-class CarouselApi {
+class CarouselApi extends BaseApi {
+  Future<HttpResponse<List<CarouselItem>>> getHomeCarouselItems(
+      {Location location}) async {
+    HttpStatus status;
+    try {
+      final response = await get('$baseUrl/home/carousel', params: {
+        'city_id': location?.city?.id,
+        'state_id': location?.state?.id,
+        'country_id': location?.country?.id
+      });
 
-  Future<List<CarouselItem>> getHomeCarouselItems() async {
-    await Future.delayed(Duration(seconds: 2));
-    return CarouselItem.mockList();
+      status = HttpResponse.codeMap[response.statusCode];
+      final data = CarouselItem.parseList(response.body);
+
+      return HttpResponse<List<CarouselItem>>(status: status, data: data);
+    } catch (error) {
+      return HttpResponse<List<CarouselItem>>(
+          status: status, message: error.toString());
+    }
   }
 }
