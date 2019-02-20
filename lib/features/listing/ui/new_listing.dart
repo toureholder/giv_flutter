@@ -55,6 +55,7 @@ class _NewListingState extends BaseState<NewListing> {
   bool _isLocationError = false;
   bool _isInformationValid = false;
   bool _areImagesValid = true;
+  bool _forceShowPhoneNumber = false;
   User _user;
   bool _isEditing = false;
 
@@ -75,8 +76,6 @@ class _NewListingState extends BaseState<NewListing> {
       if (blocUser?.user == null)
         Navigation(context).pushReplacement(SignIn(redirect: NewListing()));
     });
-
-    _newListingBloc.loadUser();
   }
 
   void _listenToUploadStream() {
@@ -99,6 +98,7 @@ class _NewListingState extends BaseState<NewListing> {
   @override
   Widget build(BuildContext context) {
     super.build(context);
+    _newListingBloc.loadUser();
 
     final title = _isEditing ? 'edit_listing_title' : 'new_listing_title';
 
@@ -266,8 +266,9 @@ class _NewListingState extends BaseState<NewListing> {
       stream: _newListingBloc.userStream,
       builder: (context, snapshot) {
         _user = snapshot?.data?.user;
+        _forceShowPhoneNumber  = _forceShowPhoneNumber || (snapshot?.data?.forceShow ?? false);
         return (_user?.phoneNumber == null ||
-                (snapshot?.data?.forceShow ?? false))
+                (_forceShowPhoneNumber ?? false))
             ? _phoneNumberItemTile(_user)
             : Container();
       },
