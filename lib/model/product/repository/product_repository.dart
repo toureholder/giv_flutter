@@ -23,7 +23,7 @@ class ProductRepository {
           isHardFilter: isHardFilter);
 
   Future<HttpResponse<ProductSearchResult>> getProductsBySearchQuery(
-          {String q, Location location, bool isHardFilter = true}) =>
+          {String q, Location location, bool isHardFilter}) =>
       productApi.getProductsBySearchQuery(
           q: q, location: location, isHardFilter: isHardFilter);
 

@@ -23,6 +23,7 @@ class SearchResultBloc {
       String searchQuery,
       Location locationFilter,
       bool isHardFilter = false}) async {
+
     try {
       if (categoryId == null && searchQuery == null)
         throw FormatException('Expected categoryId or searchQuery');

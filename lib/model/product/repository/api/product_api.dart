@@ -68,10 +68,26 @@ class ProductApi extends BaseApi {
   }
 
   Future<HttpResponse<ProductSearchResult>> getProductsBySearchQuery(
-      {String q, Location location, bool isHardFilter = true}) async {
-    await Future.delayed(Duration(seconds: 2));
-    final data = ProductSearchResult.mock();
-    return HttpResponse<ProductSearchResult>(status: HttpStatus.ok, data: data);
+      {String q, Location location, bool isHardFilter}) async {
+    HttpStatus status;
+    try {
+      final response =
+      await get('$baseUrl/listings/search', params: {
+        'q': q,
+        'city_id': location?.city?.id,
+        'state_id': location?.state?.id,
+        'country_id': location?.country?.id,
+        'is_hard_filter': isHardFilter
+      });
+
+      status = HttpResponse.codeMap[response.statusCode];
+      final data = ProductSearchResult.fromJson(jsonDecode(response.body));
+
+      return HttpResponse<ProductSearchResult>(status: status, data: data);
+    } catch (error) {
+      return HttpResponse<ProductSearchResult>(
+          status: status, message: error.toString());
+    }
   }
 
   Future<HttpResponse<List<Product>>> getMyProducts() async {

@@ -26,6 +26,7 @@ class _SearchState extends BaseState<Search> {
         textInputAction: TextInputAction.search,
         initialText: widget.initialText,
         onSubmit: (String q) {
+          if (q?.isEmpty ?? true) return;
           navigation.pushReplacement(SearchResult(searchQuery: q), hasAnimation: false);
         },
       ),
