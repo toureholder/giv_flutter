@@ -7,6 +7,7 @@ class CustomScaffold extends StatefulWidget {
   final Widget bottomNavigationBar;
   final Widget floatingActionButton;
   final FloatingActionButtonLocation floatingActionButtonLocation;
+  final bool resizeToAvoidBottomPadding;
 
   const CustomScaffold({
     Key key,
@@ -16,6 +17,7 @@ class CustomScaffold extends StatefulWidget {
     this.bottomNavigationBar,
     this.floatingActionButton,
     this.floatingActionButtonLocation,
+    this.resizeToAvoidBottomPadding = true
   })
       : super(key: key);
 
@@ -33,6 +35,7 @@ class _CustomScaffoldState extends State<CustomScaffold> {
       bottomNavigationBar: widget.bottomNavigationBar,
       floatingActionButton: widget.floatingActionButton,
       floatingActionButtonLocation: widget.floatingActionButtonLocation,
+      resizeToAvoidBottomPadding: widget.resizeToAvoidBottomPadding,
     );
   }
 }

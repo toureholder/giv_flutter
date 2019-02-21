@@ -27,6 +27,9 @@ class ProductRepository {
       productApi.getProductsBySearchQuery(
           q: q, location: location, isHardFilter: isHardFilter);
 
+  Future<HttpResponse<List<ProductCategory>>> getSearchSuggestions(String q) =>
+      productApi.getSearchSuggestions(q);
+
   Future<HttpResponse<List<Product>>> getMyProducts() =>
       productApi.getMyProducts();
 }

@@ -19,8 +19,10 @@ import 'package:giv_flutter/values/dimens.dart';
 class SearchResult extends StatefulWidget {
   final ProductCategory category;
   final String searchQuery;
+  final bool useCanonicalName;
 
-  const SearchResult({Key key, this.category, this.searchQuery})
+  const SearchResult(
+      {Key key, this.category, this.searchQuery, this.useCanonicalName = false})
       : super(key: key);
 
   @override
@@ -47,7 +49,10 @@ class _SearchResultState extends BaseState<SearchResult> {
   Widget build(BuildContext context) {
     super.build(context);
 
-    var title = widget.category?.simpleName ?? widget.searchQuery;
+    var categoryName = widget.useCanonicalName
+        ? widget.category?.canonicalName
+        : widget.category?.simpleName;
+    var title = categoryName ?? widget.searchQuery;
 
     var appBar = widget.category == null
         ? SearchTeaserAppBar(q: widget.searchQuery)

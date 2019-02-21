@@ -45,6 +45,23 @@ class ProductApi extends BaseApi {
     }
   }
 
+  Future<HttpResponse<List<ProductCategory>>> getSearchSuggestions(
+      String q) async {
+    HttpStatus status;
+    try {
+      final response =
+          await get('$baseUrl/categories/search', params: {'q': q});
+
+      status = HttpResponse.codeMap[response.statusCode];
+      final data = ProductCategory.parseList(response.body);
+
+      return HttpResponse<List<ProductCategory>>(status: status, data: data);
+    } catch (error) {
+      return HttpResponse<List<ProductCategory>>(
+          status: status, message: error.toString());
+    }
+  }
+
   Future<HttpResponse<ProductSearchResult>> getProductsByCategory(
       {int categoryId, Location location, bool isHardFilter}) async {
     HttpStatus status;
@@ -71,8 +88,7 @@ class ProductApi extends BaseApi {
       {String q, Location location, bool isHardFilter}) async {
     HttpStatus status;
     try {
-      final response =
-      await get('$baseUrl/listings/search', params: {
+      final response = await get('$baseUrl/listings/search', params: {
         'q': q,
         'city_id': location?.city?.id,
         'state_id': location?.state?.id,
