@@ -514,6 +514,14 @@ class Strings {
     "error_upload_listing_report_message": {
       "en": "Hi! I was using Giv and something went wrong when I tried to create a listing :/",
       "pt": "Oi! Eu estava usando o Giv e deu ruim quando tentei criar um anúncio :/"
+    },
+    "facebook_login_cancelled_message": {
+      "en": "Facebook login cancelled.",
+      "pt": "Login com facebook cancelado."
+    },
+    "facebook_login_error_message": {
+      "en": "Facebook login failed.",
+      "pt": "Login com facebook falhou."
     }
   };
 }

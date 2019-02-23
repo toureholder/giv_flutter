@@ -137,10 +137,12 @@ class _SignInState extends BaseState<SignIn> {
             localeString: localeString));
         break;
       case FacebookLoginStatus.cancelledByUser:
-        print('FacebookLoginStatus.cancelledByUser');
+        showInformationDialog(content: string('facebook_login_cancelled_message'));
         break;
       case FacebookLoginStatus.error:
-        print('result.errorMessage: ${result.errorMessage}');
+        String content = string('facebook_login_error_message');
+        String message = result.errorMessage;
+        showGenericErrorDialog(content: content, message: message);
         break;
     }
   }

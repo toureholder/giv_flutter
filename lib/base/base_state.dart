@@ -63,8 +63,9 @@ class BaseState<T extends StatefulWidget> extends State<T> {
     Navigator.pop(context, user);
   }
 
-  void showGenericErrorDialog({String message}) {
+  void showGenericErrorDialog({String message, String content}) {
     message = message ?? string('error_generic_report_message');
+    content = content ?? string('error_generic_message');
 
     showDialog(
         context: context,
@@ -72,7 +73,7 @@ class BaseState<T extends StatefulWidget> extends State<T> {
         builder: (context) {
           return AlertDialog(
             title: Text(string('error_generic_title')),
-            content: Text(string('error_generic_message')),
+            content: Text(content),
             actions: <Widget>[
               FlatButton(
                   child: Text(string('action_report')),
@@ -96,8 +97,8 @@ class BaseState<T extends StatefulWidget> extends State<T> {
         barrierDismissible: true,
         builder: (context) {
           return AlertDialog(
-            title: Text(title),
-            content: Text(content),
+            title: title == null ? null : Text(title),
+            content: content == null ? null : Text(content),
             actions: <Widget>[
               FlatButton(
                   child: Text(string('common_ok')),
