@@ -522,6 +522,14 @@ class Strings {
     "facebook_login_error_message": {
       "en": "Facebook login failed.",
       "pt": "Login com facebook falhou."
+    },
+    "published_on_at_": {
+      "en": "Published on $formatItem at $formatItem",
+      "pt": "Publicado em $formatItem às $formatItem"
+    },
+    "published_on_": {
+      "en": "Published on $formatItem.",
+      "pt": "Publicado em $formatItem."
     }
   };
 }

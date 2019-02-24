@@ -12,23 +12,26 @@ void main() {
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
+
   @override
   Widget build(BuildContext context) {
-    return new MaterialApp(
-      debugShowCheckedModeBanner: false,
-      onGenerateTitle: (BuildContext context) =>
-          StringLocalizations.of(context).get('app_name'),
-      localizationsDelegates: [
-        const StringLocalizationsDelegate(),
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-      ],
-      supportedLocales: L10n.supportedLocales,
-      theme: new ThemeData(
-        primaryColor: Colors.blue,
-        backgroundColor: Colors.blue,
-      ),
-      home: new Splash(),
-    );
+    return _buildApp();
   }
+
+  MaterialApp _buildApp() => MaterialApp(
+    debugShowCheckedModeBanner: false,
+    onGenerateTitle: (BuildContext context) =>
+        StringLocalizations.of(context).get('app_name'),
+    localizationsDelegates: [
+      const StringLocalizationsDelegate(),
+      GlobalMaterialLocalizations.delegate,
+      GlobalWidgetsLocalizations.delegate,
+    ],
+    supportedLocales: L10n.supportedLocales,
+    theme: new ThemeData(
+      primaryColor: Colors.blue,
+      backgroundColor: Colors.blue,
+    ),
+    home: new Splash(),
+  );
 }

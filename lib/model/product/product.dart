@@ -18,6 +18,7 @@ class Product {
   User user;
   List<ProductCategory> categories;
   bool isActive;
+  DateTime updatedAt;
 
   Product(
       {this.id,
@@ -27,13 +28,15 @@ class Product {
       this.images,
       this.user,
       this.categories,
-      this.isActive = true});
+      this.isActive = true,
+      this.updatedAt});
 
   Product.fromJson(Map<String, dynamic> json)
       : id = json['id'],
         title = json['title'],
         description = json['description'],
         isActive = json['is_active'],
+        updatedAt = DateTime.parse(json['updated_at']),
         location = Location.fromLocationPartIds(
             countryId: json['geonames_country_id'],
             stateId: json['geonames_state_id'],

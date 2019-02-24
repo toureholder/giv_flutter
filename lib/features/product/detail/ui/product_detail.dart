@@ -15,6 +15,7 @@ import 'package:giv_flutter/util/presentation/spacing.dart';
 import 'package:giv_flutter/util/presentation/typography.dart';
 import 'package:giv_flutter/util/util.dart';
 import 'package:giv_flutter/values/dimens.dart';
+import 'package:intl/intl.dart';
 
 class ProductDetail extends StatefulWidget {
   final Product product;
@@ -64,6 +65,7 @@ class _ProductDetailState extends BaseState<ProductDetail> {
         _locationStreamBuilder(),
         _iWantItButton(context),
         _textPadding(Body2Text(_product.description)),
+        _publishedAt(),
         Spacing.vertical(Dimens.grid(8)),
         Divider(),
         Spacing.vertical(Dimens.grid(8)),
@@ -71,6 +73,11 @@ class _ProductDetailState extends BaseState<ProductDetail> {
         Spacing.vertical(Dimens.grid(16)),
       ]),
     );
+  }
+
+  Padding _publishedAt() {
+    return _textPadding(Body2Text(string('published_on_',
+        formatArg: DateFormat.yMMMMd(localeString).format(_product.updatedAt))));
   }
 
   Widget _locationStreamBuilder() {

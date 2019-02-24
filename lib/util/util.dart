@@ -37,7 +37,7 @@ class Util {
     }
 
     if (countryCode != null && countryCode.isNotEmpty) {
-      buffer.write('-');
+      buffer.write('_');
       buffer.write(countryCode);
     }
 

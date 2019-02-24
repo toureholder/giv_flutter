@@ -17,12 +17,14 @@ class StringLocalizations {
 
   static const formatItemSymbol = '%1s';
 
-  String get(String key, {String formatArg}) {
+  String get(String key,
+      {String formatArg, String formatArg2, String formatArg3}) {
     var localizedString = _getLocalizedValue(key);
 
-    return formatArg != null
-        ? localizedString.replaceAll(formatItemSymbol, formatArg)
-        : localizedString;
+    return localizedString
+        .replaceFirst(formatItemSymbol, formatArg ?? '')
+        .replaceFirst(formatItemSymbol, formatArg2 ?? '')
+        .replaceFirst(formatItemSymbol, formatArg3 ?? '');
   }
 
   String _getLocalizedValue(key) {
@@ -54,6 +56,8 @@ class GetLocalizedStringFunction {
 
   GetLocalizedStringFunction(this.context);
 
-  String call(String key, {String formatArg}) =>
-      StringLocalizations.of(context).get(key, formatArg: formatArg);
+  String call(String key,
+          {String formatArg, String formatArg2, String formatArg3}) =>
+      StringLocalizations.of(context).get(key,
+          formatArg: formatArg, formatArg2: formatArg2, formatArg3: formatArg3);
 }
