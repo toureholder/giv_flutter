@@ -22,6 +22,11 @@ class Prefs {
     ]);
   }
 
+  static isAuthenticated() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString(_serverTokenKey) != null;
+  }
+
   // Location
 
   static final String _locationJsonKey = 'location';

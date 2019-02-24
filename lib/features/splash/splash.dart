@@ -3,6 +3,7 @@ import 'package:giv_flutter/base/base_state.dart';
 import 'package:giv_flutter/config/preferences/prefs.dart';
 import 'package:giv_flutter/features/base/base.dart';
 import 'package:giv_flutter/model/location/location.dart';
+import 'package:giv_flutter/model/user/repository/user_repository.dart';
 import 'package:giv_flutter/util/navigation/navigation.dart';
 import 'package:giv_flutter/util/presentation/custom_scaffold.dart';
 
@@ -32,9 +33,21 @@ class _SplashState extends BaseState<Splash> {
   _awaitTasks() async {
     // TODO: await get device location (lat, long)
 
-    // TODO: await get business location (Location object)
-
-    await Prefs.setLocation(Location.mock());
+    await Future.wait([
+      _getLocation(),
+      _updateCurrentUser()
+    ]);
     Navigation(context).pushReplacement(Base());
+  }
+
+  Future _getLocation() => Prefs.setLocation(Location.mock());
+
+  Future _updateCurrentUser() async {
+    bool isAuthenticated = await Prefs.isAuthenticated();
+    if (isAuthenticated) {
+      var response = await UserRepository().getMe();
+      if (response.data != null)
+        await Prefs.setUser(response.data);
+    }
   }
 }
