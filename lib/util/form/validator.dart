@@ -12,7 +12,7 @@ class Validator {
 
   String userName(String value) {
     String message;
-    if (value.isEmpty) message = string('validation_message_name_required');
+    if (value.trim().isEmpty) message = string('validation_message_name_required');
     return message;
   }
 
@@ -33,6 +33,8 @@ class Validator {
     String message;
     if (value.length < 6)
       message = string('validation_message_password_min_length');
+    else if (value.trim().isEmpty)
+      message = string('validation_message_password_not_only_whitspaces');
     return message;
   }
 

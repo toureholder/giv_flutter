@@ -139,6 +139,10 @@ class Strings {
       "en": "Your password should be at least 6 characters long",
       "pt": "Sua senha deve ter no mínimo 6 caracteres"
     },
+    "validation_message_password_not_only_whitspaces": {
+      "en": "Your password can't be just whitespaces",
+      "pt": "Sua senha não pode conter apenas espaços em branco"
+    },
     "sign_in_verify_email_title": {
       "en": "We sent you an email",
       "pt": "Te enviamos um e-mail"
