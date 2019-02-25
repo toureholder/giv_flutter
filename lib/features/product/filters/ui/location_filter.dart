@@ -14,10 +14,9 @@ import 'package:giv_flutter/values/dimens.dart';
 
 class LocationFilter extends StatefulWidget {
   final Location location;
-  final bool requireFullLocation;
+  final bool showSaveButton;
 
-  const LocationFilter(
-      {Key key, this.location, this.requireFullLocation = false})
+  const LocationFilter({Key key, this.location, this.showSaveButton = false})
       : super(key: key);
 
   @override
@@ -115,9 +114,13 @@ class _LocationFilterState extends BaseState<LocationFilter> {
 
   Widget _buildCountriesDropdown(
       BuildContext context, List<LocationPart.Country> countries) {
-    var menuItems = countries?.map((country) {
+    List<DropdownMenuItem<LocationPart.Country>> menuItems =
+        countries?.map((country) {
       return DropdownMenuItem(value: country, child: Text(country.name));
     })?.toList();
+
+    _addClearValueEntries<LocationPart.Country>(
+        menuItems, 'location_filter_all_countries');
 
     return Container(
       child: ButtonTheme(
@@ -126,16 +129,18 @@ class _LocationFilterState extends BaseState<LocationFilter> {
           hint: Text(string('common_country')),
           isExpanded: true,
           value: countries?.firstWhere((it) {
-            return it.id == _currentLocation.country?.id;
+            return it.id == _currentLocation?.country?.id;
           }, orElse: () => null),
           items: menuItems,
           onChanged: (LocationPart.Country country) {
             setState(() {
-              _currentLocation = Location(
-                  country:
-                      LocationPart.Country(id: country.id, name: country.name));
+              _currentLocation = country == null
+                  ? Location()
+                  : Location(
+                      country: LocationPart.Country(
+                          id: country.id, name: country.name));
             });
-            _locationFilterBloc.fetchStates(country.id);
+            _locationFilterBloc.fetchStates(country?.id);
           },
         ),
       ),
@@ -153,9 +158,12 @@ class _LocationFilterState extends BaseState<LocationFilter> {
         ? string('common_loading')
         : string('common_state');
 
-    var menuItems = states?.map((state) {
+    List<DropdownMenuItem<LocationPart.State>> menuItems = states?.map((state) {
       return DropdownMenuItem(value: state, child: Text(state.name));
     })?.toList();
+
+    _addClearValueEntries<LocationPart.State>(
+        menuItems, 'location_filter_all_states');
 
     return Container(
       child: ButtonTheme(
@@ -164,17 +172,18 @@ class _LocationFilterState extends BaseState<LocationFilter> {
           hint: Text(hintText),
           isExpanded: true,
           value: states?.firstWhere((it) {
-            return it.id == _currentLocation.state?.id;
+            return it.id == _currentLocation?.state?.id;
           }, orElse: () => null),
           items: menuItems,
           onChanged: (LocationPart.State state) {
             setState(() {
-              _currentLocation.state =
-                  LocationPart.State(id: state.id, name: state.name);
-              _currentLocation.city = null;
+              _currentLocation?.state = state == null
+                  ? null
+                  : LocationPart.State(id: state.id, name: state.name);
+              _currentLocation?.city = null;
             });
             _locationFilterBloc.fetchCities(
-                _currentLocation?.country?.id, state.id);
+                _currentLocation?.country?.id, state?.id);
           },
         ),
       ),
@@ -192,9 +201,12 @@ class _LocationFilterState extends BaseState<LocationFilter> {
         ? string('common_loading')
         : string('common_city');
 
-    var menuItems = cities?.map((city) {
+    List<DropdownMenuItem<LocationPart.City>> menuItems = cities?.map((city) {
       return DropdownMenuItem(value: city, child: Text(city.name));
     })?.toList();
+
+    _addClearValueEntries<LocationPart.City>(
+        menuItems, 'location_filter_all_cities');
 
     return Container(
       child: ButtonTheme(
@@ -203,13 +215,14 @@ class _LocationFilterState extends BaseState<LocationFilter> {
           hint: Text(hintText),
           isExpanded: true,
           value: cities?.firstWhere((it) {
-            return it.id == _currentLocation.city?.id;
+            return it.id == _currentLocation?.city?.id;
           }, orElse: () => null),
           items: menuItems,
           onChanged: (LocationPart.City city) {
             setState(() {
-              _currentLocation.city =
-                  LocationPart.City(id: city.id, name: city.name);
+              _currentLocation?.city = city == null
+                  ? null
+                  : LocationPart.City(id: city.id, name: city.name);
             });
           },
         ),
@@ -218,29 +231,32 @@ class _LocationFilterState extends BaseState<LocationFilter> {
   }
 
   Widget _buildPrimaryButton(BuildContext context) {
-    var onPressed = _hasChangedLocation() && _isLocationValid()
-        ? returnCurrentLocation
-        : null;
+    var onPressed = _hasChangedLocation() ? returnCurrentLocation : null;
 
-    var res =
-        widget.requireFullLocation ? 'shared_action_save' : 'action_filter';
+    var res = widget.showSaveButton ? 'shared_action_save' : 'action_filter';
 
     return PrimaryButton(text: string(res), onPressed: onPressed);
   }
 
-  bool _hasChangedLocation() =>
-      !_currentLocation.equals(widget.location) &&
-      !_currentLocation.equals(Location());
-
-  bool _isLocationValid() {
-    return widget.requireFullLocation ? _currentLocation.isComplete : true;
-  }
+  bool _hasChangedLocation() => !_currentLocation.equals(widget.location);
 
   void returnCurrentLocation() {
     Navigator.pop(context, _currentLocation);
   }
 
-  _handleNetworkError(error) {
+  void _handleNetworkError(error) {
     showGenericErrorDialog();
+  }
+
+  DropdownMenuItem _buildClearValueEntry<T>(String resId) =>
+      DropdownMenuItem<T>(value: null, child: Text(string(resId)));
+
+  void _addClearValueEntries<T>(
+      List<DropdownMenuItem<T>> menuItems, String resId) {
+    if (menuItems?.isNotEmpty ?? false) {
+      final clearItem = _buildClearValueEntry<T>(resId);
+      menuItems?.insert(0, clearItem);
+      menuItems?.add(clearItem);
+    }
   }
 }

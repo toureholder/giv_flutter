@@ -6,9 +6,7 @@ class LocationPart {
 
   LocationPart({this.id, this.name});
 
-  bool get isComplete =>
-      this != null &&
-      (id != null && id.isNotEmpty) &&
+  bool get isOk => this == null || (id != null && id.isNotEmpty) &&
       (name != null && name.isNotEmpty);
 }
 

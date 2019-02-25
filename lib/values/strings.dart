@@ -546,6 +546,18 @@ class Strings {
     "published_on_": {
       "en": "Published on $formatItem.",
       "pt": "Publicado em $formatItem."
+    },
+    "location_filter_all_countries": {
+      "en": "All countries",
+      "pt": "Todos os países"
+    },
+    "location_filter_all_states": {
+      "en": "All states",
+      "pt": "Todos os estados"
+    },
+    "location_filter_all_cities": {
+      "en": "All cities",
+      "pt": "Todas as cidades"
     }
   };
 }

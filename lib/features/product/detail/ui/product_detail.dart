@@ -89,7 +89,7 @@ class _ProductDetailState extends BaseState<ProductDetail> {
   }
 
   Widget _locationWidget(Location location) {
-    if (location?.isComplete ?? false) widget.product?.location = location;
+    if (location?.isOk ?? false) widget.product?.location = location;
 
     Widget locationWidget = location == null
         ? Padding(

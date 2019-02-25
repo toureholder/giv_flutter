@@ -86,9 +86,9 @@ class Product {
         id: id,
         title: title,
         description: description,
-        geoNamesCityId: location.city.id,
-        geoNamesStateId: location.state.id,
-        geoNamesCountryId: location.country.id,
+        geoNamesCityId: location?.city?.id,
+        geoNamesStateId: location?.state?.id,
+        geoNamesCountryId: location?.country?.id,
         images: images,
         categoryIds: categories.map((it) => it.id).toList(),
         isActive: isActive);

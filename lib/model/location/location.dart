@@ -19,8 +19,9 @@ class Location {
   String get mediumName {
     final array = <String>[];
 
-    if (city.isComplete) array.add(city.name);
-    if (state.isComplete) array.add(state.name);
+    if (city?.isOk ?? false) array.add(city.name);
+    if (state?.isOk ?? false) array.add(state.name);
+    if ((country?.isOk ?? false) && array.length < 2) array.add(country.name);
 
     return array.join(', ');
   }
@@ -28,9 +29,9 @@ class Location {
   String get longName {
     final array = <String>[];
 
-    if (city.isComplete) array.add(city.name);
-    if (state.isComplete) array.add(state.name);
-    if (country.isComplete) array.add(country.name);
+    if (city?.isOk ?? false) array.add(city.name);
+    if (state?.isOk ?? false) array.add(state.name);
+    if (country?.isOk ?? false) array.add(country.name);
 
     return array.join(', ');
   }
@@ -43,10 +44,10 @@ class Location {
         city?.id == location.city?.id;
   }
 
-  bool get isComplete =>
-      (country?.isComplete ?? false) &
-      (state?.isComplete ?? false) &
-      (city?.isComplete ?? false);
+  bool get isOk  =>
+      (country?.isOk ?? true) &&
+      (state?.isOk ?? true) &&
+      (city?.isOk ?? true);
 
   // Serialization
 

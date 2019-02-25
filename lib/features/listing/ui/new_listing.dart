@@ -85,7 +85,7 @@ class _NewListingState extends BaseState<NewListing> {
   }
 
   void _loadLocation() {
-    if (!(_product.location?.isComplete ?? false))
+    if (!(_product.location?.isOk ?? false))
       _newListingBloc.loadLocation(_product.location);
   }
 
@@ -276,7 +276,7 @@ class _NewListingState extends BaseState<NewListing> {
   }
 
   Widget _locationStreamBuilder() {
-    if (_product.location?.isComplete ?? false)
+    if (_product.location?.isOk ?? false)
       return _locationTile(_product.location);
 
     return StreamBuilder(
@@ -573,7 +573,7 @@ class _NewListingState extends BaseState<NewListing> {
   void _editLocation(Location location) async {
     final result = await navigation.push(LocationFilter(
       location: location,
-      requireFullLocation: true,
+      showSaveButton: true,
     ));
 
     if (result != null) {

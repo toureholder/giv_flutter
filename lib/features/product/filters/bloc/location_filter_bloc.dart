@@ -40,8 +40,11 @@ class LocationFilterBloc {
   }
 
   fetchStates(String countryId) async {
+    _clearStates();
+
+    if (countryId == null) return;
+
     try {
-      _clearCities();
       _statesPublishSubject.sink.add(StreamEvent.loading());
       var response = await _locationRepository.getStates(countryId);
 
@@ -56,8 +59,11 @@ class LocationFilterBloc {
   }
 
   fetchCities(String countryId, String stateId) async {
+    _clearCities();
+
+    if (stateId == null) return;
+
     try {
-      _clearCities();
       _citiesPublishSubject.sink.add(StreamEvent.loading());
       var response = await _locationRepository.getCities(countryId, stateId);
 
@@ -75,5 +81,13 @@ class LocationFilterBloc {
     _citiesPublishSubject.sink.add(StreamEvent<List<City>>(
       state: StreamEventState.empty,
     ));
+  }
+
+  _clearStates() {
+    _statesPublishSubject.sink.add(StreamEvent<List<State>>(
+      state: StreamEventState.empty,
+    ));
+
+    _clearCities();
   }
 }
