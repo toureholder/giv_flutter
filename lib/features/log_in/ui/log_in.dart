@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:giv_flutter/base/base_state.dart';
 import 'package:giv_flutter/config/config.dart';
 import 'package:giv_flutter/features/log_in/bloc/log_in_bloc.dart';
+import 'package:giv_flutter/features/log_in/helper/login_assistance_helper.dart';
 import 'package:giv_flutter/features/log_in/ui/login_assistance.dart';
 import 'package:giv_flutter/features/sign_up/ui/sign_up.dart';
 import 'package:giv_flutter/model/user/repository/api/request/log_in_request.dart';
@@ -154,25 +155,14 @@ class _LogInState extends BaseState<LogIn> {
 
   void _goToForgotPassword() {
     navigation.push(LoginAssistance(
-      page: LoginAssistancePage(
-          type: LoginAssistanceType.forgotPassword,
-          title: string('log_in_forgot_password'),
-          instructions: string('log_in_forgot_password_instructions'),
-          successTitle: string('forgot_password_success_title'),
-          successMessage: string('forgot_password_success_message')),
-    ));
+        page: LoginAssistanceHelper(context).forgotPassword(),
+        email: _emailController.text));
   }
 
   void _goToResendActivation() {
     navigation.push(LoginAssistance(
-      page: LoginAssistancePage(
-          type: LoginAssistanceType.forgotPassword,
-          title: string('log_in_didnt_get_verification_email'),
-          instructions:
-              string('log_in_didnt_get_verification_email_instructions'),
-          successTitle: string('sign_in_verify_email_title'),
-          successMessage: string('sign_in_verify_email_message')),
-    ));
+        page: LoginAssistanceHelper(context).resendActivation(),
+        email: _emailController.text));
   }
 
   void _goToSignUp() {

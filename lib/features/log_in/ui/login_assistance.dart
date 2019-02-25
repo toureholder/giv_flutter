@@ -17,8 +17,10 @@ import 'package:giv_flutter/values/dimens.dart';
 
 class LoginAssistance extends StatefulWidget {
   final LoginAssistancePage page;
+  final String email;
 
-  const LoginAssistance({Key key, @required this.page}) : super(key: key);
+  const LoginAssistance({Key key, @required this.page, this.email})
+      : super(key: key);
 
   @override
   _LoginAssistanceState createState() => _LoginAssistanceState();
@@ -28,7 +30,7 @@ class _LoginAssistanceState extends BaseState<LoginAssistance> {
   LogInBloc _logInBloc;
   var _formKey = GlobalKey<FormState>();
   final FocusNode _emailFocus = FocusNode();
-  final _emailController = TextEditingController();
+  TextEditingController _emailController;
   bool _autovalidate = false;
   Map<LoginAssistanceType, Function> _functionMap;
 
@@ -40,6 +42,11 @@ class _LoginAssistanceState extends BaseState<LoginAssistance> {
     _logInBloc.forgotPasswordStream.listen((StreamEvent<ApiResponse> event) {
       if (event.isReady) _onSubmitSuccess();
     });
+
+    _emailController = widget.email == null
+        ? TextEditingController()
+        : TextEditingController.fromValue(
+            new TextEditingValue(text: widget.email));
   }
 
   @override

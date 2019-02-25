@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:giv_flutter/base/base_state.dart';
 import 'package:giv_flutter/config/config.dart';
+import 'package:giv_flutter/features/log_in/helper/login_assistance_helper.dart';
 import 'package:giv_flutter/features/log_in/ui/log_in.dart';
+import 'package:giv_flutter/features/log_in/ui/login_assistance.dart';
 import 'package:giv_flutter/features/sign_in/ui/mailbox_image.dart';
 import 'package:giv_flutter/features/sign_in/ui/sign_in_full_page_message.dart';
 import 'package:giv_flutter/features/sign_up/bloc/sign_up_bloc.dart';
@@ -158,14 +160,16 @@ class _SignUpState extends BaseState<SignUp> {
   }
 
   void _onSignUpResponse(HttpResponse<ApiResponse> httpResponse) {
-    //TODO: Handle 409 (email taken)
-
-    if (httpResponse.status == HttpStatus.created) {
-      _onSignUpResponseSuccess();
-      return;
+    switch(httpResponse.status) {
+      case HttpStatus.created:
+        _onSignUpResponseSuccess();
+        break;
+      case HttpStatus.conflict:
+        showEmailTakenDialog();
+        break;
+      default:
+        showGenericErrorDialog();
     }
-
-    showGenericErrorDialog();
   }
 
   void _onSignUpResponseSuccess() {
@@ -184,5 +188,33 @@ class _SignUpState extends BaseState<SignUp> {
   void _requestHelp() {
     Util.openWhatsApp(
         Config.customerServiceNumber, string('sign_up_help_me_chat_message'));
+  }
+
+  void showEmailTakenDialog() {
+    showDialog(
+        context: context,
+        barrierDismissible: true,
+        builder: (context) {
+          return AlertDialog(
+            title: Text(string('sign_up_error_409_title')),
+            content: Text(string('sign_up_error_409_messge')),
+            actions: <Widget>[
+              FlatButton(
+                  child: Text(string('sign_up_error_409_recover_email_button')),
+                  onPressed: () {
+                    Navigation(context).pop();
+                    navigation.push(LoginAssistance(
+                      page: LoginAssistanceHelper(context).forgotPassword(),
+                      email: _emailController.text,
+                    ));
+                  }),
+              FlatButton(
+                  child: Text(string('common_ok')),
+                  onPressed: () {
+                    Navigation(context).pop();
+                  })
+            ],
+          );
+        });
   }
 }

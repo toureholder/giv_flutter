@@ -483,6 +483,18 @@ class Strings {
       "en": "Hello! I need help creating my Giv account.",
       "pt": "Olá! Preciso de ajuda para criar minha conta no Giv."
     },
+    "sign_up_error_409_title": {
+      "en": "Oh, my!",
+      "pt": "Eita!"
+    },
+    "sign_up_error_409_messge": {
+      "en": "That email address is already taken.",
+      "pt": "Já existe um usuário com esse e-mail."
+    },
+    "sign_up_error_409_recover_email_button": {
+      "en": "Recover password",
+      "pt": "Recuperar senha"
+    },
     "error_generic_title": {
       "en": "Something went wrong",
       "pt": "Houve um problema"
