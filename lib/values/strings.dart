@@ -570,6 +570,10 @@ class Strings {
     "member_since_": {
       "en": "On Giv since $formatItem.",
       "pt": "No Giv desde $formatItem."
+    },
+    "shared_dont_show_this_again": {
+      "en": "Don't show this again",
+      "pt": "Não mostrar novamente"
     }
   };
 }

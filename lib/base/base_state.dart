@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:giv_flutter/config/i18n/string_localizations.dart';
 import 'package:giv_flutter/config/preferences/prefs.dart';
 import 'package:giv_flutter/features/base/base.dart';
+import 'package:giv_flutter/features/customer_service/customer_service_dialog.dart';
 import 'package:giv_flutter/model/user/user.dart';
 import 'package:giv_flutter/util/navigation/navigation.dart';
 import 'package:giv_flutter/util/network/http_response.dart';
@@ -125,24 +126,7 @@ class BaseState<T extends StatefulWidget> extends State<T> {
         context: context,
         barrierDismissible: true,
         builder: (context) {
-          return AlertDialog(
-            title: Text(string('customer_service_dialog_title')),
-            content: Text(string('customer_service_dialog_content')),
-            actions: <Widget>[
-              FlatButton(
-                  child: Text(string('shared_action_cancel')),
-                  onPressed: () {
-                    Navigation(context).pop();
-                  }),
-              FlatButton(
-                  child: Text(string('common_ok')),
-                  onPressed: () async {
-                    await Prefs.setHasAgreedToCustomerService();
-                    Util.customerService(message);
-                    Navigation(context).pop();
-                  })
-            ],
-          );
+          return CustomerServiceDialog(message: message);
         });
   }
 }
