@@ -170,7 +170,6 @@ class _LogInState extends BaseState<LogIn> {
   }
 
   void _requestHelp() {
-    Util.openWhatsApp(
-        Config.customerServiceNumber, string('log_in_help_me_chat_message'));
+    handleCustomerServiceRequest(string('log_in_help_me_chat_message'));
   }
 }

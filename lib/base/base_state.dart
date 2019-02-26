@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:giv_flutter/config/i18n/string_localizations.dart';
+import 'package:giv_flutter/config/preferences/prefs.dart';
 import 'package:giv_flutter/features/base/base.dart';
 import 'package:giv_flutter/model/user/user.dart';
 import 'package:giv_flutter/util/navigation/navigation.dart';
@@ -21,21 +22,19 @@ class BaseState<T extends StatefulWidget> extends State<T> {
   }
 
   void onLoginResponse(HttpResponse response, Widget redirect) {
-    switch(response.status) {
+    switch (response.status) {
       case HttpStatus.ok:
         _onLoginSuccess(redirect);
         break;
       case HttpStatus.unprocessableEntity:
         showInformationDialog(
             title: string('log_in_error_bad_credentials_title'),
-            content: string('log_in_error_bad_credentials_message')
-        );
+            content: string('log_in_error_bad_credentials_message'));
         break;
       case HttpStatus.notAcceptable:
         showInformationDialog(
             title: string('log_in_error_not_activated_title'),
-            content: string('log_in_error_not_activated_message')
-        );
+            content: string('log_in_error_not_activated_message'));
         break;
       default:
         showGenericErrorDialog();
@@ -103,6 +102,43 @@ class BaseState<T extends StatefulWidget> extends State<T> {
               FlatButton(
                   child: Text(string('common_ok')),
                   onPressed: () {
+                    Navigation(context).pop();
+                  })
+            ],
+          );
+        });
+  }
+
+  void handleCustomerServiceRequest(String message) async {
+    final hasAgreed = await Prefs.hasAgreedToCustomerService();
+
+    if (hasAgreed)
+      Util.customerService(message);
+    else
+      showCustomerServiceDialog(message);
+  }
+
+  void showCustomerServiceDialog(String message) {
+    message = message ?? string('help_message');
+
+    showDialog(
+        context: context,
+        barrierDismissible: true,
+        builder: (context) {
+          return AlertDialog(
+            title: Text(string('customer_service_dialog_title')),
+            content: Text(string('customer_service_dialog_content')),
+            actions: <Widget>[
+              FlatButton(
+                  child: Text(string('shared_action_cancel')),
+                  onPressed: () {
+                    Navigation(context).pop();
+                  }),
+              FlatButton(
+                  child: Text(string('common_ok')),
+                  onPressed: () async {
+                    await Prefs.setHasAgreedToCustomerService();
+                    Util.customerService(message);
                     Navigation(context).pop();
                   })
             ],

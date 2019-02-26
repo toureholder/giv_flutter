@@ -558,6 +558,14 @@ class Strings {
     "location_filter_all_cities": {
       "en": "All cities",
       "pt": "Todas as cidades"
+    },
+    "customer_service_dialog_title": {
+      "en": "Thanks for reaching out!",
+      "pt": "Vamos te ajudar!"
+    },
+    "customer_service_dialog_content": {
+      "en": "You will be taken to a WhatsApp chat with someone from our support team.",
+      "pt": "Você será redirecionado para uma conversa WhatsApp com alguém da equipe de suporte."
     }
   };
 }

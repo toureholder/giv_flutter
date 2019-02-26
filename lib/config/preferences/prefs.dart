@@ -5,7 +5,6 @@ import 'package:giv_flutter/model/user/user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Prefs {
-
   // General
 
   static Future<bool> clear() async {
@@ -25,6 +24,21 @@ class Prefs {
   static isAuthenticated() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.getString(_serverTokenKey) != null;
+  }
+
+  // Has seen agreed to customer service dialog
+
+  static final String _hasAgreedToCustomerService =
+      'has_agreed_to_customer_service';
+
+  static Future<bool> hasAgreedToCustomerService() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getBool(_hasAgreedToCustomerService) ?? false;
+  }
+
+  static Future<bool> setHasAgreedToCustomerService() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.setBool(_hasAgreedToCustomerService, true);
   }
 
   // Location

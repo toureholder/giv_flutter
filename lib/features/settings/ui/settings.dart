@@ -135,10 +135,10 @@ class _SettingsState extends BaseState<Settings> {
   }
 
   void _whatsAppCustomerService() {
-    Util.openWhatsApp(Config.customerServiceNumber, string('help_message'));
+    handleCustomerServiceRequest(string('help_message'));
   }
 
-  void _goToProfile () async {
+  void _goToProfile() async {
     await navigation.push(Profile());
     _settingsBloc.loadUserFromPrefs();
   }

@@ -160,7 +160,7 @@ class _SignUpState extends BaseState<SignUp> {
   }
 
   void _onSignUpResponse(HttpResponse<ApiResponse> httpResponse) {
-    switch(httpResponse.status) {
+    switch (httpResponse.status) {
       case HttpStatus.created:
         _onSignUpResponseSuccess();
         break;
@@ -186,8 +186,7 @@ class _SignUpState extends BaseState<SignUp> {
   }
 
   void _requestHelp() {
-    Util.openWhatsApp(
-        Config.customerServiceNumber, string('sign_up_help_me_chat_message'));
+    handleCustomerServiceRequest(string('sign_up_help_me_chat_message'));
   }
 
   void showEmailTakenDialog() {
