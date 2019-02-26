@@ -7,6 +7,7 @@ class User {
   String phoneNumber;
   String countryCallingCode;
   String bio;
+  DateTime createdAt;
 
   User(
       {this.id,
@@ -14,7 +15,8 @@ class User {
       this.avatarUrl,
       this.phoneNumber,
       this.countryCallingCode,
-      this.bio});
+      this.bio,
+      this.createdAt});
 
   static final String idKey = 'id';
   static final String nameKey = 'name';
@@ -38,7 +40,10 @@ class User {
         avatarUrl = json[avatarUrlKey],
         phoneNumber = json[phoneNumberKey],
         countryCallingCode = json[countryCallingCodeKey],
-        bio = json[bioKey];
+        bio = json[bioKey],
+        createdAt = (json['created_at'] == null)
+            ? null
+            : DateTime.parse(json['created_at']);
 
   User copy() => User.fromJson(toJson());
 

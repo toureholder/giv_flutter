@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:giv_flutter/base/base_state.dart';
 import 'package:giv_flutter/features/listing/ui/new_listing.dart';
 import 'package:giv_flutter/features/product/detail/bloc/product_detail_bloc.dart';
+import 'package:giv_flutter/features/profile/profile.dart';
 import 'package:giv_flutter/model/image/image.dart' as CustomImage;
 import 'package:giv_flutter/model/location/location.dart';
 import 'package:giv_flutter/model/product/product.dart';
@@ -77,7 +78,8 @@ class _ProductDetailState extends BaseState<ProductDetail> {
 
   Padding _publishedAt() {
     return _textPadding(Body2Text(string('published_on_',
-        formatArg: DateFormat.yMMMMd(localeString).format(_product.updatedAt))));
+        formatArg:
+            DateFormat.yMMMMd(localeString).format(_product.updatedAt))));
   }
 
   Widget _locationStreamBuilder() {
@@ -136,15 +138,15 @@ class _ProductDetailState extends BaseState<ProductDetail> {
       padding: EdgeInsets.only(
           left: Dimens.default_horizontal_margin,
           right: Dimens.default_horizontal_margin),
-      child: Row(
-        children: <Widget>[
-          ClipRRect(
-            borderRadius: BorderRadius.circular(100.0),
-            child: AvatarImage(image: CustomImage.Image(url: user.avatarUrl)),
-          ),
-          Spacing.horizontal(Dimens.grid(6)),
-          Body2Text(user.name)
-        ],
+      child: GestureDetector(
+        onTap: _goToUserProfile,
+        child: Row(
+          children: <Widget>[
+            AvatarImage(image: CustomImage.Image(url: user.avatarUrl)),
+            Spacing.horizontal(Dimens.grid(6)),
+            Body2Text(user.name)
+          ],
+        ),
       ),
     );
   }
@@ -175,5 +177,11 @@ class _ProductDetailState extends BaseState<ProductDetail> {
       withIndicator: true,
       isFaded: !_product.isActive,
     );
+  }
+
+  _goToUserProfile() {
+    navigation.push(UserProfile(
+      user: _product.user,
+    ));
   }
 }

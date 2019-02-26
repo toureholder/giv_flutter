@@ -90,15 +90,16 @@ class H6Text extends BaseText {
   final SyntheticFontWeight weight;
   final Color color;
   final List<Shadow> shadows;
+  final TextAlign textAlign;
 
-  H6Text(this.data, {Key key, this.weight, this.color, this.shadows})
-      : super(
-          data,
-          textStyle: CustomTypography.h6,
-          syntheticWeight: weight,
-          color: color,
-          shadows: shadows,
-        );
+  H6Text(this.data,
+      {Key key, this.weight, this.color, this.shadows, this.textAlign})
+      : super(data,
+            textStyle: CustomTypography.h6,
+            syntheticWeight: weight,
+            color: color,
+            shadows: shadows,
+            textAlign: textAlign);
 }
 
 class Title extends BaseText {

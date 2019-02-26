@@ -566,6 +566,10 @@ class Strings {
     "customer_service_dialog_content": {
       "en": "You will be taken to a WhatsApp chat with someone from our support team.",
       "pt": "Você será redirecionado para uma conversa WhatsApp com alguém da equipe de suporte."
+    },
+    "member_since_": {
+      "en": "On Giv since $formatItem.",
+      "pt": "No Giv desde $formatItem."
     }
   };
 }
