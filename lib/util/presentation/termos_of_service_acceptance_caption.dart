@@ -5,10 +5,9 @@ import 'package:giv_flutter/base/base_state.dart';
 import 'package:giv_flutter/util/util.dart';
 
 class TermsOfServiceAcceptanceCaption extends StatefulWidget {
-  final TextAlign textAlign;
   final String prefix;
 
-  const TermsOfServiceAcceptanceCaption({Key key, this.textAlign, this.prefix})
+  const TermsOfServiceAcceptanceCaption({Key key, this.prefix})
       : super(key: key);
 
   @override
@@ -34,7 +33,7 @@ class _TermsOfServiceAcceptanceCaptionState
 
   _textSpan() {
     return RichText(
-        textAlign: widget.textAlign,
+        textAlign: TextAlign.center,
         text: TextSpan(
           children: [
             new TextSpan(
@@ -42,7 +41,7 @@ class _TermsOfServiceAcceptanceCaptionState
               style: new TextStyle(color: Colors.grey),
             ),
             new TextSpan(
-              text: string('terms_acceptance_caption_termos'),
+              text: string('terms_acceptance_caption_privacy'),
               style: new TextStyle(color: Colors.blue),
               recognizer: new TapGestureRecognizer()
                 ..onTap = () {
@@ -51,11 +50,11 @@ class _TermsOfServiceAcceptanceCaptionState
                 },
             ),
             new TextSpan(
-              text: string('terms_acceptance_caption_and_'),
+              text: string('terms_acceptance_caption_and_the_'),
               style: new TextStyle(color: Colors.grey),
             ),
             new TextSpan(
-              text: string('terms_acceptance_caption_privacy'),
+              text: string('terms_acceptance_caption_termos'),
               style: new TextStyle(color: Colors.blue),
               recognizer: new TapGestureRecognizer()
                 ..onTap = () {

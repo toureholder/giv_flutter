@@ -96,7 +96,6 @@ class _SignInState extends BaseState<SignIn> {
           _buildLoginButton(isFacebookLoading),
           Spacing.vertical(32.0),
           TermsOfServiceAcceptanceCaption(
-            textAlign: TextAlign.center,
             prefix: 'terms_acceptance_caption_by_signing_in_',
           )
         ],

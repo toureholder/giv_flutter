@@ -28,6 +28,8 @@ class StringLocalizations {
   }
 
   String _getLocalizedValue(key) {
+    if (_localizedValues[key] == null) return key;
+
     return _localizedValues[key][locale.languageCode] ??
         _localizedValues[key][defaultLanguageCode] ??
         key;

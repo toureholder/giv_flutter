@@ -15,7 +15,7 @@ class Util {
   }
 
   static openPhoneApp(String number) async {
-    await launchURL('tel://+$number');
+    await launchURL('tel:+$number');
   }
 
   static openWhatsApp(String number, String message) async {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:giv_flutter/base/base_state.dart';
+import 'package:giv_flutter/config/preferences/prefs.dart';
 import 'package:giv_flutter/features/listing/ui/new_listing.dart';
 import 'package:giv_flutter/features/product/detail/bloc/product_detail_bloc.dart';
 import 'package:giv_flutter/features/product/detail/ui/i_want_it_dialog.dart';
@@ -184,7 +185,9 @@ class _ProductDetailState extends BaseState<ProductDetail> {
     ));
   }
 
-  _showIWantItDialog(String message) {
+  _showIWantItDialog(String message) async {
+    var isAuthenticated = await Prefs.isAuthenticated();
+
     final fullPhoneNumber =
         '${_product?.user?.countryCallingCode}${_product?.user?.phoneNumber}';
 
@@ -192,7 +195,11 @@ class _ProductDetailState extends BaseState<ProductDetail> {
         context: context,
         barrierDismissible: true,
         builder: (context) {
-          return IWantItDialog(phoneNumber: fullPhoneNumber, message: message);
+          return IWantItDialog(
+            phoneNumber: fullPhoneNumber,
+            message: message,
+            isAuthenticated: isAuthenticated,
+          );
         });
   }
 }

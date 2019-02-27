@@ -577,19 +577,27 @@ class Strings {
     },
     "terms_acceptance_caption_by_signing_in_": {
       "en": "By signing in, you agree to our  ",
-      "pt": "Ao criar ou acessar sua conta, você concorda com os nossos "
+      "pt": "Ao criar ou acessar sua conta, você declara que aceita a "
     },
     "terms_acceptance_caption_by_continuing_": {
       "en": "By continuing, you agree to our  ",
-      "pt": "Ao continuar, você concorda com os nossos "
+      "pt": "Ao continuar, declaro que aceito a "
+    },
+    "terms_acceptance_caption_by_contacting_": {
+      "en": "By continuing, you agree to our  ",
+      "pt": "Ao entrar em contato com o anunciante, declaro que aceito a "
+    },
+    "terms_acceptance_caption_read_": {
+      "en": "Read our  ",
+      "pt": "Confira a "
     },
     "terms_acceptance_caption_termos": {
       "en": "Terms of service",
       "pt": "Termos de serviço"
     },
-    "terms_acceptance_caption_and_": {
-      "en": " and ",
-      "pt": " e "
+    "terms_acceptance_caption_and_the_": {
+      "en": " and the ",
+      "pt": " e os "
     },
     "terms_acceptance_caption_privacy": {
       "en": "Privacy policy",

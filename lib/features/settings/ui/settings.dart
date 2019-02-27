@@ -1,22 +1,21 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:giv_flutter/base/base_state.dart';
-import 'package:giv_flutter/config/config.dart';
 import 'package:giv_flutter/config/preferences/prefs.dart';
 import 'package:giv_flutter/features/base/base.dart';
 import 'package:giv_flutter/features/listing/ui/my_listings.dart';
 import 'package:giv_flutter/features/settings/bloc/settings_bloc.dart';
 import 'package:giv_flutter/features/settings/ui/profile.dart';
+import 'package:giv_flutter/model/image/image.dart' as CustomImage;
 import 'package:giv_flutter/model/user/user.dart';
 import 'package:giv_flutter/util/data/content_stream_builder.dart';
 import 'package:giv_flutter/util/data/stream_event.dart';
 import 'package:giv_flutter/util/presentation/avatar_image.dart';
 import 'package:giv_flutter/util/presentation/custom_app_bar.dart';
 import 'package:giv_flutter/util/presentation/custom_scaffold.dart';
-import 'package:giv_flutter/util/util.dart';
+import 'package:giv_flutter/util/presentation/termos_of_service_acceptance_caption.dart';
 import 'package:giv_flutter/values/custom_icons_icons.dart';
 import 'package:giv_flutter/values/dimens.dart';
-import 'package:giv_flutter/model/image/image.dart' as CustomImage;
 
 class Settings extends StatefulWidget {
   @override
@@ -42,13 +41,19 @@ class _SettingsState extends BaseState<Settings> {
       body: ContentStreamBuilder(
         stream: _settingsBloc.userStream,
         onHasData: (StreamEvent<User> event) {
-          if (event.isReady) return _buildListView(event.data);
+          if (event.isReady) return _stack(event.data);
         },
       ),
     );
   }
 
-  ListView _buildListView(User user) {
+  Stack _stack(User user) {
+    return Stack(
+      children: <Widget>[_mainListView(user), _footer()],
+    );
+  }
+
+  ListView _mainListView(User user) {
     return ListView(
       children: <Widget>[
         SettingsListTile(
@@ -100,9 +105,27 @@ class _SettingsState extends BaseState<Settings> {
         ),
         Divider(
           height: 1.0,
-        ),
+        )
       ],
     );
+  }
+
+  Positioned _footer() {
+    return Positioned(
+      bottom: 0.0,
+      left: 0.0,
+      right: 0.0,
+      child: SafeArea(child: _termsOfService()),
+    );
+  }
+
+  Padding _termsOfService() {
+    return Padding(
+        padding: EdgeInsets.symmetric(
+            horizontal: Dimens.default_horizontal_margin, vertical: 32.0),
+        child: TermsOfServiceAcceptanceCaption(
+          prefix: 'terms_acceptance_caption_read_',
+        ));
   }
 
   void _confirmLogout() {

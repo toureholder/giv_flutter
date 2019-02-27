@@ -9,8 +9,10 @@ import 'package:giv_flutter/values/dimens.dart';
 class IWantItDialog extends StatefulWidget {
   final String phoneNumber;
   final String message;
+  final bool isAuthenticated;
 
-  const IWantItDialog({Key key, this.phoneNumber, this.message})
+  const IWantItDialog(
+      {Key key, this.phoneNumber, this.message, this.isAuthenticated})
       : super(key: key);
 
   @override
@@ -34,24 +36,44 @@ class _IWantItDialogState extends BaseState<IWantItDialog> {
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          Padding(padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: Dimens.default_vertical_margin),
-          child: Body2Text(string('i_want_it_dialog_title')),),
-          Divider(height: 1.0,),
+          Padding(
+            padding: EdgeInsets.symmetric(
+                horizontal: 8.0, vertical: Dimens.default_vertical_margin),
+            child: Body2Text(string('i_want_it_dialog_title')),
+          ),
+          Divider(
+            height: 1.0,
+          ),
           ListTile(
             leading: Icon(CustomIcons.whatsapp),
             title: Text(string('i_want_it_dialog_whatsapp')),
             onTap: _startWhatsApp,
           ),
-          Divider(height: 1.0,),
+          Divider(
+            height: 1.0,
+          ),
           ListTile(
             leading: Icon(Icons.phone),
             title: Text(string('i_want_it_dialog_call')),
             onTap: _startPhoneApp,
           ),
-          Divider(height: 1.0,),
-          Padding(padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: Dimens.default_vertical_margin),
-          child: TermsOfServiceAcceptanceCaption(textAlign: TextAlign.center,),)
+          Divider(
+            height: 1.0,
+          ),
+          _termsOfService()
         ],
+      ),
+    );
+  }
+
+  Widget _termsOfService() {
+    if (widget.isAuthenticated) return Container();
+
+    return Padding(
+      padding: EdgeInsets.symmetric(
+          horizontal: 8.0, vertical: Dimens.default_vertical_margin),
+      child: TermsOfServiceAcceptanceCaption(
+        prefix: 'terms_acceptance_caption_by_contacting_',
       ),
     );
   }
