@@ -10,6 +10,7 @@ import 'package:giv_flutter/util/network/http_response.dart';
 import 'package:giv_flutter/util/presentation/buttons.dart';
 import 'package:giv_flutter/util/presentation/custom_scaffold.dart';
 import 'package:giv_flutter/util/presentation/spacing.dart';
+import 'package:giv_flutter/util/presentation/termos_of_service_acceptance_caption.dart';
 import 'package:giv_flutter/util/presentation/typography.dart';
 import 'package:giv_flutter/values/dimens.dart';
 
@@ -92,7 +93,9 @@ class _SignInState extends BaseState<SignIn> {
           Spacing.vertical(Dimens.default_vertical_margin),
           Body2Text(string('sign_in_already_have_an_acount')),
           Spacing.vertical(Dimens.default_vertical_margin),
-          _buildLoginButton(isFacebookLoading)
+          _buildLoginButton(isFacebookLoading),
+          Spacing.vertical(32.0),
+          TermsOfServiceAcceptanceCaption(textAlign: TextAlign.center,)
         ],
       ),
     );

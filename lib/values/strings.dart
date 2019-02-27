@@ -574,6 +574,22 @@ class Strings {
     "shared_dont_show_this_again": {
       "en": "Don't show this again",
       "pt": "Não mostrar novamente"
+    },
+    "terms_acceptance_caption_by_signing_in_": {
+      "en": "By signing in, you agree to our  ",
+      "pt": "Ao criar ou acessar sua conta, você concorda com os nossos "
+    },
+    "terms_acceptance_caption_termos": {
+      "en": "Terms of service",
+      "pt": "Termos de serviço"
+    },
+    "terms_acceptance_caption_and_": {
+      "en": " and ",
+      "pt": " e "
+    },
+    "terms_acceptance_caption_privacy": {
+      "en": "Privacy policy",
+      "pt": "Política de privacidade"
     }
   };
 }

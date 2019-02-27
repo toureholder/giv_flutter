@@ -6,9 +6,9 @@ class Util {
   static getClickToChatUrl(String number, String message) =>
       Uri.encodeFull('https://wa.me/$number?text=$message');
 
-  static launchURL(String url) async {
+  static launchURL(String url, { bool forceWebView = false }) async {
     if (await canLaunch(url)) {
-      await launch(url);
+      await launch(url, forceWebView: forceWebView);
     } else {
       throw 'Could not launch $url';
     }
