@@ -24,6 +24,10 @@
 ///         Author:    Just Be Nice studio
 ///         License:   SIL (http://scripts.sil.org/OFL)
 ///         Homepage:  http://www.justbenicestudio.com/
+/// * Font Awesome, Copyright (C) 2016 by Dave Gandy
+///         Author:    Dave Gandy
+///         License:   SIL ()
+///         Homepage:  http://fortawesome.github.com/Font-Awesome/
 ///
 import 'package:flutter/widgets.dart';
 
@@ -35,4 +39,5 @@ class CustomIcons {
   static const IconData gift = const IconData(0xe800, fontFamily: _kFontFam);
   static const IconData facebook_1 = const IconData(0xe801, fontFamily: _kFontFam);
   static const IconData logout = const IconData(0xe802, fontFamily: _kFontFam);
+  static const IconData whatsapp = const IconData(0xf232, fontFamily: _kFontFam);
 }
