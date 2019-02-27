@@ -6,8 +6,9 @@ import 'package:giv_flutter/util/util.dart';
 
 class TermsOfServiceAcceptanceCaption extends StatefulWidget {
   final TextAlign textAlign;
+  final String prefix;
 
-  const TermsOfServiceAcceptanceCaption({Key key, this.textAlign})
+  const TermsOfServiceAcceptanceCaption({Key key, this.textAlign, this.prefix})
       : super(key: key);
 
   @override
@@ -17,6 +18,14 @@ class TermsOfServiceAcceptanceCaption extends StatefulWidget {
 
 class _TermsOfServiceAcceptanceCaptionState
     extends BaseState<TermsOfServiceAcceptanceCaption> {
+  String _prefix;
+
+  @override
+  void initState() {
+    super.initState();
+    _prefix = widget.prefix ?? 'terms_acceptance_caption_by_continuing_';
+  }
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -29,7 +38,7 @@ class _TermsOfServiceAcceptanceCaptionState
         text: TextSpan(
           children: [
             new TextSpan(
-              text: string('terms_acceptance_caption_by_signing_in_'),
+              text: string(_prefix),
               style: new TextStyle(color: Colors.grey),
             ),
             new TextSpan(

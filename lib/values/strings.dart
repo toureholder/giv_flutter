@@ -579,6 +579,10 @@ class Strings {
       "en": "By signing in, you agree to our  ",
       "pt": "Ao criar ou acessar sua conta, você concorda com os nossos "
     },
+    "terms_acceptance_caption_by_continuing_": {
+      "en": "By continuing, you agree to our  ",
+      "pt": "Ao continuar, você concorda com os nossos "
+    },
     "terms_acceptance_caption_termos": {
       "en": "Terms of service",
       "pt": "Termos de serviço"
@@ -590,6 +594,18 @@ class Strings {
     "terms_acceptance_caption_privacy": {
       "en": "Privacy policy",
       "pt": "Política de privacidade"
+    },
+    "i_want_it_dialog_title": {
+      "en": "Get in touch with the owner",
+      "pt": "Entre em contato com o anunciante"
+    },
+    "i_want_it_dialog_whatsapp": {
+      "en": "WhatsApp",
+      "pt": "WhatsApp"
+    },
+    "i_want_it_dialog_call": {
+      "en": "Call",
+      "pt": "Ligar"
     }
   };
 }

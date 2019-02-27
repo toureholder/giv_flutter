@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:giv_flutter/base/base_state.dart';
 import 'package:giv_flutter/features/listing/ui/new_listing.dart';
 import 'package:giv_flutter/features/product/detail/bloc/product_detail_bloc.dart';
+import 'package:giv_flutter/features/product/detail/ui/i_want_it_dialog.dart';
 import 'package:giv_flutter/features/profile/profile.dart';
 import 'package:giv_flutter/model/image/image.dart' as CustomImage;
 import 'package:giv_flutter/model/location/location.dart';
@@ -125,9 +126,7 @@ class _ProductDetailState extends BaseState<ProductDetail> {
       child: PrimaryButton(
           text: string('i_want_it'),
           onPressed: () {
-            if (user.phoneNumber != null)
-              Util.openWhatsApp(
-                  '${user.countryCallingCode}${user.phoneNumber}', message);
+            if (user.phoneNumber != null) _showIWantItDialog(message);
           }),
     );
   }
@@ -183,5 +182,17 @@ class _ProductDetailState extends BaseState<ProductDetail> {
     navigation.push(UserProfile(
       user: _product.user,
     ));
+  }
+
+  _showIWantItDialog(String message) {
+    final fullPhoneNumber =
+        '${_product?.user?.countryCallingCode}${_product?.user?.phoneNumber}';
+
+    showDialog(
+        context: context,
+        barrierDismissible: true,
+        builder: (context) {
+          return IWantItDialog(phoneNumber: fullPhoneNumber, message: message);
+        });
   }
 }

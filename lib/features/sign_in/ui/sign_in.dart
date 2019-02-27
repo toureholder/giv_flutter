@@ -95,7 +95,10 @@ class _SignInState extends BaseState<SignIn> {
           Spacing.vertical(Dimens.default_vertical_margin),
           _buildLoginButton(isFacebookLoading),
           Spacing.vertical(32.0),
-          TermsOfServiceAcceptanceCaption(textAlign: TextAlign.center,)
+          TermsOfServiceAcceptanceCaption(
+            textAlign: TextAlign.center,
+            prefix: 'terms_acceptance_caption_by_signing_in_',
+          )
         ],
       ),
     );
@@ -140,7 +143,8 @@ class _SignInState extends BaseState<SignIn> {
             localeString: localeString));
         break;
       case FacebookLoginStatus.cancelledByUser:
-        showInformationDialog(content: string('facebook_login_cancelled_message'));
+        showInformationDialog(
+            content: string('facebook_login_cancelled_message'));
         break;
       case FacebookLoginStatus.error:
         String content = string('facebook_login_error_message');

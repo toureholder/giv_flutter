@@ -14,6 +14,10 @@ class Util {
     }
   }
 
+  static openPhoneApp(String number) async {
+    await launchURL('tel://+$number');
+  }
+
   static openWhatsApp(String number, String message) async {
     var chatUrl = getClickToChatUrl(number, message);
     await launchURL(chatUrl);
