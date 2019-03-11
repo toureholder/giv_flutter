@@ -170,8 +170,7 @@ class _NewListingState extends BaseState<NewListing> {
         _categoriesTile(_product.categories),
         _phoneNumberStreamBuilder(),
         _locationStreamBuilder(),
-        Spacing.vertical(Dimens.bottom_action_button_container_height +
-            Dimens.default_vertical_margin),
+        Spacing.vertical(Dimens.bottom_action_button_container_height),
       ],
     );
   }
@@ -266,9 +265,9 @@ class _NewListingState extends BaseState<NewListing> {
       stream: _newListingBloc.userStream,
       builder: (context, snapshot) {
         _user = snapshot?.data?.user;
-        _forceShowPhoneNumber  = _forceShowPhoneNumber || (snapshot?.data?.forceShow ?? false);
-        return (_user?.phoneNumber == null ||
-                (_forceShowPhoneNumber ?? false))
+        _forceShowPhoneNumber =
+            _forceShowPhoneNumber || (snapshot?.data?.forceShow ?? false);
+        return (_user?.phoneNumber == null || (_forceShowPhoneNumber ?? false))
             ? _phoneNumberItemTile(_user)
             : Container();
       },
@@ -323,19 +322,22 @@ class _NewListingState extends BaseState<NewListing> {
       bottom: 0.0,
       left: 0.0,
       right: 0.0,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          Divider(
-            height: 1.0,
-          ),
-          Container(
-            color: Colors.white,
-            height: Dimens.bottom_action_button_container_height,
-            alignment: Alignment.center,
-            child: child,
-          )
-        ],
+      child: SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Divider(
+              height: 1.0,
+            ),
+            Container(
+              color: Colors.white,
+              padding: const EdgeInsets.symmetric(
+                  horizontal: Dimens.default_horizontal_margin, vertical: 12.0),
+              alignment: Alignment.center,
+              child: child,
+            )
+          ],
+        ),
       ),
     );
   }
@@ -344,35 +346,31 @@ class _NewListingState extends BaseState<NewListing> {
     final text =
         _isEditing ? 'edit_listing_uploading' : 'new_listing_uploading';
 
-    return Padding(
-      padding:
-          EdgeInsets.symmetric(horizontal: Dimens.default_horizontal_margin),
-      child: Stack(
-        children: [
-          ClipRRect(
-              borderRadius: BorderRadius.circular(Dimens.button_border_radius),
-              child: SizedBox(
-                height: Dimens.button_flat_height,
-                child: LinearProgressIndicator(
-                  value: value,
-                  valueColor: AlwaysStoppedAnimation<Color>(Colors.blue[300]),
-                  backgroundColor: Colors.grey[200],
-                ),
-              )),
-          Positioned(
-            top: 0.0,
-            bottom: 0.0,
-            right: 0.0,
-            left: 0.0,
-            child: Center(
-              child: Body2Text(
-                string(text),
-                weight: SyntheticFontWeight.semiBold,
+    return Stack(
+      children: [
+        ClipRRect(
+            borderRadius: BorderRadius.circular(Dimens.button_border_radius),
+            child: SizedBox(
+              height: Dimens.button_flat_height,
+              child: LinearProgressIndicator(
+                value: value,
+                valueColor: AlwaysStoppedAnimation<Color>(Colors.blue[300]),
+                backgroundColor: Colors.grey[200],
               ),
+            )),
+        Positioned(
+          top: 0.0,
+          bottom: 0.0,
+          right: 0.0,
+          left: 0.0,
+          child: Center(
+            child: Body2Text(
+              string(text),
+              weight: SyntheticFontWeight.semiBold,
             ),
-          )
-        ],
-      ),
+          ),
+        )
+      ],
     );
   }
 
@@ -380,11 +378,7 @@ class _NewListingState extends BaseState<NewListing> {
     final text =
         _isEditing ? 'edit_listing_action_save' : 'new_listing_action_create';
 
-    return Padding(
-      padding:
-          EdgeInsets.symmetric(horizontal: Dimens.default_horizontal_margin),
-      child: PrimaryButton(text: string(text), onPressed: _submitForm),
-    );
+    return PrimaryButton(text: string(text), onPressed: _submitForm);
   }
 
   Widget _buildImageList(BuildContext context) {
