@@ -4,6 +4,7 @@ import 'package:giv_flutter/model/location/location.dart';
 import 'package:giv_flutter/model/product/product.dart';
 import 'package:giv_flutter/model/product/product_category.dart';
 import 'package:giv_flutter/model/product/product_search_result.dart';
+import 'package:giv_flutter/model/product/repository/cache/product_cache.dart';
 import 'package:giv_flutter/util/network/base_api.dart';
 import 'package:giv_flutter/util/network/http_response.dart';
 
@@ -37,6 +38,8 @@ class ProductApi extends BaseApi {
 
       status = HttpResponse.codeMap[response.statusCode];
       final data = ProductCategory.parseList(response.body);
+
+      if (data != null) ProductCache.saveCategories(response.body, fetchAll);
 
       return HttpResponse<List<ProductCategory>>(status: status, data: data);
     } catch (error) {

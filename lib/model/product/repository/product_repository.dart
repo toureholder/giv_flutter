@@ -3,6 +3,7 @@ import 'package:giv_flutter/model/product/product.dart';
 import 'package:giv_flutter/model/product/product_category.dart';
 import 'package:giv_flutter/model/product/product_search_result.dart';
 import 'package:giv_flutter/model/product/repository/api/product_api.dart';
+import 'package:giv_flutter/model/product/repository/cache/product_cache.dart';
 import 'package:giv_flutter/util/network/http_response.dart';
 
 class ProductRepository {
@@ -12,8 +13,15 @@ class ProductRepository {
       productApi.getFeaturedProductsCategories();
 
   Future<HttpResponse<List<ProductCategory>>> getSearchCategories(
-          {bool fetchAll}) =>
-      productApi.getSearchCategories(fetchAll: fetchAll);
+      {bool fetchAll}) async {
+    List<ProductCategory> validCache =
+        await ProductCache.getCategories(fetchAll);
+
+    return validCache != null
+        ? HttpResponse<List<ProductCategory>>(
+            status: HttpStatus.ok, data: validCache)
+        : productApi.getSearchCategories(fetchAll: fetchAll);
+  }
 
   Future<HttpResponse<ProductSearchResult>> getProductsByCategory(
           {int categoryId, Location location, bool isHardFilter}) =>
