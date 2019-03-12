@@ -120,9 +120,6 @@ class _LocationFilterState extends BaseState<LocationFilter> {
       return DropdownMenuItem(value: country, child: Text(country.name));
     })?.toList();
 
-    _addClearValueEntries<LocationPart.Country>(
-        menuItems, 'location_filter_all_countries');
-
     return Container(
       child: ButtonTheme(
         alignedDropdown: true,
