@@ -30,7 +30,7 @@ class _SignInState extends BaseState<SignIn> {
   void initState() {
     super.initState();
     _logInBloc = LogInBloc();
-    _logInBloc.responseStream
+    _logInBloc.loginResponseStream
         .listen((HttpResponse<LogInResponse> httpResponse) {
       if (httpResponse.isReady) onLoginResponse(httpResponse, widget.redirect);
     });
@@ -54,7 +54,7 @@ class _SignInState extends BaseState<SignIn> {
           ),
           backgroundColor: Colors.white,
           body: StreamBuilder(
-              stream: _logInBloc.responseStream,
+              stream: _logInBloc.loginResponseStream,
               builder: (context, snapshot) {
                 var isLoading = snapshot?.data?.isLoading ?? false;
                 return _buildMainColumn(isLoading);

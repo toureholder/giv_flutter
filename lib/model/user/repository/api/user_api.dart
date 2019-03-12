@@ -60,14 +60,36 @@ class UserApi extends BaseApi {
     }
   }
 
-  Future<ApiResponse> forgotPassword(LoginAssistanceRequest request) async {
-    await Future.delayed(Duration(seconds: 4));
-    return ApiResponse.mock();
+  Future<HttpResponse<ApiResponse>> forgotPassword(LoginAssistanceRequest request) async {
+    HttpStatus status;
+    try {
+      final response =
+      await post('$baseUrl/password_resets/emails', request.toHttpRequestBody());
+
+      status = HttpResponse.codeMap[response.statusCode];
+      final data = ApiResponse.fromJson(jsonDecode(response.body));
+
+      return HttpResponse<ApiResponse>(status: status, data: data);
+    } catch (error) {
+      return HttpResponse<ApiResponse>(
+          status: status, message: error.toString());
+    }
   }
 
-  Future<ApiResponse> resendActivation(LoginAssistanceRequest request) async {
-    await Future.delayed(Duration(seconds: 4));
-    return ApiResponse.mock();
+  Future<HttpResponse<ApiResponse>> resendActivation(LoginAssistanceRequest request) async {
+    HttpStatus status;
+    try {
+      final response =
+      await post('$baseUrl/email_confirmations/resend', request.toHttpRequestBody());
+
+      status = HttpResponse.codeMap[response.statusCode];
+      final data = ApiResponse.fromJson(jsonDecode(response.body));
+
+      return HttpResponse<ApiResponse>(status: status, data: data);
+    } catch (error) {
+      return HttpResponse<ApiResponse>(
+          status: status, message: error.toString());
+    }
   }
 
   Future<HttpResponse<User>> getMe() async {

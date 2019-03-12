@@ -42,7 +42,7 @@ class _LogInState extends BaseState<LogIn> {
   void initState() {
     super.initState();
     _logInBloc = LogInBloc();
-    _logInBloc.responseStream
+    _logInBloc.loginResponseStream
         .listen((HttpResponse<LogInResponse> httpResponse) {
       if (httpResponse.isReady) onLoginResponse(httpResponse, widget.redirect);
     });
@@ -65,7 +65,7 @@ class _LogInState extends BaseState<LogIn> {
         title: string('sign_in_log_in'),
       ),
       body: StreamBuilder(
-          stream: _logInBloc.responseStream,
+          stream: _logInBloc.loginResponseStream,
           builder:
               (context, AsyncSnapshot<HttpResponse<LogInResponse>> snapshot) {
             var isLoading = snapshot?.data?.isLoading ?? false;

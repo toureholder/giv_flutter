@@ -25,9 +25,9 @@ class UserRepository {
 
   Future<HttpResponse<User>> updateMe(Map<String, dynamic> userUpdate) => userApi.updateMe(userUpdate);
 
-  Future<ApiResponse> forgotPassword(LoginAssistanceRequest request) =>
+  Future<HttpResponse<ApiResponse>> forgotPassword(LoginAssistanceRequest request) =>
       userApi.forgotPassword(request);
 
-  Future<ApiResponse> resendActivation(LoginAssistanceRequest request) =>
+  Future<HttpResponse<ApiResponse>> resendActivation(LoginAssistanceRequest request) =>
       userApi.resendActivation(request);
 }

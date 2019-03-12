@@ -467,6 +467,22 @@ class Strings {
       "en": "Please check your mailbox for an email with a link to activate your account.",
       "pt": "Por favor ative sua conta com o link que enviamos por e-mail."
     },
+    "resend_activation_error_already_activated_title": {
+      "en": "So...",
+      "pt": "Opa!"
+    },
+    "resend_activation_error_already_activated_message": {
+      "en": "This account has already been activated. You can login with your email and password.",
+      "pt": "Esta conta já foi ativada. Você pode fazer login com seu e-mail e senha."
+    },
+    "login_assistance_email_not_found_title": {
+      "en": "Oh, my!",
+      "pt": "Eita!"
+    },
+    "login_assistance_email_not_found_message": {
+      "en": "We couldn't find any users with that email address.",
+      "pt": "Não encontramos nenhum usuário com esse e-mail."
+    },
     "common_send": {
       "en": "Send",
       "pt": "Enviar"

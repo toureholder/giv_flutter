@@ -5,9 +5,9 @@ import 'package:giv_flutter/features/sign_in/ui/mailbox_image.dart';
 import 'package:giv_flutter/features/sign_in/ui/sign_in_full_page_message.dart';
 import 'package:giv_flutter/model/api_response/api_response.dart';
 import 'package:giv_flutter/model/user/repository/api/request/login_assistance_request.dart';
-import 'package:giv_flutter/util/data/stream_event.dart';
 import 'package:giv_flutter/util/form/email_form_field.dart';
 import 'package:giv_flutter/util/navigation/navigation.dart';
+import 'package:giv_flutter/util/network/http_response.dart';
 import 'package:giv_flutter/util/presentation/buttons.dart';
 import 'package:giv_flutter/util/presentation/custom_app_bar.dart';
 import 'package:giv_flutter/util/presentation/custom_scaffold.dart';
@@ -32,21 +32,26 @@ class _LoginAssistanceState extends BaseState<LoginAssistance> {
   final FocusNode _emailFocus = FocusNode();
   TextEditingController _emailController;
   bool _autovalidate = false;
-  Map<LoginAssistanceType, Function> _functionMap;
+  Map<LoginAssistanceType, Map<LoginAssistanceFunction, Function>> _functionMap;
 
   @override
   void initState() {
     super.initState();
     _logInBloc = LogInBloc();
     _initFunctionMap();
-    _logInBloc.forgotPasswordStream.listen((StreamEvent<ApiResponse> event) {
-      if (event.isReady) _onSubmitSuccess();
-    });
+    _listenToResponseStream();
 
     _emailController = widget.email == null
         ? TextEditingController()
         : TextEditingController.fromValue(
             new TextEditingValue(text: widget.email));
+  }
+
+  _listenToResponseStream() {
+    _logInBloc.loginAssistanceStream
+        .listen((HttpResponse<ApiResponse> response) {
+      if (response.isReady) _handleResponse(response);
+    });
   }
 
   @override
@@ -55,7 +60,7 @@ class _LoginAssistanceState extends BaseState<LoginAssistance> {
     return CustomScaffold(
       appBar: CustomAppBar(),
       body: StreamBuilder(
-          stream: _logInBloc.forgotPasswordStream,
+          stream: _logInBloc.loginAssistanceStream,
           builder: (context, snapshot) {
             var isLoading = snapshot?.data?.isLoading ?? false;
             return _buildSingleChildScrollView(isLoading);
@@ -108,7 +113,8 @@ class _LoginAssistanceState extends BaseState<LoginAssistance> {
       _autovalidate = true;
     });
 
-    var function = _functionMap[widget.page.type];
+    var function =
+        _functionMap[widget.page.type][LoginAssistanceFunction.submit];
 
     if (_formKey.currentState.validate()) {
       function(LoginAssistanceRequest(email: _emailController.text));
@@ -117,9 +123,57 @@ class _LoginAssistanceState extends BaseState<LoginAssistance> {
 
   _initFunctionMap() {
     _functionMap = {
-      LoginAssistanceType.forgotPassword: _logInBloc.forgotPassword,
-      LoginAssistanceType.resendActivation: _logInBloc.resendActivation
+      LoginAssistanceType.forgotPassword: {
+        LoginAssistanceFunction.submit: _logInBloc.forgotPassword,
+        LoginAssistanceFunction.errorHandler: _handleForgotPasswordError
+      },
+      LoginAssistanceType.resendActivation: {
+        LoginAssistanceFunction.submit: _logInBloc.resendActivation,
+        LoginAssistanceFunction.errorHandler: _handleResendActivationError
+      }
     };
+  }
+
+  _handleResponse(HttpResponse<ApiResponse> response) {
+    if (response.status == HttpStatus.ok) {
+      _onSubmitSuccess();
+      return;
+    }
+
+    var errorHandler =
+        _functionMap[widget.page.type][LoginAssistanceFunction.errorHandler];
+    errorHandler(response);
+  }
+
+  _handleForgotPasswordError(HttpResponse<ApiResponse> response) {
+    switch (response.status) {
+      case HttpStatus.notFound:
+        _showNotFoundDialog();
+        break;
+      default:
+        showGenericErrorDialog();
+    }
+  }
+
+  _handleResendActivationError(HttpResponse<ApiResponse> response) {
+    switch (response.status) {
+      case HttpStatus.notAcceptable:
+        showInformationDialog(
+            title: string('resend_activation_error_already_activated_title'),
+            content: string('resend_activation_error_already_activated_message'));
+        break;
+      case HttpStatus.notFound:
+        _showNotFoundDialog();
+        break;
+      default:
+        showGenericErrorDialog();
+    }
+  }
+
+  _showNotFoundDialog() {
+    showInformationDialog(
+        title: string('login_assistance_email_not_found_title'),
+        content: string('login_assistance_email_not_found_message'));
   }
 
   _onSubmitSuccess() {
@@ -133,6 +187,8 @@ class _LoginAssistanceState extends BaseState<LoginAssistance> {
 }
 
 enum LoginAssistanceType { forgotPassword, resendActivation }
+
+enum LoginAssistanceFunction { submit, errorHandler }
 
 class LoginAssistancePage {
   final LoginAssistanceType type;
