@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:giv_flutter/model/app_config/app_config.dart';
 import 'package:giv_flutter/model/location/location.dart';
 import 'package:giv_flutter/model/user/user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -65,6 +66,27 @@ class Prefs {
   static Future<bool> setLocation(Location location) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.setString(_locationJsonKey, json.encode(location.toJson()));
+  }
+
+  // Settings
+
+  static final String _settingsJsonKey = 'settings';
+
+  static Future<AppConfig> getSettings() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    String jsonString = prefs.getString(_settingsJsonKey);
+
+    try {
+      return AppConfig.fromJson(jsonDecode(jsonString));
+    } catch (error) {
+      return null;
+    }
+  }
+
+  static Future<bool> setSettings(AppConfig settings) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.setString(_settingsJsonKey, json.encode(settings.toJson()));
   }
 
   // User

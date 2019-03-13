@@ -11,5 +11,4 @@ class Config {
   static const croppedProductImageMaxWidth = 512;
   static const croppedProductImageRatioY = 1.0;
   static const croppedProductImageRatioX = 1.0;
-  static const customerServiceNumber = '5561981178515';
 }

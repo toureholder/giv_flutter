@@ -45,8 +45,7 @@ class _TermsOfServiceAcceptanceCaptionState
               style: new TextStyle(color: Colors.blue),
               recognizer: new TapGestureRecognizer()
                 ..onTap = () {
-                  Util.launchURL('https://policies.google.com/terms?hl=pt',
-                      forceWebView: true);
+                  Util.launchPrivacyURL();
                 },
             ),
             new TextSpan(
@@ -58,8 +57,7 @@ class _TermsOfServiceAcceptanceCaptionState
               style: new TextStyle(color: Colors.blue),
               recognizer: new TapGestureRecognizer()
                 ..onTap = () {
-                  Util.launchURL('https://policies.google.com/terms?hl=pt',
-                      forceWebView: true);
+                  Util.launchTermsURL();
                 },
             ),
             new TextSpan(

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:giv_flutter/base/base_state.dart';
 import 'package:giv_flutter/config/preferences/prefs.dart';
 import 'package:giv_flutter/features/base/base.dart';
+import 'package:giv_flutter/model/app_config/repository/app_config_repository.dart';
 import 'package:giv_flutter/model/location/coordinates.dart';
 import 'package:giv_flutter/model/location/location.dart';
 import 'package:giv_flutter/model/location/repository/location_repository.dart';
@@ -34,10 +35,16 @@ class _SplashState extends BaseState<Splash> {
   _awaitTasks() async {
     // TODO: await get device location (lat, long)
 
+    await _getSettings();
     await _getLocation();
     await _updateCurrentUser();
 
     Navigation(context).pushReplacement(Base());
+  }
+
+  Future _getSettings() async {
+    final response = await AppConfigRepository().getConfig();
+    if (response.data != null) await Prefs.setSettings(response.data);
   }
 
   Future _getLocation() async {
