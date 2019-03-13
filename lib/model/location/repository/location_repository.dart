@@ -1,3 +1,4 @@
+import 'package:giv_flutter/model/location/coordinates.dart';
 import 'package:giv_flutter/model/location/location.dart';
 import 'package:giv_flutter/model/location/location_part.dart';
 import 'package:giv_flutter/model/location/repository/api/location_api.dart';
@@ -33,4 +34,7 @@ class LocationRepository {
       return response;
     }
   }
+
+  Future<HttpResponse<Location>> getMyLocation(Coordinates coordinates) =>
+      locationApi.getMyLocation(coordinates);
 }

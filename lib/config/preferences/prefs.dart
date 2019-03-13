@@ -21,7 +21,7 @@ class Prefs {
     ]);
   }
 
-  static isAuthenticated() async {
+  static Future<bool> isAuthenticated() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.getString(_serverTokenKey) != null;
   }
@@ -44,6 +44,11 @@ class Prefs {
   // Location
 
   static final String _locationJsonKey = 'location';
+
+  static Future<bool> hasPreferredLocation() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString(_locationJsonKey) != null;
+  }
 
   static Future<Location> getLocation() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();

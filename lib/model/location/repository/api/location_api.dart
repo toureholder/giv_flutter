@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:giv_flutter/model/location/coordinates.dart';
 import 'package:giv_flutter/model/location/location.dart';
 import 'package:giv_flutter/model/location/location_part.dart';
 import 'package:giv_flutter/model/location/location_list.dart';
@@ -79,6 +80,24 @@ class LocationApi extends BaseApi {
         'country_id': location.country?.id,
         'state_id': location.state?.id,
         'city_id': location.city?.id
+      });
+
+      status = HttpResponse.codeMap[response.statusCode];
+      final data = Location.fromJson(jsonDecode(response.body));
+
+      return HttpResponse<Location>(status: status, data: data);
+    } catch (error) {
+      return HttpResponse<Location>(
+          status: status, message: error.toString());
+    }
+  }
+
+  Future<HttpResponse<Location>> getMyLocation(Coordinates coordinates) async {
+    HttpStatus status;
+    try {
+      final response = await get('$baseUrl/locations/mine', params: {
+        'lat': coordinates?.latitude,
+        'long': coordinates?.longitude,
       });
 
       status = HttpResponse.codeMap[response.statusCode];
