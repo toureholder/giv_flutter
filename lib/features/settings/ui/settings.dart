@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:giv_flutter/base/base_state.dart';
 import 'package:giv_flutter/config/preferences/prefs.dart';
 import 'package:giv_flutter/features/base/base.dart';
@@ -154,6 +155,7 @@ class _SettingsState extends BaseState<Settings> {
     await Prefs.logout();
     final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
     _firebaseAuth.signOut();
+    FacebookLogin().logOut();
     navigation.push(Base(), clearStack: true);
   }
 
