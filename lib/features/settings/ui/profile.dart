@@ -33,7 +33,6 @@ class _ProfileState extends BaseState<Profile> {
   User _user;
   CustomImage.Image _currentImage;
   StorageUploadTask _uploadTask;
-  double _upLoadProgress;
   bool _isSavingImage = false;
 
   @override
@@ -150,8 +149,6 @@ class _ProfileState extends BaseState<Profile> {
 
     final isUploading = isSaving ? true : _uploadTask != null && _uploadTask.isInProgress;
 
-    final progressValue = isSaving ? null : _upLoadProgress;
-
     final children = <Widget>[
       Padding(
         padding: const EdgeInsets.all(28.0),
@@ -171,8 +168,7 @@ class _ProfileState extends BaseState<Profile> {
           width: 154.0,
           height: 154.0,
           child: CircularProgressIndicator(
-            value: progressValue,
-            strokeWidth: 10.0,
+            strokeWidth: 5.0,
           ),
         ),
       ));
@@ -285,13 +281,7 @@ class _ProfileState extends BaseState<Profile> {
     _uploadTask = ref.putFile(_currentImage.file);
 
     _uploadTask.events.listen((StorageTaskEvent event) {
-      final StorageTaskSnapshot snapshot = event.snapshot;
       _updateUser(event, ref);
-
-      setState(() {
-        _upLoadProgress = snapshot.bytesTransferred.toDouble() /
-            snapshot.totalByteCount.toDouble();
-      });
     });
   }
 

@@ -35,11 +35,20 @@ class AvatarImage extends StatelessWidget {
     final widgets = <Widget>[child];
 
     if (isLoading)
-      widgets.add(Container(
-        width: width,
-        height: height,
-        color: CustomColors.white75op,
-      ));
+      widgets.addAll([
+        Container(
+          width: width,
+          height: height,
+          color: CustomColors.white75op,
+        ),
+        SizedBox(
+          width: width,
+          height: height,
+          child: CircularProgressIndicator(
+            strokeWidth: 5.0,
+          ),
+        )
+      ]);
 
     return ClipRRect(
       borderRadius: BorderRadius.circular(100.0),
