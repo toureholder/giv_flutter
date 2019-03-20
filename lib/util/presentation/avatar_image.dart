@@ -57,7 +57,7 @@ class AvatarPlaceHolder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SvgPicture.asset(
-      'images/pokecoin.svg',
+      'images/user_bw.svg',
       width: width,
       height: height,
       fit: BoxFit.cover,

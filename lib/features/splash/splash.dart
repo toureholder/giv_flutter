@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:giv_flutter/base/base_state.dart';
 import 'package:giv_flutter/config/preferences/prefs.dart';
 import 'package:giv_flutter/features/base/base.dart';
@@ -27,7 +28,12 @@ class _SplashState extends BaseState<Splash> {
     super.build(context);
     return CustomScaffold(
       body: Center(
-        child: Text(string('app_name')),
+        child: SvgPicture.asset(
+          'images/logo.svg',
+          width: 72,
+          height: 72,
+          fit: BoxFit.cover,
+        ),
       ),
     );
   }
