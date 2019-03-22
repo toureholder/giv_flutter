@@ -411,6 +411,10 @@ class Strings {
       "en": "You haven't made any donations yet.",
       "pt": "Você ainda não criou nenhum anúncio."
     },
+    "my_listings_empty_state_button": {
+      "en": "Donate something now",
+      "pt": "Doar agora"
+    },
     "common_delete": {
       "en": "Delete",
       "pt": "Remover"
@@ -632,8 +636,8 @@ class Strings {
       "pt": "Ligar"
     },
     "error_network_layer_generic": {
-      "en": "Something went wrong. Please check your internet connection and try again.",
-      "pt": "Houve um error. Por favor verifique sua conexão à internet e tente novamente."
+      "en": "Something went wrong. Make sure you're connected to the internet and try again.",
+      "pt": "Houve um error. Certifique-se que está conectada à internet e tente novamente."
     }
   };
 }

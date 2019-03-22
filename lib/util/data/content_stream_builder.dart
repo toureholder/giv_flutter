@@ -24,8 +24,7 @@ class ContentStreamBuilder<T> extends StreamBuilder<T> {
                       children: <Widget>[
                         SvgPicture.asset(
                           'images/undraw_notify_orange.svg',
-                          width: 128.0,
-                          height: 128.0,
+                          width: 192.0,
                           fit: BoxFit.cover,
                         ),
                         Spacing.vertical(Dimens.default_vertical_margin),

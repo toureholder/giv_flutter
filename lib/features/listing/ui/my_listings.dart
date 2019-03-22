@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:giv_flutter/base/base_state.dart';
 import 'package:giv_flutter/features/listing/bloc/my_listings_bloc.dart';
 import 'package:giv_flutter/features/listing/ui/new_listing.dart';
@@ -79,9 +80,15 @@ class _MyListingsState extends BaseState<MyListings> {
             color: Colors.grey,
             textAlign: TextAlign.center,
           ),
-          Spacing.vertical(Dimens.default_vertical_margin),
+          Spacing.vertical(Dimens.grid(20)),
+          SvgPicture.asset(
+            'images/undraw_empty_posts.svg',
+            width: 150.0,
+            fit: BoxFit.cover,
+          ),
+          Spacing.vertical(Dimens.grid(20)),
           PrimaryButton(
-            text: string('shared_action_create_ad'),
+            text: string('my_listings_empty_state_button'),
             onPressed: _createNewListing,
             fillWidth: false,
           )

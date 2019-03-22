@@ -60,6 +60,7 @@ flutter:
   assets:
     - images/mailbox.svg
     - images/logo.svg
+    - images/undraw_empty_posts.svg
     - images/undraw_notify_orange.svg
     - images/user_bw.svg
 
