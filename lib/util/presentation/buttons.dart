@@ -276,6 +276,7 @@ class TextFlatButton extends StatelessWidget {
       child: Text(
         text,
         style: CustomTypography.body2,
+        textAlign: TextAlign.center,
       ),
     );
   }
