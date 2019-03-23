@@ -16,6 +16,10 @@ class Image {
   bool get hasFile => file != null;
   bool get isEmpty => (url == null && file == null);
 
-  static List<Image> fromListingImageList(List<ListingImage> list) =>
-      list.map((listingImage) => Image.fromListingImage(listingImage)).toList();
+  static List<Image> fromListingImageList(List<ListingImage> list) {
+    list.sort((a, b) => a.position.compareTo(b.position));
+    return list
+        .map((listingImage) => Image.fromListingImage(listingImage))
+        .toList();
+  }
 }
