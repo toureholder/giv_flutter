@@ -4,6 +4,8 @@
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
+	<key>CFBundleDisplayName</key>
+	<string>Alguém Quer?</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -18,10 +20,36 @@
 	<string>$(FLUTTER_BUILD_NAME)</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>fb***REMOVED***</string>
+			</array>
+		</dict>
+	</array>
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
+	<key>FacebookAppID</key>
+	<string>***REMOVED***</string>
+	<key>FacebookDisplayName</key>
+	<string>Alguém Quer?</string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>fbapi</string>
+		<string>fb-messenger-share-api</string>
+		<string>fbauth2</string>
+		<string>fbshareextension</string>
+	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>O aplicativo precisa de acesso à camera para que você possa adicionar imagens aos seus anúncios.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>This app does not require access to the microphone.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>O aplicativo precisa de acesso à biblioteca de imagens para que você possa adicionar imagens aos seus anúncios.</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
@@ -41,35 +69,5 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-
-    <key>NSPhotoLibraryUsageDescription</key>
-    <string>This app requires access to the photo library so users can add images to their donation listings.</string>
-    <key>NSMicrophoneUsageDescription</key>
-    <string>This app does not require access to the microphone.</string>
-    <key>NSCameraUsageDescription</key>
-    <string>This app requires access to the camera so users can add images to their donation listings.</string>
-
-    <!-- Facebook Login configuration -->
-    <key>CFBundleURLTypes</key>
-    <array>
-        <dict>
-            <key>CFBundleURLSchemes</key>
-            <array>
-                <string>fb***REMOVED***</string>
-            </array>
-        </dict>
-    </array>
-    <key>FacebookAppID</key>
-    <string>***REMOVED***</string>
-    <key>FacebookDisplayName</key>
-    <string>Giv</string>
-
-    <key>LSApplicationQueriesSchemes</key>
-    <array>
-        <string>fbapi</string>
-        <string>fb-messenger-share-api</string>
-        <string>fbauth2</string>
-        <string>fbshareextension</string>
-    </array>
 </dict>
 </plist>

@@ -521,7 +521,7 @@ class Strings {
     },
     "error_generic_message": {
       "en": "Please check your internet connection and try again.",
-      "pt": "Por favor verifique sua conexão à internet e tente novamente."
+      "pt": "Por favor verifique se tem conexão à internet e tente novamente."
     },
     "error_generic_report_message": {
       "en": "Hi! I was using Giv and something went wrong when ...",
@@ -637,7 +637,11 @@ class Strings {
     },
     "error_network_layer_generic": {
       "en": "Something went wrong. Make sure you're connected to the internet and try again.",
-      "pt": "Houve um error. Certifique-se que está conectada à internet e tente novamente."
+      "pt": "Houve um erro. Verifique se tem conexão à internet e tente novamente."
+    },
+    "image_cropper_toolbar_title": {
+      "en": "Edit photo",
+      "pt": "Editar foto"
     }
   };
 }

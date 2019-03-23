@@ -81,8 +81,7 @@ class _ProfileState extends BaseState<Profile> {
             builder: (context, snapshot) {
               var isLoading = snapshot?.data?.isLoading ?? false;
               return _avatar(isLoading);
-            }
-        ),
+            }),
         _sectionTitle(string('settings_section_profile')),
         _itemTile(
             value: _user.phoneNumber == null
@@ -147,7 +146,8 @@ class _ProfileState extends BaseState<Profile> {
     if (image == null && _user.avatarUrl != null)
       image = CustomImage.Image(url: _user.avatarUrl);
 
-    final isUploading = isSaving ? true : _uploadTask != null && _uploadTask.isInProgress;
+    final isUploading =
+        isSaving ? true : _uploadTask != null && _uploadTask.isInProgress;
 
     final children = <Widget>[
       Padding(
@@ -263,12 +263,13 @@ class _ProfileState extends BaseState<Profile> {
 
   Future<Null> _cropImage(File imageFile) async {
     File croppedFile = await ImageCropper.cropImage(
-      sourcePath: imageFile.path,
-      ratioX: Config.croppedProductImageRatioX,
-      ratioY: Config.croppedProductImageRatioY,
-      maxWidth: Config.croppedProductImageMaxHeight,
-      maxHeight: Config.croppedProductImageMaxWidth,
-    );
+        sourcePath: imageFile.path,
+        ratioX: Config.croppedProfileImageRatioX,
+        ratioY: Config.croppedProfileImageRatioY,
+        maxWidth: Config.croppedProfileImageMaxHeight,
+        maxHeight: Config.croppedProfileImageMaxWidth,
+        toolbarTitle: string('image_cropper_toolbar_title'),
+        toolbarColor: Colors.black);
 
     if (croppedFile == null) return;
 
@@ -289,7 +290,7 @@ class _ProfileState extends BaseState<Profile> {
     if (event.type == StorageTaskEventType.success) {
       final url = await ref.getDownloadURL();
 
-      final update = { User.avatarUrlKey: url };
+      final update = {User.avatarUrlKey: url};
 
       _settingsBloc.updateUser(update);
     }
@@ -300,24 +301,24 @@ class _ProfileState extends BaseState<Profile> {
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          title:
-          Text(string('profile_cancel_upload_confirmation_title')),
-          content: Text(string('profile_cancel_upload_confirmation_message')),
-          actions: <Widget>[
-            FlatButton(
-              onPressed: () => Navigator.of(context).pop(false),
-              child: Text(string('common_no')),
+              title: Text(string('profile_cancel_upload_confirmation_title')),
+              content:
+                  Text(string('profile_cancel_upload_confirmation_message')),
+              actions: <Widget>[
+                FlatButton(
+                  onPressed: () => Navigator.of(context).pop(false),
+                  child: Text(string('common_no')),
+                ),
+                FlatButton(
+                  onPressed: () {
+                    navigation.pop();
+                    _isSavingImage = false;
+                    navigation.pop();
+                  },
+                  child: Text(string('common_yes')),
+                ),
+              ],
             ),
-            FlatButton(
-              onPressed: () {
-                navigation.pop();
-                _isSavingImage = false;
-                navigation.pop();
-              },
-              child: Text(string('common_yes')),
-            ),
-          ],
-        ),
       );
       return false;
     } else {
