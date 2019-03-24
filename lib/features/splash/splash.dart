@@ -9,6 +9,7 @@ import 'package:giv_flutter/model/location/location.dart';
 import 'package:giv_flutter/model/location/repository/location_repository.dart';
 import 'package:giv_flutter/model/user/repository/user_repository.dart';
 import 'package:giv_flutter/util/navigation/navigation.dart';
+import 'package:giv_flutter/util/presentation/app_icon.dart';
 import 'package:giv_flutter/util/presentation/custom_scaffold.dart';
 
 class Splash extends StatefulWidget {
@@ -28,12 +29,7 @@ class _SplashState extends BaseState<Splash> {
     super.build(context);
     return CustomScaffold(
       body: Center(
-        child: SvgPicture.asset(
-          'images/logo.svg',
-          width: 64,
-          height: 64,
-          fit: BoxFit.cover,
-        ),
+        child: AppIcon(),
       ),
     );
   }

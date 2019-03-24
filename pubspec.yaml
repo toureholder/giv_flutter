@@ -94,3 +94,8 @@ flutter:
    - family:  CustomIcons
      fonts:
       - asset: fonts/CustomIcons.ttf
+   - family:  Overpass
+     fonts:
+     - asset: fonts/Overpass-Regular.ttf
+     - asset: fonts/Overpass-Bold.ttf
+       weight: 700

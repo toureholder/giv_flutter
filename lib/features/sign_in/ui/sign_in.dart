@@ -9,6 +9,7 @@ import 'package:giv_flutter/model/user/repository/api/response/log_in_response.d
 import 'package:giv_flutter/util/network/http_response.dart';
 import 'package:giv_flutter/util/presentation/buttons.dart';
 import 'package:giv_flutter/util/presentation/custom_scaffold.dart';
+import 'package:giv_flutter/util/presentation/logo_text.dart';
 import 'package:giv_flutter/util/presentation/spacing.dart';
 import 'package:giv_flutter/util/presentation/termos_of_service_acceptance_caption.dart';
 import 'package:giv_flutter/util/presentation/typography.dart';
@@ -69,7 +70,7 @@ class _SignInState extends BaseState<SignIn> {
       children: <Widget>[
         Flexible(
           child: Container(
-            child: Center(child: Text(string('app_name'))),
+            child: Center(child: LogoText()),
           ),
         ),
         _buildButtonsContainer(isFacebookLoading)

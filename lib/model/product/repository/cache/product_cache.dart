@@ -5,7 +5,7 @@ import 'package:giv_flutter/util/cache/cache_payload.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ProductCache {
-  static final ttlProductCategoryCache = 60;
+  static final ttlProductCategoryCache = 180;
 
   static final String _productCategoriesCacheKey = 'cache_product_categories';
 
