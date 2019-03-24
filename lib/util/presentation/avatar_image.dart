@@ -20,19 +20,23 @@ class AvatarImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final child = (image != null && !image.isEmpty)
-        ? (image.hasUrl)
-            ? CachedNetworkImage(
-                fit: BoxFit.cover,
-                width: width,
-                height: height,
-                imageUrl: image.url,
-              )
-            : Image.file(image.file,
-                fit: BoxFit.cover, width: width, height: height)
-        : AvatarPlaceHolder(width: width, height: height);
+    final widgets = <Widget>[
+      AvatarPlaceHolder(width: width, height: height),
+    ];
 
-    final widgets = <Widget>[child];
+    if (image != null && !image.isEmpty) {
+      final avatar = (image.hasUrl)
+          ? CachedNetworkImage(
+              fit: BoxFit.cover,
+              width: width,
+              height: height,
+              imageUrl: image.url,
+            )
+          : Image.file(image.file,
+              fit: BoxFit.cover, width: width, height: height);
+
+      widgets.add(avatar);
+    }
 
     if (isLoading)
       widgets.addAll([
