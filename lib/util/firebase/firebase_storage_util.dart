@@ -11,7 +11,7 @@ class FirebaseStorageUtil {
         .child(usersFolder)
         .child('${user.id}')
         .child(photosFolder)
-        .child('${user.id}-${Uuid().v1()}-$timeStamp.jpg');
+        .child('$timeStamp.jpg');
   }
 
   static StorageReference getListingPhotoRef() {
@@ -19,7 +19,7 @@ class FirebaseStorageUtil {
     return FirebaseStorage.instance
         .ref()
         .child(listingsFolder)
-        .child('${Uuid().v1()}-$timeStamp.jpg');
+        .child('$timeStamp-${Uuid().v1()}.jpg');
   }
 
   static const listingsFolder = 'listings';
