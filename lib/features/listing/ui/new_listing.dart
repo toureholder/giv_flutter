@@ -261,15 +261,20 @@ class _NewListingState extends BaseState<NewListing> {
   }
 
   StreamBuilder<NewListingBlocUser> _phoneNumberStreamBuilder() {
+    // TODO: Refactor this awful hack
     return StreamBuilder(
       stream: _newListingBloc.userStream,
       builder: (context, snapshot) {
-        _user = snapshot?.data?.user;
-        _forceShowPhoneNumber =
-            _forceShowPhoneNumber || (snapshot?.data?.forceShow ?? false);
-        return (_user?.phoneNumber == null || (_forceShowPhoneNumber ?? false))
-            ? _phoneNumberItemTile(_user)
-            : Container();
+        if (snapshot?.hasData ?? false) {
+          _user = snapshot.data.user;
+          _forceShowPhoneNumber =
+              _forceShowPhoneNumber || (snapshot.data.forceShow ?? false);
+          return (_user?.phoneNumber == null || (_forceShowPhoneNumber ?? false))
+              ? _phoneNumberItemTile(_user)
+              : Container();
+        } else {
+          Container();
+        }
       },
     );
   }
