@@ -3,7 +3,7 @@ class Config {
   static const defaultCountryCallingCode = '55';
   static const maxLengthName = 50;
   static const maxLengthBio = 140;
-  static const maxLengthProductTitle = 50;
+  static const maxLengthProductTitle = 80;
   static const maxLengthProductDescription = 280;
   static const maxProductCategories = 3;
   static const maxProductImages = 5;

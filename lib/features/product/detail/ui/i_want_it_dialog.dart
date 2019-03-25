@@ -39,7 +39,7 @@ class _IWantItDialogState extends BaseState<IWantItDialog> {
           Padding(
             padding: EdgeInsets.symmetric(
                 horizontal: 8.0, vertical: Dimens.default_vertical_margin),
-            child: Body2Text(string('i_want_it_dialog_title')),
+            child: Body2Text(string('i_want_it_dialog_title'), textAlign: TextAlign.center)
           ),
           Divider(
             height: 1.0,

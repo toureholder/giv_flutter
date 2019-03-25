@@ -22,11 +22,11 @@ class Strings {
     },
     "base_page_title_search": {
       "en": "Search",
-      "pt": "Busca"
+      "pt": "Explorar"
     },
     "base_page_title_post": {
       "en": "Post",
-      "pt": "Giv"
+      "pt": "Alguém Quer?"
     },
     "base_page_title_messages": {
       "en": "Messages",
@@ -37,8 +37,8 @@ class Strings {
       "pt": "Projetos"
     },
     "search_hint": {
-      "en": "Search Giv...",
-      "pt": "Busque no Giv..."
+      "en": "search...",
+      "pt": "busque..."
     },
     "search_result_x_results": {
       "en": "$formatItem Results",
@@ -173,10 +173,10 @@ class Strings {
       "pt": "Por favor preencha este campo"
     },
     "whatsapp_message_interested": {
-      "en": "Hello! I'm interested in the $formatItem that you listed on Giv :)",
-      "pt": "Olá! Estou interessado no $formatItem que você anunciou no Giv :)"
-    },
-    "settings_title": {
+      "en": "Hello! I'm interested in the '$formatItem' that you listed on Alguém Quer? :)",
+      "pt": "Olá! Me interessei pelo seu anúncio '$formatItem' no Alguém Quer? :)"
+    },''
+    "settings_title": {''
       "en": "Settings",
       "pt": "Configurações"
     },
@@ -318,14 +318,14 @@ class Strings {
     },
     "new_listing_tile_phone_number_empty_state": {
       "en": "Add a mobile phone number",
-      "pt": "Adicione o número do seu célular"
+      "pt": "Adicione o número do seu celular"
     },
     "new_listing_images_hint": {
       "en": "Don't forget to add some photos :)",
       "pt": "Bota umas fotos aí ;)"
     },
     "new_listing_edit_title_hint": {
-      "en": "Give you listing a title",
+      "en": "Give your listing a title",
       "pt": "Dê um título para seu anúncio"
     },
     "new_listing_edit_description_hint": {
@@ -405,8 +405,8 @@ class Strings {
       "pt": "Quero ajuda"
     },
     "help_message": {
-      "en": "Hi! I'm using Giv and I need some help :)",
-      "pt": "Oi! Eu estou usando o Giv e eu queria uma ajuda :)"
+      "en": "Hi! I'm using Alguém Quer? and I need some help :)",
+      "pt": "Oi! Eu estou usando o Alguém Quer? e eu queria uma ajuda :)"
     },
     "my_listings_empty_state": {
       "en": "You haven't made any donations yet.",
@@ -497,12 +497,12 @@ class Strings {
       "pt": "Precisa de ajuda?"
     },
     "log_in_help_me_chat_message": {
-      "en": "Hello! I need help logging in to Giv.",
-      "pt": "Olá! Preciso de ajuda para acessar minha conta do Giv."
+      "en": "Hello! I need help logging in to Alguém Quer?.",
+      "pt": "Olá! Preciso de ajuda para acessar minha conta do Alguém Quer?."
     },
     "sign_up_help_me_chat_message": {
-      "en": "Hello! I need help creating my Giv account.",
-      "pt": "Olá! Preciso de ajuda para criar minha conta no Giv."
+      "en": "Hello! I need help creating my Alguém Quer? account.",
+      "pt": "Olá! Preciso de ajuda para criar minha conta no Alguém Quer?."
     },
     "sign_up_error_409_title": {
       "en": "Oh, my!",
@@ -525,8 +525,8 @@ class Strings {
       "pt": "Por favor verifique se tem conexão à internet e tente novamente."
     },
     "error_generic_report_message": {
-      "en": "Hi! I was using Giv and something went wrong when ...",
-      "pt": "Oi! Eu estava usando o Giv e deu ruim quando ..."
+      "en": "Hi! I was using Alguém Quer? and something went wrong when ...",
+      "pt": "Oi! Eu estava usando o Alguém Quer? e deu ruim quando ..."
     },
     "action_report": {
       "en": "Report",
@@ -549,8 +549,8 @@ class Strings {
       "pt": "Tudo de"
     },
     "error_upload_listing_report_message": {
-      "en": "Hi! I was using Giv and something went wrong when I tried to create a listing :/",
-      "pt": "Oi! Eu estava usando o Giv e deu ruim quando tentei criar um anúncio :/"
+      "en": "Hi! I was using Alguém Quer? and something went wrong when I tried to create a listing :/",
+      "pt": "Oi! Eu estava usando o Alguém Quer? e deu ruim quando tentei criar um anúncio :/"
     },
     "facebook_login_cancelled_message": {
       "en": "Facebook login cancelled.",
@@ -589,8 +589,8 @@ class Strings {
       "pt": "Você será redirecionado para uma conversa WhatsApp com alguém da equipe de suporte."
     },
     "member_since_": {
-      "en": "On Giv since $formatItem.",
-      "pt": "No Giv desde $formatItem."
+      "en": "On Alguém Quer? since $formatItem.",
+      "pt": "No Alguém Quer? desde $formatItem."
     },
     "shared_dont_show_this_again": {
       "en": "Don't show this again",
