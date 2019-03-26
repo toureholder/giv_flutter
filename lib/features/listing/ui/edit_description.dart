@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:giv_flutter/base/base_state.dart';
 import 'package:giv_flutter/config/config.dart';
+import 'package:giv_flutter/util/presentation/android_theme.dart';
 import 'package:giv_flutter/util/presentation/buttons.dart';
 import 'package:giv_flutter/util/presentation/custom_app_bar.dart';
 import 'package:giv_flutter/util/presentation/custom_scaffold.dart';
@@ -37,7 +38,7 @@ class _EditDescriptionState extends BaseState<EditDescription> {
       appBar: CustomAppBar(
         title: string('new_listing_tile_description'),
       ),
-      body: _buildSingleChildScrollView(),
+      body: AndroidTheme(child: _buildSingleChildScrollView()),
     );
   }
 

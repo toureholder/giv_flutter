@@ -4,6 +4,7 @@ import 'package:giv_flutter/config/config.dart';
 import 'package:giv_flutter/features/settings/bloc/settings_bloc.dart';
 import 'package:giv_flutter/model/user/user.dart';
 import 'package:giv_flutter/util/network/http_response.dart';
+import 'package:giv_flutter/util/presentation/android_theme.dart';
 import 'package:giv_flutter/util/presentation/buttons.dart';
 import 'package:giv_flutter/util/presentation/custom_app_bar.dart';
 import 'package:giv_flutter/util/presentation/custom_scaffold.dart';
@@ -52,13 +53,17 @@ class _EditBioState extends BaseState<EditBio> {
       appBar: CustomAppBar(
         title: string('settings_bio'),
       ),
-      body: StreamBuilder(
-          stream: _settingsBloc.userUpdateStream,
-          builder: (context, snapshot) {
-            var isLoading = snapshot?.data?.isLoading ?? false;
-            return _buildSingleChildScrollView(isLoading);
-          }),
+      body: _buildStreamBuilder()
     );
+  }
+
+  StreamBuilder<HttpResponse<User>> _buildStreamBuilder() {
+    return StreamBuilder(
+        stream: _settingsBloc.userUpdateStream,
+        builder: (context, snapshot) {
+          var isLoading = snapshot?.data?.isLoading ?? false;
+          return AndroidTheme(child: _buildSingleChildScrollView(isLoading));
+        });
   }
 
   SingleChildScrollView _buildSingleChildScrollView(bool isLoading) {

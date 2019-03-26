@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:giv_flutter/base/base_state.dart';
-import 'package:giv_flutter/config/config.dart';
 import 'package:giv_flutter/features/log_in/bloc/log_in_bloc.dart';
 import 'package:giv_flutter/features/log_in/helper/login_assistance_helper.dart';
 import 'package:giv_flutter/features/log_in/ui/login_assistance.dart';
@@ -11,12 +10,12 @@ import 'package:giv_flutter/util/form/email_form_field.dart';
 import 'package:giv_flutter/util/form/password_form_field.dart';
 import 'package:giv_flutter/util/form/validator.dart';
 import 'package:giv_flutter/util/network/http_response.dart';
+import 'package:giv_flutter/util/presentation/android_theme.dart';
 import 'package:giv_flutter/util/presentation/buttons.dart';
 import 'package:giv_flutter/util/presentation/custom_app_bar.dart';
 import 'package:giv_flutter/util/presentation/custom_scaffold.dart';
 import 'package:giv_flutter/util/presentation/spacing.dart';
 import 'package:giv_flutter/util/presentation/typography.dart';
-import 'package:giv_flutter/util/util.dart';
 import 'package:giv_flutter/values/dimens.dart';
 
 class LogIn extends StatefulWidget {
@@ -81,7 +80,7 @@ class _LogInState extends BaseState<LogIn> {
         child: Form(
           key: _formKey,
           autovalidate: _autovalidate,
-          child: _buildFormUI(isLoading),
+          child: AndroidTheme(child: _buildFormUI(isLoading)),
         ),
       ),
     );

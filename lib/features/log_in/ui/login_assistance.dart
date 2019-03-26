@@ -8,6 +8,7 @@ import 'package:giv_flutter/model/user/repository/api/request/login_assistance_r
 import 'package:giv_flutter/util/form/email_form_field.dart';
 import 'package:giv_flutter/util/navigation/navigation.dart';
 import 'package:giv_flutter/util/network/http_response.dart';
+import 'package:giv_flutter/util/presentation/android_theme.dart';
 import 'package:giv_flutter/util/presentation/buttons.dart';
 import 'package:giv_flutter/util/presentation/custom_app_bar.dart';
 import 'package:giv_flutter/util/presentation/custom_scaffold.dart';
@@ -75,7 +76,7 @@ class _LoginAssistanceState extends BaseState<LoginAssistance> {
         child: Form(
           key: _formKey,
           autovalidate: _autovalidate,
-          child: _buildFormUI(isLoading),
+          child: AndroidTheme(child: _buildFormUI(isLoading)),
         ),
       ),
     );

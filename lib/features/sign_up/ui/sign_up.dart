@@ -15,12 +15,12 @@ import 'package:giv_flutter/util/form/password_form_field.dart';
 import 'package:giv_flutter/util/form/validator.dart';
 import 'package:giv_flutter/util/navigation/navigation.dart';
 import 'package:giv_flutter/util/network/http_response.dart';
+import 'package:giv_flutter/util/presentation/android_theme.dart';
 import 'package:giv_flutter/util/presentation/buttons.dart';
 import 'package:giv_flutter/util/presentation/custom_app_bar.dart';
 import 'package:giv_flutter/util/presentation/custom_scaffold.dart';
 import 'package:giv_flutter/util/presentation/spacing.dart';
 import 'package:giv_flutter/util/presentation/typography.dart';
-import 'package:giv_flutter/util/util.dart';
 import 'package:giv_flutter/values/dimens.dart';
 
 class SignUp extends StatefulWidget {
@@ -82,7 +82,7 @@ class _SignUpState extends BaseState<SignUp> {
         child: Form(
           key: _formKey,
           autovalidate: _autovalidate,
-          child: _buildFormUI(isLoading),
+          child: AndroidTheme(child: _buildFormUI(isLoading)),
         ),
       ),
     );

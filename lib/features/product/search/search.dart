@@ -3,6 +3,7 @@ import 'package:giv_flutter/base/base_state.dart';
 import 'package:giv_flutter/features/product/search_result/bloc/search_result_bloc.dart';
 import 'package:giv_flutter/features/product/search_result/ui/search_result.dart';
 import 'package:giv_flutter/model/product/product_category.dart';
+import 'package:giv_flutter/util/presentation/android_theme.dart';
 import 'package:giv_flutter/util/presentation/custom_scaffold.dart';
 import 'package:giv_flutter/util/presentation/material_search.dart';
 
@@ -37,26 +38,30 @@ class _SearchState extends BaseState<Search> {
 
     return CustomScaffold(
       resizeToAvoidBottomPadding: false,
-      body: MaterialSearch<String>(
-        placeholder: string('search_hint'),
-        getResults: (String q) async {
-          _suggestedCategories = await _searchResultBloc.getSearchSuggestions(q);
-          return _suggestedCategories
-              .map((category) => new MaterialSearchResult<String>(
-                    value: category.id
-                        .toString(), //The value must be of type <String>
-                    text: category
-                        .canonicalName, //String that will be show in the list
-                    icon: Icons.search,
-                  ))
-              .toList();
-        },
-        elevation: 0.0,
-        textInputAction: TextInputAction.search,
-        initialText: widget.initialText,
-        onSelect: _searchByCategoryId,
-        onSubmit: _searchByQuery,
-      ),
+      body: AndroidTheme(child: _buildSearchBar())
+    );
+  }
+
+  Widget _buildSearchBar() {
+    return MaterialSearch<String>(
+      placeholder: string('search_hint'),
+      getResults: (String q) async {
+        _suggestedCategories = await _searchResultBloc.getSearchSuggestions(q);
+        return _suggestedCategories
+            .map((category) => new MaterialSearchResult<String>(
+                  value: category.id
+                      .toString(), //The value must be of type <String>
+                  text: category
+                      .canonicalName, //String that will be show in the list
+                  icon: Icons.search,
+                ))
+            .toList();
+      },
+      elevation: 0.0,
+      textInputAction: TextInputAction.search,
+      initialText: widget.initialText,
+      onSelect: _searchByCategoryId,
+      onSubmit: _searchByQuery,
     );
   }
 
