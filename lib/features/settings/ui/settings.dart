@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:giv_flutter/base/base_state.dart';
 import 'package:giv_flutter/config/preferences/prefs.dart';
+import 'package:giv_flutter/features/about/about.dart';
 import 'package:giv_flutter/features/base/base.dart';
 import 'package:giv_flutter/features/listing/ui/my_listings.dart';
 import 'package:giv_flutter/features/settings/bloc/settings_bloc.dart';
@@ -83,10 +84,23 @@ class _SettingsState extends BaseState<Settings> {
         ),
         SettingsListTile(
           leading: Icon(
-            Icons.help,
+            Icons.help_outline,
           ),
           text: string('common_help'),
           onTap: _whatsAppCustomerService,
+          hideTrailing: true,
+        ),
+        Divider(
+          height: 1.0,
+        ),
+        SettingsListTile(
+          leading: Icon(
+            Icons.info_outline,
+          ),
+          text: string('settings_about'),
+          onTap: () {
+            navigation.push(About());
+          },
           hideTrailing: true,
         ),
         Divider(

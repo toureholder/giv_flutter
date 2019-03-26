@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:giv_flutter/values/colors.dart';
 
 class LogoText extends StatelessWidget {
+  final double fontSize;
+
+  const LogoText({Key key, this.fontSize = 30.0}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +24,7 @@ class LogoText extends StatelessWidget {
     return Text(
       text,
       style: TextStyle(
-          fontFamily: 'Overpass', fontSize: 30.0, fontWeight: FontWeight.bold, color: color),
+          fontFamily: 'Overpass', fontSize: fontSize, fontWeight: FontWeight.bold, color: color),
     );
   }
 }

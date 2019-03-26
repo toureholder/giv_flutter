@@ -1,4 +1,5 @@
 class Config {
+  static const versionName = '1.0.0';
   static const baseUrl = 'https://giv-api.herokuapp.com';
   static const defaultCountryCallingCode = '55';
   static const maxLengthName = 50;

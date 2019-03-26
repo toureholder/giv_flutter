@@ -643,6 +643,26 @@ class Strings {
     "image_cropper_toolbar_title": {
       "en": "Edit photo",
       "pt": "Editar foto"
+    },
+    "settings_about": {
+      "en": "About",
+      "pt": "Sobre"
+    },
+    "about_version_x": {
+      "en": "Version $formatItem",
+      "pt": "Versão $formatItem"
+    },
+    "about_copyright_info": {
+      "en": "Copyright information:",
+      "pt": "Informações sobre direitos autorais:"
+    },
+    "about_copyright_info_icons_made_by_": {
+      "en": "Icons made by $formatItem",
+      "pt": "Ícones feitos por $formatItem"
+    },
+    "about_copyright_info_icons_from_": {
+      "en": "Icons from $formatItem",
+      "pt": "Ícones de  $formatItem"
     }
   };
 }
