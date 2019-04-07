@@ -49,6 +49,7 @@ class _SearchTeaserAppBarState extends BaseState<SearchTeaserAppBar> {
         )
       ]),
       elevation: 0.0,
+      brightness: Brightness.light,
       backgroundColor: Colors.white,
       iconTheme: IconThemeData(color: Colors.black),
       bottom: AppBarBottomBorder(),

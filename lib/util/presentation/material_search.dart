@@ -50,6 +50,7 @@ class MaterialSearch<T> extends StatefulWidget {
     this.onSelect,
     this.onSubmit,
     this.barBackgroundColor = Colors.white,
+    this.brightness = Brightness.light,
     this.iconColor = Colors.black,
     this.elevation = 4.0,
     this.textInputAction = TextInputAction.done,
@@ -80,6 +81,7 @@ class MaterialSearch<T> extends StatefulWidget {
   final TextInputAction textInputAction;
   final Widget leading;
   final String initialText;
+  final Brightness brightness;
 
   @override
   _MaterialSearchState<T> createState() => new _MaterialSearchState<T>();
@@ -191,6 +193,7 @@ class _MaterialSearchState<T> extends State<MaterialSearch> {
       appBar: new AppBar(
         leading: widget.leading,
         backgroundColor: widget.barBackgroundColor,
+        brightness: widget.brightness,
         elevation: widget.elevation,
         iconTheme: iconTheme,
         title: new TextField(
