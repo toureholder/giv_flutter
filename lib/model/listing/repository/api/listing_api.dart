@@ -38,4 +38,19 @@ class ListingApi extends BaseApi {
           status: status, message: error.toString());
     }
   }
+
+  Future<HttpResponse<ApiModelResponse>> destroy(int id) async {
+    HttpStatus status;
+    try {
+      final response = await delete('$baseUrl/listings/$id');
+
+      status = HttpResponse.codeMap[response.statusCode];
+      final data = ApiModelResponse.fromJson(jsonDecode(response.body));
+
+      return HttpResponse<ApiModelResponse>(status: status, data: data);
+    } catch (error) {
+      return HttpResponse<ApiModelResponse>(
+          status: status, message: error.toString());
+    }
+  }
 }

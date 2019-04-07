@@ -416,13 +416,17 @@ class Strings {
       "en": "Donate something now",
       "pt": "Doar agora"
     },
-    "common_delete": {
+    "common_remove": {
       "en": "Delete",
       "pt": "Remover"
     },
     "common_edit": {
       "en": "Edit",
       "pt": "Editar"
+    },
+    "common_delete": {
+      "en": "Delete",
+      "pt": "Excluir"
     },
     "edit_listing_is_active_hint": {
       "en": "This listing will be visible to other users",
@@ -663,6 +667,22 @@ class Strings {
     "about_copyright_info_icons_from_": {
       "en": "Icons from $formatItem",
       "pt": "Ícones de  $formatItem"
+    },
+    "delete_listing_confirmation_title": {
+      "en": "Delete listing?",
+      "pt": "Excluir anúncio?"
+    },
+    "delete_listing_confirmation_content": {
+      "en": "Are you sure? After you delete this, it can't be recovered.",
+      "pt": "Tem certeza? Anúncios excluídos não podem ser recuperados."
+    },
+    "delete_listing_loading_state_text": {
+      "en": "Deleting...",
+      "pt": "Excluindo..."
+    },
+    "delete_listing_accept_button": {
+      "en": "Delete",
+      "pt": "Excluir"
     }
   };
 }

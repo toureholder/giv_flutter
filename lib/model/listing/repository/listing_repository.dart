@@ -11,4 +11,7 @@ class ListingRepository {
 
   Future<HttpResponse<ApiModelResponse>> update(CreateListingRequest request) =>
       listingApi.update(request);
+
+  Future<HttpResponse<ApiModelResponse>> destroy(int id) =>
+      listingApi.destroy(id);
 }

@@ -25,4 +25,5 @@ class FirebaseStorageUtil {
   static const listingsFolder = 'listings';
   static const usersFolder = 'users';
   static const photosFolder = 'photos';
+  static const devFolder = 'dev';
 }

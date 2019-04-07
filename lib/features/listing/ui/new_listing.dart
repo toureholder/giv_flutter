@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:giv_flutter/base/base_state.dart';
 import 'package:giv_flutter/config/config.dart';
 import 'package:giv_flutter/config/i18n/string_localizations.dart';
-import 'package:giv_flutter/features/base/base.dart';
 import 'package:giv_flutter/features/listing/bloc/new_listing_bloc.dart';
 import 'package:giv_flutter/features/listing/ui/edit_categories.dart';
 import 'package:giv_flutter/features/listing/ui/edit_description.dart';
@@ -14,8 +13,8 @@ import 'package:giv_flutter/features/listing/ui/my_listings.dart';
 import 'package:giv_flutter/features/product/categories/ui/categories.dart';
 import 'package:giv_flutter/features/product/filters/ui/location_filter.dart';
 import 'package:giv_flutter/features/settings/ui/edit_phone_number.dart';
-import 'package:giv_flutter/features/settings/ui/settings.dart';
 import 'package:giv_flutter/features/sign_in/ui/sign_in.dart';
+import 'package:giv_flutter/model/image/image.dart' as CustomImage;
 import 'package:giv_flutter/model/location/location.dart';
 import 'package:giv_flutter/model/product/product.dart';
 import 'package:giv_flutter/model/product/product_category.dart';
@@ -31,9 +30,8 @@ import 'package:giv_flutter/util/presentation/rounded_corners.dart';
 import 'package:giv_flutter/util/presentation/spacing.dart';
 import 'package:giv_flutter/util/presentation/typography.dart';
 import 'package:giv_flutter/values/dimens.dart';
-import 'package:giv_flutter/model/image/image.dart' as CustomImage;
-import 'package:image_picker/image_picker.dart';
 import 'package:image_cropper/image_cropper.dart';
+import 'package:image_picker/image_picker.dart';
 
 class NewListing extends StatefulWidget {
   final Product product;
@@ -670,7 +668,7 @@ class _NewListingState extends BaseState<NewListing> {
       image: image,
       actions: <Widget>[
         MediumFlatDangerButton(
-          text: string('common_delete'),
+          text: string('common_remove'),
           onPressed: () {
             navigation.pop(actionDelete);
           },
@@ -727,9 +725,7 @@ class _NewListingState extends BaseState<NewListing> {
 
   _onUploadSuccess() {
     if (_isEditing) {
-      navigation.push(Base(), hasAnimation: false, clearStack: true);
-      navigation.push(Settings(), hasAnimation: false);
-      navigation.push(MyListings(), hasAnimation: false);
+      goToMyListingsReloaded();
     } else {
       navigation.pushReplacement(MyListings());
     }
