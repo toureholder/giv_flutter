@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:giv_flutter/base/base_state.dart';
-import 'package:giv_flutter/model/user/user.dart';
-import 'package:giv_flutter/util/presentation/avatar_image.dart';
+import 'package:giv_flutter/features/profile/bloc/profile_bloc.dart';
 import 'package:giv_flutter/model/image/image.dart' as CustomImage;
+import 'package:giv_flutter/model/product/product.dart';
+import 'package:giv_flutter/model/user/user.dart';
+import 'package:giv_flutter/util/data/content_stream_builder.dart';
+import 'package:giv_flutter/util/presentation/avatar_image.dart';
 import 'package:giv_flutter/util/presentation/custom_app_bar.dart';
 import 'package:giv_flutter/util/presentation/custom_scaffold.dart';
+import 'package:giv_flutter/util/presentation/product_grid.dart';
+import 'package:giv_flutter/util/presentation/spacing.dart';
 import 'package:giv_flutter/util/presentation/typography.dart';
 import 'package:giv_flutter/values/dimens.dart';
 import 'package:intl/intl.dart';
@@ -20,11 +25,20 @@ class UserProfile extends StatefulWidget {
 
 class _UserProfileState extends BaseState<UserProfile> {
   User _user;
+  ProfileBloc _profileBloc;
 
   @override
   void initState() {
     super.initState();
     _user = widget.user;
+    _profileBloc = ProfileBloc();
+    _profileBloc.fetchUserProducts(_user.id);
+  }
+
+  @override
+  void dispose() {
+    _profileBloc.dispose();
+    super.dispose();
   }
 
   @override
@@ -43,23 +57,45 @@ class _UserProfileState extends BaseState<UserProfile> {
         _avatar(),
         _name(),
         _bio(),
-        _userSince()
+        _userSince(),
+        Spacing.vertical(Dimens.default_vertical_margin),
+        Divider(),
+        _productGridStreamBuilder(),
+        Spacing.vertical(Dimens.default_vertical_margin),
       ],
     );
   }
 
-  Padding _name() => _textPadding(H6Text(_user.name, textAlign: TextAlign.center,));
+  ContentStreamBuilder<List<Product>> _productGridStreamBuilder() {
+    return ContentStreamBuilder(
+        stream: _profileBloc.productsStream,
+        onHasData: (List<Product> data) {
+          return _productGrid(data);
+        },
+      );
+  }
+
+  Padding _name() => _textPadding(H6Text(
+        _user.name,
+        textAlign: TextAlign.center,
+      ));
 
   Widget _userSince() {
     if (_user.createdAt == null) return Container();
     final text = string('member_since_',
         formatArg: DateFormat.yMMMM(localeString).format(_user.createdAt));
-    return _textPadding(Body2Text(text, textAlign: TextAlign.center,));
+    return _textPadding(Body2Text(
+      text,
+      textAlign: TextAlign.center,
+    ));
   }
 
   Widget _bio() {
     if (_user.bio == null) return Container();
-    return _textPadding(Body2Text(_user.bio, textAlign: TextAlign.center,));
+    return _textPadding(Body2Text(
+      _user.bio,
+      textAlign: TextAlign.center,
+    ));
   }
 
   Widget _avatar() {
@@ -76,6 +112,10 @@ class _UserProfileState extends BaseState<UserProfile> {
         ],
       ),
     );
+  }
+
+  Widget _productGrid(List<Product> products) {
+    return products.isNotEmpty ? ProductGrid(products: products) : Container();
   }
 
   Padding _textPadding(Widget widget) {

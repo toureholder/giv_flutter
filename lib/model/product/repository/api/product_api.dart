@@ -123,4 +123,19 @@ class ProductApi extends BaseApi {
           status: status, message: error.toString());
     }
   }
+
+  Future<HttpResponse<List<Product>>> getUserProducts(int userId) async {
+    HttpStatus status;
+    try {
+      final response = await get('$baseUrl/users/$userId/listings');
+
+      status = HttpResponse.codeMap[response.statusCode];
+      final data = Product.parseList(response.body);
+
+      return HttpResponse<List<Product>>(status: status, data: data);
+    } catch (error) {
+      return HttpResponse<List<Product>>(
+          status: status, message: error.toString());
+    }
+  }
 }

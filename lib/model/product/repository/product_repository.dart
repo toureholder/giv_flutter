@@ -40,4 +40,7 @@ class ProductRepository {
 
   Future<HttpResponse<List<Product>>> getMyProducts() =>
       productApi.getMyProducts();
+
+  Future<HttpResponse<List<Product>>> getUserProducts(int userId) =>
+      productApi.getUserProducts(userId);
 }
