@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:giv_flutter/features/base/base.dart';
 import 'package:giv_flutter/model/product/product_category.dart';
+import 'package:giv_flutter/model/user/user.dart';
 
 class CarouselItem {
   final String imageUrl;
@@ -10,15 +11,16 @@ class CarouselItem {
   final String caption;
   final ProductCategory productCategory;
   final String actionId;
+  final User user;
 
-  CarouselItem({
-    this.imageUrl,
-    this.linkUrl,
-    this.title,
-    this.caption,
-    this.productCategory,
-    this.actionId,
-  });
+  CarouselItem(
+      {this.imageUrl,
+      this.linkUrl,
+      this.title,
+      this.caption,
+      this.productCategory,
+      this.actionId,
+      this.user});
 
   CarouselItem.fromJson(Map<String, dynamic> json)
       : imageUrl = json['image_url'],
@@ -26,7 +28,14 @@ class CarouselItem {
         title = json['title'],
         caption = json['caption'],
         actionId = json['action_id'],
-        productCategory = json['category'] == null ? null : ProductCategory.fromJson(json['category']);
+        productCategory = json['category'] == null
+            ? null
+            : ProductCategory.fromJson(json['category']),
+        user = json['user'] == null ? null : User.fromJson(json['user']);
+
+  bool get hasText => hasTitle || hasCaption;
+  bool get hasTitle => title != null && title.isNotEmpty;
+  bool get hasCaption => caption != null && caption.isNotEmpty;
 
   static List<CarouselItem> parseList(String responseBody) {
     final parsed = json.decode(responseBody).cast<Map<String, dynamic>>();

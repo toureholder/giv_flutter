@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:giv_flutter/config/config.dart';
 import 'package:giv_flutter/config/preferences/prefs.dart';
+import 'package:giv_flutter/util/network/custom_http_headers.dart';
 import 'package:http/http.dart' as http;
 
 class BaseApi {
@@ -45,7 +46,11 @@ class BaseApi {
 
   Future<Map<String, String>> _getDefaultHeaders() async {
     String token = await Prefs.getServerToken();
-    return {HttpHeaders.authorizationHeader: '$bearer $token'};
+    return {
+      HttpHeaders.authorizationHeader: '$bearer $token',
+      CustomHttpHeaders.clientVersionHeader: Config.buildNumber.toString(),
+      CustomHttpHeaders.clientNameHeader: Config.clientName
+    };
   }
 
   Future<Map<String, String>> _getApplicationJsonContentTypeHeaders() async {

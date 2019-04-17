@@ -4,7 +4,7 @@ import 'package:giv_flutter/config/preferences/prefs.dart';
 import 'package:giv_flutter/features/listing/ui/new_listing.dart';
 import 'package:giv_flutter/features/product/detail/bloc/product_detail_bloc.dart';
 import 'package:giv_flutter/features/product/detail/ui/i_want_it_dialog.dart';
-import 'package:giv_flutter/features/profile/ui/profile.dart';
+import 'package:giv_flutter/features/profile/ui/user_profile.dart';
 import 'package:giv_flutter/model/api_response/api_response.dart';
 import 'package:giv_flutter/model/image/image.dart' as CustomImage;
 import 'package:giv_flutter/model/location/location.dart';

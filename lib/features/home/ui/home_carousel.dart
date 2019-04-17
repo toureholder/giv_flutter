@@ -82,48 +82,54 @@ class _HomeCarouselState extends State<HomeCarousel> {
       imgList.map((item) => _buildItem(item)).toList();
 
   Widget _buildItem(CarouselItem item) {
+    final backgroundArt = Row(
+      children: <Widget>[
+        Expanded(
+            child:
+                CachedNetworkImage(fit: BoxFit.cover, imageUrl: item.imageUrl)),
+      ],
+    );
+
     return GestureDetector(
       onTap: () {
         widget.onTap(item);
       },
-      child: Stack(children: <Widget>[
-        Row(
+      child: item.hasText ? stackWithText(item, backgroundArt) : backgroundArt,
+    );
+  }
+
+  Stack stackWithText(CarouselItem item, Widget backgroundArt) {
+    return Stack(children: <Widget>[
+      backgroundArt,
+      Container(
+        decoration: BoxDecoration(
+          gradient: Gradients.carousel(),
+        ),
+      ),
+      Positioned(
+        bottom: Dimens.default_vertical_margin,
+        left: Dimens.default_horizontal_margin,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Expanded(
-                child: CachedNetworkImage(
-                    fit: BoxFit.cover, imageUrl: item.imageUrl)),
+            H6Text(
+              item.title,
+              color: Colors.white,
+              shadows: <Shadow>[
+                Shadows.text(),
+              ],
+            ),
+            Body2Text(
+              item.caption,
+              color: Colors.white,
+              shadows: <Shadow>[
+                Shadows.text(),
+              ],
+            )
           ],
         ),
-        Container(
-          decoration: BoxDecoration(
-            gradient: Gradients.carousel(),
-          ),
-        ),
-        Positioned(
-          bottom: Dimens.default_vertical_margin,
-          left: Dimens.default_horizontal_margin,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              H6Text(
-                item.title,
-                color: Colors.white,
-                shadows: <Shadow>[
-                  Shadows.text(),
-                ],
-              ),
-              Body2Text(
-                item.caption,
-                color: Colors.white,
-                shadows: <Shadow>[
-                  Shadows.text(),
-                ],
-              )
-            ],
-          ),
-        )
-      ]),
-    );
+      )
+    ]);
   }
 
   Positioned _dotIndicator(int length) {
