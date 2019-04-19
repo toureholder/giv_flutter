@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:giv_flutter/base/base_state.dart';
-import 'package:giv_flutter/features/profile/bloc/profile_bloc.dart';
+import 'package:giv_flutter/features/user_profile/bloc/user_profile_bloc.dart';
 import 'package:giv_flutter/model/image/image.dart' as CustomImage;
 import 'package:giv_flutter/model/product/product.dart';
 import 'package:giv_flutter/model/user/user.dart';
@@ -25,13 +25,13 @@ class UserProfile extends StatefulWidget {
 
 class _UserProfileState extends BaseState<UserProfile> {
   User _user;
-  ProfileBloc _profileBloc;
+  UserProfileBloc _profileBloc;
 
   @override
   void initState() {
     super.initState();
     _user = widget.user;
-    _profileBloc = ProfileBloc();
+    _profileBloc = UserProfileBloc();
     _profileBloc.fetchUserProducts(_user.id);
   }
 

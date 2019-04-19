@@ -3,7 +3,7 @@ import 'package:giv_flutter/model/product/repository/product_repository.dart';
 import 'package:giv_flutter/util/network/http_response.dart';
 import 'package:rxdart/rxdart.dart';
 
-class ProfileBloc {
+class UserProfileBloc {
   final _productRepository = ProductRepository();
 
   final _productsPublishSubject = PublishSubject<List<Product>>();
