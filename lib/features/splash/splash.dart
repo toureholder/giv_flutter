@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:giv_flutter/base/base_state.dart';
+import 'package:giv_flutter/base/custom_error.dart';
 import 'package:giv_flutter/config/preferences/prefs.dart';
 import 'package:giv_flutter/features/base/base.dart';
+import 'package:giv_flutter/features/force_update/force_update.dart';
 import 'package:giv_flutter/model/app_config/repository/app_config_repository.dart';
 import 'package:giv_flutter/model/location/coordinates.dart';
 import 'package:giv_flutter/model/location/location.dart';
 import 'package:giv_flutter/model/location/repository/location_repository.dart';
 import 'package:giv_flutter/model/user/repository/user_repository.dart';
 import 'package:giv_flutter/util/navigation/navigation.dart';
+import 'package:giv_flutter/util/network/http_response.dart';
 import 'package:giv_flutter/util/presentation/app_icon.dart';
 import 'package:giv_flutter/util/presentation/custom_scaffold.dart';
+import 'dart:async';
 
 class Splash extends StatefulWidget {
   @override
@@ -37,15 +40,23 @@ class _SplashState extends BaseState<Splash> {
   _awaitTasks() async {
     // TODO: await get device location (lat, long)
 
-    await _getSettings();
-    await _getLocation();
-    await _updateCurrentUser();
+    try {
+      await Future.wait([_getSettings(), _getLocation(), _updateCurrentUser()]);
+    } catch (error) {
+      if (error == CustomError.forceUpdate)
+        navigation.pushReplacement(ForceUpdate());
+        return;
+    }
 
     Navigation(context).pushReplacement(Base());
   }
 
   Future _getSettings() async {
     final response = await AppConfigRepository().getConfig();
+
+    if (response.status == HttpStatus.preconditionFailed)
+      throw CustomError.forceUpdate;
+
     if (response.data != null) await Prefs.setSettings(response.data);
   }
 

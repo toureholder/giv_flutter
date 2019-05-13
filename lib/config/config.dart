@@ -18,4 +18,7 @@ class Config {
   static const croppedProfileImageMaxWidth = 512;
   static const croppedProfileImageRatioY = 1.0;
   static const croppedProfileImageRatioX = 1.0;
+  static const iTunesLink = 'https://itunes.apple.com/us/app/algu%C3%A9m-quer/id1457386822';
+  static const googlePlayLink = 'https://play.google.com/store/apps/details?id=com.greenballoon.givflutter';
+  static const website = 'https://alguemquer.com.br/';
 }

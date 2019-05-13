@@ -683,6 +683,18 @@ class Strings {
     "delete_listing_accept_button": {
       "en": "Delete",
       "pt": "Excluir"
+    },
+    "force_update_title": {
+      "en": "We're better than ever",
+      "pt": "Estamos melhores que nunca!"
+    },
+    "force_update_message": {
+      "en": "A new version of the app is available and this version is no longer supported.",
+      "pt": "Temos uma nova versão do aplicativo disponível e não suportamos mais esta versão."
+    },
+    "force_update_button": {
+      "en": "Update the app now",
+      "pt": "Atualizar o app agora"
     }
   };
 }

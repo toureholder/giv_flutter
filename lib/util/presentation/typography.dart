@@ -107,15 +107,16 @@ class Title extends BaseText {
   final SyntheticFontWeight weight;
   final Color color;
   final List<Shadow> shadows;
+  final TextAlign textAlign;
 
-  Title(this.data, {Key key, this.weight, this.color, this.shadows})
-      : super(
-          data,
-          textStyle: CustomTypography.title,
-          syntheticWeight: weight,
-          color: color,
-          shadows: shadows,
-        );
+  Title(this.data,
+      {Key key, this.weight, this.color, this.shadows, this.textAlign})
+      : super(data,
+            textStyle: CustomTypography.title,
+            syntheticWeight: weight,
+            color: color,
+            shadows: shadows,
+            textAlign: textAlign);
 }
 
 class Subtitle extends BaseText {
@@ -123,15 +124,16 @@ class Subtitle extends BaseText {
   final SyntheticFontWeight weight;
   final Color color;
   final List<Shadow> shadows;
+  final TextAlign textAlign;
 
-  Subtitle(this.data, {Key key, this.weight, this.color, this.shadows})
-      : super(
-          data,
-          textStyle: CustomTypography.subtitle1,
-          syntheticWeight: weight,
-          color: color,
-          shadows: shadows,
-        );
+  Subtitle(this.data,
+      {Key key, this.weight, this.color, this.shadows, this.textAlign})
+      : super(data,
+            textStyle: CustomTypography.subtitle1,
+            syntheticWeight: weight,
+            color: color,
+            shadows: shadows,
+            textAlign: textAlign);
 }
 
 class Subtitle2 extends BaseText {
