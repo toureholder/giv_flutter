@@ -11,23 +11,8 @@ class CustomBottomSheet {
         builder: (context) {
           final List<Widget> children = [];
 
-          if (title != null && title.isNotEmpty) {
-            children.addAll([
-              Row(
-                children: <Widget>[
-                  Padding(
-                    padding:
-                        const EdgeInsets.all(Dimens.default_horizontal_margin),
-                    child: Subtitle(
-                      title,
-                      weight: SyntheticFontWeight.bold,
-                    ),
-                  ),
-                ],
-              ),
-              Spacing.vertical(Dimens.grid(2))
-            ]);
-          }
+          if (title != null && title.isNotEmpty)
+            children.addAll(_titleComponent(title));
 
           children.addAll(tiles);
           children.add(Spacing.vertical(Dimens.default_vertical_margin));
@@ -38,6 +23,23 @@ class CustomBottomSheet {
             children: children,
           );
         });
+  }
+
+  static List<Widget> _titleComponent(String title) {
+    return [
+      Row(
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.all(Dimens.default_horizontal_margin),
+            child: Subtitle(
+              title,
+              weight: SyntheticFontWeight.bold,
+            ),
+          ),
+        ],
+      ),
+      Spacing.vertical(Dimens.grid(2))
+    ];
   }
 }
 

@@ -45,3 +45,12 @@ class CreateListingRequest {
     return json.encode(toHttpRequestBody());
   }
 }
+
+class UpdateListingActiveStatusRequest {
+  final int id;
+  final bool isActive;
+
+  UpdateListingActiveStatusRequest(this.id, this.isActive);
+
+  Map<String, dynamic> toHttpRequestBody() => {'is_active': isActive};
+}

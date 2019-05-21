@@ -695,6 +695,50 @@ class Strings {
     "force_update_button": {
       "en": "Update the app now",
       "pt": "Atualizar o app agora"
+    },
+    "product_detail_action_hide": {
+      "en": "Hide listing",
+      "pt": "Ocultar anúncio"
+    },
+    "product_detail_action_reactivate": {
+      "en": "Reactivate listing",
+      "pt": "Reativar anúncio"
+    },
+    "product_detail_action_edit": {
+      "en": "Edit listing",
+      "pt": "Editar anúncio"
+    },
+    "product_detail_action_delete": {
+      "en": "Delete listing",
+      "pt": "Excluir anúncio"
+    },
+    "hide_listing_confirmation_title": {
+      "en": "Hide listing?",
+      "pt": "Ocultar anúncio?"
+    },
+    "hide_listing_confirmation_content": {
+      "en": "This listing will no longer be visile to other users.",
+      "pt": "Este anúncio não estará mais visível para outros usuários.\n\nVocê pode reativá-lo quando quiser."
+    },
+    "hide_listing_accept_button": {
+      "en": "Hide",
+      "pt": "Ocultar"
+    },
+    "reactivate_listing_confirmation_title": {
+      "en": "Reactivate listing?",
+      "pt": "Reativar anúncio?"
+    },
+    "reactivate_listing_confirmation_content": {
+      "en": "This listing will be visible to other users.",
+      "pt": "Este anúncio estará visível para outros usuários."
+    },
+    "reactivate_listing_accept_button": {
+      "en": "Reactivate",
+      "pt": "Reativar"
+    },
+    "shared_title_options": {
+      "en": "Options",
+      "pt": "Opções"
     }
   };
 }

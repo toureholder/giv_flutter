@@ -7,10 +7,13 @@ import 'package:giv_flutter/features/product/detail/ui/i_want_it_dialog.dart';
 import 'package:giv_flutter/features/user_profile/ui/user_profile.dart';
 import 'package:giv_flutter/model/api_response/api_response.dart';
 import 'package:giv_flutter/model/image/image.dart' as CustomImage;
+import 'package:giv_flutter/model/listing/repository/api/request/create_listing_request.dart';
 import 'package:giv_flutter/model/location/location.dart';
 import 'package:giv_flutter/model/product/product.dart';
+import 'package:giv_flutter/util/data/stream_event.dart';
 import 'package:giv_flutter/util/network/http_response.dart';
 import 'package:giv_flutter/util/presentation/avatar_image.dart';
+import 'package:giv_flutter/util/presentation/bottom_sheet.dart';
 import 'package:giv_flutter/util/presentation/buttons.dart';
 import 'package:giv_flutter/util/presentation/custom_app_bar.dart';
 import 'package:giv_flutter/util/presentation/custom_scaffold.dart';
@@ -44,6 +47,7 @@ class _ProductDetailState extends BaseState<ProductDetail> {
     _productDetailBloc = ProductDetailBloc();
     _productDetailBloc.fetchLocationDetails(_product.location);
     _listenToDeleteStream();
+    _listenToUpdateStream();
   }
 
   void _listenToDeleteStream() {
@@ -53,16 +57,23 @@ class _ProductDetailState extends BaseState<ProductDetail> {
     });
   }
 
+  void _listenToUpdateStream() {
+    _productDetailBloc.updateListingStream
+        .listen((HttpResponse<Product> response) {
+      if (response.isReady) _onUpdateListingResponse(response);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
 
-    return StreamBuilder<HttpResponse<ApiModelResponse>>(
-        stream: _productDetailBloc.deleteListingStream,
-        builder:
-            (context, AsyncSnapshot<HttpResponse<ApiModelResponse>> snapshot) {
-          final response = snapshot.data;
-          return buildStack(context, isDeleting: response?.isLoading ?? false);
+    return StreamBuilder<StreamEventState>(
+        stream: _productDetailBloc.loadingStream,
+        builder: (context, AsyncSnapshot<StreamEventState> snapshot) {
+          final state = snapshot.data;
+          return buildStack(context,
+              isDeleting: state == StreamEventState.loading);
         });
   }
 
@@ -82,24 +93,7 @@ class _ProductDetailState extends BaseState<ProductDetail> {
     return Material(
       color: CustomColors.inActiveForeground,
       child: Center(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 0.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              BodyText(string('delete_listing_loading_state_text')),
-              Spacing.vertical(8.0),
-              SizedBox(
-                width: 150.0,
-                child: LinearProgressIndicator(
-                  valueColor: AlwaysStoppedAnimation<Color>(Colors.red[100]),
-                  backgroundColor: Colors.red[400],
-                ),
-              ),
-            ],
-          ),
-        ),
+        child: CircularProgressIndicator(),
       ),
     );
   }
@@ -130,20 +124,38 @@ class _ProductDetailState extends BaseState<ProductDetail> {
   }
 
   List<Widget> _appBarActions() {
-    return <Widget>[
-      MediumFlatDangerButton(
-        text: string('common_delete'),
-        onPressed: _confirmDelete,
-      ),
-      MediumFlatPrimaryButton(
-        text: string('common_edit'),
-        onPressed: () {
-          navigation.pushReplacement(NewListing(
-            product: widget.product,
-          ));
-        },
-      )
+    return [
+      IconButton(
+          icon: Icon(Icons.more_vert), onPressed: _showActionsBottomSheet)
     ];
+  }
+
+  _showActionsBottomSheet() {
+    IconData activateTileIcon = Icons.visibility;
+    String activateTileTextKey = 'product_detail_action_reactivate';
+
+    if (_product.isActive) {
+      activateTileIcon = Icons.visibility_off;
+      activateTileTextKey = 'product_detail_action_hide';
+    }
+
+    final tiles = <BottomSheetTile>[
+      BottomSheetTile(
+          iconData: activateTileIcon,
+          text: string(activateTileTextKey),
+          onTap: _confirmHideOrActivate),
+      BottomSheetTile(
+          iconData: Icons.edit,
+          text: string('product_detail_action_edit'),
+          onTap: _editListing),
+      BottomSheetTile(
+          iconData: Icons.delete,
+          text: string('product_detail_action_delete'),
+          onTap: _confirmDelete),
+    ];
+
+    CustomBottomSheet.show(context,
+        tiles: tiles, title: string('shared_title_options'));
   }
 
   Padding _publishedAt() {
@@ -161,7 +173,7 @@ class _ProductDetailState extends BaseState<ProductDetail> {
   }
 
   Widget _locationWidget(Location location) {
-    if (location?.isOk ?? false) widget.product?.location = location;
+    if (location?.isOk ?? false) _product?.location = location;
 
     Widget locationWidget = location == null
         ? Padding(
@@ -257,11 +269,8 @@ class _ProductDetailState extends BaseState<ProductDetail> {
             content: Text(string('delete_listing_confirmation_content')),
             actions: <Widget>[
               FlatButton(
-                child: Text(string('shared_action_cancel')),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
+                  child: Text(string('shared_action_cancel')),
+                  onPressed: () => Navigator.of(context).pop()),
               FlatButton(
                   child: Text(
                     string('delete_listing_accept_button'),
@@ -271,6 +280,52 @@ class _ProductDetailState extends BaseState<ProductDetail> {
             ],
           );
         });
+  }
+
+  void _confirmHideOrActivate() {
+    String dialogTitleTextKey = 'reactivate_listing_confirmation_title';
+    String dialogContentTextKey = 'reactivate_listing_confirmation_content';
+    String dialogAcceptButtonTextKey = 'reactivate_listing_accept_button';
+    bool shouldActivate = true;
+
+    if (_product.isActive) {
+      dialogTitleTextKey = 'hide_listing_confirmation_title';
+      dialogContentTextKey = 'hide_listing_confirmation_content';
+      dialogAcceptButtonTextKey = 'hide_listing_accept_button';
+      shouldActivate = false;
+    }
+
+    final request =
+        UpdateListingActiveStatusRequest(_product.id, shouldActivate);
+
+    showDialog(
+        context: context,
+        barrierDismissible: true,
+        builder: (context) {
+          return AlertDialog(
+            title: Text(string(dialogTitleTextKey)),
+            content: Text(string(dialogContentTextKey)),
+            actions: <Widget>[
+              FlatButton(
+                  child: Text(string('shared_action_cancel')),
+                  onPressed: () => Navigator.of(context).pop()),
+              FlatButton(
+                  child: Text(string(dialogAcceptButtonTextKey)),
+                  onPressed: () => _updateStatus(request))
+            ],
+          );
+        });
+  }
+
+  _updateStatus(UpdateListingActiveStatusRequest request) {
+    Navigator.of(context).pop();
+    _productDetailBloc.updateListing(request);
+  }
+
+  _editListing() {
+    navigation.pushReplacement(NewListing(
+      product: _product,
+    ));
   }
 
   _deleteListing() {
@@ -306,6 +361,16 @@ class _ProductDetailState extends BaseState<ProductDetail> {
     switch (response.status) {
       case HttpStatus.ok:
         goToMyListingsReloaded();
+        break;
+      default:
+        showGenericErrorDialog();
+    }
+  }
+
+  _onUpdateListingResponse(HttpResponse<Product> response) {
+    switch (response.status) {
+      case HttpStatus.ok:
+        setState(() => _product = response.data);
         break;
       default:
         showGenericErrorDialog();
