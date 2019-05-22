@@ -31,6 +31,7 @@ class NewListingBloc {
   final _userPublishSubject = PublishSubject<NewListingBlocUser>();
   final _locationPublishSubject = PublishSubject<Location>();
   final _uploadStatusPublishSubject = PublishSubject<StreamEvent<double>>();
+  final _savedProductPublishSubject = PublishSubject<Product>();
 
   NewListingBloc(this.isEditing);
 
@@ -38,11 +39,14 @@ class NewListingBloc {
   Observable<Location> get locationStream => _locationPublishSubject.stream;
   Observable<StreamEvent<double>> get uploadStatusStream =>
       _uploadStatusPublishSubject.stream;
+  Observable<Product> get savedProductStream =>
+      _savedProductPublishSubject.stream;
 
   dispose() {
     _userPublishSubject.close();
     _locationPublishSubject.close();
     _uploadStatusPublishSubject.close();
+    _savedProductPublishSubject.close();
   }
 
   loadUser({bool forceShow = false}) async {
@@ -159,13 +163,14 @@ class NewListingBloc {
           : await _listingRepository.create(request);
 
       if (response.status == HttpStatus.created ||
-          response.status == HttpStatus.ok)
+          response.status == HttpStatus.ok) {
         _uploadStatusPublishSubject.sink
             .add(StreamEvent<double>(state: StreamEventState.ready, data: 1.0));
-      else
-        _uploadStatusPublishSubject.sink.addError(response.message);
+        _savedProductPublishSubject.sink.add(response.data);
+      } else
+        throw response.message;
     } catch (error) {
-      _uploadStatusPublishSubject.sink.addError(error);
+      _savedProductPublishSubject.sink.addError(error);
     }
   }
 }

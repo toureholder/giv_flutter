@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -66,7 +67,7 @@ class _NewListingState extends BaseState<NewListing> {
     _newListingBloc = NewListingBloc(_isEditing);
     _listenToUserStream();
     _loadLocation();
-    _listenToUploadStream();
+    _listenToSavedProductStream();
   }
 
   void _listenToUserStream() {
@@ -76,10 +77,9 @@ class _NewListingState extends BaseState<NewListing> {
     });
   }
 
-  void _listenToUploadStream() {
-    _newListingBloc.uploadStatusStream.listen((StreamEvent<double> event) {
-      if (event.isReady) _onUploadSuccess();
-    }, onError: _handleUploadError);
+  void _listenToSavedProductStream() {
+    _newListingBloc.savedProductStream
+        .listen(_onSaveSuccess, onError: _handleUploadError);
   }
 
   void _loadLocation() {
@@ -267,7 +267,8 @@ class _NewListingState extends BaseState<NewListing> {
           _user = snapshot.data.user;
           _forceShowPhoneNumber =
               _forceShowPhoneNumber || (snapshot.data.forceShow ?? false);
-          return (_user?.phoneNumber == null || (_forceShowPhoneNumber ?? false))
+          return (_user?.phoneNumber == null ||
+                  (_forceShowPhoneNumber ?? false))
               ? _phoneNumberItemTile(_user)
               : Container();
         } else {
@@ -716,19 +717,14 @@ class _NewListingState extends BaseState<NewListing> {
   }
 
   _submitForm() {
-    if (_validateForm()) {
-      print('submitting form...');
-
-      _newListingBloc.saveProduct(_product);
-    }
+    if (_validateForm()) _newListingBloc.saveProduct(_product);
   }
 
-  _onUploadSuccess() {
-    if (_isEditing) {
-      goToMyListingsReloaded();
-    } else {
+  _onSaveSuccess(Product product) {
+    if (_isEditing)
+      navigation.pop(product);
+    else
       navigation.pushReplacement(MyListings());
-    }
   }
 
   Future<bool> _onWillPop() {

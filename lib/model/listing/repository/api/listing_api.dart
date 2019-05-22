@@ -9,18 +9,18 @@ import 'package:giv_flutter/util/network/base_api.dart';
 import 'package:giv_flutter/util/network/http_response.dart';
 
 class ListingApi extends BaseApi {
-  Future<HttpResponse<ApiModelResponse>> create(
+  Future<HttpResponse<Product>> create(
       CreateListingRequest request) async {
     HttpStatus status;
     try {
       final response = await post('$baseUrl/listings', request.toHttpRequestBody());
 
       status = HttpResponse.codeMap[response.statusCode];
-      final data = ApiModelResponse.fromJson(jsonDecode(response.body));
+      final data = Product.fromJson(jsonDecode(response.body));
 
-      return HttpResponse<ApiModelResponse>(status: status, data: data);
+      return HttpResponse<Product>(status: status, data: data);
     } catch (error) {
-      return HttpResponse<ApiModelResponse>(
+      return HttpResponse<Product>(
           status: status, message: error.toString());
     }
   }

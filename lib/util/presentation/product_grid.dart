@@ -20,11 +20,19 @@ class ProductGrid extends StatefulWidget {
 }
 
 class _ProductGridState extends BaseState<ProductGrid> {
+  List<Product> _products;
+
+  @override
+  void initState() {
+    super.initState();
+    _products = widget.products;
+  }
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
     return Column(
-      children: _buildCustomGrid(context, widget.products),
+      children: _buildCustomGrid(context, _products),
     );
   }
 
@@ -125,10 +133,17 @@ class _ProductGridState extends BaseState<ProductGrid> {
     );
   }
 
-  _goToProductDetail(Product product) {
-    navigation.push(ProductDetail(
+  _goToProductDetail(Product product) async {
+    final result = await navigation.push(ProductDetail(
       product: product,
       isMine: widget.isMine,
     ));
+
+    if (result != null && result is Product) {
+      final productIndex = _products.indexWhere((it) => it.id == product.id);
+      setState(() {
+        _products[productIndex] = result;
+      });
+    }
   }
 }

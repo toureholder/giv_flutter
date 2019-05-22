@@ -101,6 +101,8 @@ class _ProductDetailState extends BaseState<ProductDetail> {
   CustomScaffold _buildCustomScaffold(BuildContext context) {
     return CustomScaffold(
       appBar: CustomAppBar(
+        leading: IconButton(
+            icon: BackButtonIcon(), onPressed: () => navigation.pop(_product)),
         actions: widget.isMine ? _appBarActions() : null,
       ),
       body: _buildMainListView(context),
@@ -322,10 +324,12 @@ class _ProductDetailState extends BaseState<ProductDetail> {
     _productDetailBloc.updateListing(request);
   }
 
-  _editListing() {
-    navigation.pushReplacement(NewListing(
+  _editListing() async {
+    final result = await navigation.push(NewListing(
       product: _product,
     ));
+
+    if (result != null && result is Product) setState(() => _product = result);
   }
 
   _deleteListing() {

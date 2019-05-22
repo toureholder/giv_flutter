@@ -9,7 +9,7 @@ import 'package:giv_flutter/util/network/http_response.dart';
 class ListingRepository {
   final listingApi = ListingApi();
 
-  Future<HttpResponse<ApiModelResponse>> create(CreateListingRequest request) =>
+  Future<HttpResponse<Product>> create(CreateListingRequest request) =>
       listingApi.create(request);
 
   Future<HttpResponse<Product>> update(CreateListingRequest request) =>
