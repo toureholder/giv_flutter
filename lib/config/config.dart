@@ -1,5 +1,5 @@
 class Config {
-  static const versionName = '1.3.3';
+  static const versionName = '1.3.4';
   static const buildNumber = 9;
   static const clientName = 'mobile';
   static const baseUrl = 'https://api.alguemquer.com.br';
