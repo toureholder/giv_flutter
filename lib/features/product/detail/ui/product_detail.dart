@@ -248,6 +248,17 @@ class _ProductDetailState extends BaseState<ProductDetail> {
 
     final imageUrls = images.map((it) => it.url).toList();
 
+    final carousel = _theCarouselItself(imageUrls, _pageController, images);
+
+    return _product.isActive
+        ? carousel
+        : Stack(
+            children: <Widget>[carousel, _positionedIsHiddenAlert()],
+          );
+  }
+
+  ImageCarousel _theCarouselItself(List<String> imageUrls,
+      PageController _pageController, List<CustomImage.Image> images) {
     return ImageCarousel(
       imageUrls: imageUrls,
       height: 300.0,
@@ -259,6 +270,26 @@ class _ProductDetailState extends BaseState<ProductDetail> {
       withIndicator: true,
       isFaded: !_product.isActive,
     );
+  }
+
+  Positioned _positionedIsHiddenAlert() {
+    return Positioned(
+        top: 0,
+        left: 0,
+        right: 0,
+        child: GestureDetector(
+          onTap: _confirmHideOrActivate,
+          child: Container(
+            padding: EdgeInsets.all(Dimens.default_horizontal_margin),
+            color: Theme.of(context).primaryColor,
+            child: Center(
+                child: Body2Text(
+              string('product_detail_inactive_listing_alert'),
+              textAlign: TextAlign.center,
+              color: Colors.white,
+            )),
+          ),
+        ));
   }
 
   void _confirmDelete() {

@@ -728,6 +728,10 @@ class Strings {
       "en": "Reactivate listing?",
       "pt": "Reativar anúncio?"
     },
+    "product_detail_inactive_listing_alert": {
+      "en": "This listing is not visible to other users.",
+      "pt": "Este anúncio não está visível para outros usuários."
+    },
     "reactivate_listing_confirmation_content": {
       "en": "This listing will be visible to other users.",
       "pt": "Este anúncio estará visível para outros usuários."
