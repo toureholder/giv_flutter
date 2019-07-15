@@ -272,7 +272,7 @@ class _NewListingState extends BaseState<NewListing> {
               ? _phoneNumberItemTile(_user)
               : Container();
         } else {
-          Container();
+          return Container();
         }
       },
     );
@@ -409,7 +409,7 @@ class _NewListingState extends BaseState<NewListing> {
   Widget _productPhoto(CustomImage.Image image) {
     final widget = image.hasUrl
         ? CachedNetworkImage(
-            placeholder: RoundedCorners(
+            placeholder: (context, url) => RoundedCorners(
               child: Container(
                 height: Dimens.home_product_image_dimension,
                 width: Dimens.home_product_image_dimension,

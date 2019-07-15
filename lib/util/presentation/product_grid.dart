@@ -120,13 +120,13 @@ class _ProductGridState extends BaseState<ProductGrid> {
   Widget _productImage(Product product) {
     return RoundedCorners(
       child: CachedNetworkImage(
-          placeholder: RoundedCorners(
-            child: Container(
-              height: Dimens.home_product_image_dimension,
-              width: Dimens.home_product_image_dimension,
-              decoration: BoxDecoration(color: Colors.grey[200]),
-            ),
-          ),
+          placeholder: (context, url) => RoundedCorners(
+                child: Container(
+                  height: Dimens.home_product_image_dimension,
+                  width: Dimens.home_product_image_dimension,
+                  decoration: BoxDecoration(color: Colors.grey[200]),
+                ),
+              ),
           fit: BoxFit.cover,
           height: Dimens.search_result_image_height,
           imageUrl: product.images.first.url),

@@ -165,7 +165,7 @@ class _HomeState extends BaseState<Home> {
             right: isLastItem ? Dimens.default_horizontal_margin : 0.0),
         child: RoundedCorners(
           child: CachedNetworkImage(
-            placeholder: RoundedCorners(
+            placeholder: (context, url) => RoundedCorners(
               child: Container(
                 height: Dimens.home_product_image_dimension,
                 width: Dimens.home_product_image_dimension,
