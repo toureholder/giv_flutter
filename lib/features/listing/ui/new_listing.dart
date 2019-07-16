@@ -646,13 +646,15 @@ class _NewListingState extends BaseState<NewListing> {
 
   Future<Null> _cropImage(File imageFile) async {
     File croppedFile = await ImageCropper.cropImage(
-        sourcePath: imageFile.path,
-        ratioX: Config.croppedProductImageRatioX,
-        ratioY: Config.croppedProductImageRatioY,
-        maxWidth: Config.croppedProductImageMaxHeight,
-        maxHeight: Config.croppedProductImageMaxWidth,
-        toolbarTitle: string('image_cropper_toolbar_title'),
-        toolbarColor: Colors.black);
+      sourcePath: imageFile.path,
+      ratioX: Config.croppedProductImageRatioX,
+      ratioY: Config.croppedProductImageRatioY,
+      maxWidth: Config.croppedProductImageMaxHeight,
+      maxHeight: Config.croppedProductImageMaxWidth,
+      toolbarTitle: string('image_cropper_toolbar_title'),
+      toolbarColor: Colors.black,
+      toolbarWidgetColor: Colors.white,
+    );
 
     if (croppedFile == null) return;
 
@@ -736,20 +738,19 @@ class _NewListingState extends BaseState<NewListing> {
         ? showDialog(
               context: context,
               builder: (context) => AlertDialog(
-                    title:
-                        Text(string('new_listing_cancel_confirmation_title')),
-                    content: Text(string(message)),
-                    actions: <Widget>[
-                      FlatButton(
-                        onPressed: () => Navigator.of(context).pop(false),
-                        child: Text(string('common_no')),
-                      ),
-                      FlatButton(
-                        onPressed: () => Navigator.of(context).pop(true),
-                        child: Text(string('common_yes')),
-                      ),
-                    ],
+                title: Text(string('new_listing_cancel_confirmation_title')),
+                content: Text(string(message)),
+                actions: <Widget>[
+                  FlatButton(
+                    onPressed: () => Navigator.of(context).pop(false),
+                    child: Text(string('common_no')),
                   ),
+                  FlatButton(
+                    onPressed: () => Navigator.of(context).pop(true),
+                    child: Text(string('common_yes')),
+                  ),
+                ],
+              ),
             ) ??
             false
         : Future<bool>.value(true);

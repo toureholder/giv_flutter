@@ -263,13 +263,15 @@ class _ProfileState extends BaseState<Profile> {
 
   Future<Null> _cropImage(File imageFile) async {
     File croppedFile = await ImageCropper.cropImage(
-        sourcePath: imageFile.path,
-        ratioX: Config.croppedProfileImageRatioX,
-        ratioY: Config.croppedProfileImageRatioY,
-        maxWidth: Config.croppedProfileImageMaxHeight,
-        maxHeight: Config.croppedProfileImageMaxWidth,
-        toolbarTitle: string('image_cropper_toolbar_title'),
-        toolbarColor: Colors.black);
+      sourcePath: imageFile.path,
+      ratioX: Config.croppedProfileImageRatioX,
+      ratioY: Config.croppedProfileImageRatioY,
+      maxWidth: Config.croppedProfileImageMaxHeight,
+      maxHeight: Config.croppedProfileImageMaxWidth,
+      toolbarTitle: string('image_cropper_toolbar_title'),
+      toolbarColor: Colors.black,
+      toolbarWidgetColor: Colors.white,
+    );
 
     if (croppedFile == null) return;
 
@@ -301,24 +303,23 @@ class _ProfileState extends BaseState<Profile> {
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
-              title: Text(string('profile_cancel_upload_confirmation_title')),
-              content:
-                  Text(string('profile_cancel_upload_confirmation_message')),
-              actions: <Widget>[
-                FlatButton(
-                  onPressed: () => Navigator.of(context).pop(false),
-                  child: Text(string('common_no')),
-                ),
-                FlatButton(
-                  onPressed: () {
-                    navigation.pop();
-                    _isSavingImage = false;
-                    navigation.pop();
-                  },
-                  child: Text(string('common_yes')),
-                ),
-              ],
+          title: Text(string('profile_cancel_upload_confirmation_title')),
+          content: Text(string('profile_cancel_upload_confirmation_message')),
+          actions: <Widget>[
+            FlatButton(
+              onPressed: () => Navigator.of(context).pop(false),
+              child: Text(string('common_no')),
             ),
+            FlatButton(
+              onPressed: () {
+                navigation.pop();
+                _isSavingImage = false;
+                navigation.pop();
+              },
+              child: Text(string('common_yes')),
+            ),
+          ],
+        ),
       );
       return false;
     } else {
