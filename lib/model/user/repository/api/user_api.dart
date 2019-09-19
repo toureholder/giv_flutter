@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'package:meta/meta.dart';
 
 import 'package:giv_flutter/model/api_response/api_response.dart';
 import 'package:giv_flutter/model/user/repository/api/request/log_in_request.dart';
@@ -11,6 +13,8 @@ import 'package:giv_flutter/util/network/base_api.dart';
 import 'package:giv_flutter/util/network/http_response.dart';
 
 class UserApi extends BaseApi {
+  UserApi({@required http.Client client}) : super(client: client);
+
   Future<HttpResponse<ApiResponse>> signUp(SignUpRequest request) async {
     HttpStatus status;
     try {

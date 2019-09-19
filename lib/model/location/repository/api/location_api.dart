@@ -6,8 +6,14 @@ import 'package:giv_flutter/model/location/location_part.dart';
 import 'package:giv_flutter/model/location/location_list.dart';
 import 'package:giv_flutter/util/network/base_api.dart';
 import 'package:giv_flutter/util/network/http_response.dart';
+import 'package:http/http.dart' as http;
+import 'package:meta/meta.dart';
 
 class LocationApi extends BaseApi {
+  LocationApi({
+    @required http.Client client,
+  }) : super(client: client);
+
   Future<HttpResponse<List<Country>>> getCountries() async {
     HttpStatus status;
     try {

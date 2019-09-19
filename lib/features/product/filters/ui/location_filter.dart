@@ -16,9 +16,14 @@ import 'package:giv_flutter/values/dimens.dart';
 class LocationFilter extends StatefulWidget {
   final Location location;
   final bool showSaveButton;
+  final LocationFilterBloc bloc;
 
-  const LocationFilter({Key key, this.location, this.showSaveButton = false})
-      : super(key: key);
+  const LocationFilter({
+    Key key,
+    @required this.bloc,
+    this.location,
+    this.showSaveButton = false,
+  }) : super(key: key);
 
   @override
   _LocationFilterState createState() => _LocationFilterState();
@@ -33,7 +38,7 @@ class _LocationFilterState extends BaseState<LocationFilter> {
   void initState() {
     super.initState();
     _currentLocation = widget.location?.copy() ?? Location();
-    _locationFilterBloc = LocationFilterBloc();
+    _locationFilterBloc = widget.bloc;
     _listenForErrors();
     _locationFilterBloc.fetchLocationLists(_currentLocation);
   }
@@ -45,12 +50,6 @@ class _LocationFilterState extends BaseState<LocationFilter> {
         .listen((event) {}, onError: _handleNetworkError);
     _locationFilterBloc.citiesStream
         .listen((event) {}, onError: _handleNetworkError);
-  }
-
-  @override
-  void dispose() {
-    _locationFilterBloc.dispose();
-    super.dispose();
   }
 
   @override

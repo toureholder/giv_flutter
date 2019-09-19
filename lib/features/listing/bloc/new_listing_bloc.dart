@@ -14,26 +14,36 @@ import 'package:giv_flutter/util/data/stream_event.dart';
 import 'package:giv_flutter/util/firebase/firebase_storage_util.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:giv_flutter/util/network/http_response.dart';
+import 'package:meta/meta.dart';
 
 class NewListingBloc {
-  final bool isEditing;
+  final ListingRepository listingRepository;
+  final LocationRepository locationRepository;
 
-  final List<double> _uploadProgresses = [];
-  var _successfulUploadCount = 0;
+  NewListingBloc({
+    @required this.locationRepository,
+    @required this.listingRepository,
+  });
+
+  bool isEditing;
+
+  List<double> _uploadProgresses = [];
+  int _successfulUploadCount = 0;
   List<ListingImage> _listingImages;
-  final List<StorageUploadTask> _uploadTasks = [];
-  final List<StorageReference> _storageReferences = [];
+  List<StorageUploadTask> _uploadTasks = [];
+  List<StorageReference> _storageReferences = [];
   bool _hasSentRequest = false;
   Product _product;
-  final _listingRepository = ListingRepository();
-  final _locationRepository = LocationRepository();
 
   final _userPublishSubject = PublishSubject<NewListingBlocUser>();
   final _locationPublishSubject = PublishSubject<Location>();
   final _uploadStatusPublishSubject = PublishSubject<StreamEvent<double>>();
   final _savedProductPublishSubject = PublishSubject<Product>();
 
-  NewListingBloc(this.isEditing);
+  factory NewListingBloc.from(NewListingBloc bloc, bool isEditing) {
+    bloc.isEditing = isEditing;
+    return bloc;
+  }
 
   Observable<NewListingBlocUser> get userStream => _userPublishSubject.stream;
   Observable<Location> get locationStream => _locationPublishSubject.stream;
@@ -41,6 +51,15 @@ class NewListingBloc {
       _uploadStatusPublishSubject.stream;
   Observable<Product> get savedProductStream =>
       _savedProductPublishSubject.stream;
+
+  _resetProgress() {
+    _uploadProgresses = [];
+    _successfulUploadCount = 0;
+    _listingImages = [];
+    _uploadTasks = [];
+    _storageReferences = [];
+    _hasSentRequest = false;
+  }
 
   dispose() {
     _userPublishSubject.close();
@@ -65,7 +84,7 @@ class NewListingBloc {
       if (location == null) {
         resolvedLocation = await Prefs.getLocation();
       } else {
-        var response = await _locationRepository.getLocationDetails(location);
+        var response = await locationRepository.getLocationDetails(location);
         if (response.status == HttpStatus.ok) resolvedLocation = response.data;
       }
       _locationPublishSubject.sink.add(resolvedLocation);
@@ -82,7 +101,7 @@ class NewListingBloc {
   _handleImages(List<Image> images) {
     _updateProgressStream(0.0);
 
-    _listingImages = [];
+    _resetProgress();
     for (var i = 0; i < images.length; i++) {
       final image = images[i];
       if (image.hasUrl)
@@ -159,8 +178,8 @@ class NewListingBloc {
 
     try {
       var response = isEditing
-          ? await _listingRepository.update(request)
-          : await _listingRepository.create(request);
+          ? await listingRepository.update(request)
+          : await listingRepository.create(request);
 
       if (response.status == HttpStatus.created ||
           response.status == HttpStatus.ok) {

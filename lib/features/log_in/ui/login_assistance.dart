@@ -19,9 +19,14 @@ import 'package:giv_flutter/values/dimens.dart';
 class LoginAssistance extends StatefulWidget {
   final LoginAssistancePage page;
   final String email;
+  final LogInBloc bloc;
 
-  const LoginAssistance({Key key, @required this.page, this.email})
-      : super(key: key);
+  const LoginAssistance({
+    Key key,
+    @required this.bloc,
+    @required this.page,
+    this.email,
+  }) : super(key: key);
 
   @override
   _LoginAssistanceState createState() => _LoginAssistanceState();
@@ -38,7 +43,7 @@ class _LoginAssistanceState extends BaseState<LoginAssistance> {
   @override
   void initState() {
     super.initState();
-    _logInBloc = LogInBloc();
+    _logInBloc = widget.bloc;
     _initFunctionMap();
     _listenToResponseStream();
 
@@ -161,7 +166,8 @@ class _LoginAssistanceState extends BaseState<LoginAssistance> {
       case HttpStatus.notAcceptable:
         showInformationDialog(
             title: string('resend_activation_error_already_activated_title'),
-            content: string('resend_activation_error_already_activated_message'));
+            content:
+                string('resend_activation_error_already_activated_message'));
         break;
       case HttpStatus.notFound:
         _showNotFoundDialog();

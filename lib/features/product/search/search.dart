@@ -6,11 +6,14 @@ import 'package:giv_flutter/model/product/product_category.dart';
 import 'package:giv_flutter/util/presentation/android_theme.dart';
 import 'package:giv_flutter/util/presentation/custom_scaffold.dart';
 import 'package:giv_flutter/util/presentation/material_search.dart';
+import 'package:provider/provider.dart';
 
 class Search extends StatefulWidget {
   final String initialText;
+  final SearchResultBloc bloc;
 
-  const Search({Key key, this.initialText}) : super(key: key);
+  const Search({Key key, @required this.bloc, this.initialText})
+      : super(key: key);
 
   @override
   _SearchState createState() => _SearchState();
@@ -23,13 +26,7 @@ class _SearchState extends BaseState<Search> {
   @override
   void initState() {
     super.initState();
-    _searchResultBloc = SearchResultBloc();
-  }
-
-  @override
-  void dispose() {
-    _searchResultBloc.dispose();
-    super.dispose();
+    _searchResultBloc = widget.bloc;
   }
 
   @override
@@ -37,9 +34,8 @@ class _SearchState extends BaseState<Search> {
     super.build(context);
 
     return CustomScaffold(
-      resizeToAvoidBottomPadding: false,
-      body: AndroidTheme(child: _buildSearchBar())
-    );
+        resizeToAvoidBottomPadding: false,
+        body: AndroidTheme(child: _buildSearchBar()));
   }
 
   Widget _buildSearchBar() {
@@ -67,7 +63,13 @@ class _SearchState extends BaseState<Search> {
 
   _searchByQuery(String q) {
     if (q?.isEmpty ?? true) return;
-    navigation.pushReplacement(SearchResult(searchQuery: q),
+    navigation.pushReplacement(
+        Consumer<SearchResultBloc>(
+          builder: (context, bloc, child) => SearchResult(
+            searchQuery: q,
+            bloc: bloc,
+          ),
+        ),
         hasAnimation: false);
   }
 
@@ -75,7 +77,13 @@ class _SearchState extends BaseState<Search> {
     ProductCategory selectedCategory =
         _suggestedCategories.firstWhere((it) => it.id.toString() == id);
     navigation.pushReplacement(
-        SearchResult(category: selectedCategory, useCanonicalName: true),
+        Consumer<SearchResultBloc>(
+          builder: (context, bloc, child) => SearchResult(
+            category: selectedCategory,
+            useCanonicalName: true,
+            bloc: bloc,
+          ),
+        ),
         hasAnimation: false);
   }
 }

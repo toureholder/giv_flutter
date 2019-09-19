@@ -4,11 +4,16 @@ import 'package:giv_flutter/model/location/location.dart';
 import 'package:giv_flutter/model/product/product.dart';
 import 'package:giv_flutter/model/product/product_category.dart';
 import 'package:giv_flutter/model/product/product_search_result.dart';
-import 'package:giv_flutter/model/product/repository/cache/product_cache.dart';
 import 'package:giv_flutter/util/network/base_api.dart';
 import 'package:giv_flutter/util/network/http_response.dart';
+import 'package:http/http.dart' as http;
+import 'package:meta/meta.dart';
 
 class ProductApi extends BaseApi {
+  ProductApi({
+    @required http.Client client,
+  }) : super(client: client);
+
   Future<HttpResponse<List<ProductCategory>>> getFeaturedProductsCategories(
       {Location location}) async {
     HttpStatus status;
@@ -25,7 +30,9 @@ class ProductApi extends BaseApi {
       return HttpResponse<List<ProductCategory>>(status: status, data: data);
     } catch (error) {
       return HttpResponse<List<ProductCategory>>(
-          status: status, message: error.toString());
+        status: status,
+        message: error.toString(),
+      );
     }
   }
 
@@ -38,10 +45,11 @@ class ProductApi extends BaseApi {
 
       status = HttpResponse.codeMap[response.statusCode];
       final data = ProductCategory.parseList(response.body);
-
-      if (data != null) ProductCache.saveCategories(response.body, fetchAll);
-
-      return HttpResponse<List<ProductCategory>>(status: status, data: data);
+      return HttpResponse<List<ProductCategory>>(
+        status: status,
+        data: data,
+        originalBody: response.body,
+      );
     } catch (error) {
       return HttpResponse<List<ProductCategory>>(
           status: status, message: error.toString());

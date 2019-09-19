@@ -14,11 +14,13 @@ import 'package:giv_flutter/util/presentation/spacing.dart';
 import 'package:giv_flutter/util/presentation/termos_of_service_acceptance_caption.dart';
 import 'package:giv_flutter/util/presentation/typography.dart';
 import 'package:giv_flutter/values/dimens.dart';
+import 'package:provider/provider.dart';
 
 class SignIn extends StatefulWidget {
   final Widget redirect;
+  final LogInBloc bloc;
 
-  const SignIn({Key key, this.redirect}) : super(key: key);
+  const SignIn({Key key, @required this.bloc, this.redirect}) : super(key: key);
 
   @override
   _SignInState createState() => _SignInState();
@@ -30,7 +32,7 @@ class _SignInState extends BaseState<SignIn> {
   @override
   void initState() {
     super.initState();
-    _logInBloc = LogInBloc();
+    _logInBloc = widget.bloc;
     _logInBloc.loginResponseStream
         .listen((HttpResponse<LogInResponse> httpResponse) {
       if (httpResponse.isReady) onLoginResponse(httpResponse, widget.redirect);
@@ -126,8 +128,11 @@ class _SignInState extends BaseState<SignIn> {
   }
 
   void _goToLogIn() {
-    navigation.pushReplacement(LogIn(
-      redirect: widget.redirect,
+    navigation.pushReplacement(Consumer<LogInBloc>(
+      builder: (context, bloc, child) => LogIn(
+        bloc: bloc,
+        redirect: widget.redirect,
+      ),
     ));
   }
 

@@ -1,12 +1,14 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:giv_flutter/base/base_state.dart';
+import 'package:giv_flutter/features/product/detail/bloc/product_detail_bloc.dart';
 import 'package:giv_flutter/features/product/detail/ui/product_detail.dart';
 import 'package:giv_flutter/model/product/product.dart';
 import 'package:giv_flutter/util/presentation/rounded_corners.dart';
 import 'package:giv_flutter/util/presentation/typography.dart';
 import 'package:giv_flutter/values/colors.dart';
 import 'package:giv_flutter/values/dimens.dart';
+import 'package:provider/provider.dart';
 
 class ProductGrid extends StatefulWidget {
   final List<Product> products;
@@ -134,9 +136,12 @@ class _ProductGridState extends BaseState<ProductGrid> {
   }
 
   _goToProductDetail(Product product) async {
-    final result = await navigation.push(ProductDetail(
-      product: product,
-      isMine: widget.isMine,
+    final result = await navigation.push(Consumer<ProductDetailBloc>(
+      builder: (context, bloc, child) => ProductDetail(
+        product: product,
+        isMine: widget.isMine,
+        bloc: bloc,
+      ),
     ));
 
     if (result != null && result is Product) {

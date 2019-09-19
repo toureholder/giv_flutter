@@ -5,6 +5,7 @@ import 'package:giv_flutter/base/base_state.dart';
 import 'package:giv_flutter/config/preferences/prefs.dart';
 import 'package:giv_flutter/features/about/about.dart';
 import 'package:giv_flutter/features/base/base.dart';
+import 'package:giv_flutter/features/listing/bloc/my_listings_bloc.dart';
 import 'package:giv_flutter/features/listing/ui/my_listings.dart';
 import 'package:giv_flutter/features/settings/bloc/settings_bloc.dart';
 import 'package:giv_flutter/features/settings/ui/profile.dart';
@@ -18,6 +19,7 @@ import 'package:giv_flutter/util/presentation/custom_scaffold.dart';
 import 'package:giv_flutter/util/presentation/termos_of_service_acceptance_caption.dart';
 import 'package:giv_flutter/values/custom_icons_icons.dart';
 import 'package:giv_flutter/values/dimens.dart';
+import 'package:provider/provider.dart';
 
 class Settings extends StatefulWidget {
   @override
@@ -76,7 +78,11 @@ class _SettingsState extends BaseState<Settings> {
           ),
           text: string('me_listings'),
           onTap: () {
-            navigation.push(MyListings());
+            navigation.push(Consumer<MyListingsBloc>(
+              builder: (context, bloc, child) => MyListings(
+                bloc: bloc,
+              ),
+            ));
           },
         ),
         Divider(

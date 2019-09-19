@@ -5,10 +5,14 @@ import 'package:giv_flutter/config/preferences/prefs.dart';
 import 'package:giv_flutter/features/home/bloc/home_bloc.dart';
 import 'package:giv_flutter/features/home/model/home_content.dart';
 import 'package:giv_flutter/features/home/ui/home_carousel.dart';
+import 'package:giv_flutter/features/log_in/bloc/log_in_bloc.dart';
+import 'package:giv_flutter/features/product/detail/bloc/product_detail_bloc.dart';
 import 'package:giv_flutter/features/product/detail/ui/product_detail.dart';
+import 'package:giv_flutter/features/product/search_result/bloc/search_result_bloc.dart';
 import 'package:giv_flutter/features/product/search_result/ui/search_result.dart';
 import 'package:giv_flutter/features/settings/ui/settings.dart';
 import 'package:giv_flutter/features/sign_in/ui/sign_in.dart';
+import 'package:giv_flutter/features/user_profile/bloc/user_profile_bloc.dart';
 import 'package:giv_flutter/features/user_profile/ui/user_profile.dart';
 import 'package:giv_flutter/model/carousel/carousel_item.dart';
 import 'package:giv_flutter/model/product/product.dart';
@@ -24,11 +28,13 @@ import 'package:giv_flutter/util/presentation/spacing.dart';
 import 'package:giv_flutter/util/presentation/typography.dart';
 import 'package:giv_flutter/values/dimens.dart';
 import 'package:giv_flutter/model/image/image.dart' as CustomImage;
+import 'package:provider/provider.dart';
 
 class Home extends StatefulWidget {
   final HomeListener listener;
+  final HomeBloc bloc;
 
-  const Home({Key key, this.listener}) : super(key: key);
+  const Home({Key key, @required this.bloc, this.listener}) : super(key: key);
 
   @override
   _HomeState createState() => _HomeState();
@@ -40,7 +46,7 @@ class _HomeState extends BaseState<Home> {
   @override
   void initState() {
     super.initState();
-    _homeBloc = HomeBloc();
+    _homeBloc = widget.bloc;
     _homeBloc.fetchContent();
   }
 
@@ -99,16 +105,14 @@ class _HomeState extends BaseState<Home> {
   MediumFlatPrimaryButton _buildSignInButton() {
     return MediumFlatPrimaryButton(
       onPressed: () {
-        navigation.push(SignIn());
+        navigation.push(Consumer<LogInBloc>(
+          builder: (context, bloc, child) => SignIn(
+            bloc: bloc,
+          ),
+        ));
       },
       text: string('shared_action_sign_in'),
     );
-  }
-
-  @override
-  void dispose() {
-    _homeBloc.dispose();
-    super.dispose();
   }
 
   ListView _buildMainListView(BuildContext context, HomeContent content) {
@@ -157,7 +161,12 @@ class _HomeState extends BaseState<Home> {
       {isLastItem = false}) {
     return GestureDetector(
       onTap: () {
-        navigation.push(ProductDetail(product: product));
+        navigation.push(Consumer<ProductDetailBloc>(
+          builder: (context, bloc, child) => ProductDetail(
+            product: product,
+            bloc: bloc,
+          ),
+        ));
       },
       child: Container(
         padding: EdgeInsets.only(
@@ -216,9 +225,19 @@ class _HomeState extends BaseState<Home> {
         }
 
         if (item.productCategory != null) {
-          navigation.push(SearchResult(category: item.productCategory));
+          navigation.push(Consumer<SearchResultBloc>(
+            builder: (context, bloc, child) => SearchResult(
+              category: item.productCategory,
+              bloc: bloc,
+            ),
+          ));
         } else if (item.user != null) {
-          navigation.push(UserProfile(user: item.user));
+          navigation.push(Consumer<UserProfileBloc>(
+            builder: (context, bloc, child) => UserProfile(
+              user: item.user,
+              bloc: bloc,
+            ),
+          ));
         }
       },
       autoAdvance: true,

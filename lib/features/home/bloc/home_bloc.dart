@@ -5,11 +5,16 @@ import 'package:giv_flutter/model/product/product_category.dart';
 import 'package:giv_flutter/model/product/repository/product_repository.dart';
 import 'package:giv_flutter/util/network/http_response.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:meta/meta.dart';
 
 class HomeBloc {
-  final _productRepository = ProductRepository();
-  final _carouselRepository = CarouselRepository();
+  HomeBloc({
+    @required this.productRepository,
+    @required this.carouselRepository,
+  });
 
+  final ProductRepository productRepository;
+  final CarouselRepository carouselRepository;
   final _contentPublishSubject = PublishSubject<HomeContent>();
 
   Observable<HomeContent> get content => _contentPublishSubject.stream;
@@ -21,8 +26,8 @@ class HomeBloc {
   fetchContent() async {
     try {
       var results = await Future.wait([
-        _carouselRepository.getHomeCarouselItems(),
-        _productRepository.getFeaturedProductsCategories()
+        carouselRepository.getHomeCarouselItems(),
+        productRepository.getFeaturedProductsCategories()
       ]);
 
       HttpResponse<List<CarouselItem>> heroItemsResponse = results[0];

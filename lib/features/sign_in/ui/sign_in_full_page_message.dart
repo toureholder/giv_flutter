@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:giv_flutter/base/base_state.dart';
+import 'package:giv_flutter/features/log_in/bloc/log_in_bloc.dart';
 import 'package:giv_flutter/features/log_in/ui/log_in.dart';
 import 'package:giv_flutter/util/presentation/buttons.dart';
 import 'package:giv_flutter/util/presentation/custom_scaffold.dart';
 import 'package:giv_flutter/util/presentation/spacing.dart';
 import 'package:giv_flutter/util/presentation/typography.dart';
 import 'package:giv_flutter/values/dimens.dart';
+import 'package:provider/provider.dart';
 
 class SignInFullPageMessage extends StatefulWidget {
   final Widget heroWidget;
@@ -51,7 +53,11 @@ class _SignInFullPageMessageState extends BaseState<SignInFullPageMessage> {
               PrimaryButton(
                 text: string('common_ok'),
                 onPressed: () {
-                  navigation.pushReplacement(LogIn());
+                  navigation.pushReplacement(Consumer<LogInBloc>(
+                    builder: (context, bloc, child) => LogIn(
+                      bloc: bloc,
+                    ),
+                  ));
                 },
                 fillWidth: false,
               )

@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:giv_flutter/base/base_state.dart';
 import 'package:giv_flutter/features/base/model/base_page.dart';
+import 'package:giv_flutter/features/home/bloc/home_bloc.dart';
 import 'package:giv_flutter/features/home/ui/home.dart';
+import 'package:giv_flutter/features/listing/bloc/new_listing_bloc.dart';
 import 'package:giv_flutter/features/listing/ui/new_listing.dart';
+import 'package:giv_flutter/features/product/categories/bloc/categories_bloc.dart';
 import 'package:giv_flutter/features/product/categories/ui/categories.dart';
 import 'package:giv_flutter/util/presentation/custom_scaffold.dart';
+import 'package:provider/provider.dart';
 
 class Base extends StatefulWidget {
   @override
@@ -73,7 +77,9 @@ class _BaseState extends BaseState<Base> implements HomeListener {
   }
 
   void _goToPostPage() {
-    navigation.push(NewListing());
+    navigation.push(Consumer<NewListingBloc>(
+      builder: (context, bloc, child) => NewListing(bloc: bloc,),
+    ));
   }
 
   void _goToSearchPage() {
@@ -97,14 +103,21 @@ class _BaseState extends BaseState<Base> implements HomeListener {
   void _setupPages() {
     _pages = [
       BasePage(
-          child: Home(listener: this),
+          child: Consumer<HomeBloc>(
+            builder: (context, bloc, child) => Home(
+              listener: this,
+              bloc: bloc,
+            ),
+          ),
           icon: Icons.home,
           iconText: string('base_page_title_home'),
           actionId: Base.actionIdHome),
       BasePage.empty(),
       BasePage.empty(),
       BasePage(
-        child: Categories(),
+        child: Consumer<CategoriesBloc>(
+          builder: (context, bloc, child) => Categories(bloc: bloc,),
+        ),
         icon: Icons.search,
         iconText: string('base_page_title_search'),
         actionId: Base.actionIdSearch,

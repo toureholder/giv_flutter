@@ -5,17 +5,29 @@ import 'package:giv_flutter/config/config.dart';
 import 'package:giv_flutter/config/preferences/prefs.dart';
 import 'package:giv_flutter/util/network/custom_http_headers.dart';
 import 'package:http/http.dart' as http;
+import 'package:meta/meta.dart';
 
 class BaseApi {
+  BaseApi({@required this.client});
+
+  final http.Client client;
+
   final String baseUrl = Config.baseUrl;
   final String bearer = 'Bearer';
 
+  http.Client tempClient;
+
+
   Future<http.Response> delete(String url) async {
+    // Remove after refactor
+    tempClient = client ?? http.Client();
     final headers = await _getDefaultHeaders();
-    return http.delete(url, headers: headers);
+    return tempClient.delete(url, headers: headers);
   }
 
   Future<http.Response> get(String url, {Map<String, dynamic> params}) async {
+    // Remove after refactor
+    tempClient = client ?? http.Client();
     final headers = await _getDefaultHeaders();
 
     final urlBuffer = new StringBuffer(url);
@@ -28,20 +40,24 @@ class BaseApi {
       urlBuffer.write(paramsList.join('&'));
     }
 
-    return http.get(urlBuffer.toString(), headers: headers);
+    return tempClient.get(urlBuffer.toString(), headers: headers);
   }
 
   Future<http.Response> patch(String url, Map<String, dynamic> body) =>
       put(url, body);
 
   Future<http.Response> post(String url, Map<String, dynamic> body) async {
+    // Remove after refactor
+    tempClient = client ?? http.Client();
     final headers = await _getApplicationJsonContentTypeHeaders();
-    return http.post(url, body: json.encode(body), headers: headers);
+    return tempClient.post(url, body: json.encode(body), headers: headers);
   }
 
   Future<http.Response> put(String url, Map<String, dynamic> body) async {
+    // Remove after refactor
+    tempClient = client ?? http.Client();
     final headers = await _getApplicationJsonContentTypeHeaders();
-    return http.put(url, body: json.encode(body), headers: headers);
+    return tempClient.put(url, body: json.encode(body), headers: headers);
   }
 
   Future<Map<String, String>> _getDefaultHeaders() async {

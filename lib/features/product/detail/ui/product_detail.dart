@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:giv_flutter/base/base_state.dart';
 import 'package:giv_flutter/config/preferences/prefs.dart';
+import 'package:giv_flutter/features/base/base.dart';
+import 'package:giv_flutter/features/listing/bloc/my_listings_bloc.dart';
+import 'package:giv_flutter/features/listing/bloc/new_listing_bloc.dart';
+import 'package:giv_flutter/features/listing/ui/my_listings.dart';
 import 'package:giv_flutter/features/listing/ui/new_listing.dart';
 import 'package:giv_flutter/features/product/detail/bloc/product_detail_bloc.dart';
 import 'package:giv_flutter/features/product/detail/ui/i_want_it_dialog.dart';
+import 'package:giv_flutter/features/settings/ui/settings.dart';
+import 'package:giv_flutter/features/user_profile/bloc/user_profile_bloc.dart';
 import 'package:giv_flutter/features/user_profile/ui/user_profile.dart';
 import 'package:giv_flutter/model/api_response/api_response.dart';
 import 'package:giv_flutter/model/image/image.dart' as CustomImage;
@@ -24,13 +30,19 @@ import 'package:giv_flutter/util/presentation/typography.dart';
 import 'package:giv_flutter/values/colors.dart';
 import 'package:giv_flutter/values/dimens.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class ProductDetail extends StatefulWidget {
   final Product product;
   final bool isMine;
+  final ProductDetailBloc bloc;
 
-  const ProductDetail({Key key, this.product, this.isMine = false})
-      : super(key: key);
+  const ProductDetail({
+    Key key,
+    @required this.bloc,
+    this.product,
+    this.isMine = false,
+  }) : super(key: key);
 
   @override
   _ProductDetailState createState() => _ProductDetailState();
@@ -44,7 +56,7 @@ class _ProductDetailState extends BaseState<ProductDetail> {
   void initState() {
     super.initState();
     _product = widget.product;
-    _productDetailBloc = ProductDetailBloc();
+    _productDetailBloc = widget.bloc;
     _productDetailBloc.fetchLocationDetails(_product.location);
     _listenToDeleteStream();
     _listenToUpdateStream();
@@ -356,8 +368,11 @@ class _ProductDetailState extends BaseState<ProductDetail> {
   }
 
   _editListing() async {
-    final result = await navigation.push(NewListing(
-      product: _product,
+    final result = await navigation.push(Consumer<NewListingBloc>(
+      builder: (context, bloc, child) => NewListing(
+        bloc: bloc,
+        product: _product,
+      ),
     ));
 
     if (result != null && result is Product) setState(() => _product = result);
@@ -369,8 +384,11 @@ class _ProductDetailState extends BaseState<ProductDetail> {
   }
 
   _goToUserProfile() {
-    navigation.push(UserProfile(
-      user: _product.user,
+    navigation.push(Consumer<UserProfileBloc>(
+      builder: (context, bloc, child) => UserProfile(
+        bloc: bloc,
+        user: _product.user,
+      ),
     ));
   }
 
@@ -395,7 +413,7 @@ class _ProductDetailState extends BaseState<ProductDetail> {
   _onDeleteListingResponse(HttpResponse<ApiModelResponse> response) {
     switch (response.status) {
       case HttpStatus.ok:
-        goToMyListingsReloaded();
+        _goToMyListingsReloaded();
         break;
       default:
         showGenericErrorDialog();
@@ -410,5 +428,17 @@ class _ProductDetailState extends BaseState<ProductDetail> {
       default:
         showGenericErrorDialog();
     }
+  }
+
+  void _goToMyListingsReloaded() {
+    navigation.push(Base(), hasAnimation: false, clearStack: true);
+    navigation.push(Settings(), hasAnimation: false);
+    navigation.push(
+        Consumer<MyListingsBloc>(
+          builder: (context, bloc, child) => MyListings(
+            bloc: bloc,
+          ),
+        ),
+        hasAnimation: false);
   }
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:giv_flutter/base/base_state.dart';
 import 'package:giv_flutter/features/listing/bloc/my_listings_bloc.dart';
+import 'package:giv_flutter/features/listing/bloc/new_listing_bloc.dart';
 import 'package:giv_flutter/features/listing/ui/new_listing.dart';
 import 'package:giv_flutter/model/product/product.dart';
 import 'package:giv_flutter/util/data/content_stream_builder.dart';
@@ -12,8 +13,13 @@ import 'package:giv_flutter/util/presentation/product_grid.dart';
 import 'package:giv_flutter/util/presentation/spacing.dart';
 import 'package:giv_flutter/util/presentation/typography.dart';
 import 'package:giv_flutter/values/dimens.dart';
+import 'package:provider/provider.dart';
 
 class MyListings extends StatefulWidget {
+  final MyListingsBloc bloc;
+
+  const MyListings({Key key, @required this.bloc}) : super(key: key);
+
   @override
   _MyListingsState createState() => _MyListingsState();
 }
@@ -24,14 +30,8 @@ class _MyListingsState extends BaseState<MyListings> {
   @override
   void initState() {
     super.initState();
-    _myListingsBloc = MyListingsBloc();
+    _myListingsBloc = widget.bloc;
     _myListingsBloc.fetchMyProducts();
-  }
-
-  @override
-  void dispose() {
-    _myListingsBloc.dispose();
-    super.dispose();
   }
 
   @override
@@ -98,6 +98,8 @@ class _MyListingsState extends BaseState<MyListings> {
   }
 
   _createNewListing() {
-    navigation.pushReplacement(NewListing());
+    navigation.pushReplacement(Consumer<NewListingBloc>(
+      builder: (context, bloc, child) => NewListing(bloc: bloc,),
+    ));
   }
 }

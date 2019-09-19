@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:meta/meta.dart';
 import 'package:giv_flutter/config/preferences/prefs.dart';
 import 'package:giv_flutter/model/api_response/api_response.dart';
 import 'package:giv_flutter/model/user/repository/api/request/log_in_request.dart';
@@ -10,7 +11,9 @@ import 'package:giv_flutter/util/network/http_response.dart';
 import 'package:rxdart/rxdart.dart';
 
 class LogInBloc {
-  final _userRepository = UserRepository();
+  LogInBloc({@required this.userRepository});
+
+  final UserRepository userRepository;
 
   final _loginPublishSubject = PublishSubject<HttpResponse<LogInResponse>>();
 
@@ -33,7 +36,7 @@ class LogInBloc {
   login(LogInRequest request) async {
     try {
       _loginPublishSubject.sink.add(HttpResponse.loading());
-      var response = await _userRepository.login(request);
+      var response = await userRepository.login(request);
 
       if (response.data != null)
         await _saveToPreferences(response.data);
@@ -48,7 +51,7 @@ class LogInBloc {
   loginWithProvider(LogInWithProviderRequest request) async {
     try {
       _loginPublishSubject.sink.add(HttpResponse.loading());
-      var response = await _userRepository.loginWithProvider(request);
+      var response = await userRepository.loginWithProvider(request);
 
       if (response.data != null)
         await _saveToPreferences(response.data);
@@ -63,7 +66,7 @@ class LogInBloc {
   forgotPassword(LoginAssistanceRequest request) async {
     try {
       _loginAssistancePublishSubject.sink.add(HttpResponse.loading());
-      final response = await _userRepository.forgotPassword(request);
+      final response = await userRepository.forgotPassword(request);
       _loginAssistancePublishSubject.sink.add(response);
     } catch (error) {
       _loginAssistancePublishSubject.addError(error);
@@ -73,7 +76,7 @@ class LogInBloc {
   resendActivation(LoginAssistanceRequest request) async {
     try {
       _loginAssistancePublishSubject.sink.add(HttpResponse.loading());
-      final response = await _userRepository.resendActivation(request);
+      final response = await userRepository.resendActivation(request);
       _loginAssistancePublishSubject.sink.add(response);
     } catch (error) {
       _loginAssistancePublishSubject.addError(error);

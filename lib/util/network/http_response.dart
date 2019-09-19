@@ -4,10 +4,16 @@ class HttpResponse<T> extends StreamEvent<T> {
   final StreamEventState state;
   final HttpStatus status;
   final String message;
+  final String originalBody;
   final T data;
 
-  HttpResponse({this.state = StreamEventState.ready, this.message, this.data, this.status})
-      : super(data: data, state: state);
+  HttpResponse({
+    this.state = StreamEventState.ready,
+    this.message,
+    this.data,
+    this.status,
+    this.originalBody,
+  }) : super(data: data, state: state);
 
   factory HttpResponse.loading() =>
       HttpResponse(state: StreamEventState.loading);
@@ -44,4 +50,3 @@ enum HttpStatus {
   unprocessableEntity,
   internalServerError
 }
-

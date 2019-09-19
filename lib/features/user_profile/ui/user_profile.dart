@@ -16,8 +16,10 @@ import 'package:intl/intl.dart';
 
 class UserProfile extends StatefulWidget {
   final User user;
+  final UserProfileBloc bloc;
 
-  const UserProfile({Key key, this.user}) : super(key: key);
+  const UserProfile({Key key, @required this.bloc, this.user})
+      : super(key: key);
 
   @override
   _UserProfileState createState() => _UserProfileState();
@@ -31,14 +33,8 @@ class _UserProfileState extends BaseState<UserProfile> {
   void initState() {
     super.initState();
     _user = widget.user;
-    _profileBloc = UserProfileBloc();
+    _profileBloc = widget.bloc;
     _profileBloc.fetchUserProducts(_user.id);
-  }
-
-  @override
-  void dispose() {
-    _profileBloc.dispose();
-    super.dispose();
   }
 
   @override
@@ -68,11 +64,11 @@ class _UserProfileState extends BaseState<UserProfile> {
 
   ContentStreamBuilder<List<Product>> _productGridStreamBuilder() {
     return ContentStreamBuilder(
-        stream: _profileBloc.productsStream,
-        onHasData: (List<Product> data) {
-          return _productGrid(data);
-        },
-      );
+      stream: _profileBloc.productsStream,
+      onHasData: (List<Product> data) {
+        return _productGrid(data);
+      },
+    );
   }
 
   Padding _name() => _textPadding(H6Text(

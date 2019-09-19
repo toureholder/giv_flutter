@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:giv_flutter/base/base_state.dart';
 import 'package:giv_flutter/config/config.dart';
+import 'package:giv_flutter/features/product/categories/bloc/categories_bloc.dart';
 import 'package:giv_flutter/features/product/categories/ui/categories.dart';
 import 'package:giv_flutter/model/product/product_category.dart';
 import 'package:giv_flutter/util/presentation/buttons.dart';
@@ -9,6 +10,7 @@ import 'package:giv_flutter/util/presentation/custom_scaffold.dart';
 import 'package:giv_flutter/util/presentation/spacing.dart';
 import 'package:giv_flutter/util/presentation/typography.dart';
 import 'package:giv_flutter/values/dimens.dart';
+import 'package:provider/provider.dart';
 
 class EditCategories extends StatefulWidget {
   final List<ProductCategory> categories;
@@ -25,7 +27,7 @@ class _EditCategoriesState extends BaseState<EditCategories> {
   @override
   void initState() {
     super.initState();
-    if (widget.categories != null ) _editedList.addAll(widget.categories);
+    if (widget.categories != null) _editedList.addAll(widget.categories);
   }
 
   @override
@@ -102,11 +104,14 @@ class _EditCategoriesState extends BaseState<EditCategories> {
   }
 
   void _addNewCategory() async {
-    final result = await navigation.push(Categories(
-      showSearch: false,
-      returnChoice: true,
-      hideThese: _editedList.map((it) => it.id).toList(),
-      fetchAll: true,
+    final result = await navigation.push(Consumer<CategoriesBloc>(
+      builder: (context, bloc, child) => Categories(
+        bloc: bloc,
+        showSearch: false,
+        returnChoice: true,
+        hideThese: _editedList.map((it) => it.id).toList(),
+        fetchAll: true,
+      ),
     ));
 
     if (result != null) {

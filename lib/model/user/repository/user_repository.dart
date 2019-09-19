@@ -7,9 +7,12 @@ import 'package:giv_flutter/model/user/repository/api/user_api.dart';
 import 'package:giv_flutter/model/user/repository/api/request/sign_up_request.dart';
 import 'package:giv_flutter/model/user/user.dart';
 import 'package:giv_flutter/util/network/http_response.dart';
+import 'package:meta/meta.dart';
 
 class UserRepository {
-  final userApi = UserApi();
+  UserRepository({@required this.userApi});
+
+  final UserApi userApi;
 
   Future<HttpResponse<ApiResponse>> signUp(SignUpRequest request) =>
       userApi.signUp(request);
@@ -23,11 +26,14 @@ class UserRepository {
 
   Future<HttpResponse<User>> getMe() => userApi.getMe();
 
-  Future<HttpResponse<User>> updateMe(Map<String, dynamic> userUpdate) => userApi.updateMe(userUpdate);
+  Future<HttpResponse<User>> updateMe(Map<String, dynamic> userUpdate) =>
+      userApi.updateMe(userUpdate);
 
-  Future<HttpResponse<ApiResponse>> forgotPassword(LoginAssistanceRequest request) =>
+  Future<HttpResponse<ApiResponse>> forgotPassword(
+          LoginAssistanceRequest request) =>
       userApi.forgotPassword(request);
 
-  Future<HttpResponse<ApiResponse>> resendActivation(LoginAssistanceRequest request) =>
+  Future<HttpResponse<ApiResponse>> resendActivation(
+          LoginAssistanceRequest request) =>
       userApi.resendActivation(request);
 }

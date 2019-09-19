@@ -3,8 +3,14 @@ import 'dart:convert';
 import 'package:giv_flutter/model/app_config/app_config.dart';
 import 'package:giv_flutter/util/network/base_api.dart';
 import 'package:giv_flutter/util/network/http_response.dart';
+import 'package:http/http.dart' as http;
+import 'package:meta/meta.dart';
 
 class AppConfigApi extends BaseApi {
+  AppConfigApi({
+    @required http.Client client,
+  }) : super(client: client);
+
   Future<HttpResponse<AppConfig>> getConfig() async {
     HttpStatus status;
     try {

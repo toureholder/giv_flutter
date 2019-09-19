@@ -3,24 +3,35 @@ import 'package:giv_flutter/model/product/product.dart';
 import 'package:giv_flutter/model/product/product_category.dart';
 import 'package:giv_flutter/model/product/product_search_result.dart';
 import 'package:giv_flutter/model/product/repository/api/product_api.dart';
-import 'package:giv_flutter/model/product/repository/cache/product_cache.dart';
+import 'package:giv_flutter/model/product/repository/cache/product_cache_provider.dart';
 import 'package:giv_flutter/util/network/http_response.dart';
+import 'package:meta/meta.dart';
 
 class ProductRepository {
-  final productApi = ProductApi();
+  final ProductApi productApi;
+  final ProductCacheProvider productCache;
+
+  ProductRepository({@required this.productApi, @required this.productCache});
 
   Future<HttpResponse<List<ProductCategory>>> getFeaturedProductsCategories() =>
       productApi.getFeaturedProductsCategories();
 
   Future<HttpResponse<List<ProductCategory>>> getSearchCategories(
       {bool fetchAll}) async {
-    List<ProductCategory> validCache =
-        await ProductCache.getCategories(fetchAll);
+    List<ProductCategory> validCache = productCache.getCategories(fetchAll);
 
-    return validCache != null
-        ? HttpResponse<List<ProductCategory>>(
-            status: HttpStatus.ok, data: validCache)
-        : productApi.getSearchCategories(fetchAll: fetchAll);
+    if (validCache != null) {
+      return HttpResponse<List<ProductCategory>>(
+        status: HttpStatus.ok,
+        data: validCache,
+      );
+    } else {
+      final response = await productApi.getSearchCategories(fetchAll: fetchAll);
+      final originalResponseBody = response.originalBody;
+      if (originalResponseBody != null)
+        productCache.saveCategories(originalResponseBody, fetchAll);
+      return response;
+    }
   }
 
   Future<HttpResponse<ProductSearchResult>> getProductsByCategory(

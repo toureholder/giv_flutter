@@ -2,9 +2,12 @@ import 'package:giv_flutter/model/product/product.dart';
 import 'package:giv_flutter/model/product/repository/product_repository.dart';
 import 'package:giv_flutter/util/network/http_response.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:meta/meta.dart';
 
 class UserProfileBloc {
-  final _productRepository = ProductRepository();
+  UserProfileBloc({@required this.productRepository});
+
+  final ProductRepository productRepository;
 
   final _productsPublishSubject = PublishSubject<List<Product>>();
 
@@ -17,7 +20,7 @@ class UserProfileBloc {
 
   fetchUserProducts(int userId) async {
     try {
-      final response = await _productRepository.getUserProducts(userId);
+      final response = await productRepository.getUserProducts(userId);
 
       if (response.status == HttpStatus.ok)
         _productsPublishSubject.sink.add(response.data);

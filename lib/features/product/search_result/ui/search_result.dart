@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:giv_flutter/base/base_state.dart';
+import 'package:giv_flutter/features/product/filters/bloc/location_filter_bloc.dart';
 import 'package:giv_flutter/features/product/filters/ui/location_filter.dart';
 import 'package:giv_flutter/features/product/search_result/bloc/search_result_bloc.dart';
 import 'package:giv_flutter/model/location/location.dart';
@@ -15,15 +16,21 @@ import 'package:giv_flutter/util/presentation/search_teaser_app_bar.dart';
 import 'package:giv_flutter/util/presentation/spacing.dart';
 import 'package:giv_flutter/util/presentation/typography.dart';
 import 'package:giv_flutter/values/dimens.dart';
+import 'package:provider/provider.dart';
 
 class SearchResult extends StatefulWidget {
   final ProductCategory category;
   final String searchQuery;
   final bool useCanonicalName;
+  final SearchResultBloc bloc;
 
-  const SearchResult(
-      {Key key, this.category, this.searchQuery, this.useCanonicalName = false})
-      : super(key: key);
+  const SearchResult({
+    Key key,
+    @required this.bloc,
+    this.category,
+    this.searchQuery,
+    this.useCanonicalName = false,
+  }) : super(key: key);
 
   @override
   _SearchResultState createState() => _SearchResultState();
@@ -35,14 +42,8 @@ class _SearchResultState extends BaseState<SearchResult> {
   @override
   void initState() {
     super.initState();
-    _searchResultBloc = SearchResultBloc();
+    _searchResultBloc = widget.bloc;
     _fetchProducts();
-  }
-
-  @override
-  void dispose() {
-    _searchResultBloc.dispose();
-    super.dispose();
   }
 
   @override
@@ -118,7 +119,10 @@ class _SearchResultState extends BaseState<SearchResult> {
   }
 
   _navigateToLocationFilter(Location location) async {
-    final result = await navigation.push(LocationFilter(location: location));
+    final result = await navigation.push(Consumer<LocationFilterBloc>(
+      builder: (context, bloc, child) =>
+          LocationFilter(bloc: bloc, location: location),
+    ));
     if (result == null) return;
     _fetchProducts(locationFilter: result, isHardFilter: true);
   }

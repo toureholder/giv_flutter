@@ -15,9 +15,11 @@ class Categories extends StatefulWidget {
   final bool returnChoice;
   final List<int> hideThese;
   final bool fetchAll;
+  final CategoriesBloc bloc;
 
   const Categories(
       {Key key,
+      @required this.bloc,
       this.showSearch = true,
       this.returnChoice = false,
       this.hideThese,
@@ -34,14 +36,8 @@ class _CategoriesState extends BaseState<Categories> {
   @override
   void initState() {
     super.initState();
-    _categoriesBloc = CategoriesBloc();
+    _categoriesBloc = widget.bloc;
     _categoriesBloc.fetchCategories(fetchAll: widget.fetchAll);
-  }
-
-  @override
-  void dispose() {
-    _categoriesBloc.dispose();
-    super.dispose();
   }
 
   @override

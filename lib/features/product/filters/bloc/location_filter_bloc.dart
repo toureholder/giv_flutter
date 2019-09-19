@@ -5,13 +5,16 @@ import 'package:giv_flutter/model/location/repository/location_repository.dart';
 import 'package:giv_flutter/util/data/stream_event.dart';
 import 'package:giv_flutter/util/network/http_response.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:meta/meta.dart';
 
 class LocationFilterBloc {
-  final _locationRepository = LocationRepository();
+  final LocationRepository locationRepository;
 
   final _listPublishSubject = PublishSubject<LocationList>();
   final _statesPublishSubject = PublishSubject<StreamEvent<List<State>>>();
   final _citiesPublishSubject = PublishSubject<StreamEvent<List<City>>>();
+
+  LocationFilterBloc({@required this.locationRepository});
 
   Observable<LocationList> get listStream => _listPublishSubject.stream;
 
@@ -29,7 +32,7 @@ class LocationFilterBloc {
 
   fetchLocationLists(Location location) async {
     try {
-      var response = await _locationRepository.getLocationList(location);
+      var response = await locationRepository.getLocationList(location);
       if (response.status == HttpStatus.ok)
         _listPublishSubject.sink.add(response.data);
       else
@@ -46,7 +49,7 @@ class LocationFilterBloc {
 
     try {
       _statesPublishSubject.sink.add(StreamEvent.loading());
-      var response = await _locationRepository.getStates(countryId);
+      var response = await locationRepository.getStates(countryId);
 
       if (response.status == HttpStatus.ok)
         _statesPublishSubject.sink
@@ -65,7 +68,7 @@ class LocationFilterBloc {
 
     try {
       _citiesPublishSubject.sink.add(StreamEvent.loading());
-      var response = await _locationRepository.getCities(countryId, stateId);
+      var response = await locationRepository.getCities(countryId, stateId);
 
       if (response.status == HttpStatus.ok)
         _citiesPublishSubject.sink

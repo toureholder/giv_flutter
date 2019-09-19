@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:giv_flutter/base/base_state.dart';
 import 'package:giv_flutter/config/config.dart';
+import 'package:giv_flutter/features/log_in/bloc/log_in_bloc.dart';
 import 'package:giv_flutter/features/log_in/helper/login_assistance_helper.dart';
 import 'package:giv_flutter/features/log_in/ui/log_in.dart';
 import 'package:giv_flutter/features/log_in/ui/login_assistance.dart';
@@ -22,6 +23,7 @@ import 'package:giv_flutter/util/presentation/custom_scaffold.dart';
 import 'package:giv_flutter/util/presentation/spacing.dart';
 import 'package:giv_flutter/util/presentation/typography.dart';
 import 'package:giv_flutter/values/dimens.dart';
+import 'package:provider/provider.dart';
 
 class SignUp extends StatefulWidget {
   @override
@@ -182,7 +184,11 @@ class _SignUpState extends BaseState<SignUp> {
   }
 
   void _goToLogin() {
-    navigation.pushReplacement(LogIn());
+    navigation.pushReplacement(Consumer<LogInBloc>(
+      builder: (context, bloc, child) => LogIn(
+        bloc: bloc,
+      ),
+    ));
   }
 
   void _requestHelp() {
@@ -202,9 +208,12 @@ class _SignUpState extends BaseState<SignUp> {
                   child: Text(string('sign_up_error_409_recover_email_button')),
                   onPressed: () {
                     Navigation(context).pop();
-                    navigation.push(LoginAssistance(
-                      page: LoginAssistanceHelper(context).forgotPassword(),
-                      email: _emailController.text,
+                    navigation.push(Consumer<LogInBloc>(
+                      builder: (context, bloc, child) => LoginAssistance(
+                        bloc: bloc,
+                        page: LoginAssistanceHelper(context).forgotPassword(),
+                        email: _emailController.text,
+                      ),
                     ));
                   }),
               FlatButton(

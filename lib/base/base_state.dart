@@ -4,8 +4,6 @@ import 'package:giv_flutter/config/i18n/string_localizations.dart';
 import 'package:giv_flutter/config/preferences/prefs.dart';
 import 'package:giv_flutter/features/base/base.dart';
 import 'package:giv_flutter/features/customer_service/customer_service_dialog.dart';
-import 'package:giv_flutter/features/listing/ui/my_listings.dart';
-import 'package:giv_flutter/features/settings/ui/settings.dart';
 import 'package:giv_flutter/model/user/user.dart';
 import 'package:giv_flutter/util/navigation/navigation.dart';
 import 'package:giv_flutter/util/network/http_response.dart';
@@ -130,11 +128,5 @@ class BaseState<T extends StatefulWidget> extends State<T> {
         builder: (context) {
           return CustomerServiceDialog(message: message);
         });
-  }
-
-  void goToMyListingsReloaded() {
-    navigation.push(Base(), hasAnimation: false, clearStack: true);
-    navigation.push(Settings(), hasAnimation: false);
-    navigation.push(MyListings(), hasAnimation: false);
   }
 }

@@ -6,12 +6,16 @@ import 'package:flutter/material.dart';
 import 'package:giv_flutter/base/base_state.dart';
 import 'package:giv_flutter/config/config.dart';
 import 'package:giv_flutter/config/i18n/string_localizations.dart';
+import 'package:giv_flutter/features/listing/bloc/my_listings_bloc.dart';
 import 'package:giv_flutter/features/listing/bloc/new_listing_bloc.dart';
 import 'package:giv_flutter/features/listing/ui/edit_categories.dart';
 import 'package:giv_flutter/features/listing/ui/edit_description.dart';
 import 'package:giv_flutter/features/listing/ui/edit_title.dart';
 import 'package:giv_flutter/features/listing/ui/my_listings.dart';
+import 'package:giv_flutter/features/log_in/bloc/log_in_bloc.dart';
+import 'package:giv_flutter/features/product/categories/bloc/categories_bloc.dart';
 import 'package:giv_flutter/features/product/categories/ui/categories.dart';
+import 'package:giv_flutter/features/product/filters/bloc/location_filter_bloc.dart';
 import 'package:giv_flutter/features/product/filters/ui/location_filter.dart';
 import 'package:giv_flutter/features/settings/ui/edit_phone_number.dart';
 import 'package:giv_flutter/features/sign_in/ui/sign_in.dart';
@@ -21,7 +25,6 @@ import 'package:giv_flutter/model/product/product.dart';
 import 'package:giv_flutter/model/product/product_category.dart';
 import 'package:giv_flutter/model/user/user.dart';
 import 'package:giv_flutter/util/data/stream_event.dart';
-import 'package:giv_flutter/util/navigation/navigation.dart';
 import 'package:giv_flutter/util/presentation/bottom_sheet.dart';
 import 'package:giv_flutter/util/presentation/buttons.dart';
 import 'package:giv_flutter/util/presentation/custom_app_bar.dart';
@@ -33,11 +36,13 @@ import 'package:giv_flutter/util/presentation/typography.dart';
 import 'package:giv_flutter/values/dimens.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 
 class NewListing extends StatefulWidget {
   final Product product;
+  final NewListingBloc bloc;
 
-  const NewListing({Key key, this.product}) : super(key: key);
+  const NewListing({Key key, @required this.bloc, this.product}) : super(key: key);
 
   @override
   _NewListingState createState() => _NewListingState();
@@ -64,7 +69,7 @@ class _NewListingState extends BaseState<NewListing> {
     _isEditing = widget.product != null;
     _product = widget.product?.copy() ?? Product();
     _product.images = _product.images ?? <CustomImage.Image>[];
-    _newListingBloc = NewListingBloc(_isEditing);
+    _newListingBloc = NewListingBloc.from(widget.bloc, _isEditing);
     _listenToUserStream();
     _loadLocation();
     _listenToSavedProductStream();
@@ -73,7 +78,10 @@ class _NewListingState extends BaseState<NewListing> {
   void _listenToUserStream() {
     _newListingBloc.userStream.listen((NewListingBlocUser blocUser) {
       if (blocUser?.user == null)
-        Navigation(context).pushReplacement(SignIn(redirect: NewListing()));
+        navigation.pushReplacement(Consumer<LogInBloc>(
+          builder: (context, bloc, child) =>
+              SignIn(bloc: bloc, redirect: NewListing(bloc: widget.bloc,)),
+        ));
     });
   }
 
@@ -85,12 +93,6 @@ class _NewListingState extends BaseState<NewListing> {
   void _loadLocation() {
     if (!(_product.location?.isOk ?? false))
       _newListingBloc.loadLocation(_product.location);
-  }
-
-  @override
-  void dispose() {
-    _newListingBloc.dispose();
-    super.dispose();
   }
 
   @override
@@ -569,9 +571,12 @@ class _NewListingState extends BaseState<NewListing> {
   }
 
   void _editLocation(Location location) async {
-    final result = await navigation.push(LocationFilter(
-      location: location,
-      showSaveButton: true,
+    final result = await navigation.push(Consumer<LocationFilterBloc>(
+      builder: (context, bloc, child) => LocationFilter(
+        bloc: bloc,
+        location: location,
+        showSaveButton: true,
+      ),
     ));
 
     if (result != null) {
@@ -595,10 +600,13 @@ class _NewListingState extends BaseState<NewListing> {
   }
 
   void _addFirstCategory() async {
-    final result = await navigation.push(Categories(
-      showSearch: false,
-      returnChoice: true,
-      fetchAll: true,
+    final result = await navigation.push(Consumer<CategoriesBloc>(
+      builder: (context, bloc, child) => Categories(
+        bloc: bloc,
+        showSearch: false,
+        returnChoice: true,
+        fetchAll: true,
+      ),
     ));
 
     if (result != null) {
@@ -726,7 +734,11 @@ class _NewListingState extends BaseState<NewListing> {
     if (_isEditing)
       navigation.pop(product);
     else
-      navigation.pushReplacement(MyListings());
+      navigation.pushReplacement(Consumer<MyListingsBloc>(
+        builder: (context, bloc, child) => MyListings(
+          bloc: bloc,
+        ),
+      ));
   }
 
   Future<bool> _onWillPop() {

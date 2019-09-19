@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:giv_flutter/base/base_state.dart';
 import 'package:giv_flutter/features/product/search/search.dart';
+import 'package:giv_flutter/features/product/search_result/bloc/search_result_bloc.dart';
 import 'package:giv_flutter/util/presentation/custom_app_bar.dart';
 import 'package:giv_flutter/values/dimens.dart';
 import 'package:giv_flutter/util/presentation/typography.dart';
+import 'package:provider/provider.dart';
 
 class SearchTeaserAppBar extends StatefulWidget implements PreferredSizeWidget {
   final Widget leading;
@@ -35,13 +37,7 @@ class _SearchTeaserAppBarState extends BaseState<SearchTeaserAppBar> {
           style: CustomTypography.title,
         ),
         GestureDetector(
-          onTap: () {
-            navigation.push(
-                Search(
-                  initialText: widget.q,
-                ),
-                hasAnimation: false);
-          },
+          onTap: _goToSearch,
           child: Container(
             color: Colors.transparent,
             height: kToolbarHeight,
@@ -55,4 +51,14 @@ class _SearchTeaserAppBarState extends BaseState<SearchTeaserAppBar> {
       bottom: AppBarBottomBorder(),
     );
   }
+
+  void _goToSearch() => navigation.push(
+        Consumer<SearchResultBloc>(
+          builder: (context, bloc, child) => Search(
+            initialText: widget.q,
+            bloc: bloc,
+          ),
+        ),
+        hasAnimation: false,
+      );
 }

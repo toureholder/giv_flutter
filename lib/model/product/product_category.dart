@@ -3,10 +3,12 @@ import 'dart:convert';
 import 'package:flutter/widgets.dart';
 import 'package:giv_flutter/config/i18n/string_localizations.dart';
 import 'package:giv_flutter/features/product/categories/ui/sub_categories.dart';
+import 'package:giv_flutter/features/product/search_result/bloc/search_result_bloc.dart';
 import 'package:giv_flutter/features/product/search_result/ui/search_result.dart';
 import 'package:giv_flutter/model/product/product.dart';
 import 'package:giv_flutter/util/navigation/navigation.dart';
 import 'package:meta/meta.dart';
+import 'package:provider/provider.dart';
 
 class ProductCategory {
   final int id;
@@ -40,7 +42,12 @@ class ProductCategory {
     if (subCategories?.isNotEmpty ?? false) {
       navigation.push(SubCategories(category: this));
     } else {
-      navigation.push(SearchResult(category: this));
+      navigation.push(Consumer<SearchResultBloc>(
+        builder: (context, bloc, child) => SearchResult(
+          category: this,
+          bloc: bloc,
+        ),
+      ));
     }
   }
 

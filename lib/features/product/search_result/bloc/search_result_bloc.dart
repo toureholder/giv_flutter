@@ -6,9 +6,12 @@ import 'package:giv_flutter/model/product/repository/product_repository.dart';
 import 'package:giv_flutter/util/data/stream_event.dart';
 import 'package:giv_flutter/util/network/http_response.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:meta/meta.dart';
 
 class SearchResultBloc {
-  final _productRepository = ProductRepository();
+  SearchResultBloc({@required this.productRepository});
+
+  final ProductRepository productRepository;
 
   final _searchResultPublishSubject =
       PublishSubject<StreamEvent<ProductSearchResult>>();
@@ -23,7 +26,7 @@ class SearchResultBloc {
   Future<List<ProductCategory>> getSearchSuggestions(String q) async {
     try {
       HttpResponse<List<ProductCategory>> response =
-          await _productRepository.getSearchSuggestions(q);
+          await productRepository.getSearchSuggestions(q);
 
       if (response.status == HttpStatus.ok) return response.data;
 
@@ -47,11 +50,11 @@ class SearchResultBloc {
       locationFilter = locationFilter ?? await Prefs.getLocation();
 
       var response = categoryId != null
-          ? await _productRepository.getProductsByCategory(
+          ? await productRepository.getProductsByCategory(
               categoryId: categoryId,
               location: locationFilter,
               isHardFilter: isHardFilter)
-          : await _productRepository.getProductsBySearchQuery(
+          : await productRepository.getProductsBySearchQuery(
               q: searchQuery,
               location: locationFilter,
               isHardFilter: isHardFilter);

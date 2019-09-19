@@ -17,11 +17,13 @@ import 'package:giv_flutter/util/presentation/custom_scaffold.dart';
 import 'package:giv_flutter/util/presentation/spacing.dart';
 import 'package:giv_flutter/util/presentation/typography.dart';
 import 'package:giv_flutter/values/dimens.dart';
+import 'package:provider/provider.dart';
 
 class LogIn extends StatefulWidget {
   final Widget redirect;
+  final LogInBloc bloc;
 
-  const LogIn({Key key, this.redirect}) : super(key: key);
+  const LogIn({Key key, this.bloc, this.redirect}) : super(key: key);
 
   @override
   _LogInState createState() => _LogInState();
@@ -40,17 +42,11 @@ class _LogInState extends BaseState<LogIn> {
   @override
   void initState() {
     super.initState();
-    _logInBloc = LogInBloc();
+    _logInBloc = widget.bloc;
     _logInBloc.loginResponseStream
         .listen((HttpResponse<LogInResponse> httpResponse) {
       if (httpResponse.isReady) onLoginResponse(httpResponse, widget.redirect);
     });
-  }
-
-  @override
-  void dispose() {
-    _logInBloc.dispose();
-    super.dispose();
   }
 
   @override
@@ -153,15 +149,21 @@ class _LogInState extends BaseState<LogIn> {
   }
 
   void _goToForgotPassword() {
-    navigation.push(LoginAssistance(
-        page: LoginAssistanceHelper(context).forgotPassword(),
-        email: _emailController.text));
+    navigation.push(Consumer<LogInBloc>(
+      builder: (context, bloc, child) => LoginAssistance(
+          bloc: bloc,
+          page: LoginAssistanceHelper(context).forgotPassword(),
+          email: _emailController.text),
+    ));
   }
 
   void _goToResendActivation() {
-    navigation.push(LoginAssistance(
-        page: LoginAssistanceHelper(context).resendActivation(),
-        email: _emailController.text));
+    navigation.push(Consumer<LogInBloc>(
+      builder: (context, bloc, child) => LoginAssistance(
+          bloc: bloc,
+          page: LoginAssistanceHelper(context).resendActivation(),
+          email: _emailController.text),
+    ));
   }
 
   void _goToSignUp() {

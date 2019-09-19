@@ -7,16 +7,21 @@ import 'package:giv_flutter/model/product/product.dart';
 import 'package:giv_flutter/util/data/stream_event.dart';
 import 'package:giv_flutter/util/network/http_response.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:meta/meta.dart';
 
 class ProductDetailBloc {
-  final _locationRepository = LocationRepository();
-  final _listingRepository = ListingRepository();
+  final LocationRepository locationRepository;
+  final ListingRepository listingRepository;
+
+  ProductDetailBloc({
+    @required this.locationRepository,
+    @required this.listingRepository,
+  });
 
   final _locationPublishSubject = PublishSubject<Location>();
   final _deleteListingPublishSubject =
       PublishSubject<HttpResponse<ApiModelResponse>>();
-  final _updateListingPublishSubject =
-      PublishSubject<HttpResponse<Product>>();
+  final _updateListingPublishSubject = PublishSubject<HttpResponse<Product>>();
   final _loadingPublishSubject = PublishSubject<StreamEventState>();
 
   Observable<Location> get locationStream => _locationPublishSubject.stream;
@@ -36,7 +41,7 @@ class ProductDetailBloc {
 
   fetchLocationDetails(Location location) async {
     try {
-      var response = await _locationRepository.getLocationDetails(location);
+      var response = await locationRepository.getLocationDetails(location);
       if (response.status == HttpStatus.ok)
         _locationPublishSubject.sink.add(response.data);
       else
@@ -49,7 +54,7 @@ class ProductDetailBloc {
   deleteListing(int id) async {
     try {
       _loadingPublishSubject.sink.add(StreamEventState.loading);
-      final response = await _listingRepository.destroy(id);
+      final response = await listingRepository.destroy(id);
       _deleteListingPublishSubject.sink.add(response);
       _loadingPublishSubject.sink.add(StreamEventState.ready);
     } catch (error) {
@@ -60,7 +65,7 @@ class ProductDetailBloc {
   updateListing(UpdateListingActiveStatusRequest request) async {
     try {
       _loadingPublishSubject.sink.add(StreamEventState.loading);
-      final response = await _listingRepository.updateActiveStatus(request);
+      final response = await listingRepository.updateActiveStatus(request);
       _updateListingPublishSubject.sink.add(response);
       _loadingPublishSubject.sink.add(StreamEventState.ready);
     } catch (error) {
