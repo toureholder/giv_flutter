@@ -5,17 +5,19 @@ import 'package:rxdart/rxdart.dart';
 import 'package:meta/meta.dart';
 
 class CategoriesBloc {
-  CategoriesBloc({@required this.productRepository});
+  CategoriesBloc({
+    @required this.productRepository,
+    @required this.categoriesPublishSubject,
+  });
 
   final ProductRepository productRepository;
-
-  final _categoriesPublishSubject = PublishSubject<List<ProductCategory>>();
+  final PublishSubject<List<ProductCategory>> categoriesPublishSubject;
 
   Observable<List<ProductCategory>> get categories =>
-      _categoriesPublishSubject.stream;
+      categoriesPublishSubject.stream;
 
   dispose() {
-    _categoriesPublishSubject.close();
+    categoriesPublishSubject.close();
   }
 
   fetchCategories({bool fetchAll}) async {
@@ -25,11 +27,11 @@ class CategoriesBloc {
 
       final data = response.data;
       if (response.status == HttpStatus.ok && data != null)
-        _categoriesPublishSubject.sink.add(data);
+        categoriesPublishSubject.sink.add(data);
       else
         throw response.message;
     } catch (err) {
-      _categoriesPublishSubject.sink.addError(err);
+      categoriesPublishSubject.sink.addError(err);
     }
   }
 }

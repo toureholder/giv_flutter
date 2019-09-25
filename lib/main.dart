@@ -1,7 +1,16 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:giv_flutter/base/app.dart';
+import 'package:giv_flutter/features/home/model/home_content.dart';
+import 'package:giv_flutter/model/api_response/api_response.dart';
+import 'package:giv_flutter/model/location/location.dart';
+import 'package:giv_flutter/model/product/product.dart';
+import 'package:giv_flutter/model/product/product_category.dart';
+import 'package:giv_flutter/model/user/repository/api/response/log_in_response.dart';
+import 'package:giv_flutter/model/user/user.dart';
 import 'package:giv_flutter/service/preferences/shared_preferences_storage.dart';
 import 'package:giv_flutter/features/customer_service/bloc/customer_service_dialog_bloc.dart';
 import 'package:giv_flutter/features/home/bloc/home_bloc.dart';
@@ -31,8 +40,11 @@ import 'package:giv_flutter/model/product/repository/product_repository.dart';
 import 'package:giv_flutter/model/user/repository/api/user_api.dart';
 import 'package:giv_flutter/model/user/repository/user_repository.dart';
 import 'package:giv_flutter/service/session/session.dart';
+import 'package:giv_flutter/util/data/stream_event.dart';
+import 'package:giv_flutter/util/network/http_response.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
+import 'package:rxdart/rxdart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
@@ -55,6 +67,7 @@ void main() async {
 
   final diskStorage = SharedPreferencesStorage(sharedPreferences);
   final session = Session(diskStorage);
+  final firebaseAuth = FirebaseAuth.instance;
 
   final productRepository = ProductRepository(
     productCache: productCache,
@@ -79,10 +92,18 @@ void main() async {
       builder: (_) => LogInBloc(
         userRepository: userRepository,
         session: session,
+        loginPublishSubject: PublishSubject<HttpResponse<LogInResponse>>(),
+        loginAssistancePublishSubject:
+            PublishSubject<HttpResponse<ApiResponse>>(),
+        firebaseAuth: firebaseAuth,
+        facebookLogin: FacebookLogin()
       ),
     ),
     Provider<UserProfileBloc>(
-      builder: (_) => UserProfileBloc(productRepository: productRepository),
+      builder: (_) => UserProfileBloc(
+        productRepository: productRepository,
+        productsPublishSubject: PublishSubject<List<Product>>(),
+      ),
     ),
     Provider<SearchResultBloc>(
       builder: (_) => SearchResultBloc(
@@ -91,17 +112,22 @@ void main() async {
       ),
     ),
     Provider<MyListingsBloc>(
-      builder: (_) => MyListingsBloc(productRepository: productRepository),
+      builder: (_) => MyListingsBloc(
+        productRepository: productRepository,
+        productsPublishSubject: PublishSubject<List<Product>>(),
+      ),
     ),
     Provider<HomeBloc>(
       builder: (_) => HomeBloc(
-        productRepository: productRepository,
-        carouselRepository: carouselRepository,
-        diskStorage: diskStorage,
-      ),
+          productRepository: productRepository,
+          carouselRepository: carouselRepository,
+          diskStorage: diskStorage,
+          contentPublishSubject: PublishSubject<HomeContent>()),
     ),
     Provider<CategoriesBloc>(
-      builder: (_) => CategoriesBloc(productRepository: productRepository),
+      builder: (_) => CategoriesBloc(
+          productRepository: productRepository,
+          categoriesPublishSubject: PublishSubject<List<ProductCategory>>()),
     ),
     Provider<SplashBloc>(
       builder: (_) => SplashBloc(
@@ -122,6 +148,10 @@ void main() async {
         locationRepository: locationRepository,
         listingRepository: listingRepository,
         diskStorage: diskStorage,
+        userPublishSubject: PublishSubject<NewListingBlocUser>(),
+        locationPublishSubject: PublishSubject<Location>(),
+        savedProductPublishSubject: PublishSubject<Product>(),
+        uploadStatusPublishSubject: PublishSubject<StreamEvent<double>>(),
       ),
     ),
     Provider<ProductDetailBloc>(
@@ -129,6 +159,11 @@ void main() async {
         locationRepository: locationRepository,
         listingRepository: listingRepository,
         session: session,
+        locationPublishSubject: PublishSubject<Location>(),
+        deleteListingPublishSubject:
+            PublishSubject<HttpResponse<ApiModelResponse>>(),
+        loadingPublishSubject: PublishSubject<StreamEventState>(),
+        updateListingPublishSubject: PublishSubject<HttpResponse<Product>>(),
       ),
     ),
     Provider<SettingsBloc>(
@@ -136,13 +171,18 @@ void main() async {
         userRepository: userRepository,
         diskStorage: diskStorage,
         session: session,
+        userPublishSubject: PublishSubject<StreamEvent<User>>(),
+        userUpdatePublishSubject: PublishSubject<HttpResponse<User>>(),
       ),
     ),
     Provider<CustomerServiceDialogBloc>(
       builder: (_) => CustomerServiceDialogBloc(diskStorage: diskStorage),
     ),
     Provider<SignUpBloc>(
-      builder: (_) => SignUpBloc(userRepository: userRepository),
+      builder: (_) => SignUpBloc(
+        userRepository: userRepository,
+        responsePublishSubject: PublishSubject<HttpResponse<ApiResponse>>(),
+      ),
     ),
   ];
 

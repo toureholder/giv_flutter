@@ -14,32 +14,34 @@ class ProductDetailBloc {
   final LocationRepository locationRepository;
   final ListingRepository listingRepository;
   final SessionProvider session;
+  final PublishSubject<Location> locationPublishSubject;
+  final PublishSubject<HttpResponse<ApiModelResponse>> deleteListingPublishSubject;
+  final PublishSubject<HttpResponse<Product>> updateListingPublishSubject;
+  final PublishSubject<StreamEventState> loadingPublishSubject;
 
   ProductDetailBloc({
     @required this.locationRepository,
     @required this.listingRepository,
     @required this.session,
+    @required this.locationPublishSubject,
+    @required this.deleteListingPublishSubject,
+    @required this.updateListingPublishSubject,
+    @required this.loadingPublishSubject,
   });
 
-  final _locationPublishSubject = PublishSubject<Location>();
-  final _deleteListingPublishSubject =
-      PublishSubject<HttpResponse<ApiModelResponse>>();
-  final _updateListingPublishSubject = PublishSubject<HttpResponse<Product>>();
-  final _loadingPublishSubject = PublishSubject<StreamEventState>();
-
-  Observable<Location> get locationStream => _locationPublishSubject.stream;
+  Observable<Location> get locationStream => locationPublishSubject.stream;
   Observable<HttpResponse<ApiModelResponse>> get deleteListingStream =>
-      _deleteListingPublishSubject.stream;
+      deleteListingPublishSubject.stream;
   Observable<HttpResponse<Product>> get updateListingStream =>
-      _updateListingPublishSubject.stream;
+      updateListingPublishSubject.stream;
   Observable<StreamEventState> get loadingStream =>
-      _loadingPublishSubject.stream;
+      loadingPublishSubject.stream;
 
   dispose() {
-    _locationPublishSubject.close();
-    _deleteListingPublishSubject.close();
-    _updateListingPublishSubject.close();
-    _loadingPublishSubject.close();
+    locationPublishSubject.close();
+    deleteListingPublishSubject.close();
+    updateListingPublishSubject.close();
+    loadingPublishSubject.close();
   }
 
   isAuthenticated() => session.isAuthenticated();
@@ -48,33 +50,33 @@ class ProductDetailBloc {
     try {
       var response = await locationRepository.getLocationDetails(location);
       if (response.status == HttpStatus.ok)
-        _locationPublishSubject.sink.add(response.data);
+        locationPublishSubject.sink.add(response.data);
       else
-        _locationPublishSubject.sink.addError(response.message);
+        locationPublishSubject.sink.addError(response.message);
     } catch (error) {
-      _locationPublishSubject.sink.addError(error);
+      locationPublishSubject.sink.addError(error);
     }
   }
 
   deleteListing(int id) async {
     try {
-      _loadingPublishSubject.sink.add(StreamEventState.loading);
+      loadingPublishSubject.sink.add(StreamEventState.loading);
       final response = await listingRepository.destroy(id);
-      _deleteListingPublishSubject.sink.add(response);
-      _loadingPublishSubject.sink.add(StreamEventState.ready);
+      deleteListingPublishSubject.sink.add(response);
+      loadingPublishSubject.sink.add(StreamEventState.ready);
     } catch (error) {
-      _deleteListingPublishSubject.sink.addError(error);
+      deleteListingPublishSubject.sink.addError(error);
     }
   }
 
   updateListing(UpdateListingActiveStatusRequest request) async {
     try {
-      _loadingPublishSubject.sink.add(StreamEventState.loading);
+      loadingPublishSubject.sink.add(StreamEventState.loading);
       final response = await listingRepository.updateActiveStatus(request);
-      _updateListingPublishSubject.sink.add(response);
-      _loadingPublishSubject.sink.add(StreamEventState.ready);
+      updateListingPublishSubject.sink.add(response);
+      loadingPublishSubject.sink.add(StreamEventState.ready);
     } catch (error) {
-      _updateListingPublishSubject.sink.addError(error);
+      updateListingPublishSubject.sink.addError(error);
     }
   }
 }

@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:giv_flutter/model/api_response/api_response.dart';
 import 'package:giv_flutter/model/user/repository/api/request/log_in_request.dart';
 import 'package:giv_flutter/model/user/repository/api/request/log_in_with_provider_request.dart';
@@ -14,72 +15,75 @@ class LogInBloc {
   LogInBloc({
     @required this.userRepository,
     @required this.session,
+    @required this.loginPublishSubject,
+    @required this.loginAssistancePublishSubject,
+    @required this.firebaseAuth,
+    @required this.facebookLogin,
   });
 
   final UserRepository userRepository;
   final SessionProvider session;
-
-  final _loginPublishSubject = PublishSubject<HttpResponse<LogInResponse>>();
-
-  final _loginAssistancePublishSubject =
-      PublishSubject<HttpResponse<ApiResponse>>();
-
-  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  final PublishSubject<HttpResponse<LogInResponse>> loginPublishSubject;
+  final PublishSubject<HttpResponse<ApiResponse>> loginAssistancePublishSubject;
+  final FirebaseAuth firebaseAuth;
+  final FacebookLogin facebookLogin;
 
   Observable<HttpResponse<LogInResponse>> get loginResponseStream =>
-      _loginPublishSubject.stream;
+      loginPublishSubject.stream;
 
   Observable<HttpResponse<ApiResponse>> get loginAssistanceStream =>
-      _loginAssistancePublishSubject.stream;
+      loginAssistancePublishSubject.stream;
 
   dispose() {
-    _loginPublishSubject.close();
-    _loginAssistancePublishSubject.close();
+    loginPublishSubject.close();
+    loginAssistancePublishSubject.close();
   }
 
   login(LogInRequest request) async {
     try {
-      _loginPublishSubject.sink.add(HttpResponse.loading());
+      loginPublishSubject.sink.add(HttpResponse.loading());
       var response = await userRepository.login(request);
 
       if (response.data != null) await _saveToPreferences(response.data);
 
-      _loginPublishSubject.sink.add(response);
+      loginPublishSubject.sink.add(response);
     } catch (error) {
-      _loginPublishSubject.addError(error);
+      loginPublishSubject.addError(error);
     }
   }
 
+  loginToFacebook() => facebookLogin.logInWithReadPermissions(['email']);
+
   loginWithProvider(LogInWithProviderRequest request) async {
     try {
-      _loginPublishSubject.sink.add(HttpResponse.loading());
+      loginPublishSubject.sink.add(HttpResponse.loading());
       var response = await userRepository.loginWithProvider(request);
 
       if (response.data != null) await _saveToPreferences(response.data);
 
-      _loginPublishSubject.sink.add(response);
+      loginPublishSubject.sink.add(response);
     } catch (error) {
-      _loginPublishSubject.addError(error);
+      loginPublishSubject.addError(error);
     }
   }
 
   forgotPassword(LoginAssistanceRequest request) async {
     try {
-      _loginAssistancePublishSubject.sink.add(HttpResponse.loading());
+      loginAssistancePublishSubject.sink.add(HttpResponse.loading());
       final response = await userRepository.forgotPassword(request);
-      _loginAssistancePublishSubject.sink.add(response);
+      loginAssistancePublishSubject.sink.add(response);
     } catch (error) {
-      _loginAssistancePublishSubject.addError(error);
+      loginAssistancePublishSubject.addError(error);
     }
   }
 
   resendActivation(LoginAssistanceRequest request) async {
     try {
-      _loginAssistancePublishSubject.sink.add(HttpResponse.loading());
+      loginAssistancePublishSubject.sink.add(HttpResponse.loading());
       final response = await userRepository.resendActivation(request);
-      _loginAssistancePublishSubject.sink.add(response);
+      loginAssistancePublishSubject.sink.add(response);
     } catch (error) {
-      _loginAssistancePublishSubject.addError(error);
+      loginAssistancePublishSubject.addError(error);
     }
   }
 
@@ -88,7 +92,7 @@ class LogInBloc {
 
     await Future.wait([
       session.logUserIn(response),
-      _firebaseAuth.signInWithCustomToken(token: response.firebaseAuthToken)
+      firebaseAuth.signInWithCustomToken(token: response.firebaseAuthToken)
     ]);
   }
 }

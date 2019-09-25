@@ -14,17 +14,18 @@ class HomeBloc {
     @required this.productRepository,
     @required this.carouselRepository,
     @required this.diskStorage,
+    @required this.contentPublishSubject,
   });
 
   final ProductRepository productRepository;
   final CarouselRepository carouselRepository;
   final DiskStorageProvider diskStorage;
-  final _contentPublishSubject = PublishSubject<HomeContent>();
+  final PublishSubject<HomeContent> contentPublishSubject;
 
-  Observable<HomeContent> get content => _contentPublishSubject.stream;
+  Observable<HomeContent> get content => contentPublishSubject.stream;
 
   dispose() {
-    _contentPublishSubject.close();
+    contentPublishSubject.close();
   }
 
   User getUser() => diskStorage.getUser();
@@ -42,13 +43,13 @@ class HomeBloc {
 
       if (heroItemsResponse.status == HttpStatus.ok &&
           featuredCategoriesResponse.status == HttpStatus.ok)
-        _contentPublishSubject.sink.add(HomeContent(
+        contentPublishSubject.sink.add(HomeContent(
             heroItems: heroItemsResponse.data,
             productCategories: featuredCategoriesResponse.data));
       else
-        _contentPublishSubject.sink.addError(heroItemsResponse);
+        contentPublishSubject.sink.addError(heroItemsResponse);
     } catch (err) {
-      _contentPublishSubject.sink.addError(err);
+      contentPublishSubject.sink.addError(err);
     }
   }
 }

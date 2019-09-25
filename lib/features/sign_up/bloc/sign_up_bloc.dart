@@ -8,27 +8,29 @@ import 'package:rxdart/rxdart.dart';
 class SignUpBloc {
   final UserRepository userRepository;
 
-  final _responsePublishSubject = PublishSubject<HttpResponse<ApiResponse>>();
+  final PublishSubject<HttpResponse<ApiResponse>> responsePublishSubject;
 
-  SignUpBloc({@required this.userRepository});
+  SignUpBloc({
+    @required this.userRepository,
+    @required this.responsePublishSubject,
+  });
 
   Observable<HttpResponse<ApiResponse>> get responseStream =>
-      _responsePublishSubject.stream;
+      responsePublishSubject.stream;
 
   dispose() {
-    _responsePublishSubject.close();
+    responsePublishSubject.close();
   }
 
   signUp(SignUpRequest request) async {
     try {
-      _responsePublishSubject.sink.add(HttpResponse.loading());
+      responsePublishSubject.sink.add(HttpResponse.loading());
 
-      HttpResponse<ApiResponse> response =
-          await userRepository.signUp(request);
+      HttpResponse<ApiResponse> response = await userRepository.signUp(request);
 
-      _responsePublishSubject.sink.add(response);
+      responsePublishSubject.sink.add(response);
     } catch (error) {
-      _responsePublishSubject.addError(error);
+      responsePublishSubject.addError(error);
     }
   }
 }

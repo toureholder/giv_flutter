@@ -8,8 +8,8 @@ import 'package:meta/meta.dart';
 import 'package:rxdart/rxdart.dart';
 
 class SettingsBloc {
-  final _userPublishSubject = PublishSubject<StreamEvent<User>>();
-  final _userUpdatePublishSubject = PublishSubject<HttpResponse<User>>();
+  final PublishSubject<StreamEvent<User>> userPublishSubject;
+  final PublishSubject<HttpResponse<User>> userUpdatePublishSubject;
   final UserRepository userRepository;
   final DiskStorageProvider diskStorage;
   final SessionProvider session;
@@ -18,39 +18,32 @@ class SettingsBloc {
     @required this.userRepository,
     @required this.diskStorage,
     @required this.session,
+    @required this.userPublishSubject,
+    @required this.userUpdatePublishSubject,
   });
 
-  Observable<StreamEvent<User>> get userStream => _userPublishSubject.stream;
+  Observable<StreamEvent<User>> get userStream => userPublishSubject.stream;
   Observable<HttpResponse<User>> get userUpdateStream =>
-      _userUpdatePublishSubject.stream;
+      userUpdatePublishSubject.stream;
 
   dispose() {
-    _userPublishSubject.close();
-    _userUpdatePublishSubject.close();
+    userPublishSubject.close();
+    userUpdatePublishSubject.close();
   }
-
-//  loadUserFromPrefs() {
-//    try {
-//      var user = diskStorage.getUser();
-//      _userPublishSubject.sink.add(StreamEvent<User>(data: user));
-//    } catch (error) {
-//      _userPublishSubject.sink.addError(error);
-//    }
-//  }
 
   User getUser() => diskStorage.getUser();
 
   updateUser(Map<String, dynamic> userUpdate) async {
     try {
-      _userUpdatePublishSubject.sink.add(HttpResponse.loading());
+      userUpdatePublishSubject.sink.add(HttpResponse.loading());
 
       var response = await userRepository.updateMe(userUpdate);
 
       if (response.data != null) await diskStorage.setUser(response.data);
 
-      _userUpdatePublishSubject.sink.add(response);
+      userUpdatePublishSubject.sink.add(response);
     } catch (error) {
-      _userUpdatePublishSubject.sink.addError(error);
+      userUpdatePublishSubject.sink.addError(error);
     }
   }
 

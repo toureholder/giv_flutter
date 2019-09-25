@@ -21,7 +21,11 @@ class SignIn extends StatefulWidget {
   final Widget redirect;
   final LogInBloc bloc;
 
-  const SignIn({Key key, @required this.bloc, this.redirect}) : super(key: key);
+  const SignIn({
+    Key key,
+    @required this.bloc,
+    this.redirect,
+  }) : super(key: key);
 
   @override
   _SignInState createState() => _SignInState();
@@ -90,7 +94,7 @@ class _SignInState extends BaseState<SignIn> {
         children: <Widget>[
           FacebookButton(
             text: string('sign_in_continue_with_facebook'),
-            onPressed: _facebookLogin,
+            onPressed: _loginWithFacebook,
             isLoading: isFacebookLoading,
           ),
           Spacing.vertical(Dimens.default_vertical_margin),
@@ -126,7 +130,9 @@ class _SignInState extends BaseState<SignIn> {
 
   void _goToSignUp() {
     navigation.push(Consumer<SignUpBloc>(
-      builder: (context, bloc, child) => SignUp(bloc: bloc,),
+      builder: (context, bloc, child) => SignUp(
+        bloc: bloc,
+      ),
     ));
   }
 
@@ -139,9 +145,8 @@ class _SignInState extends BaseState<SignIn> {
     ));
   }
 
-  void _facebookLogin() async {
-    final facebookLogin = FacebookLogin();
-    final result = await facebookLogin.logInWithReadPermissions(['email']);
+  void _loginWithFacebook() async {
+    final result = await _logInBloc.loginToFacebook();
 
     switch (result.status) {
       case FacebookLoginStatus.loggedIn:

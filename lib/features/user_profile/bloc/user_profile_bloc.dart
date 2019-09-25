@@ -5,17 +5,18 @@ import 'package:rxdart/rxdart.dart';
 import 'package:meta/meta.dart';
 
 class UserProfileBloc {
-  UserProfileBloc({@required this.productRepository});
+  UserProfileBloc({
+    @required this.productRepository,
+    @required this.productsPublishSubject,
+  });
 
   final ProductRepository productRepository;
+  final PublishSubject<List<Product>> productsPublishSubject;
 
-  final _productsPublishSubject = PublishSubject<List<Product>>();
-
-  Observable<List<Product>> get productsStream =>
-      _productsPublishSubject.stream;
+  Observable<List<Product>> get productsStream => productsPublishSubject.stream;
 
   dispose() {
-    _productsPublishSubject.close();
+    productsPublishSubject.close();
   }
 
   fetchUserProducts(int userId) async {
@@ -23,11 +24,11 @@ class UserProfileBloc {
       final response = await productRepository.getUserProducts(userId);
 
       if (response.status == HttpStatus.ok)
-        _productsPublishSubject.sink.add(response.data);
+        productsPublishSubject.sink.add(response.data);
       else
-        _productsPublishSubject.sink.addError(response.message);
+        productsPublishSubject.sink.addError(response.message);
     } catch (error) {
-      _productsPublishSubject.sink.addError(error);
+      productsPublishSubject.sink.addError(error);
     }
   }
 }

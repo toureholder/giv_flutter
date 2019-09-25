@@ -3,7 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:giv_flutter/config/i18n/string_localizations.dart';
 import 'package:giv_flutter/features/base/base.dart';
 import 'package:giv_flutter/features/customer_service/bloc/customer_service_dialog_bloc.dart';
-import 'package:giv_flutter/features/customer_service/customer_service_dialog.dart';
+import 'package:giv_flutter/features/customer_service/ui/customer_service_dialog.dart';
 import 'package:giv_flutter/model/user/user.dart';
 import 'package:giv_flutter/service/preferences/shared_preferences_storage.dart';
 import 'package:giv_flutter/util/navigation/navigation.dart';

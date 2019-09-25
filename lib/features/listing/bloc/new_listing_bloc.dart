@@ -20,11 +20,19 @@ class NewListingBloc {
   final ListingRepository listingRepository;
   final LocationRepository locationRepository;
   final DiskStorageProvider diskStorage;
+  final PublishSubject<NewListingBlocUser> userPublishSubject;
+  final PublishSubject<Location> locationPublishSubject;
+  final PublishSubject<StreamEvent<double>> uploadStatusPublishSubject;
+  final PublishSubject<Product> savedProductPublishSubject;
 
   NewListingBloc({
     @required this.locationRepository,
     @required this.listingRepository,
     @required this.diskStorage,
+    @required this.userPublishSubject,
+    @required this.locationPublishSubject,
+    @required this.uploadStatusPublishSubject,
+    @required this.savedProductPublishSubject,
   });
 
   bool isEditing;
@@ -37,22 +45,17 @@ class NewListingBloc {
   bool _hasSentRequest = false;
   Product _product;
 
-  final _userPublishSubject = PublishSubject<NewListingBlocUser>();
-  final _locationPublishSubject = PublishSubject<Location>();
-  final _uploadStatusPublishSubject = PublishSubject<StreamEvent<double>>();
-  final _savedProductPublishSubject = PublishSubject<Product>();
-
   factory NewListingBloc.from(NewListingBloc bloc, bool isEditing) {
     bloc.isEditing = isEditing;
     return bloc;
   }
 
-  Observable<NewListingBlocUser> get userStream => _userPublishSubject.stream;
-  Observable<Location> get locationStream => _locationPublishSubject.stream;
+  Observable<NewListingBlocUser> get userStream => userPublishSubject.stream;
+  Observable<Location> get locationStream => locationPublishSubject.stream;
   Observable<StreamEvent<double>> get uploadStatusStream =>
-      _uploadStatusPublishSubject.stream;
+      uploadStatusPublishSubject.stream;
   Observable<Product> get savedProductStream =>
-      _savedProductPublishSubject.stream;
+      savedProductPublishSubject.stream;
 
   _resetProgress() {
     _uploadProgresses = [];
@@ -64,18 +67,18 @@ class NewListingBloc {
   }
 
   dispose() {
-    _userPublishSubject.close();
-    _locationPublishSubject.close();
-    _uploadStatusPublishSubject.close();
-    _savedProductPublishSubject.close();
+    userPublishSubject.close();
+    locationPublishSubject.close();
+    uploadStatusPublishSubject.close();
+    savedProductPublishSubject.close();
   }
 
   loadUser({bool forceShow = false}) {
     try {
       var user = diskStorage.getUser();
-      _userPublishSubject.sink.add(NewListingBlocUser(user, forceShow));
+      userPublishSubject.sink.add(NewListingBlocUser(user, forceShow));
     } catch (error) {
-      _userPublishSubject.sink.addError(error);
+      userPublishSubject.sink.addError(error);
     }
   }
 
@@ -89,9 +92,9 @@ class NewListingBloc {
         var response = await locationRepository.getLocationDetails(location);
         if (response.status == HttpStatus.ok) resolvedLocation = response.data;
       }
-      _locationPublishSubject.sink.add(resolvedLocation);
+      locationPublishSubject.sink.add(resolvedLocation);
     } catch (error) {
-      _locationPublishSubject.sink.addError(error);
+      locationPublishSubject.sink.addError(error);
     }
   }
 
@@ -123,7 +126,7 @@ class NewListingBloc {
   }
 
   _updateProgressStream(double progress) {
-    _uploadStatusPublishSubject.sink.add(
+    uploadStatusPublishSubject.sink.add(
         StreamEvent<double>(state: StreamEventState.loading, data: progress));
   }
 
@@ -185,13 +188,13 @@ class NewListingBloc {
 
       if (response.status == HttpStatus.created ||
           response.status == HttpStatus.ok) {
-        _uploadStatusPublishSubject.sink
+        uploadStatusPublishSubject.sink
             .add(StreamEvent<double>(state: StreamEventState.ready, data: 1.0));
-        _savedProductPublishSubject.sink.add(response.data);
+        savedProductPublishSubject.sink.add(response.data);
       } else
         throw response.message;
     } catch (error) {
-      _savedProductPublishSubject.sink.addError(error);
+      savedProductPublishSubject.sink.addError(error);
     }
   }
 }
