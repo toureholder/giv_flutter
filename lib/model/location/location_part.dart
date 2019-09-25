@@ -6,8 +6,11 @@ class LocationPart {
 
   LocationPart({this.id, this.name});
 
-  bool get isOk => this == null || (id != null && id.isNotEmpty) &&
-      (name != null && name.isNotEmpty);
+  bool get isOk =>
+      this == null ||
+      (id != null && id.isNotEmpty) && (name != null && name.isNotEmpty);
+
+  bool get propertiesAreNull => id == null && name == null;
 }
 
 class Country extends LocationPart {
@@ -42,6 +45,8 @@ class State extends LocationPart {
       : id = '${json['id']}',
         name = json['name'];
 
+  factory State.fake() => State(id: '123', name: 'Somes state');
+
   static List<State> fromDynamicList(List<dynamic> list) {
     return (list == null)
         ? []
@@ -63,6 +68,8 @@ class City extends LocationPart {
   City.fromJson(Map<String, dynamic> json)
       : id = '${json['id']}',
         name = json['name'];
+
+  factory City.fake() => City(id: '123', name: 'Somes state');
 
   static List<City> fromDynamicList(List<dynamic> list) {
     return (list == null)

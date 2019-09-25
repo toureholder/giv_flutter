@@ -3,6 +3,7 @@
 import 'package:giv_flutter/model/app_config/app_config.dart';
 import 'package:giv_flutter/model/location/location.dart';
 import 'package:giv_flutter/model/user/user.dart';
+import 'package:giv_flutter/util/cache/cache_payload.dart';
 
 abstract class DiskStorageProvider {
   Future<bool> clearAll();
@@ -27,4 +28,10 @@ abstract class DiskStorageProvider {
   Future<bool> setUser(User user);
   Future<bool> clearUser();
   User getUser();
+
+  Location getLocationCacheItem(String cacheKey);
+  Future<bool> setLocationCacheItem(String cacheKey, Location location);
+
+  Future<bool> setCachePayloadItem(String cacheKey, CachePayload payload);
+  CachePayload getCachePayloadItem(String cacheKey);
 }

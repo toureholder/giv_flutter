@@ -36,6 +36,10 @@ class _CategoriesState extends BaseState<Categories> {
   @override
   void initState() {
     super.initState();
+    // TODO: We have problem here. Since where aren't instantiating a new bloc,
+    // instances of this widget will display the result loaded by other
+    // instances build after it. Flutter onResume() ?
+
     _categoriesBloc = widget.bloc;
     _categoriesBloc.fetchCategories(fetchAll: widget.fetchAll);
   }
@@ -52,17 +56,34 @@ class _CategoriesState extends BaseState<Categories> {
       appBar: appBar,
       body: ContentStreamBuilder(
         stream: _categoriesBloc.categories,
-        onHasData: (data) {
-          return _buildMainListView(context, data);
+        onHasData: (List<ProductCategory> data) {
+          return CategoryListView(
+            categories: data,
+            returnChoice: widget.returnChoice,
+            hideThese: widget.hideThese,
+          );
         },
       ),
     );
   }
+}
 
-  ListView _buildMainListView(
-      BuildContext context, List<ProductCategory> categories) {
-    if (widget.hideThese != null)
-      categories.removeWhere((it) => widget.hideThese.contains(it.id));
+class CategoryListView extends StatelessWidget {
+  final List<ProductCategory> categories;
+  final bool returnChoice;
+  final List<int> hideThese;
+
+  const CategoryListView({
+    Key key,
+    @required this.categories,
+    @required this.returnChoice,
+    @required this.hideThese,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    if (hideThese != null)
+      categories.removeWhere((it) => hideThese.contains(it.id));
 
     return ListView.builder(
         shrinkWrap: true,
@@ -71,8 +92,8 @@ class _CategoriesState extends BaseState<Categories> {
           return i < categories.length
               ? CategoryListTile(
                   category: categories[i],
-                  returnChoice: widget.returnChoice,
-                  hideThese: widget.hideThese,
+                  returnChoice: returnChoice,
+                  hideThese: hideThese,
                 )
               : Spacing.vertical(Dimens.default_vertical_margin);
         });

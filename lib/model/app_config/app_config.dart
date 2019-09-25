@@ -20,4 +20,10 @@ class AppConfig {
         privacyPolicyUrlKey: privacyPolicyUrl,
         termsOfServiceUrlKey: termsOfServiceUrl
       };
+
+  factory AppConfig.fake() => AppConfig(
+        'http://policy',
+        'http://termos',
+        customerServiceNumber: '987654321',
+      );
 }

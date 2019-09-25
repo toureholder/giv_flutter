@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:giv_flutter/base/base_state.dart';
+import 'package:giv_flutter/config/i18n/string_localizations.dart';
 import 'package:giv_flutter/features/log_in/bloc/log_in_bloc.dart';
 import 'package:giv_flutter/features/sign_in/ui/mailbox_image.dart';
 import 'package:giv_flutter/features/sign_in/ui/sign_in_full_page_message.dart';
 import 'package:giv_flutter/model/api_response/api_response.dart';
 import 'package:giv_flutter/model/user/repository/api/request/login_assistance_request.dart';
+import 'package:giv_flutter/util/form/form_validator.dart';
+import 'package:giv_flutter/util/form/text_editing_controller_builder.dart';
 import 'package:giv_flutter/util/form/email_form_field.dart';
 import 'package:giv_flutter/util/navigation/navigation.dart';
 import 'package:giv_flutter/util/network/http_response.dart';
@@ -47,15 +50,13 @@ class _LoginAssistanceState extends BaseState<LoginAssistance> {
     _initFunctionMap();
     _listenToResponseStream();
 
-    _emailController = widget.email == null
-        ? TextEditingController()
-        : TextEditingController.fromValue(
-            new TextEditingValue(text: widget.email));
+    _emailController =
+        TextEditingControllerBuilder().setInitialText(widget.email).build();
   }
 
   _listenToResponseStream() {
     _logInBloc.loginAssistanceStream
-        .listen((HttpResponse<ApiResponse> response) {
+        ?.listen((HttpResponse<ApiResponse> response) {
       if (response.isReady) _handleResponse(response);
     });
   }
@@ -96,17 +97,28 @@ class _LoginAssistanceState extends BaseState<LoginAssistance> {
           widget.page.title,
           weight: SyntheticFontWeight.semiBold,
         ),
-        Spacing.vertical(Dimens.default_vertical_margin),
-        Body2Text(widget.page.instructions, color: Colors.grey),
-        Spacing.vertical(Dimens.default_vertical_margin),
+        Spacing.vertical(
+          Dimens.default_vertical_margin,
+        ),
+        Body2Text(
+          widget.page.instructions,
+          color: Colors.grey,
+        ),
+        Spacing.vertical(
+          Dimens.default_vertical_margin,
+        ),
         EmailFormField(
           enabled: !isLoading,
           focusNode: _emailFocus,
           controller: _emailController,
+          validator: (String input) => string(
+            FormValidator().email(input),
+          ),
         ),
-        Spacing.vertical(Dimens.sign_in_submit_button_margin_top),
-        PrimaryButton(
-          text: string('common_send'),
+        Spacing.vertical(
+          Dimens.sign_in_submit_button_margin_top,
+        ),
+        SubmitButton(
           isLoading: isLoading,
           onPressed: _handleSubmit,
         )
@@ -193,6 +205,26 @@ class _LoginAssistanceState extends BaseState<LoginAssistance> {
   }
 }
 
+class SubmitButton extends StatelessWidget {
+  final bool isLoading;
+  final VoidCallback onPressed;
+
+  const SubmitButton({
+    Key key,
+    this.isLoading,
+    this.onPressed,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return PrimaryButton(
+      text: GetLocalizedStringFunction(context)('common_send'),
+      isLoading: isLoading,
+      onPressed: onPressed,
+    );
+  }
+}
+
 enum LoginAssistanceType { forgotPassword, resendActivation }
 
 enum LoginAssistanceFunction { submit, errorHandler }
@@ -210,4 +242,13 @@ class LoginAssistancePage {
       @required this.type,
       @required this.title,
       @required this.instructions});
+
+  factory LoginAssistancePage.fake(LoginAssistanceType type) =>
+      LoginAssistancePage(
+        successTitle: 'fake success title',
+        successMessage: 'fake success message',
+        type: type,
+        title: 'fake title',
+        instructions: 'fake instructions',
+      );
 }

@@ -5,7 +5,7 @@ import 'package:giv_flutter/values/dimens.dart';
 
 class CustomBottomSheet {
   static show(BuildContext context,
-      {List<BottomSheetTile> tiles, String title}) {
+      {List<Widget> tiles, String title}) {
     showModalBottomSheet(
         context: context,
         builder: (context) {
@@ -17,11 +17,7 @@ class CustomBottomSheet {
           children.addAll(tiles);
           children.add(Spacing.vertical(Dimens.default_vertical_margin));
 
-          return Column(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: children,
-          );
+          return BottomSheetColumn(children: children);
         });
   }
 
@@ -60,6 +56,21 @@ class BottomSheetTile extends StatelessWidget {
         Navigator.pop(context);
         onTap();
       },
+    );
+  }
+}
+
+class BottomSheetColumn extends StatelessWidget {
+  final List<Widget> children;
+
+  const BottomSheetColumn({Key key, @required this.children}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: children,
     );
   }
 }

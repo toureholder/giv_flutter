@@ -1,10 +1,8 @@
 import 'package:flutter/widgets.dart';
 import 'package:giv_flutter/base/base_state.dart';
-import 'package:giv_flutter/config/i18n/string_localizations.dart';
 import 'package:giv_flutter/util/form/form_util.dart';
 
 class CustomFormFieldState<T extends StatefulWidget> extends BaseState<T> {
-  GetLocalizedStringFunction string;
   FocusNode focusNode;
   FormUtil formUtil;
 

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:giv_flutter/base/base_state.dart';
+import 'package:giv_flutter/config/i18n/string_localizations.dart';
 import 'package:giv_flutter/features/base/base.dart';
 import 'package:giv_flutter/features/listing/bloc/my_listings_bloc.dart';
 import 'package:giv_flutter/features/listing/bloc/new_listing_bloc.dart';
@@ -23,6 +24,7 @@ import 'package:giv_flutter/util/presentation/bottom_sheet.dart';
 import 'package:giv_flutter/util/presentation/buttons.dart';
 import 'package:giv_flutter/util/presentation/custom_app_bar.dart';
 import 'package:giv_flutter/util/presentation/custom_scaffold.dart';
+import 'package:giv_flutter/util/presentation/icon_buttons.dart';
 import 'package:giv_flutter/util/presentation/image_carousel.dart';
 import 'package:giv_flutter/util/presentation/photo_view_page.dart';
 import 'package:giv_flutter/util/presentation/spacing.dart';
@@ -34,14 +36,12 @@ import 'package:provider/provider.dart';
 
 class ProductDetail extends StatefulWidget {
   final Product product;
-  final bool isMine;
   final ProductDetailBloc bloc;
 
   const ProductDetail({
     Key key,
     @required this.bloc,
-    this.product,
-    this.isMine = false,
+    @required this.product,
   }) : super(key: key);
 
   @override
@@ -51,6 +51,7 @@ class ProductDetail extends StatefulWidget {
 class _ProductDetailState extends BaseState<ProductDetail> {
   Product _product;
   ProductDetailBloc _productDetailBloc;
+  bool _isMine;
 
   @override
   void initState() {
@@ -58,20 +59,21 @@ class _ProductDetailState extends BaseState<ProductDetail> {
     _product = widget.product;
     _productDetailBloc = widget.bloc;
     _productDetailBloc.fetchLocationDetails(_product.location);
+    _isMine = _productDetailBloc.isProductMine(_product.user.id);
     _listenToDeleteStream();
     _listenToUpdateStream();
   }
 
   void _listenToDeleteStream() {
     _productDetailBloc.deleteListingStream
-        .listen((HttpResponse<ApiModelResponse> response) {
+        ?.listen((HttpResponse<ApiModelResponse> response) {
       if (response.isReady) _onDeleteListingResponse(response);
     });
   }
 
   void _listenToUpdateStream() {
     _productDetailBloc.updateListingStream
-        .listen((HttpResponse<Product> response) {
+        ?.listen((HttpResponse<Product> response) {
       if (response.isReady) _onUpdateListingResponse(response);
     });
   }
@@ -85,37 +87,23 @@ class _ProductDetailState extends BaseState<ProductDetail> {
         builder: (context, AsyncSnapshot<StreamEventState> snapshot) {
           final state = snapshot.data;
           return buildStack(context,
-              isDeleting: state == StreamEventState.loading);
+              isLoading: state == StreamEventState.loading);
         });
   }
 
-  Stack buildStack(BuildContext context, {bool isDeleting}) {
-    final children = <Widget>[
-      _buildCustomScaffold(context),
-    ];
+  Stack buildStack(BuildContext context, {bool isLoading}) {
+    final children = <Widget>[_buildCustomScaffold(context)];
 
-    if (isDeleting) children.add(_buildDeletingLoadingState());
+    if (isLoading) children.add(LoadingStateForeground());
 
-    return Stack(
-      children: children,
-    );
-  }
-
-  Widget _buildDeletingLoadingState() {
-    return Material(
-      color: CustomColors.inActiveForeground,
-      child: Center(
-        child: CircularProgressIndicator(),
-      ),
-    );
+    return Stack(children: children);
   }
 
   CustomScaffold _buildCustomScaffold(BuildContext context) {
     return CustomScaffold(
       appBar: CustomAppBar(
-        leading: IconButton(
-            icon: BackButtonIcon(), onPressed: () => navigation.pop(_product)),
-        actions: widget.isMine ? _appBarActions() : null,
+        leading: BackIconButton(onPressed: () => navigation.pop(_product)),
+        actions: _isMine ? _appBarActions() : null,
       ),
       body: _buildMainListView(context),
     );
@@ -126,7 +114,7 @@ class _ProductDetailState extends BaseState<ProductDetail> {
       _imageCarousel(context, _product.images),
       _textPadding(H6Text(_product.title)),
       _locationStreamBuilder(),
-      _iWantItButton(context),
+      _maybeIWantItButton(),
       _textPadding(Body2Text(_product.description)),
       _publishedAt(),
       Spacing.vertical(Dimens.grid(8)),
@@ -137,35 +125,15 @@ class _ProductDetailState extends BaseState<ProductDetail> {
     ]);
   }
 
-  List<Widget> _appBarActions() {
-    return [
-      IconButton(
-          icon: Icon(Icons.more_vert), onPressed: _showActionsBottomSheet)
-    ];
-  }
+  List<Widget> _appBarActions() =>
+      [MoreIconButton(onPressed: _showActionsBottomSheet)];
 
   _showActionsBottomSheet() {
-    IconData activateTileIcon = Icons.visibility;
-    String activateTileTextKey = 'product_detail_action_reactivate';
-
-    if (_product.isActive) {
-      activateTileIcon = Icons.visibility_off;
-      activateTileTextKey = 'product_detail_action_hide';
-    }
-
-    final tiles = <BottomSheetTile>[
-      BottomSheetTile(
-          iconData: activateTileIcon,
-          text: string(activateTileTextKey),
-          onTap: _confirmHideOrActivate),
-      BottomSheetTile(
-          iconData: Icons.edit,
-          text: string('product_detail_action_edit'),
-          onTap: _editListing),
-      BottomSheetTile(
-          iconData: Icons.delete,
-          text: string('product_detail_action_delete'),
-          onTap: _confirmDelete),
+    final tiles = <Widget>[
+      ToggleActivationBottomSheetTile(
+          onTap: _confirmHideOrActivate, isActive: _product.isActive),
+      EditBottomSheetTile(onTap: _editListing),
+      DeleteBottomSheetTile(onTap: _confirmDelete),
     ];
 
     CustomBottomSheet.show(context,
@@ -209,21 +177,18 @@ class _ProductDetailState extends BaseState<ProductDetail> {
     return locationWidget;
   }
 
-  Widget _iWantItButton(BuildContext context) {
-    if (widget.isMine) return Container();
+  Widget _maybeIWantItButton() {
+    return _isMine ? Container() : IWantItButton(onPressed: _handleIWantItTap);
+  }
 
-    final user = _product.user;
-    final message =
-        string('whatsapp_message_interested', formatArg: _product.title);
-
-    return Padding(
-      padding: EdgeInsets.all(Dimens.default_horizontal_margin),
-      child: PrimaryButton(
-          text: string('i_want_it'),
-          onPressed: () {
-            if (user.phoneNumber != null) _showIWantItDialog(message);
-          }),
-    );
+  _handleIWantItTap() {
+    if (_product.user.phoneNumber != null)
+      _showIWantItDialog(
+        string(
+          'whatsapp_message_interested',
+          formatArg: _product.title,
+        ),
+      );
   }
 
   Padding _userRow() {
@@ -265,7 +230,10 @@ class _ProductDetailState extends BaseState<ProductDetail> {
     return _product.isActive
         ? carousel
         : Stack(
-            children: <Widget>[carousel, _positionedIsHiddenAlert()],
+            children: <Widget>[
+              carousel,
+              PositionedIsHiddenAlert(onTap: _confirmHideOrActivate),
+            ],
           );
   }
 
@@ -282,26 +250,6 @@ class _ProductDetailState extends BaseState<ProductDetail> {
       withIndicator: true,
       isFaded: !_product.isActive,
     );
-  }
-
-  Positioned _positionedIsHiddenAlert() {
-    return Positioned(
-        top: 0,
-        left: 0,
-        right: 0,
-        child: GestureDetector(
-          onTap: _confirmHideOrActivate,
-          child: Container(
-            padding: EdgeInsets.all(Dimens.default_horizontal_margin),
-            color: Theme.of(context).primaryColor,
-            child: Center(
-                child: Body2Text(
-              string('product_detail_inactive_listing_alert'),
-              textAlign: TextAlign.center,
-              color: Colors.white,
-            )),
-          ),
-        ));
   }
 
   void _confirmDelete() {
@@ -364,7 +312,7 @@ class _ProductDetailState extends BaseState<ProductDetail> {
 
   _updateStatus(UpdateListingActiveStatusRequest request) {
     Navigator.of(context).pop();
-    _productDetailBloc.updateListing(request);
+    _productDetailBloc.updateActiveStatus(request);
   }
 
   _editListing() async {
@@ -406,6 +354,7 @@ class _ProductDetailState extends BaseState<ProductDetail> {
             phoneNumber: fullPhoneNumber,
             message: message,
             isAuthenticated: isAuthenticated,
+            util: _productDetailBloc.util,
           );
         });
   }
@@ -451,5 +400,126 @@ class _ProductDetailState extends BaseState<ProductDetail> {
           ),
         ),
         hasAnimation: false);
+  }
+}
+
+class IWantItButton extends StatelessWidget {
+  final VoidCallback onPressed;
+
+  const IWantItButton({Key key, @required this.onPressed}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.all(Dimens.default_horizontal_margin),
+      child: PrimaryButton(
+        text: GetLocalizedStringFunction(context)('i_want_it'),
+        onPressed: onPressed,
+      ),
+    );
+  }
+}
+
+class LoadingStateForeground extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: CustomColors.inActiveForeground,
+      child: Center(
+        child: CircularProgressIndicator(),
+      ),
+    );
+  }
+}
+
+class ToggleActivationBottomSheetTile extends StatelessWidget {
+  final GestureTapCallback onTap;
+  final bool isActive;
+
+  const ToggleActivationBottomSheetTile({
+    Key key,
+    @required this.onTap,
+    @required this.isActive,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    IconData activateTileIcon = Icons.visibility;
+    String activateTileTextKey = 'product_detail_action_reactivate';
+
+    if (isActive) {
+      activateTileIcon = Icons.visibility_off;
+      activateTileTextKey = 'product_detail_action_hide';
+    }
+
+    return BottomSheetTile(
+      iconData: activateTileIcon,
+      text: GetLocalizedStringFunction(context)(activateTileTextKey),
+      onTap: onTap,
+    );
+  }
+}
+
+class EditBottomSheetTile extends StatelessWidget {
+  final GestureTapCallback onTap;
+
+  const EditBottomSheetTile({Key key, @required this.onTap}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BottomSheetTile(
+      iconData: Icons.edit,
+      text: GetLocalizedStringFunction(context)('product_detail_action_edit'),
+      onTap: onTap,
+    );
+  }
+}
+
+class DeleteBottomSheetTile extends StatelessWidget {
+  final GestureTapCallback onTap;
+
+  const DeleteBottomSheetTile({
+    Key key,
+    @required this.onTap,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BottomSheetTile(
+      iconData: Icons.delete,
+      text: GetLocalizedStringFunction(context)('product_detail_action_delete'),
+      onTap: onTap,
+    );
+  }
+}
+
+class PositionedIsHiddenAlert extends StatelessWidget {
+  final GestureTapCallback onTap;
+
+  const PositionedIsHiddenAlert({
+    Key key,
+    @required this.onTap,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Positioned(
+        top: 0,
+        left: 0,
+        right: 0,
+        child: GestureDetector(
+          onTap: onTap,
+          child: Container(
+            padding: EdgeInsets.all(Dimens.default_horizontal_margin),
+            color: Theme.of(context).primaryColor,
+            child: Center(
+                child: Body2Text(
+              GetLocalizedStringFunction(context)(
+                  'product_detail_inactive_listing_alert'),
+              textAlign: TextAlign.center,
+              color: Colors.white,
+            )),
+          ),
+        ));
   }
 }

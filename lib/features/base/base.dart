@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:giv_flutter/base/base_state.dart';
+import 'package:giv_flutter/config/i18n/string_localizations.dart';
 import 'package:giv_flutter/features/base/model/base_page.dart';
 import 'package:giv_flutter/features/home/bloc/home_bloc.dart';
 import 'package:giv_flutter/features/home/ui/home.dart';
@@ -35,11 +36,7 @@ class _BaseState extends BaseState<Base> implements HomeListener {
       onWillPop: _onBackPressed,
       child: CustomScaffold(
         body: _currentPage.child,
-        floatingActionButton: FloatingActionButton.extended(
-          onPressed: _goToPostPage,
-          icon: Icon(Icons.add),
-          label: Text(string('shared_action_create_ad')),
-        ),
+        floatingActionButton: BasePageFab(onPressed: _goToPostPage),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         bottomNavigationBar: _buildBottomNavigationBar(),
       ),
@@ -59,8 +56,13 @@ class _BaseState extends BaseState<Base> implements HomeListener {
   }
 
   BottomNavigationBarItem _buildBottomNavigationBarItem(
-      IconData iconData, String text) {
-    final icon = iconData == null ? Container() : Icon(iconData);
+      IconData iconData, String text, String widgetKey) {
+    final icon = iconData == null
+        ? Container()
+        : Icon(
+            iconData,
+            key: Key(widgetKey),
+          );
 
     return BottomNavigationBarItem(
         icon: icon,
@@ -72,13 +74,16 @@ class _BaseState extends BaseState<Base> implements HomeListener {
 
   List<BottomNavigationBarItem> _buildBottomNavigationBarList() {
     return _pages.map((BasePage page) {
-      return _buildBottomNavigationBarItem(page.icon, page.iconText);
+      return _buildBottomNavigationBarItem(
+          page.icon, page.iconText, page.actionId);
     }).toList();
   }
 
   void _goToPostPage() {
     navigation.push(Consumer<NewListingBloc>(
-      builder: (context, bloc, child) => NewListing(bloc: bloc,),
+      builder: (context, bloc, child) => NewListing(
+        bloc: bloc,
+      ),
     ));
   }
 
@@ -103,20 +108,23 @@ class _BaseState extends BaseState<Base> implements HomeListener {
   void _setupPages() {
     _pages = [
       BasePage(
-          child: Consumer<HomeBloc>(
-            builder: (context, bloc, child) => Home(
-              listener: this,
-              bloc: bloc,
-            ),
+        child: Consumer<HomeBloc>(
+          builder: (context, bloc, child) => Home(
+            listener: this,
+            bloc: bloc,
           ),
-          icon: Icons.home,
-          iconText: string('base_page_title_home'),
-          actionId: Base.actionIdHome),
+        ),
+        icon: Icons.home,
+        iconText: string('base_page_title_home'),
+        actionId: Base.actionIdHome,
+      ),
       BasePage.empty(),
       BasePage.empty(),
       BasePage(
         child: Consumer<CategoriesBloc>(
-          builder: (context, bloc, child) => Categories(bloc: bloc,),
+          builder: (context, bloc, child) => Categories(
+            bloc: bloc,
+          ),
         ),
         icon: Icons.search,
         iconText: string('base_page_title_search'),
@@ -150,4 +158,20 @@ class _BaseState extends BaseState<Base> implements HomeListener {
 
   int _getIndexByActionId(String actionId) =>
       _pages.indexWhere((it) => it.actionId == actionId);
+}
+
+class BasePageFab extends StatelessWidget {
+  final VoidCallback onPressed;
+
+  const BasePageFab({Key key, this.onPressed}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return FloatingActionButton.extended(
+      onPressed: onPressed,
+      icon: Icon(Icons.add),
+      label:
+          Text(GetLocalizedStringFunction(context)('shared_action_create_ad')),
+    );
+  }
 }

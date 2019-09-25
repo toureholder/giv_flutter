@@ -11,39 +11,39 @@ import 'package:meta/meta.dart';
 class LocationFilterBloc {
   final LocationRepository locationRepository;
   final DiskStorageProvider diskStorage;
-
-  final _listPublishSubject = PublishSubject<LocationList>();
-  final _statesPublishSubject = PublishSubject<StreamEvent<List<State>>>();
-  final _citiesPublishSubject = PublishSubject<StreamEvent<List<City>>>();
+  final BehaviorSubject<LocationList> listSubject;
+  final PublishSubject<StreamEvent<List<State>>> statesSubject;
+  final PublishSubject<StreamEvent<List<City>>> citiesSubject;
 
   LocationFilterBloc({
     @required this.locationRepository,
     @required this.diskStorage,
+    @required this.listSubject,
+    @required this.statesSubject,
+    @required this.citiesSubject,
   });
 
-  Observable<LocationList> get listStream => _listPublishSubject.stream;
+  Observable<LocationList> get listStream => listSubject.stream;
 
-  Observable<StreamEvent<List<State>>> get statesStream =>
-      _statesPublishSubject.stream;
+  Observable<StreamEvent<List<State>>> get statesStream => statesSubject.stream;
 
-  Observable<StreamEvent<List<City>>> get citiesStream =>
-      _citiesPublishSubject.stream;
+  Observable<StreamEvent<List<City>>> get citiesStream => citiesSubject.stream;
 
   dispose() {
-    _listPublishSubject.close();
-    _statesPublishSubject.close();
-    _citiesPublishSubject.close();
+    listSubject.close();
+    statesSubject.close();
+    citiesSubject.close();
   }
 
   fetchLocationLists(Location location) async {
     try {
       var response = await locationRepository.getLocationList(location);
       if (response.status == HttpStatus.ok)
-        _listPublishSubject.sink.add(response.data);
+        listSubject.sink.add(response.data);
       else
-        _listPublishSubject.sink.addError(response.message);
+        listSubject.sink.addError(response.message);
     } catch (error) {
-      _listPublishSubject.sink.addError(error);
+      listSubject.sink.addError(error);
     }
   }
 
@@ -53,16 +53,15 @@ class LocationFilterBloc {
     if (countryId == null) return;
 
     try {
-      _statesPublishSubject.sink.add(StreamEvent.loading());
+      statesSubject.sink.add(StreamEvent.loading());
       var response = await locationRepository.getStates(countryId);
 
       if (response.status == HttpStatus.ok)
-        _statesPublishSubject.sink
-            .add(StreamEvent<List<State>>(data: response.data));
+        statesSubject.sink.add(StreamEvent<List<State>>(data: response.data));
       else
-        _statesPublishSubject.sink.addError(response.message);
+        statesSubject.sink.addError(response.message);
     } catch (error) {
-      _statesPublishSubject.sink.addError(error);
+      statesSubject.sink.addError(error);
     }
   }
 
@@ -72,29 +71,28 @@ class LocationFilterBloc {
     if (stateId == null) return;
 
     try {
-      _citiesPublishSubject.sink.add(StreamEvent.loading());
+      citiesSubject.sink.add(StreamEvent.loading());
       var response = await locationRepository.getCities(countryId, stateId);
 
       if (response.status == HttpStatus.ok)
-        _citiesPublishSubject.sink
-            .add(StreamEvent<List<City>>(data: response.data));
+        citiesSubject.sink.add(StreamEvent<List<City>>(data: response.data));
       else
-        _citiesPublishSubject.sink.addError(response.message);
+        citiesSubject.sink.addError(response.message);
     } catch (error) {
-      _citiesPublishSubject.sink.addError(error);
+      citiesSubject.sink.addError(error);
     }
   }
 
   setLocation(Location location) => diskStorage.setLocation(location);
 
   _clearCities() {
-    _citiesPublishSubject.sink.add(StreamEvent<List<City>>(
+    citiesSubject.sink.add(StreamEvent<List<City>>(
       state: StreamEventState.empty,
     ));
   }
 
   _clearStates() {
-    _statesPublishSubject.sink.add(StreamEvent<List<State>>(
+    statesSubject.sink.add(StreamEvent<List<State>>(
       state: StreamEventState.empty,
     ));
 

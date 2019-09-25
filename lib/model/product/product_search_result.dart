@@ -11,7 +11,7 @@ class ProductSearchResult {
       : location = Location.fromJson(json['location']),
         products = Product.fromDynamicList(json['listings']);
 
-  ProductSearchResult.mock()
-      : location = Location.mock(),
-        products = Product.getMockList();
+  ProductSearchResult.fake()
+      : location = Location.fake(),
+        products = Product.fakeList();
 }

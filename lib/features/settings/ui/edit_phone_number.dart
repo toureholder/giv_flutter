@@ -4,6 +4,7 @@ import 'package:giv_flutter/base/base_state.dart';
 import 'package:giv_flutter/config/config.dart';
 import 'package:giv_flutter/features/settings/bloc/settings_bloc.dart';
 import 'package:giv_flutter/model/user/user.dart';
+import 'package:giv_flutter/util/form/text_editing_controller_builder.dart';
 import 'package:giv_flutter/util/network/http_response.dart';
 import 'package:giv_flutter/util/presentation/android_theme.dart';
 import 'package:giv_flutter/util/presentation/buttons.dart';
@@ -11,7 +12,6 @@ import 'package:giv_flutter/util/presentation/custom_app_bar.dart';
 import 'package:giv_flutter/util/presentation/custom_scaffold.dart';
 import 'package:giv_flutter/util/presentation/spacing.dart';
 import 'package:giv_flutter/util/presentation/typography.dart';
-import 'package:giv_flutter/util/util.dart';
 import 'package:giv_flutter/values/dimens.dart';
 
 class EditPhoneNumber extends StatefulWidget {
@@ -43,10 +43,9 @@ class _EditPhoneNumberState extends BaseState<EditPhoneNumber> {
       if (httpResponse.isReady) onUpdateUserResponse(httpResponse);
     });
 
-    _controller = widget.user?.phoneNumber == null
-        ? TextEditingController()
-        : TextEditingController.fromValue(
-            new TextEditingValue(text: widget.user.phoneNumber));
+    _controller = TextEditingControllerBuilder()
+        .setInitialText(widget.user?.phoneNumber)
+        .build();
   }
 
   @override
@@ -166,8 +165,7 @@ class _EditPhoneNumberState extends BaseState<EditPhoneNumber> {
     if (_controller.text == null || _controller.text.isEmpty) return;
 
     var number = '$_selectedCode${_controller.text}';
-    print(number);
     var message = string('settings_edit_phone_number_test_message');
-    Util.openWhatsApp(number, message);
+    _settingsBloc.openWhatsApp(number, message);
   }
 }

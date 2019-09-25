@@ -6,4 +6,8 @@ class HomeContent {
   List<ProductCategory> productCategories;
 
   HomeContent({this.heroItems, this.productCategories});
+
+  HomeContent.fake()
+      : heroItems = CarouselItem.fakeList(),
+        productCategories = ProductCategory.fakeListHomeContent();
 }

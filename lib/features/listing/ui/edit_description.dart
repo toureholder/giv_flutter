@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:giv_flutter/base/base_state.dart';
 import 'package:giv_flutter/config/config.dart';
+import 'package:giv_flutter/util/form/text_editing_controller_builder.dart';
 import 'package:giv_flutter/util/presentation/android_theme.dart';
 import 'package:giv_flutter/util/presentation/buttons.dart';
 import 'package:giv_flutter/util/presentation/custom_app_bar.dart';
@@ -25,10 +26,9 @@ class _EditDescriptionState extends BaseState<EditDescription> {
   void initState() {
     super.initState();
 
-    _controller = widget.description == null
-        ? TextEditingController()
-        : TextEditingController.fromValue(
-            new TextEditingValue(text: widget.description));
+    _controller = TextEditingControllerBuilder()
+        .setInitialText(widget.description)
+        .build();
   }
 
   @override

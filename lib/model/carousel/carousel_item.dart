@@ -48,7 +48,7 @@ class CarouselItem {
         .toList();
   }
 
-  static List<CarouselItem> mockList() {
+  static List<CarouselItem> fakeList() {
     return [
       CarouselItem(
         imageUrl: 'https://picsum.photos/400/300/?image=20',
@@ -67,6 +67,56 @@ class CarouselItem {
         title: 'Abra espaço para o novo',
         caption: 'Descubra como é fácil doar',
         actionId: Base.actionIdPost,
+      ),
+    ];
+  }
+
+  static List<CarouselItem> fakeListWithTwoItems() {
+    return [
+      CarouselItem(
+        imageUrl: 'https://picsum.photos/400/300/?image=20',
+        title: 'Quanta coisa!',
+        caption: 'Dê uma pesquisada, vai ;)',
+        actionId: Base.actionIdSearch,
+      ),
+      CarouselItem(
+        imageUrl: 'https://picsum.photos/400/300/?image=1073',
+        title: 'Melhore seu inglês',
+        caption: 'Veja os livros sendo doados',
+        productCategory: ProductCategory(id: 5, simpleName: "Livros em inglês"),
+      ),
+    ];
+  }
+
+  static List<CarouselItem> fakeListWithOneAction() {
+    return [
+      CarouselItem(
+        imageUrl: 'https://picsum.photos/400/300/?image=20',
+        title: 'Quanta coisa!',
+        caption: 'Dê uma pesquisada, vai ;)',
+        actionId: Base.actionIdSearch,
+      ),
+    ];
+  }
+
+  static List<CarouselItem> fakeListWithOneCategory() {
+    return [
+      CarouselItem(
+        imageUrl: 'https://picsum.photos/400/300/?image=1073',
+        title: 'Melhore seu inglês',
+        caption: 'Veja os livros sendo doados',
+        productCategory: ProductCategory(id: 5, simpleName: "Livros em inglês"),
+      ),
+    ];
+  }
+
+  static List<CarouselItem> fakeListWithOneUser() {
+    return [
+      CarouselItem(
+        imageUrl: 'https://picsum.photos/400/300/?image=1073',
+        title: 'Olha que coisa mais linda',
+        caption: 'É ela que vem e que passa',
+        user: User.fake(),
       ),
     ];
   }

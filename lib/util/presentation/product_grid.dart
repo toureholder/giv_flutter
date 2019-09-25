@@ -12,9 +12,8 @@ import 'package:provider/provider.dart';
 
 class ProductGrid extends StatefulWidget {
   final List<Product> products;
-  final bool isMine;
 
-  const ProductGrid({Key key, @required this.products, this.isMine = false})
+  const ProductGrid({Key key, @required this.products})
       : super(key: key);
 
   @override
@@ -139,7 +138,6 @@ class _ProductGridState extends BaseState<ProductGrid> {
     final result = await navigation.push(Consumer<ProductDetailBloc>(
       builder: (context, bloc, child) => ProductDetail(
         product: product,
-        isMine: widget.isMine,
         bloc: bloc,
       ),
     ));

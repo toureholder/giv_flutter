@@ -12,7 +12,7 @@ class LogInResponse {
         longLivedToken = json['long_lived_token'],
         user = User.fromJson(json['user']);
 
-  LogInResponse.mock()
+  LogInResponse.fake()
       : firebaseAuthToken = 'd393n39dn',
         longLivedToken = 'j9d3nf4fn',
         user = User.newUser();

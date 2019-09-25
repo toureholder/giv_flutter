@@ -7,12 +7,12 @@ import 'package:giv_flutter/model/listing/repository/api/request/create_listing_
 import 'package:giv_flutter/model/product/product.dart';
 import 'package:giv_flutter/util/network/base_api.dart';
 import 'package:giv_flutter/util/network/http_response.dart';
-import 'package:http/http.dart' as http;
+import 'package:giv_flutter/util/network/http_client_wrapper.dart';
 import 'package:meta/meta.dart';
 
 class ListingApi extends BaseApi {
   ListingApi({
-    @required http.Client client,
+    @required HttpClientWrapper client,
   }) : super(client: client);
 
   Future<HttpResponse<Product>> create(

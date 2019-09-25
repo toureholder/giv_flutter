@@ -8,11 +8,16 @@ class LogInWithProviderRequest {
   LogInWithProviderRequest(
       {@required this.provider, @required this.accessToken, this.localeString});
 
+  LogInWithProviderRequest.fake()
+      : provider = facebook,
+        accessToken = 'qwe1234',
+        localeString = 'pt_BR';
+
   Map<String, String> toHttpRequestBody() => {
-    'auth_provider': provider,
-    'access_token': accessToken,
-    'locale': localeString
-  };
+        'auth_provider': provider,
+        'access_token': accessToken,
+        'locale': localeString
+      };
 
   static const facebook = 'FACEBOOK';
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:giv_flutter/base/base_state.dart';
+import 'package:giv_flutter/config/i18n/string_localizations.dart';
 import 'package:giv_flutter/features/product/filters/bloc/location_filter_bloc.dart';
 import 'package:giv_flutter/model/location/location.dart';
 import 'package:giv_flutter/model/location/location_list.dart';
@@ -44,11 +45,11 @@ class _LocationFilterState extends BaseState<LocationFilter> {
 
   void _listenForErrors() {
     _locationFilterBloc.listStream
-        .listen((event) {}, onError: _handleNetworkError);
+        ?.listen((event) {}, onError: _handleNetworkError);
     _locationFilterBloc.statesStream
-        .listen((event) {}, onError: _handleNetworkError);
+        ?.listen((event) {}, onError: _handleNetworkError);
     _locationFilterBloc.citiesStream
-        .listen((event) {}, onError: _handleNetworkError);
+        ?.listen((event) {}, onError: _handleNetworkError);
   }
 
   @override
@@ -60,31 +61,20 @@ class _LocationFilterState extends BaseState<LocationFilter> {
         stream: _locationFilterBloc.listStream,
         onHasData: (LocationList data) {
           _locationList = data;
-          return _buildMainListView(context);
+          return _buildMainListView();
         },
       ),
     );
   }
 
-  ListView _buildMainListView(BuildContext context) {
-    return ListView(
-      padding: EdgeInsets.only(
-          top: Dimens.default_vertical_margin, bottom: Dimens.grid(60)),
+  Widget _buildMainListView() {
+    return LocationFilterMainListView(
       children: <Widget>[
-        Container(
-          padding: EdgeInsets.symmetric(
-              horizontal: Dimens.default_horizontal_margin),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              _buildCountriesDropdown(context, _locationList.countries),
-              _statesDropdownStreamBuilder(),
-              _citiesDropdownStreamBuilder(),
-              Spacing.vertical(Dimens.grid(16)),
-              _buildPrimaryButton(context)
-            ],
-          ),
-        )
+        _buildCountriesDropdown(context, _locationList.countries),
+        _statesDropdownStreamBuilder(),
+        _citiesDropdownStreamBuilder(),
+        Spacing.vertical(Dimens.grid(16)),
+        _buildPrimaryButton(context)
       ],
     );
   }
@@ -113,34 +103,29 @@ class _LocationFilterState extends BaseState<LocationFilter> {
 
   Widget _buildCountriesDropdown(
       BuildContext context, List<LocationPart.Country> countries) {
-    List<DropdownMenuItem<LocationPart.Country>> menuItems =
-        countries?.map((country) {
+    final menuItems = countries?.map((country) {
       return DropdownMenuItem(value: country, child: Text(country.name));
     })?.toList();
 
-    return Container(
-      child: ButtonTheme(
-        alignedDropdown: true,
-        child: DropdownButton(
-          hint: Text(string('common_country')),
-          isExpanded: true,
-          value: countries?.firstWhere((it) {
-            return it.id == _currentLocation?.country?.id;
-          }, orElse: () => null),
-          items: menuItems,
-          onChanged: (LocationPart.Country country) {
-            setState(() {
-              _currentLocation = country == null
-                  ? Location()
-                  : Location(
-                      country: LocationPart.Country(
-                          id: country.id, name: country.name));
-            });
-            _locationFilterBloc.fetchStates(country?.id);
-          },
-        ),
+    return CountryDropdownButton(
+      value: countries?.firstWhere(
+        (it) {
+          return it.id == _currentLocation?.country?.id;
+        },
+        orElse: () => null,
       ),
+      menuItems: menuItems,
+      onChanged: _onCountryChanged,
     );
+  }
+
+  void _onCountryChanged(LocationPart.Country country) {
+    setState(() {
+      _currentLocation = Location(
+        country: LocationPart.Country(id: country.id, name: country.name),
+      );
+    });
+    _locationFilterBloc.fetchStates(country?.id);
   }
 
   Widget _buildStatesDropdown(BuildContext context,
@@ -227,7 +212,7 @@ class _LocationFilterState extends BaseState<LocationFilter> {
   }
 
   Widget _buildPrimaryButton(BuildContext context) {
-    var onPressed = _hasChangedLocation() ? returnCurrentLocation : null;
+    var onPressed = _hasChangedLocation() ? _returnCurrentLocation : null;
 
     var res = widget.showSaveButton ? 'shared_action_save' : 'action_filter';
 
@@ -236,7 +221,7 @@ class _LocationFilterState extends BaseState<LocationFilter> {
 
   bool _hasChangedLocation() => !_currentLocation.equals(widget.location);
 
-  void returnCurrentLocation() async {
+  void _returnCurrentLocation() async {
     await _locationFilterBloc.setLocation(_currentLocation);
     Navigator.pop(context, _currentLocation);
   }
@@ -255,5 +240,61 @@ class _LocationFilterState extends BaseState<LocationFilter> {
       menuItems?.insert(0, clearItem);
       menuItems?.add(clearItem);
     }
+  }
+}
+
+class LocationFilterMainListView extends StatelessWidget {
+  final List<Widget> children;
+
+  const LocationFilterMainListView({
+    Key key,
+    @required this.children,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      padding: EdgeInsets.only(
+          top: Dimens.default_vertical_margin, bottom: Dimens.grid(60)),
+      children: <Widget>[
+        Container(
+          padding: EdgeInsets.symmetric(
+              horizontal: Dimens.default_horizontal_margin),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: children,
+          ),
+        )
+      ],
+    );
+  }
+}
+
+class CountryDropdownButton extends StatelessWidget {
+  final ValueChanged<LocationPart.Country> onChanged;
+  final List<DropdownMenuItem<LocationPart.Country>> menuItems;
+  final LocationPart.Country value;
+
+  const CountryDropdownButton({
+    Key key,
+    @required this.onChanged,
+    @required this.menuItems,
+    @required this.value,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: ButtonTheme(
+        alignedDropdown: true,
+        child: DropdownButton<LocationPart.Country>(
+          hint: Text(GetLocalizedStringFunction(context)('common_country')),
+          isExpanded: true,
+          value: value,
+          items: menuItems,
+          onChanged: onChanged,
+        ),
+      ),
+    );
   }
 }

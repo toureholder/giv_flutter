@@ -29,11 +29,13 @@ import 'package:giv_flutter/util/data/stream_event.dart';
 import 'package:giv_flutter/util/presentation/bottom_sheet.dart';
 import 'package:giv_flutter/util/presentation/buttons.dart';
 import 'package:giv_flutter/util/presentation/custom_app_bar.dart';
+import 'package:giv_flutter/util/presentation/custom_divider.dart';
 import 'package:giv_flutter/util/presentation/custom_scaffold.dart';
 import 'package:giv_flutter/util/presentation/photo_view_page.dart';
 import 'package:giv_flutter/util/presentation/rounded_corners.dart';
 import 'package:giv_flutter/util/presentation/spacing.dart';
 import 'package:giv_flutter/util/presentation/typography.dart';
+import 'package:giv_flutter/values/colors.dart';
 import 'package:giv_flutter/values/dimens.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
@@ -51,7 +53,7 @@ class NewListing extends StatefulWidget {
 }
 
 class _NewListingState extends BaseState<NewListing> {
-  NewListingBloc _newListingBloc;
+  NewListingBloc _bloc;
   ScrollController _listViewController = ScrollController();
   Product _product;
   bool _isTitleError = false;
@@ -61,7 +63,7 @@ class _NewListingState extends BaseState<NewListing> {
   bool _isLocationError = false;
   bool _isInformationValid = false;
   bool _areImagesValid = true;
-  bool _forceShowPhoneNumber = false;
+  bool _userNeedsToAddPhoneNumber = false;
   User _user;
   bool _isEditing = false;
 
@@ -71,51 +73,55 @@ class _NewListingState extends BaseState<NewListing> {
     _isEditing = widget.product != null;
     _product = widget.product?.copy() ?? Product();
     _product.images = _product.images ?? <CustomImage.Image>[];
-    _newListingBloc = NewListingBloc.from(widget.bloc, _isEditing);
-    _listenToUserStream();
-    _loadLocation();
+    _bloc = NewListingBloc.from(widget.bloc, _isEditing);
+    _user = _bloc.getUser();
+    _userNeedsToAddPhoneNumber = (_user?.hasPhoneNumber ?? false) == false;
+
+    _resolveLocation();
     _listenToSavedProductStream();
   }
 
-  void _listenToUserStream() {
-    _newListingBloc.userStream.listen((NewListingBlocUser blocUser) {
-      if (blocUser?.user == null)
-        navigation.pushReplacement(Consumer<LogInBloc>(
-          builder: (context, bloc, child) => SignIn(
-              bloc: bloc,
-              redirect: NewListing(
-                bloc: widget.bloc,
-              )),
-        ));
-    });
-  }
-
   void _listenToSavedProductStream() {
-    _newListingBloc.savedProductStream
-        .listen(_onSaveSuccess, onError: _handleUploadError);
+    _bloc.savedProductStream
+        ?.listen(_onSaveSuccess, onError: _handleUploadError);
   }
 
-  void _loadLocation() {
-    if (!(_product.location?.isOk ?? false))
-      _newListingBloc.loadLocation(_product.location);
+  void _resolveLocation() {
+    if (_product.location == null) {
+      _product.location = _bloc.getPreferredLocation();
+      return;
+    }
+
+    if (_product.isLocationComplete == false) {
+      _bloc.loadCompleteLocation(_product.location);
+      return;
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    _newListingBloc.loadUser();
 
     final title = _isEditing ? 'edit_listing_title' : 'new_listing_title';
 
-    return WillPopScope(
-      onWillPop: _onWillPop,
-      child: CustomScaffold(
-        appBar: CustomAppBar(
-          title: string(title),
-        ),
-        body: _uploadStatusStreamBuilder(),
-      ),
-    );
+    final page = _user != null
+        ? WillPopScope(
+            onWillPop: _onWillPop,
+            child: CustomScaffold(
+              appBar: CustomAppBar(
+                title: string(title),
+              ),
+              body: _uploadStatusStreamBuilder(),
+            ),
+          )
+        : Consumer<LogInBloc>(
+            builder: (context, bloc, child) => SignIn(
+              bloc: bloc,
+              redirect: NewListing(bloc: widget.bloc),
+            ),
+          );
+
+    return page;
   }
 
   Stack _buildStack(StreamEvent<double> uploadStatus) {
@@ -130,7 +136,7 @@ class _NewListingState extends BaseState<NewListing> {
 
   StreamBuilder<StreamEvent<double>> _uploadStatusStreamBuilder() {
     return StreamBuilder(
-      stream: _newListingBloc.uploadStatusStream,
+      stream: _bloc.uploadStatusStream,
       builder: (context, snapshot) {
         return _buildStack(snapshot.data);
       },
@@ -159,22 +165,18 @@ class _NewListingState extends BaseState<NewListing> {
         _emptyImagesErrorMessage(),
         _buildImageList(context),
         _sectionTitle(string('new_listing_section_title_about')),
-        _detailsItemTile(
-            value: _product.title,
-            caption: string('new_listing_tile_name'),
-            emptyStateCaption: string('new_listing_tile_name_empty_state'),
-            onTap: _editTitle,
-            isError: _isTitleError),
-        _detailsItemTile(
+        ListingTitleListTile(
+          value: _product.title,
+          onTap: _editTitle,
+          isError: _isTitleError,
+        ),
+        ListingDescriptionListTile(
             value: _product.description,
-            caption: string('new_listing_tile_description'),
-            emptyStateCaption:
-                string('new_listing_tile_description_empty_state'),
             onTap: _editDescription,
             isError: _isDescriptionError),
         _categoriesTile(_product.categories),
-        _phoneNumberStreamBuilder(),
-        _locationStreamBuilder(),
+        _phoneNumberTile(),
+        _locationComponent(),
         Spacing.vertical(Dimens.bottom_action_button_container_height),
       ],
     );
@@ -214,9 +216,7 @@ class _NewListingState extends BaseState<NewListing> {
             ),
           ),
         ),
-        Divider(
-          height: 1.0,
-        )
+        CustomDivider(),
       ],
     );
   }
@@ -226,27 +226,19 @@ class _NewListingState extends BaseState<NewListing> {
         ? null
         : location.shortName;
 
-    return _detailsItemTile(
-        value: value,
-        caption: string('new_listing_tile_location'),
-        emptyStateCaption: string('new_listing_tile_location_empty_state'),
-        onTap: () {
-          _editLocation(location);
-        },
-        isError: _isLocationError);
+    return ListingLocationListTile(
+      value: value,
+      onTap: () {
+        _editLocation(location);
+      },
+      isError: _isLocationError,
+    );
   }
 
   Widget _emptyImagesErrorMessage() {
     return _areImagesValid
         ? Container()
-        : Padding(
-            padding: const EdgeInsets.symmetric(
-                horizontal: Dimens.default_horizontal_margin),
-            child: Body2Text(
-              string('new_listing_images_hint'),
-              color: Colors.red,
-            ),
-          );
+        : EmptyImagesErrorMessage(stringFunction: string);
   }
 
   Widget _categoriesTile(List<ProductCategory> categories) {
@@ -257,58 +249,37 @@ class _NewListingState extends BaseState<NewListing> {
     final onTap =
         categories?.isEmpty ?? true ? _addFirstCategory : _editCategories;
 
-    return _detailsItemTile(
-        value: value,
-        caption: string('new_listing_tile_category'),
-        emptyStateCaption: string('new_listing_tile_category_empty_state'),
-        onTap: onTap,
-        isError: _isCategoryError);
-  }
-
-  StreamBuilder<NewListingBlocUser> _phoneNumberStreamBuilder() {
-    // TODO: Refactor this awful hack
-    return StreamBuilder(
-      stream: _newListingBloc.userStream,
-      builder: (context, snapshot) {
-        if (snapshot?.hasData ?? false) {
-          _user = snapshot.data.user;
-          _forceShowPhoneNumber =
-              _forceShowPhoneNumber || (snapshot.data.forceShow ?? false);
-          return (_user?.phoneNumber == null ||
-                  (_forceShowPhoneNumber ?? false))
-              ? _phoneNumberItemTile(_user)
-              : Container();
-        } else {
-          return Container();
-        }
-      },
+    return ListingCategoryListTile(
+      value: value,
+      onTap: onTap,
+      isError: _isCategoryError,
     );
   }
 
-  Widget _locationStreamBuilder() {
-    if (_product.location?.isOk ?? false)
-      return _locationTile(_product.location);
+  Widget _phoneNumberTile() {
+    return (_user == null || _userNeedsToAddPhoneNumber == false)
+        ? Container()
+        : PhoneNumberListTile(
+            user: _user,
+            onTap: () {
+              _editPhoneNumber(_user);
+            },
+            isError: _isTelephoneError,
+          );
+  }
 
-    return StreamBuilder(
-      stream: _newListingBloc.locationStream,
+  Widget _locationComponent() {
+    if (_product.isLocationComplete) {
+      return _locationTile(_product.location);
+    }
+
+    return ListingLocationStreamBuilder(
+      stream: _bloc.locationStream,
       builder: (context, snapshot) {
         _product.location = snapshot.data;
         return _locationTile(_product.location);
       },
     );
-  }
-
-  Widget _phoneNumberItemTile(User user) {
-    return _detailsItemTile(
-        value: user?.phoneNumber == null
-            ? null
-            : '+${user.countryCallingCode} ${user.phoneNumber}',
-        caption: string('settings_phone_number'),
-        emptyStateCaption: string('new_listing_tile_phone_number_empty_state'),
-        onTap: () {
-          _editPhoneNumber(user);
-        },
-        isError: _isTelephoneError);
   }
 
   Widget _sectionTitle(String text) {
@@ -327,7 +298,11 @@ class _NewListingState extends BaseState<NewListing> {
   Positioned _buildActionPositioned({StreamEvent<double> uploadStatus}) {
     final child = (uploadStatus != null && uploadStatus.isLoading)
         ? _buildProgressIndicator(uploadStatus.data)
-        : _buildPrimaryButton();
+        : NewListingSubmitButton(
+            isEditing: _isEditing,
+            stringFunction: string,
+            onPressed: _submitForm,
+          );
 
     return Positioned(
       bottom: 0.0,
@@ -337,9 +312,7 @@ class _NewListingState extends BaseState<NewListing> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            Divider(
-              height: 1.0,
-            ),
+            CustomDivider(),
             Container(
               color: Colors.white,
               padding: const EdgeInsets.symmetric(
@@ -385,13 +358,6 @@ class _NewListingState extends BaseState<NewListing> {
     );
   }
 
-  Widget _buildPrimaryButton() {
-    final text =
-        _isEditing ? 'edit_listing_action_save' : 'new_listing_action_create';
-
-    return PrimaryButton(text: string(text), onPressed: _submitForm);
-  }
-
   Widget _buildImageList(BuildContext context) {
     final images = _product.images ?? [];
 
@@ -405,7 +371,7 @@ class _NewListingState extends BaseState<NewListing> {
           itemCount: images.length + 1,
           itemBuilder: (context, i) {
             return i == images.length
-                ? _newPhotoButton(context)
+                ? _newPhotoButton()
                 : _productPhoto(images[i]);
           },
         ),
@@ -434,102 +400,17 @@ class _NewListingState extends BaseState<NewListing> {
             fit: BoxFit.cover,
           );
 
-    return GestureDetector(
+    return NewListingImageContainer(
+      child: widget,
       onTap: () {
         _viewPhoto(image);
       },
-      child: Container(
-        padding: EdgeInsets.only(left: Dimens.default_horizontal_margin),
-        child: RoundedCorners(
-          child: widget,
-        ),
-      ),
     );
   }
 
-  Widget _newPhotoButton(BuildContext context) {
-    if (_product.images.length >= Config.maxProductImages) return Container();
-
-    return Padding(
-      padding: EdgeInsets.only(left: Dimens.default_horizontal_margin),
-      child: RoundedCorners(
-        child: Container(
-          height: Dimens.home_product_image_dimension,
-          width: Dimens.home_product_image_dimension,
-          decoration: BoxDecoration(color: Colors.grey[200]),
-          child: Material(
-            color: Colors.transparent,
-            child: InkWell(
-              onTap: _showAddImageModal,
-              child: Center(
-                child: Icon(
-                  Icons.add,
-                  color: Colors.grey[400],
-                ),
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _detailsItemTile(
-      {String value,
-      String caption,
-      String emptyStateCaption,
-      GestureTapCallback onTap,
-      bool isError}) {
-    final isEmpty = value == null;
-
-    var finalValue = value ?? caption;
-
-    var finalCaption = isEmpty ? emptyStateCaption : caption;
-    final fontWeight =
-        isEmpty ? SyntheticFontWeight.regular : SyntheticFontWeight.semiBold;
-    final valueColor = isEmpty ? Colors.grey[700] : CustomTypography.baseColor;
-
-    final captionColor = isError ? Colors.red : Colors.grey;
-
-    final captionRowChildren = <Widget>[
-      Body2Text(finalCaption, color: captionColor, weight: fontWeight),
-    ];
-
-    if (!isEmpty) {
-      captionRowChildren.addAll(<Widget>[
-        Spacing.horizontal(4.0),
-        Icon(
-          Icons.check,
-          size: 16.0,
-          color: Colors.green,
-        )
-      ]);
-    }
-
-    return Material(
-      color: Colors.white,
-      child: InkWell(
-        onTap: onTap,
-        child: Padding(
-          padding: EdgeInsets.symmetric(
-              vertical: 16.0, horizontal: Dimens.default_horizontal_margin),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              BodyText(
-                finalValue,
-                weight: fontWeight,
-                color: valueColor,
-              ),
-              Row(
-                children: captionRowChildren,
-              )
-            ],
-          ),
-        ),
-      ),
-    );
-  }
+  Widget _newPhotoButton() => _product.images.length >= Config.maxProductImages
+      ? Container()
+      : NewListingNewPhotoButton(onTap: _showAddImageModal);
 
   void _scrollToTop() {
     _listViewController.animateTo(0.0,
@@ -542,15 +423,13 @@ class _NewListingState extends BaseState<NewListing> {
   }
 
   void _editPhoneNumber(User user) async {
-    final result = await navigation.push(Consumer<SettingsBloc>(
-      builder: (context, bloc, child) => EditPhoneNumber(
-        settingsBloc: bloc,
-        user: user,
-      ),
+    final result = await navigation.push(EditPhoneNumber(
+      settingsBloc: Provider.of<SettingsBloc>(context),
+      user: user,
     ));
     if (result != null) {
       _isTelephoneError = false;
-      _newListingBloc.loadUser(forceShow: true);
+      _user = _bloc.getUser();
     }
   }
 
@@ -598,8 +477,11 @@ class _NewListingState extends BaseState<NewListing> {
   }
 
   void _editCategories() async {
+    final editedList = <ProductCategory>[];
+    editedList.addAll(_product.categories);
+
     final result =
-        await navigation.push(EditCategories(categories: _product.categories));
+        await navigation.push(EditCategories(categories: editedList));
 
     if (result != null) {
       setState(() {
@@ -610,13 +492,11 @@ class _NewListingState extends BaseState<NewListing> {
   }
 
   void _addFirstCategory() async {
-    final result = await navigation.push(Consumer<CategoriesBloc>(
-      builder: (context, bloc, child) => Categories(
-        bloc: bloc,
-        showSearch: false,
-        returnChoice: true,
-        fetchAll: true,
-      ),
+    final result = await navigation.push(Categories(
+      bloc: Provider.of<CategoriesBloc>(context),
+      showSearch: false,
+      returnChoice: true,
+      fetchAll: true,
     ));
 
     if (result != null) {
@@ -737,7 +617,7 @@ class _NewListingState extends BaseState<NewListing> {
   }
 
   _submitForm() {
-    if (_validateForm()) _newListingBloc.saveProduct(_product);
+    if (_validateForm()) _bloc.saveProduct(_product);
   }
 
   _onSaveSuccess(Product product) {
@@ -785,4 +665,323 @@ class _NewListingState extends BaseState<NewListing> {
   }
 
   static const actionDelete = 'ACTION_DELETE';
+}
+
+class NewListingImageContainer extends StatelessWidget {
+  final Widget child;
+  final GestureTapCallback onTap;
+
+  const NewListingImageContainer({
+    Key key,
+    @required this.child,
+    @required this.onTap,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: EdgeInsets.only(left: Dimens.default_horizontal_margin),
+        child: RoundedCorners(
+          child: child,
+        ),
+      ),
+    );
+  }
+}
+
+class NewListingNewPhotoButton extends StatelessWidget {
+  final GestureTapCallback onTap;
+
+  const NewListingNewPhotoButton({
+    Key key,
+    @required this.onTap,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.only(left: Dimens.default_horizontal_margin),
+      child: RoundedCorners(
+        child: Container(
+          height: Dimens.home_product_image_dimension,
+          width: Dimens.home_product_image_dimension,
+          decoration: BoxDecoration(color: Colors.grey[200]),
+          child: Material(
+            color: Colors.transparent,
+            child: InkWell(
+              onTap: onTap,
+              child: Center(
+                child: Icon(
+                  Icons.add,
+                  color: Colors.grey[400],
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class EmptyImagesErrorMessage extends StatelessWidget {
+  final GetLocalizedStringFunction stringFunction;
+
+  const EmptyImagesErrorMessage({Key key, this.stringFunction})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) => Padding(
+        padding: const EdgeInsets.symmetric(
+            horizontal: Dimens.default_horizontal_margin),
+        child: Body2Text(
+          stringFunction('new_listing_images_hint'),
+          color: Colors.red,
+        ),
+      );
+}
+
+class NewListingSubmitButton extends StatelessWidget {
+  final GetLocalizedStringFunction stringFunction;
+  final VoidCallback onPressed;
+  final bool isEditing;
+
+  const NewListingSubmitButton({
+    Key key,
+    @required this.isEditing,
+    @required this.onPressed,
+    @required this.stringFunction,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final text =
+        isEditing ? 'edit_listing_action_save' : 'new_listing_action_create';
+
+    return PrimaryButton(text: stringFunction(text), onPressed: onPressed);
+  }
+}
+
+class NewListingDetailTile extends StatelessWidget {
+  final String value;
+  final String caption;
+  final String emptyStateCaption;
+  final GestureTapCallback onTap;
+  final bool isError;
+
+  const NewListingDetailTile({
+    Key key,
+    this.value,
+    this.caption,
+    this.emptyStateCaption,
+    this.onTap,
+    this.isError,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final isEmpty = value == null;
+
+    var finalValue = value ?? caption;
+
+    var finalCaption = isEmpty ? emptyStateCaption : caption;
+    final fontWeight =
+        isEmpty ? SyntheticFontWeight.regular : SyntheticFontWeight.semiBold;
+    final valueColor = isEmpty ? Colors.grey[700] : CustomTypography.baseColor;
+
+    final captionColor = isError ? CustomColors.errorColor : Colors.grey;
+
+    final captionRowChildren = <Widget>[
+      Body2Text(finalCaption, color: captionColor, weight: fontWeight),
+    ];
+
+    if (!isEmpty) {
+      captionRowChildren.addAll(<Widget>[
+        Spacing.horizontal(4.0),
+        Icon(
+          Icons.check,
+          size: 16.0,
+          color: Colors.green,
+        )
+      ]);
+    }
+
+    return Material(
+      color: Colors.white,
+      child: InkWell(
+        onTap: onTap,
+        child: Padding(
+          padding: EdgeInsets.symmetric(
+              vertical: 16.0, horizontal: Dimens.default_horizontal_margin),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              BodyText(
+                finalValue,
+                weight: fontWeight,
+                color: valueColor,
+              ),
+              Row(
+                children: captionRowChildren,
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class PhoneNumberListTile extends StatelessWidget {
+  final User user;
+  final GestureTapCallback onTap;
+  final bool isError;
+
+  const PhoneNumberListTile({
+    Key key,
+    @required this.user,
+    @required this.onTap,
+    @required this.isError,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final stringFunction = GetLocalizedStringFunction(context);
+
+    return NewListingDetailTile(
+      value: user?.phoneNumber == null
+          ? null
+          : '+${user.countryCallingCode} ${user.phoneNumber}',
+      caption: stringFunction('settings_phone_number'),
+      emptyStateCaption:
+          stringFunction('new_listing_tile_phone_number_empty_state'),
+      onTap: onTap,
+      isError: isError,
+    );
+  }
+}
+
+class ListingTitleListTile extends StatelessWidget {
+  final String value;
+  final GestureTapCallback onTap;
+  final bool isError;
+
+  const ListingTitleListTile({
+    Key key,
+    @required this.onTap,
+    @required this.isError,
+    @required this.value,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final stringFunction = GetLocalizedStringFunction(context);
+
+    return NewListingDetailTile(
+      value: value,
+      caption: stringFunction('new_listing_tile_name'),
+      emptyStateCaption: stringFunction('new_listing_tile_name_empty_state'),
+      onTap: onTap,
+      isError: isError,
+    );
+  }
+}
+
+class ListingDescriptionListTile extends StatelessWidget {
+  final String value;
+  final GestureTapCallback onTap;
+  final bool isError;
+
+  const ListingDescriptionListTile({
+    Key key,
+    @required this.onTap,
+    @required this.isError,
+    @required this.value,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final stringFunction = GetLocalizedStringFunction(context);
+
+    return NewListingDetailTile(
+      value: value,
+      caption: stringFunction('new_listing_tile_description'),
+      emptyStateCaption:
+          stringFunction('new_listing_tile_description_empty_state'),
+      onTap: onTap,
+      isError: isError,
+    );
+  }
+}
+
+class ListingCategoryListTile extends StatelessWidget {
+  final String value;
+  final GestureTapCallback onTap;
+  final bool isError;
+
+  const ListingCategoryListTile({
+    Key key,
+    @required this.onTap,
+    @required this.isError,
+    @required this.value,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final stringFunction = GetLocalizedStringFunction(context);
+
+    return NewListingDetailTile(
+      value: value,
+      caption: stringFunction('new_listing_tile_category'),
+      emptyStateCaption:
+          stringFunction('new_listing_tile_category_empty_state'),
+      onTap: onTap,
+      isError: isError,
+    );
+  }
+}
+
+class ListingLocationListTile extends StatelessWidget {
+  final String value;
+  final GestureTapCallback onTap;
+  final bool isError;
+
+  const ListingLocationListTile({
+    Key key,
+    @required this.onTap,
+    @required this.isError,
+    @required this.value,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final stringFunction = GetLocalizedStringFunction(context);
+
+    return NewListingDetailTile(
+      value: value,
+      caption: stringFunction('new_listing_tile_location'),
+      emptyStateCaption:
+          stringFunction('new_listing_tile_location_empty_state'),
+      onTap: onTap,
+      isError: isError,
+    );
+  }
+}
+
+class ListingLocationStreamBuilder extends StatelessWidget {
+  final Stream stream;
+  final AsyncWidgetBuilder builder;
+
+  const ListingLocationStreamBuilder({Key key, this.stream, this.builder})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder(
+      stream: stream,
+      builder: builder,
+    );
+  }
 }

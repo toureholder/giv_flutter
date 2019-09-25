@@ -39,7 +39,8 @@ class _MyMaterialAppState extends State<MyMaterialApp> {
           backgroundColor: Colors.blue,
         ),
         home: Consumer<SplashBloc>(
-            builder: (context, bloc, child) => Splash(bloc: bloc)),
+          builder: (context, bloc, child) => Splash(bloc: bloc),
+        ),
       );
 
   @override
@@ -55,6 +56,7 @@ class _MyMaterialAppState extends State<MyMaterialApp> {
     Provider.of<ProductDetailBloc>(context).dispose();
     Provider.of<SettingsBloc>(context).dispose();
     Provider.of<SignUpBloc>(context).dispose();
+    Provider.of<SplashBloc>(context).dispose();
     super.dispose();
   }
 }

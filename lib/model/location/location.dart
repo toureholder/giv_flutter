@@ -44,10 +44,8 @@ class Location {
         city?.id == location.city?.id;
   }
 
-  bool get isOk  =>
-      (country?.isOk ?? true) &&
-      (state?.isOk ?? true) &&
-      (city?.isOk ?? true);
+  bool get isOk =>
+      (country?.isOk ?? true) && (state?.isOk ?? true) && (city?.isOk ?? true);
 
   // Serialization
 
@@ -60,33 +58,41 @@ class Location {
   factory Location.fromJson(Map<String, dynamic> json) {
     if (json == null) return null;
 
-    final country = json.containsKey(countryKey) && json[countryKey] != null
+    Country country = json.containsKey(countryKey) && json[countryKey] != null
         ? Country(
             id: json[countryKey][idKey],
             name: json[countryKey][nameKey],
           )
         : null;
 
-    final state = json.containsKey(stateKey) && json[stateKey] != null
+    State state = json.containsKey(stateKey) && json[stateKey] != null
         ? State(
             id: json[stateKey][idKey],
             name: json[stateKey][nameKey],
           )
         : null;
 
-    final city = json.containsKey(cityKey) && json[cityKey] != null
+    City city = json.containsKey(cityKey) && json[cityKey] != null
         ? City(
             id: json[cityKey][idKey],
             name: json[cityKey][nameKey],
           )
         : null;
 
+    if (city?.propertiesAreNull ?? true) city = null;
+    if (state?.propertiesAreNull ?? true) state = null;
+    if (country?.propertiesAreNull ?? true) country = null;
+
     return Location(country: country, state: state, city: city);
   }
 
-  Location.mock()
+  Location.fake()
       : country = Country(id: '3469034', name: 'Brasil'),
         state = State(id: '3463504', name: 'Distrito Federal');
+
+  Location.fakeMissingNames()
+      : country = Country(id: '3469034'),
+        state = State(id: '3463504');
 
   Map<String, dynamic> toJson() => {
         cityKey: {idKey: city?.id, nameKey: city?.name},

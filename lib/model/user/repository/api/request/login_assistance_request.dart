@@ -5,6 +5,8 @@ class LoginAssistanceRequest {
 
   LoginAssistanceRequest({@required this.email});
 
+  LoginAssistanceRequest.fake() : email = 'test@test.com';
+
   Map<String, String> toHttpRequestBody() => {
     'email': email,
   };

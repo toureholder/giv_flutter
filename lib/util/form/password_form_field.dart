@@ -37,15 +37,12 @@ class _PasswordFormFieldState extends CustomFormFieldState<PasswordFormField> {
     return TextFormField(
       controller: widget.controller,
       decoration: InputDecoration(
-          labelText: widget.labelText,
-          suffixIcon: IconButton(
-              icon: Icon(
-                  _isPasswordVisible ? Icons.visibility : Icons.visibility_off),
-              onPressed: () {
-                setState(() {
-                  _isPasswordVisible = !_isPasswordVisible;
-                });
-              })),
+        labelText: widget.labelText,
+        suffixIcon: PasswordVisibilityToggle(
+          icon: _isPasswordVisible ? VisibilityIcon() : VisibilityOffIcon(),
+          onPressed: _togglePasswordVisibility,
+        ),
+      ),
       obscureText: !_isPasswordVisible,
       keyboardType: TextInputType.text,
       validator: widget.validator,
@@ -57,4 +54,37 @@ class _PasswordFormFieldState extends CustomFormFieldState<PasswordFormField> {
       },
     );
   }
+
+  _togglePasswordVisibility() =>
+      setState(() => _isPasswordVisible = !_isPasswordVisible);
 }
+
+class PasswordVisibilityToggle extends StatelessWidget {
+  final Widget icon;
+  final VoidCallback onPressed;
+
+  const PasswordVisibilityToggle({
+    Key key,
+    @required this.icon,
+    @required this.onPressed,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      icon: icon,
+      onPressed: onPressed,
+    );
+  }
+}
+
+class VisibilityIcon extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) => Icon(Icons.visibility);
+}
+
+class VisibilityOffIcon extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) => Icon(Icons.visibility_off);
+}
+

@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:giv_flutter/config/i18n/string_localizations.dart';
-import 'package:giv_flutter/features/log_in/ui/login_assistance.dart';
+import 'package:giv_flutter/features/log_in/ui/log_in_assistance.dart';
 
 class LoginAssistanceHelper {
   BuildContext context;

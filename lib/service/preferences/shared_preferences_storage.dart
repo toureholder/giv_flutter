@@ -4,14 +4,15 @@ import 'package:giv_flutter/service/preferences/disk_storage_provider.dart';
 import 'package:giv_flutter/model/app_config/app_config.dart';
 import 'package:giv_flutter/model/location/location.dart';
 import 'package:giv_flutter/model/user/user.dart';
+import 'package:giv_flutter/util/cache/cache_payload.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-const String _userKey = 'user';
-const String _serverTokenKey = 'server_token';
-const String _firebaseTokenKey = 'firebase_token';
-const String _hasAgreedToCustomerServiceKey = 'has_agreed_to_customer_service';
-const String _locationKey = 'location';
-const String _appConfigKey = 'settings';
+const String userKey = 'user';
+const String serverTokenKey = 'server_token';
+const String firebaseTokenKey = 'firebase_token';
+const String hasAgreedToCustomerServiceKey = 'has_agreed_to_customer_service';
+const String locationKey = 'location';
+const String appConfigKey = 'settings';
 
 class SharedPreferencesStorage implements DiskStorageProvider {
   SharedPreferencesStorage(this.sharedPreferences);
@@ -23,20 +24,31 @@ class SharedPreferencesStorage implements DiskStorageProvider {
 
   @override
   Future<bool> clearFirebaseToken() =>
-      sharedPreferences.remove(_firebaseTokenKey);
+      sharedPreferences.remove(firebaseTokenKey);
 
   @override
-  Future<bool> clearServerToken() => sharedPreferences.remove(_serverTokenKey);
+  Future<bool> clearServerToken() => sharedPreferences.remove(serverTokenKey);
 
   @override
-  Future<bool> clearUser() => sharedPreferences.remove(_userKey);
+  Future<bool> clearUser() => sharedPreferences.remove(userKey);
+
 
   @override
-  String getFirebaseToken() => sharedPreferences.get(_firebaseTokenKey);
+  CachePayload getCachePayloadItem(String cacheKey) {
+    String jsonString = sharedPreferences.getString(cacheKey);
+    try {
+      return CachePayload.fromJson(jsonDecode(jsonString));
+    } catch (error) {
+      return null;
+    }
+  }
+
+  @override
+  String getFirebaseToken() => sharedPreferences.get(firebaseTokenKey);
 
   @override
   Location getLocation() {
-    String jsonString = sharedPreferences.getString(_locationKey);
+    String jsonString = sharedPreferences.getString(locationKey);
 
     try {
       return Location.fromJson(jsonDecode(jsonString));
@@ -46,11 +58,22 @@ class SharedPreferencesStorage implements DiskStorageProvider {
   }
 
   @override
-  String getServerToken() => sharedPreferences.get(_serverTokenKey);
+  Location getLocationCacheItem(String cacheKey) {
+    String jsonString = sharedPreferences.getString(cacheKey);
+
+    try {
+      return Location.fromJson(jsonDecode(jsonString));
+    } catch (error) {
+      return null;
+    }
+  }
+
+  @override
+  String getServerToken() => sharedPreferences.get(serverTokenKey);
 
   @override
   AppConfig getAppConfiguration() {
-    String jsonString = sharedPreferences.getString(_appConfigKey);
+    String jsonString = sharedPreferences.getString(appConfigKey);
 
     try {
       return AppConfig.fromJson(jsonDecode(jsonString));
@@ -61,7 +84,7 @@ class SharedPreferencesStorage implements DiskStorageProvider {
 
   @override
   User getUser() {
-    String jsonString = sharedPreferences.getString(_userKey);
+    String jsonString = sharedPreferences.getString(userKey);
 
     try {
       return User.fromJson(jsonDecode(jsonString));
@@ -72,29 +95,37 @@ class SharedPreferencesStorage implements DiskStorageProvider {
 
   @override
   bool hasAgreedToCustomerService() =>
-      sharedPreferences.getBool(_hasAgreedToCustomerServiceKey) ?? false;
+      sharedPreferences.getBool(hasAgreedToCustomerServiceKey) ?? false;
 
   @override
   Future<bool> setAppConfiguration(AppConfig appConfig) => sharedPreferences
-      .setString(_appConfigKey, json.encode(appConfig.toJson()));
+      .setString(appConfigKey, json.encode(appConfig.toJson()));
 
   @override
   Future<bool> setFirebaseToken(String token) =>
-      sharedPreferences.setString(_firebaseTokenKey, token);
+      sharedPreferences.setString(firebaseTokenKey, token);
 
   @override
   Future<bool> setHasAgreedToCustomerService() =>
-      sharedPreferences.setBool(_hasAgreedToCustomerServiceKey, true);
+      sharedPreferences.setBool(hasAgreedToCustomerServiceKey, true);
 
   @override
   Future<bool> setLocation(Location location) =>
-      sharedPreferences.setString(_locationKey, json.encode(location.toJson()));
+      sharedPreferences.setString(locationKey, json.encode(location.toJson()));
 
   @override
   Future<bool> setServerToken(String token) =>
-      sharedPreferences.setString(_serverTokenKey, token);
+      sharedPreferences.setString(serverTokenKey, token);
 
   @override
   Future<bool> setUser(User user) =>
-      sharedPreferences.setString(_userKey, json.encode(user.toJson()));
+      sharedPreferences.setString(userKey, json.encode(user.toJson()));
+
+  @override
+  Future<bool> setLocationCacheItem(String cacheKey, Location location) =>
+      sharedPreferences.setString(cacheKey, json.encode(location.toJson()));
+
+  @override
+  Future<bool> setCachePayloadItem(String cacheKey, CachePayload payload) =>
+      sharedPreferences.setString(cacheKey, json.encode(payload.toJson()));
 }

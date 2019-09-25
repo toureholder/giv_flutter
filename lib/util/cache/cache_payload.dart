@@ -24,6 +24,16 @@ class CachePayload {
             json[ttlKey] == null ? null : int.tryParse(json[ttlKey]) ?? null,
         serializedData = json[dataKey];
 
+  CachePayload.fakeExpiredPayload(String serializedData)
+      : serializedData = serializedData,
+        ttlInSeconds = 180,
+        updatedAt = DateTime.now().subtract(Duration(hours: 1));
+
+  CachePayload.fakeValidPayload(String serializedData)
+      : serializedData = serializedData,
+        ttlInSeconds = 180,
+        updatedAt = DateTime.now().subtract(Duration(seconds: 1));
+
   bool get isValid {
     if (ttlInSeconds == null || updatedAt == null) return true;
 

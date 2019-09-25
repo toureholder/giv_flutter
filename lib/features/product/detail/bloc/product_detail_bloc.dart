@@ -7,6 +7,7 @@ import 'package:giv_flutter/model/product/product.dart';
 import 'package:giv_flutter/service/session/session_provider.dart';
 import 'package:giv_flutter/util/data/stream_event.dart';
 import 'package:giv_flutter/util/network/http_response.dart';
+import 'package:giv_flutter/util/util.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:meta/meta.dart';
 
@@ -15,9 +16,11 @@ class ProductDetailBloc {
   final ListingRepository listingRepository;
   final SessionProvider session;
   final PublishSubject<Location> locationPublishSubject;
-  final PublishSubject<HttpResponse<ApiModelResponse>> deleteListingPublishSubject;
+  final PublishSubject<HttpResponse<ApiModelResponse>>
+      deleteListingPublishSubject;
   final PublishSubject<HttpResponse<Product>> updateListingPublishSubject;
   final PublishSubject<StreamEventState> loadingPublishSubject;
+  final Util util;
 
   ProductDetailBloc({
     @required this.locationRepository,
@@ -27,6 +30,7 @@ class ProductDetailBloc {
     @required this.deleteListingPublishSubject,
     @required this.updateListingPublishSubject,
     @required this.loadingPublishSubject,
+    @required this.util,
   });
 
   Observable<Location> get locationStream => locationPublishSubject.stream;
@@ -44,7 +48,10 @@ class ProductDetailBloc {
     loadingPublishSubject.close();
   }
 
-  isAuthenticated() => session.isAuthenticated();
+  bool isProductMine(int productUserId) =>
+      isAuthenticated() && session.getUser().id == productUserId;
+
+  bool isAuthenticated() => session.isAuthenticated();
 
   fetchLocationDetails(Location location) async {
     try {
@@ -69,7 +76,7 @@ class ProductDetailBloc {
     }
   }
 
-  updateListing(UpdateListingActiveStatusRequest request) async {
+  updateActiveStatus(UpdateListingActiveStatusRequest request) async {
     try {
       loadingPublishSubject.sink.add(StreamEventState.loading);
       final response = await listingRepository.updateActiveStatus(request);

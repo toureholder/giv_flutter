@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:giv_flutter/base/base_state.dart';
+import 'package:giv_flutter/config/i18n/string_localizations.dart';
 import 'package:giv_flutter/features/home/bloc/home_bloc.dart';
 import 'package:giv_flutter/features/home/model/home_content.dart';
 import 'package:giv_flutter/features/home/ui/home_carousel.dart';
@@ -33,7 +34,11 @@ class Home extends StatefulWidget {
   final HomeListener listener;
   final HomeBloc bloc;
 
-  const Home({Key key, @required this.bloc, this.listener}) : super(key: key);
+  const Home({
+    Key key,
+    @required this.bloc,
+    @required this.listener,
+  }) : super(key: key);
 
   @override
   _HomeState createState() => _HomeState();
@@ -60,8 +65,8 @@ class _HomeState extends BaseState<Home> {
       ),
       body: ContentStreamBuilder(
           stream: _homeBloc.content,
-          onHasData: (data) {
-            return _buildMainListView(context, data);
+          onHasData: (HomeContent data) {
+            return HomeContentListView(children: _buildContent(context, data));
           }),
     );
   }
@@ -69,8 +74,11 @@ class _HomeState extends BaseState<Home> {
   Row _buildAppBarActionsRow() {
     final authenticatedUser = _homeBloc.getUser();
     final userWidget = authenticatedUser == null
-        ? _buildSignInButton()
-        : _userAvatar(authenticatedUser.avatarUrl);
+        ? SignInButton(onPressed: _navigateToSignIn)
+        : HomeUserAvatar(
+            imageUrl: authenticatedUser.avatarUrl,
+            onTap: _navigateToSettings,
+          );
 
     return Row(
       mainAxisSize: MainAxisSize.min,
@@ -78,41 +86,6 @@ class _HomeState extends BaseState<Home> {
       children: <Widget>[
         userWidget,
       ],
-    );
-  }
-
-  Padding _userAvatar(String imageUrl) {
-    return Padding(
-      padding: const EdgeInsets.only(right: Dimens.default_horizontal_margin),
-      child: GestureDetector(
-        child: AvatarImage(image: CustomImage.Image(url: imageUrl)),
-        onTap: () {
-          navigation.push(Consumer<SettingsBloc>(
-            builder: (context, bloc, child) => Settings(
-              bloc: bloc,
-            ),
-          ));
-        },
-      ),
-    );
-  }
-
-  MediumFlatPrimaryButton _buildSignInButton() {
-    return MediumFlatPrimaryButton(
-      onPressed: () {
-        navigation.push(Consumer<LogInBloc>(
-          builder: (context, bloc, child) => SignIn(
-            bloc: bloc,
-          ),
-        ));
-      },
-      text: string('shared_action_sign_in'),
-    );
-  }
-
-  ListView _buildMainListView(BuildContext context, HomeContent content) {
-    return ListView(
-      children: _buildContent(context, content),
     );
   }
 
@@ -127,7 +100,7 @@ class _HomeState extends BaseState<Home> {
 
     categories.forEach((category) {
       widgets.add(_buildSectionHeader(context, category));
-      widgets.add(_buildItemList(context, category.products));
+      widgets.add(_buildItemList(context, category.products, category.id));
     });
 
     widgets.add(Spacing.vertical(Dimens.default_vertical_margin));
@@ -135,7 +108,8 @@ class _HomeState extends BaseState<Home> {
     return widgets;
   }
 
-  Widget _buildItemList(BuildContext context, List<Product> products) {
+  Widget _buildItemList(
+      BuildContext context, List<Product> products, int categoryId) {
     return Padding(
       padding: EdgeInsets.only(top: Dimens.grid(4), bottom: Dimens.grid(16)),
       child: SizedBox(
@@ -144,42 +118,15 @@ class _HomeState extends BaseState<Home> {
           scrollDirection: Axis.horizontal,
           itemCount: products.length,
           itemBuilder: (context, i) {
-            return _buildItem(context, products[i],
-                isLastItem: i == products.length - 1);
+            final product = products[i];
+            return HomeListItem(
+              onTap: () {
+                _navigateToProductDetil(product);
+              },
+              product: product,
+              isLastItem: i == products.length - 1,
+            );
           },
-        ),
-      ),
-    );
-  }
-
-  Widget _buildItem(BuildContext context, Product product,
-      {isLastItem = false}) {
-    return GestureDetector(
-      onTap: () {
-        navigation.push(Consumer<ProductDetailBloc>(
-          builder: (context, bloc, child) => ProductDetail(
-            product: product,
-            bloc: bloc,
-          ),
-        ));
-      },
-      child: Container(
-        padding: EdgeInsets.only(
-            left: Dimens.default_horizontal_margin,
-            right: isLastItem ? Dimens.default_horizontal_margin : 0.0),
-        child: RoundedCorners(
-          child: CachedNetworkImage(
-            placeholder: (context, url) => RoundedCorners(
-              child: Container(
-                height: Dimens.home_product_image_dimension,
-                width: Dimens.home_product_image_dimension,
-                decoration: BoxDecoration(color: Colors.grey[200]),
-              ),
-            ),
-            fit: BoxFit.cover,
-            width: Dimens.home_product_image_dimension,
-            imageUrl: product.images.first.url,
-          ),
         ),
       ),
     );
@@ -197,11 +144,10 @@ class _HomeState extends BaseState<Home> {
             category.simpleName,
             weight: SyntheticFontWeight.semiBold,
           ),
-          SmallFlatPrimaryButton(
+          SeeMoreButton(
             onPressed: () {
               category.goToSubCategoryOrResult(navigation);
             },
-            text: string('common_more'),
           ),
         ],
       ),
@@ -237,6 +183,133 @@ class _HomeState extends BaseState<Home> {
       },
       autoAdvance: true,
       loop: true,
+    );
+  }
+
+  void _navigateToSignIn() => navigation.push(Consumer<LogInBloc>(
+        builder: (context, bloc, child) => SignIn(
+          bloc: bloc,
+        ),
+      ));
+
+  void _navigateToSettings() => navigation.push(Consumer<SettingsBloc>(
+        builder: (context, bloc, child) => Settings(
+          bloc: bloc,
+        ),
+      ));
+
+  void _navigateToProductDetil(Product product) =>
+      navigation.push(Consumer<ProductDetailBloc>(
+        builder: (context, bloc, child) => ProductDetail(
+          product: product,
+          bloc: bloc,
+        ),
+      ));
+}
+
+class SignInButton extends StatelessWidget {
+  final VoidCallback onPressed;
+
+  const SignInButton({Key key, @required this.onPressed}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return MediumFlatPrimaryButton(
+      onPressed: onPressed,
+      text: GetLocalizedStringFunction(context)('shared_action_sign_in'),
+    );
+  }
+}
+
+class HomeUserAvatar extends StatelessWidget {
+  final GestureTapCallback onTap;
+  final String imageUrl;
+
+  const HomeUserAvatar({
+    Key key,
+    @required this.onTap,
+    @required this.imageUrl,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(right: Dimens.default_horizontal_margin),
+      child: GestureDetector(
+        child: AvatarImage(
+          image: CustomImage.Image(url: imageUrl),
+        ),
+        onTap: onTap,
+      ),
+    );
+  }
+}
+
+class HomeContentListView extends StatelessWidget {
+  final List<Widget> children;
+
+  const HomeContentListView({
+    Key key,
+    @required this.children,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      children: children,
+    );
+  }
+}
+
+class SeeMoreButton extends StatelessWidget {
+  final VoidCallback onPressed;
+
+  const SeeMoreButton({Key key, @required this.onPressed}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SmallFlatPrimaryButton(
+      onPressed: onPressed,
+      text: GetLocalizedStringFunction(context)('common_more'),
+    );
+  }
+}
+
+class HomeListItem extends StatelessWidget {
+  final GestureTapCallback onTap;
+  final Product product;
+  final bool isLastItem;
+
+  const HomeListItem({
+    Key key,
+    @required this.onTap,
+    @required this.product,
+    @required this.isLastItem,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: EdgeInsets.only(
+            left: Dimens.default_horizontal_margin,
+            right: isLastItem ? Dimens.default_horizontal_margin : 0.0),
+        child: RoundedCorners(
+          child: CachedNetworkImage(
+            placeholder: (context, url) => RoundedCorners(
+              child: Container(
+                height: Dimens.home_product_image_dimension,
+                width: Dimens.home_product_image_dimension,
+                decoration: BoxDecoration(color: Colors.grey[200]),
+              ),
+            ),
+            fit: BoxFit.cover,
+            width: Dimens.home_product_image_dimension,
+            imageUrl: product.images.first.url,
+          ),
+        ),
+      ),
     );
   }
 }

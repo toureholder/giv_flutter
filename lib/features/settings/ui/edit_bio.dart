@@ -3,6 +3,7 @@ import 'package:giv_flutter/base/base_state.dart';
 import 'package:giv_flutter/config/config.dart';
 import 'package:giv_flutter/features/settings/bloc/settings_bloc.dart';
 import 'package:giv_flutter/model/user/user.dart';
+import 'package:giv_flutter/util/form/text_editing_controller_builder.dart';
 import 'package:giv_flutter/util/network/http_response.dart';
 import 'package:giv_flutter/util/presentation/android_theme.dart';
 import 'package:giv_flutter/util/presentation/buttons.dart';
@@ -39,10 +40,8 @@ class _EditBioState extends BaseState<EditBio> {
       if (httpResponse.isReady) onUpdateUserResponse(httpResponse);
     });
 
-    _controller = widget.user?.bio == null
-        ? TextEditingController()
-        : TextEditingController.fromValue(
-            new TextEditingValue(text: widget.user.bio));
+    _controller =
+        TextEditingControllerBuilder().setInitialText(widget.user?.bio).build();
   }
 
   @override

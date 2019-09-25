@@ -44,7 +44,7 @@ class _SearchState extends BaseState<Search> {
       getResults: (String q) async {
         _suggestedCategories = await _searchResultBloc.getSearchSuggestions(q);
         return _suggestedCategories
-            .map((category) => new MaterialSearchResult<String>(
+            .map((category) => MaterialSearchResult<String>(
                   value: category.id
                       .toString(), //The value must be of type <String>
                   text: category

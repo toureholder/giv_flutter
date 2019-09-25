@@ -1,18 +1,23 @@
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:giv_flutter/service/preferences/shared_preferences_storage.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:giv_flutter/service/preferences/disk_storage_provider.dart';
+import 'package:giv_flutter/util/firebase/firebase_storage_util_provider.dart';
+import 'package:meta/meta.dart';
 import 'package:uuid/uuid.dart';
 
-class FirebaseStorageUtil {
-  // TODO: Inject an instance as a dependency and depend on disk storage
+class FirebaseStorageUtil implements FirebaseStorageUtilProvider {
+  final DiskStorageProvider diskStorage;
+  final FirebaseStorage firebaseStorage;
 
-  static Future<StorageReference> getProfilePhotoRef() async {
-    final sharedPreferences = await SharedPreferences.getInstance();
-    final storage = SharedPreferencesStorage(sharedPreferences);
+  FirebaseStorageUtil({
+    @required this.diskStorage,
+    @required this.firebaseStorage,
+  });
 
-    final user = storage.getUser();
+  @override
+  Future<StorageReference> getProfilePhotoRef() async {
+    final user = diskStorage.getUser();
     final timeStamp = DateTime.now().millisecondsSinceEpoch;
-    return FirebaseStorage.instance
+    return firebaseStorage
         .ref()
         .child(usersFolder)
         .child('${user.id}')
@@ -20,9 +25,10 @@ class FirebaseStorageUtil {
         .child('$timeStamp.jpg');
   }
 
-  static StorageReference getListingPhotoRef() {
+  @override
+  StorageReference getListingPhotoRef() {
     final timeStamp = DateTime.now().millisecondsSinceEpoch;
-    return FirebaseStorage.instance
+    return firebaseStorage
         .ref()
         .child(listingsFolder)
         .child('$timeStamp-${Uuid().v1()}.jpg');

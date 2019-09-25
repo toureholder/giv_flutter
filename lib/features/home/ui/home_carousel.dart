@@ -18,6 +18,7 @@ class HomeCarousel extends StatefulWidget {
   final bool withIndicator;
   final bool autoAdvance;
   final bool loop;
+  final Duration autoAdvanceDelay;
 
   HomeCarousel({
     Key key,
@@ -29,6 +30,7 @@ class HomeCarousel extends StatefulWidget {
     this.withIndicator,
     this.autoAdvance,
     this.loop,
+    this.autoAdvanceDelay,
   }) : super(key: key);
 
   @override
@@ -39,6 +41,13 @@ class _HomeCarouselState extends State<HomeCarousel> {
   Timer _autoAdvanceTimer;
   final _kDuration = const Duration(milliseconds: 300);
   final _kCurve = Curves.ease;
+  Duration _autoAdvanceDelay;
+
+  @override
+  void initState() {
+    super.initState();
+    _autoAdvanceDelay = widget.autoAdvanceDelay ?? Duration(seconds: 5);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -175,7 +184,7 @@ class _HomeCarouselState extends State<HomeCarousel> {
 
   void _initAutoAdvanceTimer() {
     _cancelAutoAdvanceTimer();
-    _autoAdvanceTimer = Timer(Duration(seconds: 5), _advanceToNextPage);
+    _autoAdvanceTimer = Timer(_autoAdvanceDelay, _advanceToNextPage);
   }
 
   void _cancelAutoAdvanceTimer() {

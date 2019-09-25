@@ -6,12 +6,12 @@ import 'package:giv_flutter/model/location/location_part.dart';
 import 'package:giv_flutter/model/location/location_list.dart';
 import 'package:giv_flutter/util/network/base_api.dart';
 import 'package:giv_flutter/util/network/http_response.dart';
-import 'package:http/http.dart' as http;
+import 'package:giv_flutter/util/network/http_client_wrapper.dart';
 import 'package:meta/meta.dart';
 
 class LocationApi extends BaseApi {
   LocationApi({
-    @required http.Client client,
+    @required HttpClientWrapper client,
   }) : super(client: client);
 
   Future<HttpResponse<List<Country>>> getCountries() async {
@@ -93,8 +93,7 @@ class LocationApi extends BaseApi {
 
       return HttpResponse<Location>(status: status, data: data);
     } catch (error) {
-      return HttpResponse<Location>(
-          status: status, message: error.toString());
+      return HttpResponse<Location>(status: status, message: error.toString());
     }
   }
 
@@ -107,12 +106,13 @@ class LocationApi extends BaseApi {
       });
 
       status = HttpResponse.codeMap[response.statusCode];
-      final data = Location.fromJson(jsonDecode(response.body));
 
+      if (status != HttpStatus.ok) throw response.body;
+
+      final data = Location.fromJson(jsonDecode(response.body));
       return HttpResponse<Location>(status: status, data: data);
     } catch (error) {
-      return HttpResponse<Location>(
-          status: status, message: error.toString());
+      return HttpResponse<Location>(status: status, message: error.toString());
     }
   }
 }

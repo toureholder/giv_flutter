@@ -45,20 +45,31 @@ class User {
             ? null
             : DateTime.parse(json['created_at']);
 
+  bool get hasPhoneNumber => phoneNumber != null && phoneNumber.isNotEmpty;
+
   User copy() => User.fromJson(toJson());
 
-  static User mock() {
+  static User fake({bool withPhoneNumber = true}) {
     final faker = new Faker();
     final fakePerson = faker.person;
     final String gender = faker.randomGenerator.boolean() ? "men" : "women";
     final id = faker.randomGenerator.integer(99, min: 1);
 
+    String phoneNumber;
+    String countryCallingCode;
+
+    if (withPhoneNumber) {
+      phoneNumber = '61981178515';
+      countryCallingCode = '55';
+    }
+
     return User(
-        id: id,
-        name: "${fakePerson.firstName()} ${fakePerson.lastName()}",
-        avatarUrl: "https://randomuser.me/api/portraits/$gender/$id.jpg",
-        phoneNumber: '61981178515',
-        countryCallingCode: '55');
+      id: id,
+      name: "${fakePerson.firstName()} ${fakePerson.lastName()}",
+      avatarUrl: "https://randomuser.me/api/portraits/$gender/$id.jpg",
+      phoneNumber: phoneNumber,
+      countryCallingCode: countryCallingCode,
+    );
   }
 
   static User newUser() {

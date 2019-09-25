@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:giv_flutter/base/base_state.dart';
 import 'package:giv_flutter/config/config.dart';
+import 'package:giv_flutter/config/i18n/string_localizations.dart';
 import 'package:giv_flutter/features/log_in/bloc/log_in_bloc.dart';
 import 'package:giv_flutter/features/log_in/helper/login_assistance_helper.dart';
 import 'package:giv_flutter/features/log_in/ui/log_in.dart';
-import 'package:giv_flutter/features/log_in/ui/login_assistance.dart';
+import 'package:giv_flutter/features/log_in/ui/log_in_assistance.dart';
 import 'package:giv_flutter/features/sign_in/ui/mailbox_image.dart';
 import 'package:giv_flutter/features/sign_in/ui/sign_in_full_page_message.dart';
 import 'package:giv_flutter/features/sign_up/bloc/sign_up_bloc.dart';
@@ -12,8 +13,8 @@ import 'package:giv_flutter/model/api_response/api_response.dart';
 import 'package:giv_flutter/model/user/repository/api/request/sign_up_request.dart';
 import 'package:giv_flutter/util/form/custom_text_form_field.dart';
 import 'package:giv_flutter/util/form/email_form_field.dart';
+import 'package:giv_flutter/util/form/form_validator.dart';
 import 'package:giv_flutter/util/form/password_form_field.dart';
-import 'package:giv_flutter/util/form/validator.dart';
 import 'package:giv_flutter/util/navigation/navigation.dart';
 import 'package:giv_flutter/util/network/http_response.dart';
 import 'package:giv_flutter/util/presentation/android_theme.dart';
@@ -30,7 +31,6 @@ class SignUp extends StatefulWidget {
 
   const SignUp({Key key, @required this.bloc}) : super(key: key);
 
-
   @override
   _SignUpState createState() => _SignUpState();
 }
@@ -44,14 +44,15 @@ class _SignUpState extends BaseState<SignUp> {
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  Validator _validate;
   bool _autovalidate = false;
+  FormValidator _formValidator = FormValidator();
 
   @override
   void initState() {
     super.initState();
     _signUpBloc = widget.bloc;
-    _signUpBloc.responseStream.listen((HttpResponse<ApiResponse> httpResponse) {
+    _signUpBloc.responseStream
+        ?.listen((HttpResponse<ApiResponse> httpResponse) {
       if (httpResponse.isReady) _onSignUpResponse(httpResponse);
     });
   }
@@ -59,8 +60,6 @@ class _SignUpState extends BaseState<SignUp> {
   @override
   Widget build(BuildContext context) {
     super.build(context);
-
-    _validate = Validator(context);
 
     return CustomScaffold(
       appBar: CustomAppBar(
@@ -93,55 +92,53 @@ class _SignUpState extends BaseState<SignUp> {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        CustomTextFormField(
-          labelText: string('sign_in_form_name'),
-          validator: _validate.userName,
+        NameFormField(
+          validator: (String input) => string(_formValidator.userName(input)),
           enabled: !isLoading,
           focusNode: _nameFocus,
           nextFocus: _emailFocus,
           controller: _nameController,
           maxLength: Config.maxLengthName,
         ),
-        Spacing.vertical(Dimens.default_vertical_margin),
+        Spacing.vertical(
+          Dimens.default_vertical_margin,
+        ),
         EmailFormField(
           enabled: !isLoading,
           focusNode: _emailFocus,
           nextFocus: _passwordFocus,
           controller: _emailController,
+          validator: (String input) => string(_formValidator.email(input)),
         ),
-        Spacing.vertical(Dimens.default_vertical_margin),
+        Spacing.vertical(
+          Dimens.default_vertical_margin,
+        ),
         PasswordFormField(
           labelText: string('sign_in_form_password'),
-          validator: _validate.password,
+          validator: (String input) => string(_formValidator.password(input)),
           enabled: !isLoading,
           focusNode: _passwordFocus,
           controller: _passwordController,
         ),
-        Spacing.vertical(Dimens.sign_in_submit_button_margin_top),
-        PrimaryButton(
-          text: string('sign_in_sign_up'),
+        Spacing.vertical(
+          Dimens.sign_in_submit_button_margin_top,
+        ),
+        SubmitSignUpButton(
           isLoading: isLoading,
           onPressed: _handleSubmit,
         ),
-        Spacing.vertical(Dimens.default_vertical_margin),
-        TextFlatButton(
-          text: string('log_in_help_me'),
+        Spacing.vertical(
+          Dimens.default_vertical_margin,
+        ),
+        SignUpHelpButton(
           onPressed: _requestHelp,
         ),
-        Spacing.vertical(Dimens.sign_in_submit_button_margin_top),
-        GestureDetector(
-          onTap: _goToLogin,
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Body2Text(string('sign_in_already_have_an_acount')),
-              MediumFlatPrimaryButton(
-                text: string('sign_in_log_in'),
-                onPressed: _goToLogin,
-              )
-            ],
-          ),
-        )
+        Spacing.vertical(
+          Dimens.sign_in_submit_button_margin_top,
+        ),
+        SignUpAlreadyHaveAnAccountWidget(
+          onPressed: _goToLogin,
+        ),
       ],
     );
   }
@@ -223,5 +220,104 @@ class _SignUpState extends BaseState<SignUp> {
             ],
           );
         });
+  }
+}
+
+class NameFormField extends StatelessWidget {
+  final FormFieldValidator<String> validator;
+  final bool enabled;
+  final FocusNode focusNode;
+  final FocusNode nextFocus;
+  final TextInputAction textInputAction;
+  final TextEditingController controller;
+  final int maxLength;
+
+  const NameFormField({
+    Key key,
+    this.validator,
+    this.enabled,
+    this.focusNode,
+    this.nextFocus,
+    this.textInputAction,
+    this.controller,
+    this.maxLength,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return CustomTextFormField(
+      labelText: GetLocalizedStringFunction(context)('sign_in_form_name'),
+      validator: validator,
+      enabled: enabled,
+      focusNode: focusNode,
+      nextFocus: nextFocus,
+      controller: controller,
+      maxLength: maxLength,
+    );
+  }
+}
+
+class SubmitSignUpButton extends StatelessWidget {
+  final bool isLoading;
+  final VoidCallback onPressed;
+
+  const SubmitSignUpButton({
+    Key key,
+    this.isLoading,
+    this.onPressed,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return PrimaryButton(
+      text: GetLocalizedStringFunction(context)('sign_in_sign_up'),
+      isLoading: isLoading,
+      onPressed: onPressed,
+    );
+  }
+}
+
+class SignUpHelpButton extends StatelessWidget {
+  final VoidCallback onPressed;
+
+  const SignUpHelpButton({
+    Key key,
+    @required this.onPressed,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return TextFlatButton(
+      text: GetLocalizedStringFunction(context)('sign_up_help_me'),
+      onPressed: onPressed,
+    );
+  }
+}
+
+class SignUpAlreadyHaveAnAccountWidget extends StatelessWidget {
+  final VoidCallback onPressed;
+
+  const SignUpAlreadyHaveAnAccountWidget({
+    Key key,
+    @required this.onPressed,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final string = GetLocalizedStringFunction(context);
+
+    return GestureDetector(
+      onTap: onPressed,
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Body2Text(string('sign_in_already_have_an_acount')),
+          MediumFlatPrimaryButton(
+            text: string('sign_in_log_in'),
+            onPressed: onPressed,
+          )
+        ],
+      ),
+    );
   }
 }

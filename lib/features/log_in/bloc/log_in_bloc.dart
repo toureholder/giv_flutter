@@ -8,6 +8,7 @@ import 'package:giv_flutter/model/user/repository/api/response/log_in_response.d
 import 'package:giv_flutter/model/user/repository/user_repository.dart';
 import 'package:giv_flutter/service/session/session_provider.dart';
 import 'package:giv_flutter/util/network/http_response.dart';
+import 'package:giv_flutter/util/util.dart';
 import 'package:meta/meta.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -19,6 +20,7 @@ class LogInBloc {
     @required this.loginAssistancePublishSubject,
     @required this.firebaseAuth,
     @required this.facebookLogin,
+    @required this.util,
   });
 
   final UserRepository userRepository;
@@ -27,6 +29,7 @@ class LogInBloc {
   final PublishSubject<HttpResponse<ApiResponse>> loginAssistancePublishSubject;
   final FirebaseAuth firebaseAuth;
   final FacebookLogin facebookLogin;
+  final Util util;
 
   Observable<HttpResponse<LogInResponse>> get loginResponseStream =>
       loginPublishSubject.stream;
@@ -88,8 +91,6 @@ class LogInBloc {
   }
 
   Future<void> _saveToPreferences(LogInResponse response) async {
-
-
     await Future.wait([
       session.logUserIn(response),
       firebaseAuth.signInWithCustomToken(token: response.firebaseAuthToken)

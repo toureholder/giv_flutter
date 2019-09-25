@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:giv_flutter/base/base_state.dart';
 import 'package:giv_flutter/config/config.dart';
+import 'package:giv_flutter/util/form/text_editing_controller_builder.dart';
 import 'package:giv_flutter/util/presentation/android_theme.dart';
 import 'package:giv_flutter/util/presentation/buttons.dart';
 import 'package:giv_flutter/util/presentation/custom_app_bar.dart';
@@ -25,10 +26,8 @@ class _EditTitleState extends BaseState<EditTitle> {
   void initState() {
     super.initState();
 
-    _controller = widget.title == null
-        ? TextEditingController()
-        : TextEditingController.fromValue(
-        new TextEditingValue(text: widget.title));
+    _controller =
+        TextEditingControllerBuilder().setInitialText(widget.title).build();
   }
 
   @override
@@ -59,7 +58,8 @@ class _EditTitleState extends BaseState<EditTitle> {
               TextFormField(
                 controller: _controller,
                 keyboardType: TextInputType.text,
-                decoration: InputDecoration(hintText: string('new_listing_tile_name')),
+                decoration:
+                    InputDecoration(hintText: string('new_listing_tile_name')),
                 maxLength: Config.maxLengthProductTitle,
                 autofocus: true,
               ),

@@ -6,9 +6,13 @@ import 'package:giv_flutter/util/util.dart';
 
 class TermsOfServiceAcceptanceCaption extends StatefulWidget {
   final String prefix;
+  final Util util;
 
-  const TermsOfServiceAcceptanceCaption({Key key, this.prefix})
-      : super(key: key);
+  const TermsOfServiceAcceptanceCaption({
+    Key key,
+    @required this.util,
+    this.prefix,
+  }) : super(key: key);
 
   @override
   _TermsOfServiceAcceptanceCaptionState createState() =>
@@ -18,11 +22,13 @@ class TermsOfServiceAcceptanceCaption extends StatefulWidget {
 class _TermsOfServiceAcceptanceCaptionState
     extends BaseState<TermsOfServiceAcceptanceCaption> {
   String _prefix;
+  Util _util;
 
   @override
   void initState() {
     super.initState();
     _prefix = widget.prefix ?? 'terms_acceptance_caption_by_continuing_';
+    _util = widget.util;
   }
 
   @override
@@ -45,7 +51,7 @@ class _TermsOfServiceAcceptanceCaptionState
               style: new TextStyle(color: Colors.blue),
               recognizer: new TapGestureRecognizer()
                 ..onTap = () {
-                  Util.launchPrivacyURL();
+                  _util.launchPrivacyURL();
                 },
             ),
             new TextSpan(
@@ -57,7 +63,7 @@ class _TermsOfServiceAcceptanceCaptionState
               style: new TextStyle(color: Colors.blue),
               recognizer: new TapGestureRecognizer()
                 ..onTap = () {
-                  Util.launchTermsURL();
+                  _util.launchTermsURL();
                 },
             ),
             new TextSpan(

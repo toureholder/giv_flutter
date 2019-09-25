@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:giv_flutter/base/base_state.dart';
+import 'package:giv_flutter/config/i18n/string_localizations.dart';
 import 'package:giv_flutter/features/listing/bloc/my_listings_bloc.dart';
 import 'package:giv_flutter/features/listing/bloc/new_listing_bloc.dart';
 import 'package:giv_flutter/features/listing/ui/new_listing.dart';
@@ -59,16 +60,50 @@ class _MyListingsState extends BaseState<MyListings> {
 
   Widget _buildSingleChildScrollView(List<Product> products) {
     return products.isNotEmpty
-        ? SingleChildScrollView(
-            child: ProductGrid(
-              products: products,
-              isMine: true,
-            ),
+        ? MyListingsScrollView(
+            products: products,
           )
-        : _buildEmptyState();
+        : MyListingsEmptyState(
+            stringFunction: string,
+            onPressed: _createNewListing,
+          );
   }
 
-  Container _buildEmptyState() {
+  _createNewListing() {
+    navigation.pushReplacement(Consumer<NewListingBloc>(
+      builder: (context, bloc, child) => NewListing(
+        bloc: bloc,
+      ),
+    ));
+  }
+}
+
+class MyListingsScrollView extends StatelessWidget {
+  final List<Product> products;
+
+  const MyListingsScrollView({Key key, @required this.products})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      child: ProductGrid(products: products),
+    );
+  }
+}
+
+class MyListingsEmptyState extends StatelessWidget {
+  final GetLocalizedStringFunction stringFunction;
+  final VoidCallback onPressed;
+
+  const MyListingsEmptyState({
+    Key key,
+    @required this.stringFunction,
+    @required this.onPressed,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: Dimens.grid(32)),
       alignment: Alignment.center,
@@ -76,7 +111,7 @@ class _MyListingsState extends BaseState<MyListings> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Body2Text(
-            string('my_listings_empty_state'),
+            stringFunction('my_listings_empty_state'),
             color: Colors.grey,
             textAlign: TextAlign.center,
           ),
@@ -88,18 +123,12 @@ class _MyListingsState extends BaseState<MyListings> {
           ),
           Spacing.vertical(Dimens.grid(20)),
           PrimaryButton(
-            text: string('my_listings_empty_state_button'),
-            onPressed: _createNewListing,
+            text: stringFunction('my_listings_empty_state_button'),
+            onPressed: onPressed,
             fillWidth: false,
           )
         ],
       ),
     );
-  }
-
-  _createNewListing() {
-    navigation.pushReplacement(Consumer<NewListingBloc>(
-      builder: (context, bloc, child) => NewListing(bloc: bloc,),
-    ));
   }
 }

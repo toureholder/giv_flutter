@@ -3,7 +3,7 @@ class ApiResponse {
 
   ApiResponse({this.message});
 
-  ApiResponse.mock() : message = "Success";
+  ApiResponse.fake() : message = "Success";
 
   ApiResponse.fromJson(Map<String, dynamic> json)
       : message = json['message'];
@@ -14,7 +14,7 @@ class ApiModelResponse {
 
   ApiModelResponse({this.id});
 
-  ApiModelResponse.mock() : id = 1;
+  ApiModelResponse.fake() : id = 1;
 
   ApiModelResponse.fromJson(Map<String, dynamic> json)
       : id = json['id'];

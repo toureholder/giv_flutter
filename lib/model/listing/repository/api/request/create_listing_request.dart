@@ -44,6 +44,20 @@ class CreateListingRequest {
   String toEncodedString() {
     return json.encode(toHttpRequestBody());
   }
+
+  factory CreateListingRequest.fake() => CreateListingRequest(
+        title: 'Testing?',
+        description: 'lorem ipsum dolor',
+        geoNamesCityId: '123',
+        geoNamesStateId: '456',
+        geoNamesCountryId: '789',
+        categoryIds: <int>[1, 2],
+        isActive: true,
+        images: <ListingImage>[
+          ListingImage(
+              url: 'https://picsum.photos/500/500/?image=336', position: 0)
+        ],
+      );
 }
 
 class UpdateListingActiveStatusRequest {
@@ -53,4 +67,7 @@ class UpdateListingActiveStatusRequest {
   UpdateListingActiveStatusRequest(this.id, this.isActive);
 
   Map<String, dynamic> toHttpRequestBody() => {'is_active': isActive};
+
+  factory UpdateListingActiveStatusRequest.fake() =>
+      UpdateListingActiveStatusRequest(1, true);
 }

@@ -4,17 +4,18 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:giv_flutter/base/base_state.dart';
 import 'package:giv_flutter/config/config.dart';
+import 'package:giv_flutter/config/i18n/string_localizations.dart';
 import 'package:giv_flutter/features/settings/bloc/settings_bloc.dart';
 import 'package:giv_flutter/features/settings/ui/edit_bio.dart';
 import 'package:giv_flutter/features/settings/ui/edit_name.dart';
 import 'package:giv_flutter/features/settings/ui/edit_phone_number.dart';
 import 'package:giv_flutter/model/image/image.dart' as CustomImage;
 import 'package:giv_flutter/model/user/user.dart';
-import 'package:giv_flutter/util/firebase/firebase_storage_util.dart';
 import 'package:giv_flutter/util/network/http_response.dart';
 import 'package:giv_flutter/util/presentation/avatar_image.dart';
 import 'package:giv_flutter/util/presentation/bottom_sheet.dart';
 import 'package:giv_flutter/util/presentation/custom_app_bar.dart';
+import 'package:giv_flutter/util/presentation/custom_divider.dart';
 import 'package:giv_flutter/util/presentation/custom_scaffold.dart';
 import 'package:giv_flutter/util/presentation/typography.dart';
 import 'package:giv_flutter/values/dimens.dart';
@@ -22,16 +23,16 @@ import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
-class Profile extends StatefulWidget {
+class EditProfile extends StatefulWidget {
   final SettingsBloc settingsBloc;
 
-  const Profile({Key key, @required this.settingsBloc}) : super(key: key);
+  const EditProfile({Key key, @required this.settingsBloc}) : super(key: key);
 
   @override
-  _ProfileState createState() => _ProfileState();
+  _EditProfileState createState() => _EditProfileState();
 }
 
-class _ProfileState extends BaseState<Profile> {
+class _EditProfileState extends BaseState<EditProfile> {
   SettingsBloc _settingsBloc;
   User _user;
   CustomImage.Image _currentImage;
@@ -43,7 +44,7 @@ class _ProfileState extends BaseState<Profile> {
     super.initState();
     _settingsBloc = widget.settingsBloc;
 
-    _settingsBloc.userUpdateStream.listen((HttpResponse<User> httpResponse) {
+    _settingsBloc.userUpdateStream?.listen((HttpResponse<User> httpResponse) {
       if (httpResponse.isReady) _isSavingImage = false;
     });
 
@@ -68,66 +69,20 @@ class _ProfileState extends BaseState<Profile> {
     return ListView(
       children: <Widget>[
         StreamBuilder(
-            stream: _settingsBloc.userUpdateStream,
-            builder: (context, snapshot) {
-              var isLoading = snapshot?.data?.isLoading ?? false;
-              return _avatar(isLoading);
-            }),
-        _sectionTitle(string('settings_section_profile')),
-        _itemTile(
-            value: _user.phoneNumber == null
-                ? null
-                : '+${_user.countryCallingCode} ${_user.phoneNumber}',
-            caption: string('settings_phone_number'),
-            emptyStateCaption: string('settings_phone_number_empty_state'),
-            onTap: _editPhoneNumber),
-        Divider(
-          height: 1.0,
+          stream: _settingsBloc.userUpdateStream,
+          builder: (context, snapshot) {
+            var isLoading = snapshot?.data?.isLoading ?? false;
+            return _avatar(isLoading);
+          },
         ),
-        _itemTile(
-            value: _user.name,
-            caption: string('settings_name'),
-            emptyStateCaption: string('settings_name_empty_state'),
-            onTap: _editName),
-        Divider(
-          height: 1.0,
-        ),
-        _itemTile(
-            value: _user.bio,
-            caption: string('settings_bio'),
-            emptyStateCaption: string('settings_bio_empty_state'),
-            onTap: _editBio),
-        Divider(
-          height: 1.0,
-        )
+        EditProfileSectionTitle(string('settings_section_profile')),
+        PhoneNumberTile(user: _user, onTap: _editPhoneNumber),
+        CustomDivider(),
+        NameTile(value: _user.name, onTap: _editName),
+        CustomDivider(),
+        BioTile(value: _user.bio, onTap: _editBio),
+        CustomDivider(),
       ],
-    );
-  }
-
-  Widget _itemTile(
-      {String value,
-      String caption,
-      String emptyStateCaption,
-      GestureTapCallback onTap}) {
-    var finalValue = value ?? caption;
-    var finalCaption = value == null ? emptyStateCaption : caption;
-
-    return Material(
-      color: Colors.white,
-      child: InkWell(
-        onTap: onTap,
-        child: Padding(
-          padding: EdgeInsets.symmetric(
-              vertical: 12.0, horizontal: Dimens.default_horizontal_margin),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              BodyText(finalValue),
-              Body2Text(finalCaption, color: Colors.grey)
-            ],
-          ),
-        ),
-      ),
     );
   }
 
@@ -141,38 +96,14 @@ class _ProfileState extends BaseState<Profile> {
         isSaving ? true : _uploadTask != null && _uploadTask.isInProgress;
 
     final children = <Widget>[
-      Padding(
-        padding: const EdgeInsets.all(28.0),
-        child: AvatarImage(
-          image: image,
-          width: 154.0,
-          height: 154.0,
-          isLoading: isUploading,
-        ),
-      )
+      ProfileAvatar(image: image, isUploading: isUploading),
     ];
 
-    if (isUploading) {
-      children.add(Padding(
-        padding: const EdgeInsets.all(28.0),
-        child: SizedBox(
-          width: 154.0,
-          height: 154.0,
-          child: CircularProgressIndicator(
-            strokeWidth: 5.0,
-          ),
-        ),
-      ));
-    } else {
-      children.add(Positioned(
-          bottom: 24.0,
-          right: 24.0,
-          child: FloatingActionButton(
-            onPressed: _showAddImageModal,
-            child: Icon(Icons.camera_alt),
-            elevation: 2.0,
-          )));
-    }
+    final nextWidget = isUploading
+        ? ProfileAvatarUploadingState()
+        : ProfileAvatarAddImageFab(onPressed: _showAddImageModal);
+
+    children.add(nextWidget);
 
     return Row(
       mainAxisSize: MainAxisSize.max,
@@ -182,22 +113,6 @@ class _ProfileState extends BaseState<Profile> {
           children: children,
         ),
       ],
-    );
-  }
-
-  Widget _sectionTitle(String text) {
-    return Material(
-      color: Colors.white,
-      child: Padding(
-        padding: EdgeInsets.only(
-            left: Dimens.default_horizontal_margin,
-            right: Dimens.default_horizontal_margin,
-            top: Dimens.default_vertical_margin,
-            bottom: 8.0),
-        child: Subtitle(text,
-            weight: SyntheticFontWeight.bold,
-            color: Theme.of(context).primaryColor),
-      ),
     );
   }
 
@@ -282,7 +197,7 @@ class _ProfileState extends BaseState<Profile> {
       _isSavingImage = true;
     });
 
-    final ref = await FirebaseStorageUtil.getProfilePhotoRef();
+    final ref = await _settingsBloc.getProfilePhotoRef();
     _uploadTask = ref.putFile(_currentImage.file);
 
     _uploadTask.events.listen((StorageTaskEvent event) {
@@ -327,5 +242,201 @@ class _ProfileState extends BaseState<Profile> {
     } else {
       return true;
     }
+  }
+}
+
+class ProfileAvatar extends StatelessWidget {
+  final CustomImage.Image image;
+  final bool isUploading;
+
+  const ProfileAvatar({
+    Key key,
+    @required this.image,
+    @required this.isUploading,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(28.0),
+      child: AvatarImage(
+        image: image,
+        width: 154.0,
+        height: 154.0,
+        isLoading: isUploading,
+      ),
+    );
+  }
+}
+
+class ProfileAvatarAddImageFab extends StatelessWidget {
+  final VoidCallback onPressed;
+
+  const ProfileAvatarAddImageFab({Key key, @required this.onPressed})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Positioned(
+      bottom: 24.0,
+      right: 24.0,
+      child: FloatingActionButton(
+        onPressed: onPressed,
+        child: Icon(Icons.camera_alt),
+        elevation: 2.0,
+      ),
+    );
+  }
+}
+
+class ProfileAvatarUploadingState extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(28.0),
+      child: SizedBox(
+        width: 154.0,
+        height: 154.0,
+        child: CircularProgressIndicator(
+          strokeWidth: 5.0,
+        ),
+      ),
+    );
+  }
+}
+
+class EditProfileSectionTitle extends StatelessWidget {
+  final String text;
+
+  const EditProfileSectionTitle(this.text, {Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: Colors.white,
+      child: Padding(
+        padding: EdgeInsets.only(
+            left: Dimens.default_horizontal_margin,
+            right: Dimens.default_horizontal_margin,
+            top: Dimens.default_vertical_margin,
+            bottom: 8.0),
+        child: Subtitle(text,
+            weight: SyntheticFontWeight.bold,
+            color: Theme.of(context).primaryColor),
+      ),
+    );
+  }
+}
+
+class EditProfileTile extends StatelessWidget {
+  final String value;
+  final String caption;
+  final String emptyStateCaption;
+  final GestureTapCallback onTap;
+
+  const EditProfileTile({
+    Key key,
+    @required this.value,
+    @required this.caption,
+    @required this.emptyStateCaption,
+    @required this.onTap,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final computedValue =
+        (value != null && value.trim().isEmpty) ? null : value;
+
+    var finalValue = computedValue ?? caption;
+    var finalCaption = computedValue == null ? emptyStateCaption : caption;
+
+    return Material(
+      color: Colors.white,
+      child: InkWell(
+        onTap: onTap,
+        child: Padding(
+          padding: EdgeInsets.symmetric(
+              vertical: 12.0, horizontal: Dimens.default_horizontal_margin),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              BodyText(finalValue),
+              Body2Text(finalCaption, color: Colors.grey)
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class PhoneNumberTile extends StatelessWidget {
+  final User user;
+  final GestureTapCallback onTap;
+
+  const PhoneNumberTile({
+    Key key,
+    @required this.user,
+    @required this.onTap,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final stringFunction = GetLocalizedStringFunction(context);
+
+    return EditProfileTile(
+      value: user.phoneNumber == null
+          ? null
+          : '+${user.countryCallingCode} ${user.phoneNumber}',
+      caption: stringFunction('settings_phone_number'),
+      emptyStateCaption: stringFunction('settings_phone_number_empty_state'),
+      onTap: onTap,
+    );
+  }
+}
+
+class NameTile extends StatelessWidget {
+  final String value;
+  final GestureTapCallback onTap;
+
+  const NameTile({
+    Key key,
+    @required this.value,
+    @required this.onTap,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final stringFunction = GetLocalizedStringFunction(context);
+
+    return EditProfileTile(
+      value: value,
+      caption: stringFunction('settings_name'),
+      emptyStateCaption: stringFunction('settings_name_empty_state'),
+      onTap: onTap,
+    );
+  }
+}
+
+class BioTile extends StatelessWidget {
+  final String value;
+  final GestureTapCallback onTap;
+
+  const BioTile({
+    Key key,
+    @required this.value,
+    @required this.onTap,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final stringFunction = GetLocalizedStringFunction(context);
+
+    return EditProfileTile(
+      value: value,
+      caption: stringFunction('settings_bio'),
+      emptyStateCaption: stringFunction('settings_bio_empty_state'),
+      onTap: onTap,
+    );
   }
 }

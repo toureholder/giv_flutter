@@ -7,17 +7,17 @@ import 'package:meta/meta.dart';
 class CategoriesBloc {
   CategoriesBloc({
     @required this.productRepository,
-    @required this.categoriesPublishSubject,
+    @required this.categoriesSubject,
   });
 
   final ProductRepository productRepository;
-  final PublishSubject<List<ProductCategory>> categoriesPublishSubject;
+  final BehaviorSubject<List<ProductCategory>> categoriesSubject;
 
   Observable<List<ProductCategory>> get categories =>
-      categoriesPublishSubject.stream;
+      categoriesSubject.stream;
 
   dispose() {
-    categoriesPublishSubject.close();
+    categoriesSubject.close();
   }
 
   fetchCategories({bool fetchAll}) async {
@@ -27,11 +27,11 @@ class CategoriesBloc {
 
       final data = response.data;
       if (response.status == HttpStatus.ok && data != null)
-        categoriesPublishSubject.sink.add(data);
+        categoriesSubject.sink.add(data);
       else
         throw response.message;
     } catch (err) {
-      categoriesPublishSubject.sink.addError(err);
+      categoriesSubject.sink.addError(err);
     }
   }
 }

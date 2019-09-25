@@ -1,14 +1,13 @@
-import 'package:giv_flutter/service/preferences/disk_storage_provider.dart';
-import 'package:giv_flutter/model/app_config/app_config.dart';
+import 'package:giv_flutter/base/custom_error.dart';
 import 'package:giv_flutter/model/app_config/repository/app_config_repository.dart';
 import 'package:giv_flutter/model/location/coordinates.dart';
-import 'package:giv_flutter/model/location/location.dart';
 import 'package:giv_flutter/model/location/repository/location_repository.dart';
 import 'package:giv_flutter/model/user/repository/user_repository.dart';
-import 'package:giv_flutter/model/user/user.dart';
+import 'package:giv_flutter/service/preferences/disk_storage_provider.dart';
 import 'package:giv_flutter/service/session/session_provider.dart';
 import 'package:giv_flutter/util/network/http_response.dart';
 import 'package:meta/meta.dart';
+import 'package:rxdart/rxdart.dart';
 
 class SplashBloc {
   final UserRepository userRepository;
@@ -16,6 +15,7 @@ class SplashBloc {
   final AppConfigRepository appConfigRepository;
   final DiskStorageProvider diskStorage;
   final SessionProvider session;
+  final PublishSubject<bool> tasksSuccessSubject;
 
   SplashBloc({
     @required this.userRepository,
@@ -23,23 +23,50 @@ class SplashBloc {
     @required this.appConfigRepository,
     @required this.diskStorage,
     @required this.session,
+    @required this.tasksSuccessSubject,
   });
 
-  Future<HttpResponse<User>> getMe() => userRepository.getMe();
+  dispose() => tasksSuccessSubject.close();
 
-  Future<HttpResponse<Location>> getMyLocation(Coordinates coordinates) =>
-      locationRepository.getMyLocation(coordinates);
+  Observable<bool> get tasksStateStream => tasksSuccessSubject.stream;
 
-  Future<HttpResponse<AppConfig>> getConfig() =>
-      appConfigRepository.getConfig();
+  runTasks() async {
+    try {
+      await Future.wait([
+        _loadAppConfig(),
+        _loadPreferredLocation(),
+        _loadCurrentUser(),
+      ]);
 
-  Future<bool> persistAppConfig(AppConfig appConfig) => diskStorage.setAppConfiguration(appConfig);
+      tasksSuccessSubject.sink.add(true);
+    } catch (error) {
+      tasksSuccessSubject.sink.addError(error);
+    }
+  }
 
-  bool hasPreferredLocation() => diskStorage.getLocation() != null;
+  Future _loadAppConfig() async {
+    final response = await appConfigRepository.getConfig();
 
-  Future<bool> persistLocation(Location location) => diskStorage.setLocation(location);
+    if (response.status == HttpStatus.preconditionFailed)
+      throw CustomError.forceUpdate;
 
-  bool isAuthenticated() => session.isAuthenticated();
+    if (response.data != null)
+      await diskStorage.setAppConfiguration(response.data);
+  }
 
-  Future<bool> persistUser(User user) => diskStorage.setUser(user);
+  Future _loadPreferredLocation() async {
+    if (diskStorage.getLocation() == null) {
+      final response =
+          await locationRepository.getMyLocation(Coordinates(0, 0));
+
+      if (response.data != null) await diskStorage.setLocation(response.data);
+    }
+  }
+
+  Future _loadCurrentUser() async {
+    if (session.isAuthenticated()) {
+      final response = await userRepository.getMe();
+      if (response.data != null) await diskStorage.setUser(response.data);
+    }
+  }
 }

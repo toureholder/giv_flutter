@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:giv_flutter/values/colors.dart';
 
 class CustomScaffold extends StatefulWidget {
   final PreferredSizeWidget appBar;
@@ -13,7 +14,7 @@ class CustomScaffold extends StatefulWidget {
     Key key,
     this.appBar,
     this.body,
-    this.backgroundColor = Colors.white,
+    this.backgroundColor = CustomColors.backgroundColor,
     this.bottomNavigationBar,
     this.floatingActionButton,
     this.floatingActionButtonLocation,

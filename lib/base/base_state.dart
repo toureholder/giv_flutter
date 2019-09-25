@@ -16,12 +16,14 @@ class BaseState<T extends StatefulWidget> extends State<T> {
   Navigation navigation;
   GetLocalizedStringFunction string;
   String localeString;
+  Util util;
 
   @override
   Widget build(BuildContext context) {
+    util = Provider.of<Util>(context);
     navigation = Navigation(context);
     string = GetLocalizedStringFunction(context);
-    localeString = Util.getCurrentLocaleString(context);
+    localeString = util.getCurrentLocaleString(context);
     return null;
   }
 
@@ -74,22 +76,10 @@ class BaseState<T extends StatefulWidget> extends State<T> {
         context: context,
         barrierDismissible: true,
         builder: (context) {
-          return AlertDialog(
-            title: Text(string('error_generic_title')),
-            content: Text(content),
-            actions: <Widget>[
-              FlatButton(
-                  child: Text(string('action_report')),
-                  onPressed: () {
-                    Util.launchCustomerService(message);
-                    Navigation(context).pop();
-                  }),
-              FlatButton(
-                  child: Text(string('common_ok')),
-                  onPressed: () {
-                    Navigation(context).pop();
-                  })
-            ],
+          return GenericErrorDialog(
+            message: message,
+            content: content,
+            util: util,
           );
         });
   }
@@ -120,7 +110,7 @@ class BaseState<T extends StatefulWidget> extends State<T> {
     final hasAgreed = storage.hasAgreedToCustomerService();
 
     if (hasAgreed)
-      Util.launchCustomerService(message);
+      util.launchCustomerService(message);
     else
       showCustomerServiceDialog(message);
   }
@@ -139,5 +129,42 @@ class BaseState<T extends StatefulWidget> extends State<T> {
             ),
           );
         });
+  }
+}
+
+class GenericErrorDialog extends StatelessWidget {
+  final String content;
+  final String message;
+  final Util util;
+
+  const GenericErrorDialog({
+    Key key,
+    @required this.content,
+    @required this.message,
+    @required this.util,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final string = GetLocalizedStringFunction(context);
+    return AlertDialog(
+      title: Text(string('error_generic_title')),
+      content: Text(content),
+      actions: <Widget>[
+        FlatButton(
+          child: Text(string('action_report')),
+          onPressed: () {
+            util.launchCustomerService(message);
+            Navigation(context).pop();
+          },
+        ),
+        FlatButton(
+          child: Text(string('common_ok')),
+          onPressed: () {
+            Navigation(context).pop();
+          },
+        ),
+      ],
+    );
   }
 }

@@ -12,20 +12,18 @@ class SearchResultBloc {
   SearchResultBloc({
     @required this.productRepository,
     @required this.diskStorage,
+    @required this.searchResultSubject,
   });
 
   final ProductRepository productRepository;
   final DiskStorageProvider diskStorage;
 
-  final _searchResultPublishSubject =
-      PublishSubject<StreamEvent<ProductSearchResult>>();
+  final PublishSubject<StreamEvent<ProductSearchResult>> searchResultSubject;
 
   Observable<StreamEvent<ProductSearchResult>> get result =>
-      _searchResultPublishSubject.stream;
+      searchResultSubject.stream;
 
-  dispose() {
-    _searchResultPublishSubject.close();
-  }
+  dispose() => searchResultSubject.close();
 
   Future<List<ProductCategory>> getSearchSuggestions(String q) async {
     try {
@@ -49,7 +47,7 @@ class SearchResultBloc {
       if (categoryId == null && searchQuery == null)
         throw FormatException('Expected categoryId or searchQuery');
 
-      _searchResultPublishSubject.sink.add(StreamEvent.loading());
+      searchResultSubject.sink.add(StreamEvent.loading());
 
       locationFilter = locationFilter ?? diskStorage.getLocation();
 
@@ -64,12 +62,12 @@ class SearchResultBloc {
               isHardFilter: isHardFilter);
 
       if (response.status == HttpStatus.ok)
-        _searchResultPublishSubject.sink
+        searchResultSubject.sink
             .add(StreamEvent<ProductSearchResult>(data: response.data));
       else
-        _searchResultPublishSubject.addError(response.message);
+        searchResultSubject.addError(response.message);
     } catch (error) {
-      _searchResultPublishSubject.addError(error);
+      searchResultSubject.addError(error);
     }
   }
 }

@@ -36,26 +36,25 @@ class _SubCategoriesState extends BaseState<SubCategories> {
     return CustomScaffold(
       appBar: CustomAppBar(title: widget.category.simpleName),
       body: ListView(
-        children: _buildList(context, _subCategories),
+        children: _buildList(_subCategories),
       ),
     );
   }
 
-  List<Widget> _buildList(
-      BuildContext context, List<ProductCategory> categories) {
+  List<Widget> _buildList(List<ProductCategory> categories) {
     if (widget.hideThese != null)
       categories.removeWhere((it) => widget.hideThese.contains(it.id));
 
-    final parentWidget = widget.category;
+    final category = widget.category;
 
     final parentCategory = ProductCategory(
-        id: parentWidget.id,
-        simpleName: parentWidget.getNameAsParent(context),
-        canonicalName: parentWidget.canonicalName);
+        id: category.id,
+        simpleName: category.getNameAsParent(context),
+        canonicalName: category.canonicalName);
 
     final finalList = List<ProductCategory>.from(categories);
 
-    if (_noSiblingsWhereSelected()) finalList.insert(0, parentCategory);
+    if (_noSiblingsWereSelected()) finalList.insert(0, parentCategory);
 
     return finalList
         .map((it) => CategoryListTile(
@@ -66,7 +65,7 @@ class _SubCategoriesState extends BaseState<SubCategories> {
         .toList();
   }
 
-  bool _noSiblingsWhereSelected() {
+  bool _noSiblingsWereSelected() {
     if (widget.hideThese == null  || widget.hideThese.isEmpty) return true;
 
     final subCategoryIds = _originalSubCategoryList.map((it) => it.id).toList();

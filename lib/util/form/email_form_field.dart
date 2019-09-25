@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:giv_flutter/util/form/form_field_state.dart';
-import 'package:giv_flutter/util/form/validator.dart';
 
 class EmailFormField extends StatefulWidget {
   final bool enabled;
@@ -8,6 +7,7 @@ class EmailFormField extends StatefulWidget {
   final FocusNode nextFocus;
   final TextInputAction textInputAction;
   final TextEditingController controller;
+  final FormFieldValidator<String> validator;
 
   const EmailFormField(
       {Key key,
@@ -15,7 +15,8 @@ class EmailFormField extends StatefulWidget {
       this.focusNode,
       this.nextFocus,
       this.textInputAction = TextInputAction.next,
-      this.controller})
+      this.controller,
+      @required this.validator,})
       : super(key: key);
 
   @override
@@ -23,8 +24,11 @@ class EmailFormField extends StatefulWidget {
 }
 
 class _EmailFormFieldState extends CustomFormFieldState<EmailFormField> {
+  FormFieldValidator<String> validator;
+
   @override
   void initState() {
+    validator = widget.validator;
     super.focusNode = widget.focusNode;
     super.initState();
   }
@@ -36,7 +40,7 @@ class _EmailFormFieldState extends CustomFormFieldState<EmailFormField> {
       controller: widget.controller,
       decoration: InputDecoration(labelText: string('sign_in_form_email')),
       keyboardType: TextInputType.emailAddress,
-      validator: Validator(context).email,
+      validator: validator,
       autovalidate: autovalidate,
       focusNode: focusNode,
       textInputAction: widget.textInputAction,

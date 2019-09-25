@@ -20,16 +20,17 @@ class Product {
   bool isActive;
   DateTime updatedAt;
 
-  Product(
-      {this.id,
-      this.title,
-      this.location,
-      this.description,
-      this.images,
-      this.user,
-      this.categories,
-      this.isActive = true,
-      this.updatedAt});
+  Product({
+    this.id,
+    this.title,
+    this.location,
+    this.description,
+    this.images,
+    this.user,
+    this.categories,
+    this.isActive = true,
+    this.updatedAt,
+  });
 
   Product.fromJson(Map<String, dynamic> json)
       : id = json['id'],
@@ -55,12 +56,13 @@ class Product {
     return fromDynamicList(parsed);
   }
 
-  bool get isNotEmpty {
-    return title != null ||
-        description != null ||
-        (images != null && images.isNotEmpty) ||
-        (categories != null && categories.isNotEmpty);
-  }
+  bool get isNotEmpty =>
+      title != null ||
+      description != null ||
+      (images != null && images.isNotEmpty) ||
+      (categories != null && categories.isNotEmpty);
+
+  bool get isLocationComplete => location?.isOk ?? false;
 
   Product copy() {
     var images = List<Image>.from(this.images);
@@ -99,10 +101,11 @@ class Product {
       .map((image) => image.file)
       .toList();
 
-  static Product mock(int id) {
+  factory Product.fakeWithImageUrls(int id, {int howManyImages}) {
     final faker = new Faker();
 
-    final numberOfImages = faker.randomGenerator.integer(8, min: 1);
+    final numberOfImages =
+        howManyImages ?? faker.randomGenerator.integer(8, min: 1);
     final imageIds = faker.randomGenerator.numbers(1000, numberOfImages);
     final images = imageIds.map((id) {
       return Image(url: "https://picsum.photos/500/500/?image=$id");
@@ -111,7 +114,7 @@ class Product {
     return Product(
         id: id ?? faker.randomGenerator.integer(99, min: 1),
         title: faker.food.dish(),
-        location: Location.mock(),
+        location: Location.fake(),
         description:
             'Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. The quick brown fox jumps over the lazy dog. ',
         images: images,
@@ -121,17 +124,70 @@ class Product {
             simpleName: "Música e hobbies",
           )
         ],
-        user: User.mock());
+        updatedAt: DateTime(1982, 8, 11),
+        user: User.fake());
   }
 
-  static List<Product> getMockList({int quantity}) {
+  factory Product.fakeWithImageFiles(int id, {int howManyImages}) {
+    final faker = new Faker();
+
+    final numberOfImages =
+        howManyImages ?? faker.randomGenerator.integer(8, min: 1);
+    final imageIds = faker.randomGenerator.numbers(1000, numberOfImages);
+    final images = imageIds.map((id) {
+      return Image(file: File('some/path/{$id}.jpg'));
+    }).toList();
+
+    return Product(
+        id: id ?? faker.randomGenerator.integer(99, min: 1),
+        title: faker.food.dish(),
+        location: Location.fake(),
+        description:
+            'Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. The quick brown fox jumps over the lazy dog. ',
+        images: images,
+        categories: [
+          ProductCategory(
+            id: 20,
+            simpleName: "Música e hobbies",
+          )
+        ],
+        user: User.fake());
+  }
+
+  factory Product.fakeWithIncompleteLocation(int id, {int howManyImages}) {
+    final faker = new Faker();
+
+    final numberOfImages =
+        howManyImages ?? faker.randomGenerator.integer(8, min: 1);
+    final imageIds = faker.randomGenerator.numbers(1000, numberOfImages);
+    final images = imageIds.map((id) {
+      return Image(file: File('some/path/{$id}.jpg'));
+    }).toList();
+
+    return Product(
+        id: id ?? faker.randomGenerator.integer(99, min: 1),
+        title: faker.food.dish(),
+        location: Location.fakeMissingNames(),
+        description:
+            'Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. The quick brown fox jumps over the lazy dog. ',
+        images: images,
+        categories: [
+          ProductCategory(
+            id: 20,
+            simpleName: "Música e hobbies",
+          )
+        ],
+        user: User.fake());
+  }
+
+  static List<Product> fakeList({int quantity}) {
     final faker = new Faker();
     final List<Product> list = [];
 
     int size = quantity ?? faker.randomGenerator.integer(20, min: 3);
 
     for (var i = 0; i < size; i++) {
-      list.add(Product.mock(i + 1));
+      list.add(Product.fakeWithImageUrls(i + 1));
     }
     return list;
   }

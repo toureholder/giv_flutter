@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:giv_flutter/service/preferences/disk_storage_provider.dart';
 import 'package:giv_flutter/model/image/image.dart';
 import 'package:giv_flutter/model/listing/listing_image.dart';
 import 'package:giv_flutter/model/listing/repository/api/request/create_listing_request.dart';
@@ -10,8 +9,9 @@ import 'package:giv_flutter/model/location/location.dart';
 import 'package:giv_flutter/model/location/repository/location_repository.dart';
 import 'package:giv_flutter/model/product/product.dart';
 import 'package:giv_flutter/model/user/user.dart';
+import 'package:giv_flutter/service/preferences/disk_storage_provider.dart';
 import 'package:giv_flutter/util/data/stream_event.dart';
-import 'package:giv_flutter/util/firebase/firebase_storage_util.dart';
+import 'package:giv_flutter/util/firebase/firebase_storage_util_provider.dart';
 import 'package:giv_flutter/util/network/http_response.dart';
 import 'package:meta/meta.dart';
 import 'package:rxdart/rxdart.dart';
@@ -20,19 +20,19 @@ class NewListingBloc {
   final ListingRepository listingRepository;
   final LocationRepository locationRepository;
   final DiskStorageProvider diskStorage;
-  final PublishSubject<NewListingBlocUser> userPublishSubject;
   final PublishSubject<Location> locationPublishSubject;
   final PublishSubject<StreamEvent<double>> uploadStatusPublishSubject;
   final PublishSubject<Product> savedProductPublishSubject;
+  final FirebaseStorageUtilProvider firebaseStorageUtil;
 
   NewListingBloc({
     @required this.locationRepository,
     @required this.listingRepository,
     @required this.diskStorage,
-    @required this.userPublishSubject,
     @required this.locationPublishSubject,
     @required this.uploadStatusPublishSubject,
     @required this.savedProductPublishSubject,
+    @required this.firebaseStorageUtil,
   });
 
   bool isEditing;
@@ -50,7 +50,6 @@ class NewListingBloc {
     return bloc;
   }
 
-  Observable<NewListingBlocUser> get userStream => userPublishSubject.stream;
   Observable<Location> get locationStream => locationPublishSubject.stream;
   Observable<StreamEvent<double>> get uploadStatusStream =>
       uploadStatusPublishSubject.stream;
@@ -67,22 +66,16 @@ class NewListingBloc {
   }
 
   dispose() {
-    userPublishSubject.close();
     locationPublishSubject.close();
     uploadStatusPublishSubject.close();
     savedProductPublishSubject.close();
   }
 
-  loadUser({bool forceShow = false}) {
-    try {
-      var user = diskStorage.getUser();
-      userPublishSubject.sink.add(NewListingBlocUser(user, forceShow));
-    } catch (error) {
-      userPublishSubject.sink.addError(error);
-    }
-  }
+  User getUser() => diskStorage.getUser();
 
-  loadLocation(Location location) async {
+  Location getPreferredLocation() => diskStorage.getLocation();
+
+  loadCompleteLocation(Location location) async {
     Location resolvedLocation;
 
     try {
@@ -92,6 +85,7 @@ class NewListingBloc {
         var response = await locationRepository.getLocationDetails(location);
         if (response.status == HttpStatus.ok) resolvedLocation = response.data;
       }
+
       locationPublishSubject.sink.add(resolvedLocation);
     } catch (error) {
       locationPublishSubject.sink.addError(error);
@@ -113,7 +107,7 @@ class NewListingBloc {
         _listingImages.add(ListingImage(position: i, url: image.url));
       else if (image.hasFile) {
         _uploadProgresses.add(0.0);
-        StorageReference ref = FirebaseStorageUtil.getListingPhotoRef();
+        StorageReference ref = firebaseStorageUtil.getListingPhotoRef();
         _storageReferences.add(ref);
         _uploadTasks.add(ref.putFile(image.file));
       }
@@ -197,11 +191,4 @@ class NewListingBloc {
       savedProductPublishSubject.sink.addError(error);
     }
   }
-}
-
-class NewListingBlocUser {
-  final User user;
-  final bool forceShow;
-
-  NewListingBlocUser(this.user, this.forceShow);
 }

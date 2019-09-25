@@ -1,17 +1,18 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:giv_flutter/base/base_state.dart';
-import 'package:giv_flutter/features/about/about.dart';
+import 'package:giv_flutter/config/i18n/string_localizations.dart';
+import 'package:giv_flutter/features/about/bloc/about_bloc.dart';
+import 'package:giv_flutter/features/about/ui/about.dart';
 import 'package:giv_flutter/features/base/base.dart';
 import 'package:giv_flutter/features/listing/bloc/my_listings_bloc.dart';
 import 'package:giv_flutter/features/listing/ui/my_listings.dart';
 import 'package:giv_flutter/features/settings/bloc/settings_bloc.dart';
-import 'package:giv_flutter/features/settings/ui/profile.dart';
+import 'package:giv_flutter/features/settings/ui/edit_profile.dart';
 import 'package:giv_flutter/model/image/image.dart' as CustomImage;
 import 'package:giv_flutter/model/user/user.dart';
 import 'package:giv_flutter/util/presentation/avatar_image.dart';
 import 'package:giv_flutter/util/presentation/custom_app_bar.dart';
+import 'package:giv_flutter/util/presentation/custom_divider.dart';
 import 'package:giv_flutter/util/presentation/custom_scaffold.dart';
 import 'package:giv_flutter/util/presentation/termos_of_service_acceptance_caption.dart';
 import 'package:giv_flutter/values/custom_icons_icons.dart';
@@ -57,73 +58,16 @@ class _SettingsState extends BaseState<Settings> {
   ListView _mainListView(User user) {
     return ListView(
       children: <Widget>[
-        SettingsListTile(
-          leading: AvatarImage(image: CustomImage.Image(url: user.avatarUrl)),
-          text: string('profile_title'),
-          onTap: _goToProfile,
-        ),
-        Divider(
-          height: 1.0,
-        ),
-        SettingsListTile(
-          leading: Padding(
-            padding: const EdgeInsets.only(left: 4.0),
-            child: Icon(
-              CustomIcons.gift,
-              size: Dimens.settings_tile_icon_size,
-            ),
-          ),
-          text: string('me_listings'),
-          onTap: () {
-            navigation.push(Consumer<MyListingsBloc>(
-              builder: (context, bloc, child) => MyListings(
-                bloc: bloc,
-              ),
-            ));
-          },
-        ),
-        Divider(
-          height: 1.0,
-        ),
-        SettingsListTile(
-          leading: Icon(
-            Icons.help_outline,
-          ),
-          text: string('common_help'),
-          onTap: _whatsAppCustomerService,
-          hideTrailing: true,
-        ),
-        Divider(
-          height: 1.0,
-        ),
-        SettingsListTile(
-          leading: Icon(
-            Icons.info_outline,
-          ),
-          text: string('settings_about'),
-          onTap: () {
-            navigation.push(About());
-          },
-          hideTrailing: true,
-        ),
-        Divider(
-          height: 1.0,
-        ),
-        SettingsListTile(
-          leading: Padding(
-            padding: const EdgeInsets.only(left: 4.0),
-            child: Icon(
-              CustomIcons.logout,
-              size: Dimens.settings_tile_icon_size,
-            ),
-          ),
-          text: string('settings_logout'),
-          onTap: _confirmLogout,
-          hideTrailing: true,
-        ),
-        Divider(
-          height: 1.0,
-        )
+        ProfileTile(avatarUrl: user.avatarUrl, onTap: _goToProfile),
+        CustomDivider(),
+        MyListingsTile(onTap: _goToMyListings),
+        CustomDivider(),
+        HelpTile(onTap: _whatsAppCustomerService),
+        CustomDivider(),
+        AboutTheAppTile(onTap: _goToAbout),
+        CustomDivider(),
+        LogOutTile(onTap: _confirmLogout),
+        CustomDivider()
       ],
     );
   }
@@ -142,6 +86,7 @@ class _SettingsState extends BaseState<Settings> {
         padding: EdgeInsets.symmetric(
             horizontal: Dimens.default_horizontal_margin, vertical: 32.0),
         child: TermsOfServiceAcceptanceCaption(
+          util: _settingsBloc.util,
           prefix: 'terms_acceptance_caption_read_',
         ));
   }
@@ -170,9 +115,6 @@ class _SettingsState extends BaseState<Settings> {
 
   void _logout() async {
     await _settingsBloc.logout();
-    final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
-    _firebaseAuth.signOut();
-    FacebookLogin().logOut();
     navigation.push(Base(), clearStack: true);
   }
 
@@ -182,7 +124,7 @@ class _SettingsState extends BaseState<Settings> {
 
   void _goToProfile() async {
     await navigation.push(Consumer<SettingsBloc>(
-      builder: (context, bloc, child) => Profile(
+      builder: (context, bloc, child) => EditProfile(
         settingsBloc: bloc,
       ),
     ));
@@ -190,6 +132,22 @@ class _SettingsState extends BaseState<Settings> {
     setState(() {
       _user = _settingsBloc.getUser();
     });
+  }
+
+  void _goToMyListings() {
+    navigation.push(Consumer<MyListingsBloc>(
+      builder: (context, bloc, child) => MyListings(
+        bloc: bloc,
+      ),
+    ));
+  }
+
+  void _goToAbout() {
+    navigation.push(Consumer<AboutBloc>(
+      builder: (context, bloc, child) => About(
+        bloc: bloc,
+      ),
+    ));
   }
 }
 
@@ -213,3 +171,103 @@ class SettingsListTile extends StatelessWidget {
     );
   }
 }
+
+class ProfileTile extends StatelessWidget {
+  final String avatarUrl;
+  final GestureTapCallback onTap;
+
+  const ProfileTile({
+    Key key,
+    @required this.avatarUrl,
+    @required this.onTap,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SettingsListTile(
+      leading: AvatarImage(image: CustomImage.Image(url: avatarUrl)),
+      text: GetLocalizedStringFunction(context)('profile_title'),
+      onTap: onTap,
+    );
+  }
+}
+
+class MyListingsTile extends StatelessWidget {
+  final GestureTapCallback onTap;
+
+  const MyListingsTile({Key key, @required this.onTap}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SettingsListTile(
+      leading: Padding(
+        padding: const EdgeInsets.only(left: 4.0),
+        child: Icon(
+          CustomIcons.gift,
+          size: Dimens.settings_tile_icon_size,
+        ),
+      ),
+      text: GetLocalizedStringFunction(context)('me_listings'),
+      onTap: onTap,
+    );
+  }
+}
+
+class HelpTile extends StatelessWidget {
+  final GestureTapCallback onTap;
+
+  const HelpTile({Key key, @required this.onTap}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SettingsListTile(
+      leading: Icon(
+        Icons.help_outline,
+      ),
+      text: GetLocalizedStringFunction(context)('common_help'),
+      onTap: onTap,
+      hideTrailing: true,
+    );
+  }
+}
+
+class LogOutTile extends StatelessWidget {
+  final GestureTapCallback onTap;
+
+  const LogOutTile({Key key, @required this.onTap}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SettingsListTile(
+      leading: Padding(
+        padding: const EdgeInsets.only(left: 4.0),
+        child: Icon(
+          CustomIcons.logout,
+          size: Dimens.settings_tile_icon_size,
+        ),
+      ),
+      text: GetLocalizedStringFunction(context)('settings_logout'),
+      onTap: onTap,
+      hideTrailing: true,
+    );
+  }
+}
+
+class AboutTheAppTile extends StatelessWidget {
+  final GestureTapCallback onTap;
+
+  const AboutTheAppTile({Key key, @required this.onTap}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SettingsListTile(
+      leading: Icon(
+        Icons.info_outline,
+      ),
+      text: GetLocalizedStringFunction(context)('settings_about'),
+      onTap: onTap,
+      hideTrailing: true,
+    );
+  }
+}
+

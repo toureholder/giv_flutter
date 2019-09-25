@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:giv_flutter/base/base_state.dart';
+import 'package:giv_flutter/config/i18n/string_localizations.dart';
 import 'package:giv_flutter/features/log_in/bloc/log_in_bloc.dart';
 import 'package:giv_flutter/features/log_in/helper/login_assistance_helper.dart';
-import 'package:giv_flutter/features/log_in/ui/login_assistance.dart';
+import 'package:giv_flutter/features/log_in/ui/log_in_assistance.dart';
 import 'package:giv_flutter/features/sign_up/bloc/sign_up_bloc.dart';
 import 'package:giv_flutter/features/sign_up/ui/sign_up.dart';
 import 'package:giv_flutter/model/user/repository/api/request/log_in_request.dart';
 import 'package:giv_flutter/model/user/repository/api/response/log_in_response.dart';
 import 'package:giv_flutter/util/form/email_form_field.dart';
+import 'package:giv_flutter/util/form/form_validator.dart';
 import 'package:giv_flutter/util/form/password_form_field.dart';
-import 'package:giv_flutter/util/form/validator.dart';
 import 'package:giv_flutter/util/network/http_response.dart';
 import 'package:giv_flutter/util/presentation/android_theme.dart';
 import 'package:giv_flutter/util/presentation/buttons.dart';
@@ -24,7 +25,11 @@ class LogIn extends StatefulWidget {
   final Widget redirect;
   final LogInBloc bloc;
 
-  const LogIn({Key key, this.bloc, this.redirect}) : super(key: key);
+  const LogIn({
+    Key key,
+    @required this.bloc,
+    this.redirect,
+  }) : super(key: key);
 
   @override
   _LogInState createState() => _LogInState();
@@ -37,15 +42,15 @@ class _LogInState extends BaseState<LogIn> {
   final FocusNode _passwordFocus = FocusNode();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  Validator _validate;
   bool _autovalidate = false;
+  FormValidator _formValidator = FormValidator();
 
   @override
   void initState() {
     super.initState();
     _logInBloc = widget.bloc;
     _logInBloc.loginResponseStream
-        .listen((HttpResponse<LogInResponse> httpResponse) {
+        ?.listen((HttpResponse<LogInResponse> httpResponse) {
       if (httpResponse.isReady) onLoginResponse(httpResponse, widget.redirect);
     });
   }
@@ -53,8 +58,6 @@ class _LogInState extends BaseState<LogIn> {
   @override
   Widget build(BuildContext context) {
     super.build(context);
-
-    _validate = Validator(context);
 
     return CustomScaffold(
       appBar: CustomAppBar(
@@ -92,48 +95,41 @@ class _LogInState extends BaseState<LogIn> {
           focusNode: _emailFocus,
           nextFocus: _passwordFocus,
           controller: _emailController,
+          validator: (String input) => string(_formValidator.email(input)),
         ),
-        Spacing.vertical(Dimens.default_vertical_margin),
+        Spacing.vertical(
+          Dimens.default_vertical_margin,
+        ),
         PasswordFormField(
           labelText: string('sign_in_form_password'),
-          validator: _validate.required,
+          validator: (String input) => string(_formValidator.required(input)),
           enabled: !isLoading,
           focusNode: _passwordFocus,
           controller: _passwordController,
         ),
-        Spacing.vertical(Dimens.sign_in_submit_button_margin_top),
-        PrimaryButton(
-          text: string('sign_in_log_in'),
+        Spacing.vertical(
+          Dimens.sign_in_submit_button_margin_top,
+        ),
+        SubmitLogInButton(
           isLoading: isLoading,
           onPressed: _handleSubmit,
         ),
-        Spacing.vertical(Dimens.default_vertical_margin),
-        TextFlatButton(
-          text: string('log_in_forgot_password'),
+        Spacing.vertical(
+          Dimens.default_vertical_margin,
+        ),
+        ForgotPasswordButton(
           onPressed: _goToForgotPassword,
         ),
-        TextFlatButton(
-          text: string('log_in_didnt_get_verification_email'),
+        ResendEmailButton(
           onPressed: _goToResendActivation,
         ),
-        TextFlatButton(
-          text: string('log_in_help_me'),
+        LogInHelpButton(
           onPressed: _requestHelp,
         ),
-        Spacing.vertical(Dimens.sign_in_submit_button_margin_top),
-        GestureDetector(
-          onTap: _goToSignUp,
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Body2Text(string('sign_in_dont_have_an_account')),
-              MediumFlatPrimaryButton(
-                text: string('sign_in_sign_up'),
-                onPressed: _goToSignUp,
-              )
-            ],
-          ),
-        )
+        Spacing.vertical(
+          Dimens.sign_in_submit_button_margin_top,
+        ),
+        LogInDontHaveAnAccountWidget(onPressed: _goToSignUp),
       ],
     );
   }
@@ -169,11 +165,113 @@ class _LogInState extends BaseState<LogIn> {
 
   void _goToSignUp() {
     navigation.pushReplacement(Consumer<SignUpBloc>(
-      builder: (context, bloc, child) => SignUp(bloc: bloc,),
+      builder: (context, bloc, child) => SignUp(
+        bloc: bloc,
+      ),
     ));
   }
 
   void _requestHelp() {
     handleCustomerServiceRequest(string('log_in_help_me_chat_message'));
+  }
+}
+
+class SubmitLogInButton extends StatelessWidget {
+  final bool isLoading;
+  final VoidCallback onPressed;
+
+  const SubmitLogInButton({
+    Key key,
+    this.isLoading,
+    this.onPressed,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return PrimaryButton(
+      text: GetLocalizedStringFunction(context)('sign_in_log_in'),
+      isLoading: isLoading,
+      onPressed: onPressed,
+    );
+  }
+}
+
+class ForgotPasswordButton extends StatelessWidget {
+  final VoidCallback onPressed;
+
+  const ForgotPasswordButton({
+    Key key,
+    @required this.onPressed,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return TextFlatButton(
+      text: GetLocalizedStringFunction(context)('log_in_forgot_password'),
+      onPressed: onPressed,
+    );
+  }
+}
+
+class ResendEmailButton extends StatelessWidget {
+  final VoidCallback onPressed;
+
+  const ResendEmailButton({
+    Key key,
+    @required this.onPressed,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return TextFlatButton(
+      text: GetLocalizedStringFunction(context)(
+          'log_in_didnt_get_verification_email'),
+      onPressed: onPressed,
+    );
+  }
+}
+
+class LogInHelpButton extends StatelessWidget {
+  final VoidCallback onPressed;
+
+  const LogInHelpButton({
+    Key key,
+    @required this.onPressed,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return TextFlatButton(
+      text: GetLocalizedStringFunction(context)('log_in_help_me'),
+      onPressed: onPressed,
+    );
+  }
+}
+
+class LogInDontHaveAnAccountWidget extends StatelessWidget {
+  final VoidCallback onPressed;
+
+  const LogInDontHaveAnAccountWidget({
+    Key key,
+    @required this.onPressed,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final string = GetLocalizedStringFunction(context);
+
+    return GestureDetector(
+      onTap: onPressed,
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Body2Text(string('sign_in_dont_have_an_account')),
+          MediumFlatPrimaryButton(
+            text: string('sign_in_sign_up'),
+            onPressed: onPressed,
+          )
+        ],
+      ),
+    );
   }
 }

@@ -497,12 +497,16 @@ class Strings {
       "pt": "Enviar"
     },
     "log_in_help_me": {
-      "en": "Do you need help?",
-      "pt": "Precisa de ajuda?"
+      "en": "Need help logging in?",
+      "pt": "Precisa de ajuda para acessar sua conta?"
     },
     "log_in_help_me_chat_message": {
       "en": "Hello! I need help logging in to Alguém Quer?.",
       "pt": "Olá! Preciso de ajuda para acessar minha conta do Alguém Quer?."
+    },
+    "sign_up_help_me": {
+      "en": "Need help creating your account?",
+      "pt": "Precisa de ajuda para criar sua conta?"
     },
     "sign_up_help_me_chat_message": {
       "en": "Hello! I need help creating my Alguém Quer? account.",
@@ -721,8 +725,8 @@ class Strings {
       "pt": "Este anúncio não estará mais visível para outros usuários.\n\nVocê pode reativá-lo quando quiser."
     },
     "hide_listing_accept_button": {
-      "en": "Hide",
-      "pt": "Ocultar"
+      "en": "Hide listing",
+      "pt": "Ocultar anúncio"
     },
     "reactivate_listing_confirmation_title": {
       "en": "Reactivate listing?",
@@ -737,8 +741,8 @@ class Strings {
       "pt": "Este anúncio estará visível para outros usuários."
     },
     "reactivate_listing_accept_button": {
-      "en": "Reactivate",
-      "pt": "Reativar"
+      "en": "Reactivate listing",
+      "pt": "Reativar anúncio"
     },
     "shared_title_options": {
       "en": "Options",

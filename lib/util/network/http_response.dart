@@ -33,7 +33,8 @@ class HttpResponse<T> extends StreamEvent<T> {
     409: HttpStatus.conflict,
     412: HttpStatus.preconditionFailed,
     422: HttpStatus.unprocessableEntity,
-    500: HttpStatus.internalServerError
+    500: HttpStatus.internalServerError,
+    501: HttpStatus.notImplemented,
   };
 }
 
@@ -48,5 +49,6 @@ enum HttpStatus {
   conflict,
   preconditionFailed,
   unprocessableEntity,
-  internalServerError
+  internalServerError,
+  notImplemented,
 }

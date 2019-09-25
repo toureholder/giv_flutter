@@ -39,7 +39,7 @@ class _SignInState extends BaseState<SignIn> {
     super.initState();
     _logInBloc = widget.bloc;
     _logInBloc.loginResponseStream
-        .listen((HttpResponse<LogInResponse> httpResponse) {
+        ?.listen((HttpResponse<LogInResponse> httpResponse) {
       if (httpResponse.isReady) onLoginResponse(httpResponse, widget.redirect);
     });
   }
@@ -105,6 +105,7 @@ class _SignInState extends BaseState<SignIn> {
           _buildLoginButton(isFacebookLoading),
           Spacing.vertical(32.0),
           TermsOfServiceAcceptanceCaption(
+            util: _logInBloc.util,
             prefix: 'terms_acceptance_caption_by_signing_in_',
           )
         ],
@@ -150,7 +151,6 @@ class _SignInState extends BaseState<SignIn> {
 
     switch (result.status) {
       case FacebookLoginStatus.loggedIn:
-        print('result.accessToken.token: ${result.accessToken.token}');
         _logInBloc.loginWithProvider(LogInWithProviderRequest(
             accessToken: result.accessToken.token,
             provider: LogInWithProviderRequest.facebook,

@@ -21,10 +21,12 @@ class StringLocalizations {
       {String formatArg, String formatArg2, String formatArg3}) {
     var localizedString = _getLocalizedValue(key);
 
-    return localizedString
-        .replaceFirst(formatItemSymbol, formatArg ?? '')
-        .replaceFirst(formatItemSymbol, formatArg2 ?? '')
-        .replaceFirst(formatItemSymbol, formatArg3 ?? '');
+    return localizedString == null
+        ? null
+        : localizedString
+            .replaceFirst(formatItemSymbol, formatArg ?? '')
+            .replaceFirst(formatItemSymbol, formatArg2 ?? '')
+            .replaceFirst(formatItemSymbol, formatArg3 ?? '');
   }
 
   String _getLocalizedValue(key) {

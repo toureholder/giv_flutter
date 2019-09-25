@@ -1,39 +1,29 @@
-import 'dart:convert';
-
 import 'package:giv_flutter/model/location/location.dart';
 import 'package:giv_flutter/model/location/repository/cache/location_cache_provider.dart';
+import 'package:giv_flutter/service/preferences/disk_storage_provider.dart';
 import 'package:meta/meta.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class LocationCache implements LocationCacheProvider {
-  static final String _locationDetailKey = 'cache_location_details';
+  static final String locationDetailKey = 'cache_location_details';
 
-  final SharedPreferences sharedPreferences;
+  final DiskStorageProvider diskStorage;
 
-  LocationCache({@required this.sharedPreferences});
+  LocationCache({@required this.diskStorage});
 
   @override
   Location getLocationDetails(Location location) {
-    final cacheKey = getLocationDetailsCacheKey(location);
-
-    String jsonString = sharedPreferences.getString(cacheKey);
-
-    try {
-      return Location.fromJson(jsonDecode(jsonString));
-    } catch (error) {
-      return null;
-    }
+    final cacheKey = _getLocationDetailsCacheKey(location);
+    return diskStorage.getLocationCacheItem(cacheKey);
   }
 
   @override
   Future<bool> saveLocationDetails(Location location) async {
-    final cacheKey = getLocationDetailsCacheKey(location);
-    return sharedPreferences.setString(cacheKey, json.encode(location.toJson()));
+    final cacheKey = _getLocationDetailsCacheKey(location);
+    return diskStorage.setLocationCacheItem(cacheKey, location);
   }
 
-  @override
-  String getLocationDetailsCacheKey(Location location) {
-    final cacheKeyBuffer = StringBuffer(_locationDetailKey);
+  String _getLocationDetailsCacheKey(Location location) {
+    final cacheKeyBuffer = StringBuffer(locationDetailKey);
     cacheKeyBuffer.write('_country_id${location.country?.id}');
     cacheKeyBuffer.write('_state_id${location.state?.id}');
     cacheKeyBuffer.write('_city_id${location.city?.id}');

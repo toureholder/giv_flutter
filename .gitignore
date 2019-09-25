@@ -226,6 +226,9 @@ DerivedData/
 
 ### https://github.com/flutter/flutter/blob/master/.gitignore ###
 
+# Miscellaneous
+coverage/
+
 # Flutter/Dart/Pub related
 .pub-cache/
 .pub/

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:giv_flutter/base/base_state.dart';
 import 'package:giv_flutter/features/product/categories/ui/sub_categories.dart';
 import 'package:giv_flutter/model/product/product_category.dart';
+import 'package:giv_flutter/util/presentation/custom_divider.dart';
 import 'package:giv_flutter/util/presentation/typography.dart';
 
 class CategoryListTile extends StatefulWidget {
@@ -9,8 +10,12 @@ class CategoryListTile extends StatefulWidget {
   final bool returnChoice;
   final List<int> hideThese;
 
-  const CategoryListTile({Key key, this.category, this.returnChoice = false, this.hideThese})
-      : super(key: key);
+  const CategoryListTile({
+    Key key,
+    this.category,
+    this.returnChoice = false,
+    this.hideThese,
+  }) : super(key: key);
 
   @override
   _CategoryListTileState createState() => _CategoryListTileState();
@@ -40,7 +45,7 @@ class _CategoryListTileState extends BaseState<CategoryListTile> {
           trailing: trailing,
           onTap: onTap,
         ),
-        Divider(height: 1.0,)
+        CustomDivider(),
       ],
     );
   }

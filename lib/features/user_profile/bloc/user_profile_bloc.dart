@@ -15,9 +15,7 @@ class UserProfileBloc {
 
   Observable<List<Product>> get productsStream => productsPublishSubject.stream;
 
-  dispose() {
-    productsPublishSubject.close();
-  }
+  dispose() => productsPublishSubject.close();
 
   fetchUserProducts(int userId) async {
     try {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:giv_flutter/base/base_state.dart';
+import 'package:giv_flutter/config/i18n/string_localizations.dart';
 import 'package:giv_flutter/features/product/filters/bloc/location_filter_bloc.dart';
 import 'package:giv_flutter/features/product/filters/ui/location_filter.dart';
 import 'package:giv_flutter/features/product/search_result/bloc/search_result_bloc.dart';
@@ -37,12 +38,12 @@ class SearchResult extends StatefulWidget {
 }
 
 class _SearchResultState extends BaseState<SearchResult> {
-  SearchResultBloc _searchResultBloc;
+  SearchResultBloc _bloc;
 
   @override
   void initState() {
     super.initState();
-    _searchResultBloc = widget.bloc;
+    _bloc = widget.bloc;
     _fetchProducts();
   }
 
@@ -53,6 +54,7 @@ class _SearchResultState extends BaseState<SearchResult> {
     var categoryName = widget.useCanonicalName
         ? widget.category?.canonicalName
         : widget.category?.simpleName;
+
     var title = categoryName ?? widget.searchQuery;
 
     var appBar = widget.category == null
@@ -62,60 +64,31 @@ class _SearchResultState extends BaseState<SearchResult> {
     return CustomScaffold(
         appBar: appBar,
         body: ContentStreamBuilder(
-          stream: _searchResultBloc.result,
+          stream: _bloc.result,
           onHasData: (StreamEvent<ProductSearchResult> event) {
             return event.isLoading
                 ? Center(child: CircularProgressIndicator())
-                : _buildMainListView(context, event.data);
+                : SearchResultListView(
+                    children: _buildResultsGrid(event.data),
+                  );
           },
         ));
   }
 
-  ListView _buildMainListView(
-      BuildContext context, ProductSearchResult result) {
-    return ListView(
-      padding: EdgeInsets.symmetric(
-          horizontal: Dimens.grid(4), vertical: Dimens.grid(8)),
-      children: _buildResultsGrid(context, result),
-    );
-  }
-
-  List<Widget> _buildResultsGrid(
-      BuildContext context, ProductSearchResult result) {
+  List<Widget> _buildResultsGrid(ProductSearchResult result) {
     var widgets = <Widget>[];
 
-    widgets.add(_buildResultsHeader(result)); // Add Header
+    widgets.add(ResultsHeader(
+      result: result,
+      onSearchFilterButtonPressed: () =>
+          _navigateToLocationFilter(result.location),
+    ));
+
     widgets.add(ProductGrid(
       products: result.products,
     ));
 
     return widgets;
-  }
-
-  Container _buildResultsHeader(ProductSearchResult result) {
-    final quantity = result.products.length;
-    final buttonText = result.location?.shortName ?? string('action_filter');
-
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: Dimens.grid(6)),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          BodyText(string('search_result_x_results', formatArg: '$quantity')),
-          Spacing.horizontal(Dimens.default_horizontal_margin),
-          Flexible(
-            child: GreyIconButton(
-              onPressed: () {
-                _navigateToLocationFilter(result.location);
-              },
-              text: buttonText,
-              isFlexible: true,
-              icon: Icon(Icons.tune, color: Colors.grey),
-            ),
-          )
-        ],
-      ),
-    );
   }
 
   _navigateToLocationFilter(Location location) async {
@@ -128,10 +101,91 @@ class _SearchResultState extends BaseState<SearchResult> {
   }
 
   _fetchProducts({Location locationFilter, bool isHardFilter}) {
-    _searchResultBloc.fetchProducts(
+    _bloc.fetchProducts(
         categoryId: widget?.category?.id,
         searchQuery: widget.searchQuery,
         locationFilter: locationFilter,
         isHardFilter: isHardFilter);
+  }
+}
+
+class SearchResultListView extends StatelessWidget {
+  final List<Widget> children;
+
+  const SearchResultListView({
+    Key key,
+    @required this.children,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      padding: EdgeInsets.symmetric(
+        horizontal: Dimens.grid(4),
+        vertical: Dimens.grid(8),
+      ),
+      children: children,
+    );
+  }
+}
+
+class ResultsHeader extends StatelessWidget {
+  final ProductSearchResult result;
+  final VoidCallback onSearchFilterButtonPressed;
+
+  const ResultsHeader({
+    Key key,
+    @required this.result,
+    @required this.onSearchFilterButtonPressed,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final stringFunction = GetLocalizedStringFunction(context);
+    final quantity = result.products.length;
+
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: Dimens.grid(6)),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          BodyText(stringFunction(
+            'search_result_x_results',
+            formatArg: '$quantity',
+          )),
+          Spacing.horizontal(Dimens.default_horizontal_margin),
+          Flexible(
+            child: SearchFilterButton(
+              onPressed: onSearchFilterButtonPressed,
+              buttonText: result.location?.shortName,
+            ),
+          )
+        ],
+      ),
+    );
+  }
+}
+
+class SearchFilterButton extends StatelessWidget {
+  final String buttonText;
+  final VoidCallback onPressed;
+
+  const SearchFilterButton({
+    Key key,
+    this.buttonText,
+    @required this.onPressed,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final text =
+        buttonText ?? GetLocalizedStringFunction(context)('action_filter');
+
+    return GreyIconButton(
+      onPressed: onPressed,
+      text: text,
+      isFlexible: true,
+      icon: Icon(Icons.tune, color: Colors.grey),
+    );
   }
 }

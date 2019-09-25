@@ -111,7 +111,9 @@ class _UserProfileState extends BaseState<UserProfile> {
   }
 
   Widget _productGrid(List<Product> products) {
-    return products.isNotEmpty ? ProductGrid(products: products) : Container();
+    return products.isNotEmpty
+        ? ProductGrid(products: products)
+        : UserProfileEmptyProductGrid();
   }
 
   Padding _textPadding(Widget widget) {
@@ -122,5 +124,12 @@ class _UserProfileState extends BaseState<UserProfile> {
           right: Dimens.default_horizontal_margin),
       child: widget,
     );
+  }
+}
+
+class UserProfileEmptyProductGrid extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container();
   }
 }

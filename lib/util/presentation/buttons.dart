@@ -29,7 +29,11 @@ class PrimaryButton extends StatelessWidget {
   final bool fillWidth;
 
   const PrimaryButton(
-      {Key key, this.onPressed, this.text, this.isLoading = false, this.fillWidth = true})
+      {Key key,
+      this.onPressed,
+      this.text,
+      this.isLoading = false,
+      this.fillWidth = true})
       : super(key: key);
 
   @override
@@ -266,8 +270,7 @@ class TextFlatButton extends StatelessWidget {
   final VoidCallback onPressed;
   final String text;
 
-  const TextFlatButton({Key key, this.onPressed, this.text})
-      : super(key: key);
+  const TextFlatButton({Key key, this.onPressed, this.text}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
