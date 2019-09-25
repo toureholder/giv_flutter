@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:giv_flutter/base/base_state.dart';
-import 'package:giv_flutter/config/preferences/prefs.dart';
+import 'package:giv_flutter/features/customer_service/bloc/customer_service_dialog_bloc.dart';
 import 'package:giv_flutter/util/navigation/navigation.dart';
 import 'package:giv_flutter/util/presentation/typography.dart';
 import 'package:giv_flutter/util/util.dart';
 
 class CustomerServiceDialog extends StatefulWidget {
   final String message;
+  final CustomerServiceDialogBloc bloc;
 
-  const CustomerServiceDialog({Key key, this.message}) : super(key: key);
+  const CustomerServiceDialog({
+    Key key,
+    @required this.bloc,
+    this.message,
+  }) : super(key: key);
 
   @override
   _CustomerServiceDialogState createState() => _CustomerServiceDialogState();
@@ -16,6 +21,13 @@ class CustomerServiceDialog extends StatefulWidget {
 
 class _CustomerServiceDialogState extends BaseState<CustomerServiceDialog> {
   bool showNoMore = false;
+  CustomerServiceDialogBloc _bloc;
+
+  @override
+  void initState() {
+    super.initState();
+    _bloc = widget.bloc;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,8 +54,8 @@ class _CustomerServiceDialogState extends BaseState<CustomerServiceDialog> {
         FlatButton(
             child: Text(string('common_ok')),
             onPressed: () async {
-              if (showNoMore) await Prefs.setHasAgreedToCustomerService();
-              Util.customerService(widget.message);
+              if (showNoMore) await _bloc.setHasAgreedToCustomerService();
+              Util.launchCustomerService(widget.message);
               Navigation(context).pop();
             })
       ],

@@ -14,8 +14,13 @@ import 'package:giv_flutter/values/dimens.dart';
 
 class EditName extends StatefulWidget {
   final User user;
+  final SettingsBloc settingsBloc;
 
-  const EditName({Key key, this.user}) : super(key: key);
+  const EditName({
+    Key key,
+    @required this.settingsBloc,
+    this.user,
+  }) : super(key: key);
 
   @override
   _EditNameState createState() => _EditNameState();
@@ -28,7 +33,7 @@ class _EditNameState extends BaseState<EditName> {
   @override
   void initState() {
     super.initState();
-    _settingsBloc = SettingsBloc();
+    _settingsBloc = widget.settingsBloc;
 
     _settingsBloc.userUpdateStream.listen((HttpResponse<User> httpResponse) {
       if (httpResponse.isReady) onUpdateUserResponse(httpResponse);

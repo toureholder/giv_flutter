@@ -3,6 +3,7 @@ import 'package:giv_flutter/base/base_state.dart';
 import 'package:giv_flutter/features/log_in/bloc/log_in_bloc.dart';
 import 'package:giv_flutter/features/log_in/helper/login_assistance_helper.dart';
 import 'package:giv_flutter/features/log_in/ui/login_assistance.dart';
+import 'package:giv_flutter/features/sign_up/bloc/sign_up_bloc.dart';
 import 'package:giv_flutter/features/sign_up/ui/sign_up.dart';
 import 'package:giv_flutter/model/user/repository/api/request/log_in_request.dart';
 import 'package:giv_flutter/model/user/repository/api/response/log_in_response.dart';
@@ -167,7 +168,9 @@ class _LogInState extends BaseState<LogIn> {
   }
 
   void _goToSignUp() {
-    navigation.pushReplacement(SignUp());
+    navigation.pushReplacement(Consumer<SignUpBloc>(
+      builder: (context, bloc, child) => SignUp(bloc: bloc,),
+    ));
   }
 
   void _requestHelp() {

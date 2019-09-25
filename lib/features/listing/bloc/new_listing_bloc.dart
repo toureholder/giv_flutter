@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:giv_flutter/config/preferences/prefs.dart';
+import 'package:giv_flutter/service/preferences/disk_storage_provider.dart';
 import 'package:giv_flutter/model/image/image.dart';
 import 'package:giv_flutter/model/listing/listing_image.dart';
 import 'package:giv_flutter/model/listing/repository/api/request/create_listing_request.dart';
@@ -12,17 +12,19 @@ import 'package:giv_flutter/model/product/product.dart';
 import 'package:giv_flutter/model/user/user.dart';
 import 'package:giv_flutter/util/data/stream_event.dart';
 import 'package:giv_flutter/util/firebase/firebase_storage_util.dart';
-import 'package:rxdart/rxdart.dart';
 import 'package:giv_flutter/util/network/http_response.dart';
 import 'package:meta/meta.dart';
+import 'package:rxdart/rxdart.dart';
 
 class NewListingBloc {
   final ListingRepository listingRepository;
   final LocationRepository locationRepository;
+  final DiskStorageProvider diskStorage;
 
   NewListingBloc({
     @required this.locationRepository,
     @required this.listingRepository,
+    @required this.diskStorage,
   });
 
   bool isEditing;
@@ -68,9 +70,9 @@ class NewListingBloc {
     _savedProductPublishSubject.close();
   }
 
-  loadUser({bool forceShow = false}) async {
+  loadUser({bool forceShow = false}) {
     try {
-      var user = await Prefs.getUser();
+      var user = diskStorage.getUser();
       _userPublishSubject.sink.add(NewListingBlocUser(user, forceShow));
     } catch (error) {
       _userPublishSubject.sink.addError(error);
@@ -82,7 +84,7 @@ class NewListingBloc {
 
     try {
       if (location == null) {
-        resolvedLocation = await Prefs.getLocation();
+        resolvedLocation = diskStorage.getLocation();
       } else {
         var response = await locationRepository.getLocationDetails(location);
         if (response.status == HttpStatus.ok) resolvedLocation = response.data;

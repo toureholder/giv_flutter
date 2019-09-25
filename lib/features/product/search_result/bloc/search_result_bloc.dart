@@ -1,17 +1,21 @@
-import 'package:giv_flutter/config/preferences/prefs.dart';
+import 'package:giv_flutter/service/preferences/disk_storage_provider.dart';
 import 'package:giv_flutter/model/location/location.dart';
 import 'package:giv_flutter/model/product/product_category.dart';
 import 'package:giv_flutter/model/product/product_search_result.dart';
 import 'package:giv_flutter/model/product/repository/product_repository.dart';
 import 'package:giv_flutter/util/data/stream_event.dart';
 import 'package:giv_flutter/util/network/http_response.dart';
-import 'package:rxdart/rxdart.dart';
 import 'package:meta/meta.dart';
+import 'package:rxdart/rxdart.dart';
 
 class SearchResultBloc {
-  SearchResultBloc({@required this.productRepository});
+  SearchResultBloc({
+    @required this.productRepository,
+    @required this.diskStorage,
+  });
 
   final ProductRepository productRepository;
+  final DiskStorageProvider diskStorage;
 
   final _searchResultPublishSubject =
       PublishSubject<StreamEvent<ProductSearchResult>>();
@@ -47,7 +51,7 @@ class SearchResultBloc {
 
       _searchResultPublishSubject.sink.add(StreamEvent.loading());
 
-      locationFilter = locationFilter ?? await Prefs.getLocation();
+      locationFilter = locationFilter ?? diskStorage.getLocation();
 
       var response = categoryId != null
           ? await productRepository.getProductsByCategory(

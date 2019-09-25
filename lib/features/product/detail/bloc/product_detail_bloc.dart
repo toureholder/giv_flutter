@@ -4,6 +4,7 @@ import 'package:giv_flutter/model/listing/repository/listing_repository.dart';
 import 'package:giv_flutter/model/location/location.dart';
 import 'package:giv_flutter/model/location/repository/location_repository.dart';
 import 'package:giv_flutter/model/product/product.dart';
+import 'package:giv_flutter/service/session/session_provider.dart';
 import 'package:giv_flutter/util/data/stream_event.dart';
 import 'package:giv_flutter/util/network/http_response.dart';
 import 'package:rxdart/rxdart.dart';
@@ -12,10 +13,12 @@ import 'package:meta/meta.dart';
 class ProductDetailBloc {
   final LocationRepository locationRepository;
   final ListingRepository listingRepository;
+  final SessionProvider session;
 
   ProductDetailBloc({
     @required this.locationRepository,
     @required this.listingRepository,
+    @required this.session,
   });
 
   final _locationPublishSubject = PublishSubject<Location>();
@@ -38,6 +41,8 @@ class ProductDetailBloc {
     _updateListingPublishSubject.close();
     _loadingPublishSubject.close();
   }
+
+  isAuthenticated() => session.isAuthenticated();
 
   fetchLocationDetails(Location location) async {
     try {

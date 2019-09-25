@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:giv_flutter/base/base_state.dart';
-import 'package:giv_flutter/config/preferences/prefs.dart';
 import 'package:giv_flutter/features/base/base.dart';
 import 'package:giv_flutter/features/listing/bloc/my_listings_bloc.dart';
 import 'package:giv_flutter/features/listing/bloc/new_listing_bloc.dart';
@@ -8,6 +7,7 @@ import 'package:giv_flutter/features/listing/ui/my_listings.dart';
 import 'package:giv_flutter/features/listing/ui/new_listing.dart';
 import 'package:giv_flutter/features/product/detail/bloc/product_detail_bloc.dart';
 import 'package:giv_flutter/features/product/detail/ui/i_want_it_dialog.dart';
+import 'package:giv_flutter/features/settings/bloc/settings_bloc.dart';
 import 'package:giv_flutter/features/settings/ui/settings.dart';
 import 'package:giv_flutter/features/user_profile/bloc/user_profile_bloc.dart';
 import 'package:giv_flutter/features/user_profile/ui/user_profile.dart';
@@ -392,8 +392,8 @@ class _ProductDetailState extends BaseState<ProductDetail> {
     ));
   }
 
-  _showIWantItDialog(String message) async {
-    var isAuthenticated = await Prefs.isAuthenticated();
+  _showIWantItDialog(String message) {
+    var isAuthenticated = _productDetailBloc.isAuthenticated();
 
     final fullPhoneNumber =
         '${_product?.user?.countryCallingCode}${_product?.user?.phoneNumber}';
@@ -431,8 +431,19 @@ class _ProductDetailState extends BaseState<ProductDetail> {
   }
 
   void _goToMyListingsReloaded() {
-    navigation.push(Base(), hasAnimation: false, clearStack: true);
-    navigation.push(Settings(), hasAnimation: false);
+    navigation.push(
+      Base(),
+      hasAnimation: false,
+      clearStack: true,
+    );
+    navigation.push(
+      Consumer<SettingsBloc>(
+        builder: (context, bloc, child) => Settings(
+          bloc: bloc,
+        ),
+      ),
+      hasAnimation: false,
+    );
     navigation.push(
         Consumer<MyListingsBloc>(
           builder: (context, bloc, child) => MyListings(

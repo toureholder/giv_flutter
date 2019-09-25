@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:giv_flutter/base/base_state.dart';
 import 'package:giv_flutter/base/custom_error.dart';
-import 'package:giv_flutter/config/preferences/prefs.dart';
 import 'package:giv_flutter/features/base/base.dart';
 import 'package:giv_flutter/features/force_update/force_update.dart';
 import 'package:giv_flutter/features/splash/bloc/splash_bloc.dart';
@@ -66,22 +65,22 @@ class _SplashState extends BaseState<Splash> {
     if (response.status == HttpStatus.preconditionFailed)
       throw CustomError.forceUpdate;
 
-    if (response.data != null) await Prefs.setSettings(response.data);
+    if (response.data != null) await bloc.persistAppConfig(response.data);
   }
 
   Future _getLocation() async {
-    bool hasPreferredLocation = await Prefs.hasPreferredLocation();
+    bool hasPreferredLocation = bloc.hasPreferredLocation();
     if (!hasPreferredLocation) {
       final response = await bloc.getMyLocation(Coordinates(0, 0));
-      if (response.data != null) await Prefs.setLocation(Location.mock());
+      if (response.data != null) await bloc.persistLocation(Location.mock());
     }
   }
 
   Future _updateCurrentUser() async {
-    bool isAuthenticated = await Prefs.isAuthenticated();
+    bool isAuthenticated = bloc.isAuthenticated();
     if (isAuthenticated) {
       final response = await bloc.getMe();
-      if (response.data != null) await Prefs.setUser(response.data);
+      if (response.data != null) await bloc.persistUser(response.data);
     }
   }
 }

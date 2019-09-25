@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:giv_flutter/base/base_state.dart';
-import 'package:giv_flutter/config/preferences/prefs.dart';
 import 'package:giv_flutter/features/about/about.dart';
 import 'package:giv_flutter/features/base/base.dart';
 import 'package:giv_flutter/features/listing/bloc/my_listings_bloc.dart';
@@ -11,8 +10,6 @@ import 'package:giv_flutter/features/settings/bloc/settings_bloc.dart';
 import 'package:giv_flutter/features/settings/ui/profile.dart';
 import 'package:giv_flutter/model/image/image.dart' as CustomImage;
 import 'package:giv_flutter/model/user/user.dart';
-import 'package:giv_flutter/util/data/content_stream_builder.dart';
-import 'package:giv_flutter/util/data/stream_event.dart';
 import 'package:giv_flutter/util/presentation/avatar_image.dart';
 import 'package:giv_flutter/util/presentation/custom_app_bar.dart';
 import 'package:giv_flutter/util/presentation/custom_scaffold.dart';
@@ -22,18 +19,23 @@ import 'package:giv_flutter/values/dimens.dart';
 import 'package:provider/provider.dart';
 
 class Settings extends StatefulWidget {
+  final SettingsBloc bloc;
+
+  const Settings({Key key, @required this.bloc}) : super(key: key);
+
   @override
   _SettingsState createState() => _SettingsState();
 }
 
 class _SettingsState extends BaseState<Settings> {
   SettingsBloc _settingsBloc;
+  User _user;
 
   @override
   void initState() {
     super.initState();
-    _settingsBloc = SettingsBloc();
-    _settingsBloc.loadUserFromPrefs();
+    _settingsBloc = widget.bloc;
+    _user = _settingsBloc.getUser();
   }
 
   @override
@@ -42,12 +44,7 @@ class _SettingsState extends BaseState<Settings> {
 
     return CustomScaffold(
       appBar: CustomAppBar(title: string('common_me')),
-      body: ContentStreamBuilder(
-        stream: _settingsBloc.userStream,
-        onHasData: (StreamEvent<User> event) {
-          if (event.isReady) return _stack(event.data);
-        },
-      ),
+      body: _stack(_user),
     );
   }
 
@@ -172,7 +169,7 @@ class _SettingsState extends BaseState<Settings> {
   }
 
   void _logout() async {
-    await Prefs.logout();
+    await _settingsBloc.logout();
     final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
     _firebaseAuth.signOut();
     FacebookLogin().logOut();
@@ -184,8 +181,15 @@ class _SettingsState extends BaseState<Settings> {
   }
 
   void _goToProfile() async {
-    await navigation.push(Profile());
-    _settingsBloc.loadUserFromPrefs();
+    await navigation.push(Consumer<SettingsBloc>(
+      builder: (context, bloc, child) => Profile(
+        settingsBloc: bloc,
+      ),
+    ));
+
+    setState(() {
+      _user = _settingsBloc.getUser();
+    });
   }
 }
 

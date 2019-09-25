@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:giv_flutter/base/base_state.dart';
-import 'package:giv_flutter/config/preferences/prefs.dart';
 import 'package:giv_flutter/features/product/filters/bloc/location_filter_bloc.dart';
 import 'package:giv_flutter/model/location/location.dart';
 import 'package:giv_flutter/model/location/location_list.dart';
@@ -238,7 +237,7 @@ class _LocationFilterState extends BaseState<LocationFilter> {
   bool _hasChangedLocation() => !_currentLocation.equals(widget.location);
 
   void returnCurrentLocation() async {
-    await Prefs.setLocation(_currentLocation);
+    await _locationFilterBloc.setLocation(_currentLocation);
     Navigator.pop(context, _currentLocation);
   }
 

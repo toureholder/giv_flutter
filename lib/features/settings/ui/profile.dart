@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:giv_flutter/base/base_state.dart';
 import 'package:giv_flutter/config/config.dart';
@@ -11,8 +12,6 @@ import 'package:giv_flutter/model/image/image.dart' as CustomImage;
 import 'package:giv_flutter/model/user/user.dart';
 import 'package:giv_flutter/util/firebase/firebase_storage_util.dart';
 import 'package:giv_flutter/util/network/http_response.dart';
-import 'package:giv_flutter/util/data/content_stream_builder.dart';
-import 'package:giv_flutter/util/data/stream_event.dart';
 import 'package:giv_flutter/util/presentation/avatar_image.dart';
 import 'package:giv_flutter/util/presentation/bottom_sheet.dart';
 import 'package:giv_flutter/util/presentation/custom_app_bar.dart';
@@ -21,9 +20,13 @@ import 'package:giv_flutter/util/presentation/typography.dart';
 import 'package:giv_flutter/values/dimens.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:firebase_storage/firebase_storage.dart';
+import 'package:provider/provider.dart';
 
 class Profile extends StatefulWidget {
+  final SettingsBloc settingsBloc;
+
+  const Profile({Key key, @required this.settingsBloc}) : super(key: key);
+
   @override
   _ProfileState createState() => _ProfileState();
 }
@@ -38,19 +41,13 @@ class _ProfileState extends BaseState<Profile> {
   @override
   void initState() {
     super.initState();
-    _settingsBloc = SettingsBloc();
+    _settingsBloc = widget.settingsBloc;
 
     _settingsBloc.userUpdateStream.listen((HttpResponse<User> httpResponse) {
       if (httpResponse.isReady) _isSavingImage = false;
     });
 
-    _settingsBloc.loadUserFromPrefs();
-  }
-
-  @override
-  void dispose() {
-    _settingsBloc.dispose();
-    super.dispose();
+    _user = _settingsBloc.getUser();
   }
 
   @override
@@ -62,13 +59,7 @@ class _ProfileState extends BaseState<Profile> {
         appBar: CustomAppBar(
           title: string('profile_title'),
         ),
-        body: ContentStreamBuilder(
-          stream: _settingsBloc.userStream,
-          onHasData: (StreamEvent<User> event) {
-            _setCurrentUser(event.data);
-            return _buildListView();
-          },
-        ),
+        body: _buildListView(),
       ),
     );
   }
@@ -210,29 +201,40 @@ class _ProfileState extends BaseState<Profile> {
     );
   }
 
-  void _setCurrentUser(User user) {
-    _user = user;
-  }
-
   void _editBio() async {
-    final result = await navigation.push(EditBio(
-      user: _user,
+    final result = await navigation.push(Consumer<SettingsBloc>(
+      builder: (context, bloc, child) => EditBio(
+        settingsBloc: bloc,
+        user: _user,
+      ),
     ));
-    if (result != null) _settingsBloc.loadUserFromPrefs();
+    if (result != null) _reloadUser();
   }
 
   void _editName() async {
-    final result = await navigation.push(EditName(
-      user: _user,
+    final result = await navigation.push(Consumer<SettingsBloc>(
+      builder: (context, bloc, child) => EditName(
+        settingsBloc: bloc,
+        user: _user,
+      ),
     ));
-    if (result != null) _settingsBloc.loadUserFromPrefs();
+    if (result != null) _reloadUser();
   }
 
   void _editPhoneNumber() async {
-    final result = await navigation.push(EditPhoneNumber(
-      user: _user,
+    final result = await navigation.push(Consumer<SettingsBloc>(
+      builder: (context, bloc, child) => EditPhoneNumber(
+        settingsBloc: bloc,
+        user: _user,
+      ),
     ));
-    if (result != null) _settingsBloc.loadUserFromPrefs();
+    if (result != null) _reloadUser();
+  }
+
+  void _reloadUser() {
+    setState(() {
+      _user = _settingsBloc.getUser();
+    });
   }
 
   void _showAddImageModal() {

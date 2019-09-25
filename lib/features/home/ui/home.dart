@@ -1,7 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:giv_flutter/base/base_state.dart';
-import 'package:giv_flutter/config/preferences/prefs.dart';
 import 'package:giv_flutter/features/home/bloc/home_bloc.dart';
 import 'package:giv_flutter/features/home/model/home_content.dart';
 import 'package:giv_flutter/features/home/ui/home_carousel.dart';
@@ -10,24 +9,24 @@ import 'package:giv_flutter/features/product/detail/bloc/product_detail_bloc.dar
 import 'package:giv_flutter/features/product/detail/ui/product_detail.dart';
 import 'package:giv_flutter/features/product/search_result/bloc/search_result_bloc.dart';
 import 'package:giv_flutter/features/product/search_result/ui/search_result.dart';
+import 'package:giv_flutter/features/settings/bloc/settings_bloc.dart';
 import 'package:giv_flutter/features/settings/ui/settings.dart';
 import 'package:giv_flutter/features/sign_in/ui/sign_in.dart';
 import 'package:giv_flutter/features/user_profile/bloc/user_profile_bloc.dart';
 import 'package:giv_flutter/features/user_profile/ui/user_profile.dart';
 import 'package:giv_flutter/model/carousel/carousel_item.dart';
+import 'package:giv_flutter/model/image/image.dart' as CustomImage;
 import 'package:giv_flutter/model/product/product.dart';
 import 'package:giv_flutter/model/product/product_category.dart';
-import 'package:giv_flutter/model/user/user.dart';
 import 'package:giv_flutter/util/data/content_stream_builder.dart';
-import 'package:giv_flutter/util/presentation/buttons.dart';
 import 'package:giv_flutter/util/presentation/avatar_image.dart';
+import 'package:giv_flutter/util/presentation/buttons.dart';
 import 'package:giv_flutter/util/presentation/custom_app_bar.dart';
 import 'package:giv_flutter/util/presentation/custom_scaffold.dart';
 import 'package:giv_flutter/util/presentation/rounded_corners.dart';
 import 'package:giv_flutter/util/presentation/spacing.dart';
 import 'package:giv_flutter/util/presentation/typography.dart';
 import 'package:giv_flutter/values/dimens.dart';
-import 'package:giv_flutter/model/image/image.dart' as CustomImage;
 import 'package:provider/provider.dart';
 
 class Home extends StatefulWidget {
@@ -68,24 +67,16 @@ class _HomeState extends BaseState<Home> {
   }
 
   Row _buildAppBarActionsRow() {
+    final authenticatedUser = _homeBloc.getUser();
+    final userWidget = authenticatedUser == null
+        ? _buildSignInButton()
+        : _userAvatar(authenticatedUser.avatarUrl);
+
     return Row(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
-        FutureBuilder<User>(
-          future: Prefs.getUser(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.done) {
-              if (snapshot.hasData) {
-                return _userAvatar(snapshot.data.avatarUrl);
-              } else {
-                return _buildSignInButton();
-              }
-            } else {
-              return Container();
-            }
-          },
-        ),
+        userWidget,
       ],
     );
   }
@@ -96,7 +87,11 @@ class _HomeState extends BaseState<Home> {
       child: GestureDetector(
         child: AvatarImage(image: CustomImage.Image(url: imageUrl)),
         onTap: () {
-          navigation.push(Settings());
+          navigation.push(Consumer<SettingsBloc>(
+            builder: (context, bloc, child) => Settings(
+              bloc: bloc,
+            ),
+          ));
         },
       ),
     );

@@ -1,10 +1,16 @@
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:giv_flutter/config/preferences/prefs.dart';
+import 'package:giv_flutter/service/preferences/shared_preferences_storage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 
 class FirebaseStorageUtil {
+  // TODO: Inject an instance as a dependency and depend on disk storage
+
   static Future<StorageReference> getProfilePhotoRef() async {
-    final user = await Prefs.getUser();
+    final sharedPreferences = await SharedPreferences.getInstance();
+    final storage = SharedPreferencesStorage(sharedPreferences);
+
+    final user = storage.getUser();
     final timeStamp = DateTime.now().millisecondsSinceEpoch;
     return FirebaseStorage.instance
         .ref()

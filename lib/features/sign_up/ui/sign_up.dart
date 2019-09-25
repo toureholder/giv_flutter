@@ -26,6 +26,11 @@ import 'package:giv_flutter/values/dimens.dart';
 import 'package:provider/provider.dart';
 
 class SignUp extends StatefulWidget {
+  final SignUpBloc bloc;
+
+  const SignUp({Key key, @required this.bloc}) : super(key: key);
+
+
   @override
   _SignUpState createState() => _SignUpState();
 }
@@ -45,16 +50,10 @@ class _SignUpState extends BaseState<SignUp> {
   @override
   void initState() {
     super.initState();
-    _signUpBloc = SignUpBloc();
+    _signUpBloc = widget.bloc;
     _signUpBloc.responseStream.listen((HttpResponse<ApiResponse> httpResponse) {
       if (httpResponse.isReady) _onSignUpResponse(httpResponse);
     });
-  }
-
-  @override
-  void dispose() {
-    _signUpBloc.dispose();
-    super.dispose();
   }
 
   @override

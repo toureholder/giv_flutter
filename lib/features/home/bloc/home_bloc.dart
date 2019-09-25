@@ -1,8 +1,10 @@
+import 'package:giv_flutter/service/preferences/disk_storage_provider.dart';
 import 'package:giv_flutter/features/home/model/home_content.dart';
 import 'package:giv_flutter/model/carousel/carousel_item.dart';
 import 'package:giv_flutter/model/carousel/repository/carousel_repository.dart';
 import 'package:giv_flutter/model/product/product_category.dart';
 import 'package:giv_flutter/model/product/repository/product_repository.dart';
+import 'package:giv_flutter/model/user/user.dart';
 import 'package:giv_flutter/util/network/http_response.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:meta/meta.dart';
@@ -11,10 +13,12 @@ class HomeBloc {
   HomeBloc({
     @required this.productRepository,
     @required this.carouselRepository,
+    @required this.diskStorage,
   });
 
   final ProductRepository productRepository;
   final CarouselRepository carouselRepository;
+  final DiskStorageProvider diskStorage;
   final _contentPublishSubject = PublishSubject<HomeContent>();
 
   Observable<HomeContent> get content => _contentPublishSubject.stream;
@@ -22,6 +26,8 @@ class HomeBloc {
   dispose() {
     _contentPublishSubject.close();
   }
+
+  User getUser() => diskStorage.getUser();
 
   fetchContent() async {
     try {

@@ -2,10 +2,11 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:giv_flutter/config/config.dart';
-import 'package:giv_flutter/config/preferences/prefs.dart';
+import 'package:giv_flutter/service/preferences/shared_preferences_storage.dart';
 import 'package:giv_flutter/util/network/custom_http_headers.dart';
 import 'package:http/http.dart' as http;
 import 'package:meta/meta.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class BaseApi {
   BaseApi({@required this.client});
@@ -17,6 +18,7 @@ class BaseApi {
 
   http.Client tempClient;
 
+  // TODO: Depend on disk storage
 
   Future<http.Response> delete(String url) async {
     // Remove after refactor
@@ -61,7 +63,10 @@ class BaseApi {
   }
 
   Future<Map<String, String>> _getDefaultHeaders() async {
-    String token = await Prefs.getServerToken();
+    final sharedPreferences = await SharedPreferences.getInstance();
+    final storage = SharedPreferencesStorage(sharedPreferences);
+
+    String token = storage.getServerToken();
     return {
       HttpHeaders.authorizationHeader: '$bearer $token',
       CustomHttpHeaders.clientVersionHeader: Config.buildNumber.toString(),

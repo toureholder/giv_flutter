@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:giv_flutter/config/i18n/string_localizations.dart';
-import 'package:giv_flutter/config/preferences/prefs.dart';
 import 'package:giv_flutter/features/base/base.dart';
+import 'package:giv_flutter/features/customer_service/bloc/customer_service_dialog_bloc.dart';
 import 'package:giv_flutter/features/customer_service/customer_service_dialog.dart';
 import 'package:giv_flutter/model/user/user.dart';
+import 'package:giv_flutter/service/preferences/shared_preferences_storage.dart';
 import 'package:giv_flutter/util/navigation/navigation.dart';
 import 'package:giv_flutter/util/network/http_response.dart';
 import 'package:giv_flutter/util/util.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class BaseState<T extends StatefulWidget> extends State<T> {
   Navigation navigation;
@@ -78,7 +81,7 @@ class BaseState<T extends StatefulWidget> extends State<T> {
               FlatButton(
                   child: Text(string('action_report')),
                   onPressed: () {
-                    Util.customerService(message);
+                    Util.launchCustomerService(message);
                     Navigation(context).pop();
                   }),
               FlatButton(
@@ -111,10 +114,13 @@ class BaseState<T extends StatefulWidget> extends State<T> {
   }
 
   void handleCustomerServiceRequest(String message) async {
-    final hasAgreed = await Prefs.hasAgreedToCustomerService();
+    final sharedPreferences = await SharedPreferences.getInstance();
+    final storage = SharedPreferencesStorage(sharedPreferences);
+
+    final hasAgreed = storage.hasAgreedToCustomerService();
 
     if (hasAgreed)
-      Util.customerService(message);
+      Util.launchCustomerService(message);
     else
       showCustomerServiceDialog(message);
   }
@@ -126,7 +132,12 @@ class BaseState<T extends StatefulWidget> extends State<T> {
         context: context,
         barrierDismissible: true,
         builder: (context) {
-          return CustomerServiceDialog(message: message);
+          return Consumer<CustomerServiceDialogBloc>(
+            builder: (context, bloc, child) => CustomerServiceDialog(
+              bloc: bloc,
+              message: message,
+            ),
+          );
         });
   }
 }

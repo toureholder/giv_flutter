@@ -14,8 +14,13 @@ import 'package:giv_flutter/values/dimens.dart';
 
 class EditBio extends StatefulWidget {
   final User user;
+  final SettingsBloc settingsBloc;
 
-  const EditBio({Key key, this.user}) : super(key: key);
+  const EditBio({
+    Key key,
+    @required this.settingsBloc,
+    this.user,
+  }) : super(key: key);
 
   @override
   _EditBioState createState() => _EditBioState();
@@ -28,7 +33,7 @@ class _EditBioState extends BaseState<EditBio> {
   @override
   void initState() {
     super.initState();
-    _settingsBloc = SettingsBloc();
+    _settingsBloc = widget.settingsBloc;
 
     _settingsBloc.userUpdateStream.listen((HttpResponse<User> httpResponse) {
       if (httpResponse.isReady) onUpdateUserResponse(httpResponse);
@@ -41,20 +46,13 @@ class _EditBioState extends BaseState<EditBio> {
   }
 
   @override
-  void dispose() {
-    _settingsBloc.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     super.build(context);
     return CustomScaffold(
-      appBar: CustomAppBar(
-        title: string('settings_bio'),
-      ),
-      body: _buildStreamBuilder()
-    );
+        appBar: CustomAppBar(
+          title: string('settings_bio'),
+        ),
+        body: _buildStreamBuilder());
   }
 
   StreamBuilder<HttpResponse<User>> _buildStreamBuilder() {
@@ -112,9 +110,7 @@ class _EditBioState extends BaseState<EditBio> {
       return;
     }
 
-    final update = {
-      User.bioKey: _controller.text
-    };
+    final update = {User.bioKey: _controller.text};
 
     _settingsBloc.updateUser(update);
   }

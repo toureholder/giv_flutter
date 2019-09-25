@@ -17,6 +17,7 @@ import 'package:giv_flutter/features/product/categories/bloc/categories_bloc.dar
 import 'package:giv_flutter/features/product/categories/ui/categories.dart';
 import 'package:giv_flutter/features/product/filters/bloc/location_filter_bloc.dart';
 import 'package:giv_flutter/features/product/filters/ui/location_filter.dart';
+import 'package:giv_flutter/features/settings/bloc/settings_bloc.dart';
 import 'package:giv_flutter/features/settings/ui/edit_phone_number.dart';
 import 'package:giv_flutter/features/sign_in/ui/sign_in.dart';
 import 'package:giv_flutter/model/image/image.dart' as CustomImage;
@@ -42,7 +43,8 @@ class NewListing extends StatefulWidget {
   final Product product;
   final NewListingBloc bloc;
 
-  const NewListing({Key key, @required this.bloc, this.product}) : super(key: key);
+  const NewListing({Key key, @required this.bloc, this.product})
+      : super(key: key);
 
   @override
   _NewListingState createState() => _NewListingState();
@@ -79,8 +81,11 @@ class _NewListingState extends BaseState<NewListing> {
     _newListingBloc.userStream.listen((NewListingBlocUser blocUser) {
       if (blocUser?.user == null)
         navigation.pushReplacement(Consumer<LogInBloc>(
-          builder: (context, bloc, child) =>
-              SignIn(bloc: bloc, redirect: NewListing(bloc: widget.bloc,)),
+          builder: (context, bloc, child) => SignIn(
+              bloc: bloc,
+              redirect: NewListing(
+                bloc: widget.bloc,
+              )),
         ));
     });
   }
@@ -537,7 +542,12 @@ class _NewListingState extends BaseState<NewListing> {
   }
 
   void _editPhoneNumber(User user) async {
-    final result = await navigation.push(EditPhoneNumber(user: user));
+    final result = await navigation.push(Consumer<SettingsBloc>(
+      builder: (context, bloc, child) => EditPhoneNumber(
+        settingsBloc: bloc,
+        user: user,
+      ),
+    ));
     if (result != null) {
       _isTelephoneError = false;
       _newListingBloc.loadUser(forceShow: true);

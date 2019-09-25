@@ -1,3 +1,4 @@
+import 'package:giv_flutter/service/preferences/disk_storage_provider.dart';
 import 'package:giv_flutter/model/location/location.dart';
 import 'package:giv_flutter/model/location/location_list.dart';
 import 'package:giv_flutter/model/location/location_part.dart';
@@ -9,12 +10,16 @@ import 'package:meta/meta.dart';
 
 class LocationFilterBloc {
   final LocationRepository locationRepository;
+  final DiskStorageProvider diskStorage;
 
   final _listPublishSubject = PublishSubject<LocationList>();
   final _statesPublishSubject = PublishSubject<StreamEvent<List<State>>>();
   final _citiesPublishSubject = PublishSubject<StreamEvent<List<City>>>();
 
-  LocationFilterBloc({@required this.locationRepository});
+  LocationFilterBloc({
+    @required this.locationRepository,
+    @required this.diskStorage,
+  });
 
   Observable<LocationList> get listStream => _listPublishSubject.stream;
 
@@ -79,6 +84,8 @@ class LocationFilterBloc {
       _citiesPublishSubject.sink.addError(error);
     }
   }
+
+  setLocation(Location location) => diskStorage.setLocation(location);
 
   _clearCities() {
     _citiesPublishSubject.sink.add(StreamEvent<List<City>>(

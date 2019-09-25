@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:giv_flutter/base/app.dart';
+import 'package:giv_flutter/service/preferences/shared_preferences_storage.dart';
+import 'package:giv_flutter/features/customer_service/bloc/customer_service_dialog_bloc.dart';
 import 'package:giv_flutter/features/home/bloc/home_bloc.dart';
 import 'package:giv_flutter/features/listing/bloc/my_listings_bloc.dart';
 import 'package:giv_flutter/features/listing/bloc/new_listing_bloc.dart';
@@ -10,6 +12,8 @@ import 'package:giv_flutter/features/product/categories/bloc/categories_bloc.dar
 import 'package:giv_flutter/features/product/detail/bloc/product_detail_bloc.dart';
 import 'package:giv_flutter/features/product/filters/bloc/location_filter_bloc.dart';
 import 'package:giv_flutter/features/product/search_result/bloc/search_result_bloc.dart';
+import 'package:giv_flutter/features/settings/bloc/settings_bloc.dart';
+import 'package:giv_flutter/features/sign_up/bloc/sign_up_bloc.dart';
 import 'package:giv_flutter/features/splash/bloc/splash_bloc.dart';
 import 'package:giv_flutter/features/user_profile/bloc/user_profile_bloc.dart';
 import 'package:giv_flutter/model/app_config/repository/api/app_config_api.dart';
@@ -26,6 +30,7 @@ import 'package:giv_flutter/model/product/repository/cache/product_cache.dart';
 import 'package:giv_flutter/model/product/repository/product_repository.dart';
 import 'package:giv_flutter/model/user/repository/api/user_api.dart';
 import 'package:giv_flutter/model/user/repository/user_repository.dart';
+import 'package:giv_flutter/service/session/session.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -48,6 +53,9 @@ void main() async {
   final productCache = ProductCache(sharedPreferences: sharedPreferences);
   final locationCache = LocationCache(sharedPreferences: sharedPreferences);
 
+  final diskStorage = SharedPreferencesStorage(sharedPreferences);
+  final session = Session(diskStorage);
+
   final productRepository = ProductRepository(
     productCache: productCache,
     productApi: productApi,
@@ -68,13 +76,19 @@ void main() async {
 
   final dependencies = <SingleChildCloneableWidget>[
     Provider<LogInBloc>(
-      builder: (_) => LogInBloc(userRepository: userRepository),
+      builder: (_) => LogInBloc(
+        userRepository: userRepository,
+        session: session,
+      ),
     ),
     Provider<UserProfileBloc>(
       builder: (_) => UserProfileBloc(productRepository: productRepository),
     ),
     Provider<SearchResultBloc>(
-      builder: (_) => SearchResultBloc(productRepository: productRepository),
+      builder: (_) => SearchResultBloc(
+        productRepository: productRepository,
+        diskStorage: diskStorage,
+      ),
     ),
     Provider<MyListingsBloc>(
       builder: (_) => MyListingsBloc(productRepository: productRepository),
@@ -83,6 +97,7 @@ void main() async {
       builder: (_) => HomeBloc(
         productRepository: productRepository,
         carouselRepository: carouselRepository,
+        diskStorage: diskStorage,
       ),
     ),
     Provider<CategoriesBloc>(
@@ -90,26 +105,44 @@ void main() async {
     ),
     Provider<SplashBloc>(
       builder: (_) => SplashBloc(
-        userRepository: userRepository,
-        locationRepository: locationRepository,
-        appConfigRepository: appConfigRepository,
-      ),
+          userRepository: userRepository,
+          locationRepository: locationRepository,
+          appConfigRepository: appConfigRepository,
+          diskStorage: diskStorage,
+          session: session),
     ),
     Provider<LocationFilterBloc>(
-      builder: (_) =>
-          LocationFilterBloc(locationRepository: locationRepository),
+      builder: (_) => LocationFilterBloc(
+        locationRepository: locationRepository,
+        diskStorage: diskStorage,
+      ),
     ),
     Provider<NewListingBloc>(
       builder: (_) => NewListingBloc(
         locationRepository: locationRepository,
         listingRepository: listingRepository,
+        diskStorage: diskStorage,
       ),
     ),
     Provider<ProductDetailBloc>(
       builder: (_) => ProductDetailBloc(
         locationRepository: locationRepository,
         listingRepository: listingRepository,
+        session: session,
       ),
+    ),
+    Provider<SettingsBloc>(
+      builder: (_) => SettingsBloc(
+        userRepository: userRepository,
+        diskStorage: diskStorage,
+        session: session,
+      ),
+    ),
+    Provider<CustomerServiceDialogBloc>(
+      builder: (_) => CustomerServiceDialogBloc(diskStorage: diskStorage),
+    ),
+    Provider<SignUpBloc>(
+      builder: (_) => SignUpBloc(userRepository: userRepository),
     ),
   ];
 

@@ -10,6 +10,8 @@ import 'package:giv_flutter/features/product/categories/bloc/categories_bloc.dar
 import 'package:giv_flutter/features/product/detail/bloc/product_detail_bloc.dart';
 import 'package:giv_flutter/features/product/filters/bloc/location_filter_bloc.dart';
 import 'package:giv_flutter/features/product/search_result/bloc/search_result_bloc.dart';
+import 'package:giv_flutter/features/settings/bloc/settings_bloc.dart';
+import 'package:giv_flutter/features/sign_up/bloc/sign_up_bloc.dart';
 import 'package:giv_flutter/features/splash/bloc/splash_bloc.dart';
 import 'package:giv_flutter/features/splash/ui/splash.dart';
 import 'package:giv_flutter/features/user_profile/bloc/user_profile_bloc.dart';
@@ -51,6 +53,8 @@ class _MyMaterialAppState extends State<MyMaterialApp> {
     Provider.of<LocationFilterBloc>(context).dispose();
     Provider.of<NewListingBloc>(context).dispose();
     Provider.of<ProductDetailBloc>(context).dispose();
+    Provider.of<SettingsBloc>(context).dispose();
+    Provider.of<SignUpBloc>(context).dispose();
     super.dispose();
   }
 }

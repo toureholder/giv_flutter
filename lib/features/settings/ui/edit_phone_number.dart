@@ -16,8 +16,13 @@ import 'package:giv_flutter/values/dimens.dart';
 
 class EditPhoneNumber extends StatefulWidget {
   final User user;
+  final SettingsBloc settingsBloc;
 
-  const EditPhoneNumber({Key key, this.user}) : super(key: key);
+  const EditPhoneNumber({
+    Key key,
+    @required this.settingsBloc,
+    this.user,
+  }) : super(key: key);
 
   @override
   _EditPhoneNumberState createState() => _EditPhoneNumberState();
@@ -32,7 +37,7 @@ class _EditPhoneNumberState extends BaseState<EditPhoneNumber> {
   @override
   void initState() {
     super.initState();
-    _settingsBloc = SettingsBloc();
+    _settingsBloc = widget.settingsBloc;
 
     _settingsBloc.userUpdateStream.listen((HttpResponse<User> httpResponse) {
       if (httpResponse.isReady) onUpdateUserResponse(httpResponse);
