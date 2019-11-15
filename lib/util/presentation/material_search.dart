@@ -226,7 +226,7 @@ class _MaterialSearchState<T> extends State<MaterialSearch> {
         ? new Center(
             child: new Padding(
               padding: const EdgeInsets.only(top: 50.0),
-              child: new CircularProgressIndicator()
+              child: new Container(),
             ),
           )
         : new SingleChildScrollView(
