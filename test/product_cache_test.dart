@@ -1,3 +1,4 @@
+import 'package:flutter_test/flutter_test.dart' as flutter_test;
 import 'package:giv_flutter/model/product/product_category.dart';
 import 'package:giv_flutter/model/product/repository/cache/product_cache.dart';
 import 'package:giv_flutter/util/cache/cache_payload.dart';
@@ -8,6 +9,7 @@ import 'package:test/test.dart';
 import 'test_util/mocks.dart';
 
 void main() {
+  flutter_test.TestWidgetsFlutterBinding.ensureInitialized();
   SharedPreferences.setMockInitialValues({});
   MockDiskStorageProvider mockDiskStorageProvider;
   ProductCache productCache;

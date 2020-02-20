@@ -154,6 +154,7 @@ doc/api/
 
 ### Flutter ###
 .flutter-plugins
+.flutter-plugins-dependencies
 
 
 # End of https://www.gitignore.io/api/dart,flutter,androidstudio

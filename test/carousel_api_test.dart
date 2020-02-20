@@ -1,3 +1,4 @@
+import 'package:flutter_test/flutter_test.dart' as flutter_test;
 import 'package:giv_flutter/model/carousel/carousel_item.dart';
 import 'package:giv_flutter/model/carousel/repository/api/carousel_api.dart';
 import 'package:giv_flutter/util/network/http_client_wrapper.dart';
@@ -10,6 +11,7 @@ import 'package:test/test.dart';
 import 'test_util/mocks.dart';
 
 void main() {
+  flutter_test.TestWidgetsFlutterBinding.ensureInitialized();
   SharedPreferences.setMockInitialValues({});
   HttpClientWrapper client;
   MockHttp mockHttp;

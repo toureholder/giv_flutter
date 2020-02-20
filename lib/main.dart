@@ -5,6 +5,7 @@ import 'package:giv_flutter/base/app.dart';
 import 'package:giv_flutter/base/app_dependencies.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   debugPaintSizeEnabled = false;
 
   await SystemChrome.setPreferredOrientations(

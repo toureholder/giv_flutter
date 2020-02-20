@@ -1,3 +1,4 @@
+import 'package:flutter_test/flutter_test.dart' as flutter_test;
 import 'package:giv_flutter/model/api_response/api_response.dart';
 import 'package:giv_flutter/model/listing/repository/api/listing_api.dart';
 import 'package:giv_flutter/model/listing/repository/api/request/create_listing_request.dart';
@@ -12,6 +13,7 @@ import 'package:test/test.dart';
 import 'test_util/mocks.dart';
 
 void main() {
+  flutter_test.TestWidgetsFlutterBinding.ensureInitialized();
   SharedPreferences.setMockInitialValues({});
   HttpClientWrapper client;
   MockHttp mockHttp;
