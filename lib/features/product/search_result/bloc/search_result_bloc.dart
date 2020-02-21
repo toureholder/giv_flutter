@@ -1,8 +1,8 @@
-import 'package:giv_flutter/service/preferences/disk_storage_provider.dart';
 import 'package:giv_flutter/model/location/location.dart';
 import 'package:giv_flutter/model/product/product_category.dart';
 import 'package:giv_flutter/model/product/product_search_result.dart';
 import 'package:giv_flutter/model/product/repository/product_repository.dart';
+import 'package:giv_flutter/service/preferences/disk_storage_provider.dart';
 import 'package:giv_flutter/util/data/stream_event.dart';
 import 'package:giv_flutter/util/network/http_response.dart';
 import 'package:meta/meta.dart';
@@ -25,6 +25,7 @@ class SearchResultBloc {
 
   dispose() => searchResultSubject.close();
 
+
   Future<List<ProductCategory>> getSearchSuggestions(String q) async {
     try {
       HttpResponse<List<ProductCategory>> response =
@@ -38,11 +39,13 @@ class SearchResultBloc {
     }
   }
 
-  fetchProducts(
-      {int categoryId,
-      String searchQuery,
-      Location locationFilter,
-      bool isHardFilter = false}) async {
+  fetchProducts({
+    int categoryId,
+    String searchQuery,
+    Location locationFilter,
+    bool isHardFilter = false,
+    int page = 1,
+  }) async {
     try {
       if (categoryId == null && searchQuery == null)
         throw FormatException('Expected categoryId or searchQuery');
@@ -55,11 +58,15 @@ class SearchResultBloc {
           ? await productRepository.getProductsByCategory(
               categoryId: categoryId,
               location: locationFilter,
-              isHardFilter: isHardFilter)
+              isHardFilter: isHardFilter,
+              page: page,
+            )
           : await productRepository.getProductsBySearchQuery(
               q: searchQuery,
               location: locationFilter,
-              isHardFilter: isHardFilter);
+              isHardFilter: isHardFilter,
+              page: page,
+            );
 
       if (response.status == HttpStatus.ok)
         searchResultSubject.sink

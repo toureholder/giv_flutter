@@ -35,16 +35,22 @@ class ProductRepository {
   }
 
   Future<HttpResponse<ProductSearchResult>> getProductsByCategory(
-          {int categoryId, Location location, bool isHardFilter}) =>
+          {int categoryId, Location location, bool isHardFilter, int page}) =>
       productApi.getProductsByCategory(
-          categoryId: categoryId,
-          location: location,
-          isHardFilter: isHardFilter);
+        categoryId: categoryId,
+        location: location,
+        isHardFilter: isHardFilter,
+        page: page,
+      );
 
   Future<HttpResponse<ProductSearchResult>> getProductsBySearchQuery(
-          {String q, Location location, bool isHardFilter}) =>
+          {String q, Location location, bool isHardFilter, int page}) =>
       productApi.getProductsBySearchQuery(
-          q: q, location: location, isHardFilter: isHardFilter);
+        q: q,
+        location: location,
+        isHardFilter: isHardFilter,
+        page: page,
+      );
 
   Future<HttpResponse<List<ProductCategory>>> getSearchSuggestions(String q) =>
       productApi.getSearchSuggestions(q);

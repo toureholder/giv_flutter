@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:giv_flutter/config/config.dart';
 import 'package:giv_flutter/model/location/location.dart';
 import 'package:giv_flutter/model/product/product.dart';
 import 'package:giv_flutter/model/product/product_category.dart';
@@ -74,7 +75,7 @@ class ProductApi extends BaseApi {
   }
 
   Future<HttpResponse<ProductSearchResult>> getProductsByCategory(
-      {int categoryId, Location location, bool isHardFilter}) async {
+      {int categoryId, Location location, bool isHardFilter, int page}) async {
     HttpStatus status;
     try {
       final response =
@@ -82,7 +83,9 @@ class ProductApi extends BaseApi {
         'city_id': location?.city?.id,
         'state_id': location?.state?.id,
         'country_id': location?.country?.id,
-        'is_hard_filter': isHardFilter
+        'is_hard_filter': isHardFilter,
+        'page': page,
+        'per_page': Config.paginationDefaultPerPage,
       });
 
       status = HttpResponse.codeMap[response.statusCode];
@@ -96,7 +99,7 @@ class ProductApi extends BaseApi {
   }
 
   Future<HttpResponse<ProductSearchResult>> getProductsBySearchQuery(
-      {String q, Location location, bool isHardFilter}) async {
+      {String q, Location location, bool isHardFilter, int page}) async {
     HttpStatus status;
     try {
       final response = await get('$baseUrl/listings/search', params: {
@@ -104,7 +107,9 @@ class ProductApi extends BaseApi {
         'city_id': location?.city?.id,
         'state_id': location?.state?.id,
         'country_id': location?.country?.id,
-        'is_hard_filter': isHardFilter
+        'is_hard_filter': isHardFilter,
+        'page': page,
+        'per_page': Config.paginationDefaultPerPage,
       });
 
       status = HttpResponse.codeMap[response.statusCode];

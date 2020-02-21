@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:giv_flutter/base/base_state.dart';
+import 'package:giv_flutter/config/config.dart';
 import 'package:giv_flutter/config/i18n/string_localizations.dart';
 import 'package:giv_flutter/features/product/filters/bloc/location_filter_bloc.dart';
 import 'package:giv_flutter/features/product/filters/ui/location_filter.dart';
 import 'package:giv_flutter/features/product/search_result/bloc/search_result_bloc.dart';
 import 'package:giv_flutter/model/location/location.dart';
+import 'package:giv_flutter/model/product/product.dart';
 import 'package:giv_flutter/model/product/product_category.dart';
 import 'package:giv_flutter/model/product/product_search_result.dart';
 import 'package:giv_flutter/util/data/content_stream_builder.dart';
@@ -39,12 +41,26 @@ class SearchResult extends StatefulWidget {
 
 class _SearchResultState extends BaseState<SearchResult> {
   SearchResultBloc _bloc;
+  List<Product> _products = [];
+  bool _isInfiniteScrollOn;
+  int _currentPage;
+  ScrollController _scrollController;
+  double _loadingWidgetOpacity;
 
   @override
   void initState() {
     super.initState();
+    _scrollController = ScrollController();
     _bloc = widget.bloc;
+    _enableInfiniteScroll();
+    _observeScrolling();
     _fetchProducts();
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
   }
 
   @override
@@ -66,11 +82,10 @@ class _SearchResultState extends BaseState<SearchResult> {
         body: ContentStreamBuilder(
           stream: _bloc.result,
           onHasData: (StreamEvent<ProductSearchResult> event) {
-            return event.isLoading
-                ? Center(child: CircularProgressIndicator())
-                : SearchResultListView(
-                    children: _buildResultsGrid(event.data),
-                  );
+            return SearchResultListView(
+              children: _buildResultsGrid(event.data),
+              scrollController: _scrollController,
+            );
           },
         ));
   }
@@ -78,17 +93,62 @@ class _SearchResultState extends BaseState<SearchResult> {
   List<Widget> _buildResultsGrid(ProductSearchResult result) {
     var widgets = <Widget>[];
 
-    widgets.add(ResultsHeader(
-      result: result,
-      onSearchFilterButtonPressed: () =>
-          _navigateToLocationFilter(result.location),
-    ));
+    if (result != null) {
+      final products = result.products;
 
-    widgets.add(ProductGrid(
-      products: result.products,
-    ));
+      // Widgets rebuild whenever they want and I don't want to duplicate items
+      if (_products.where((it) => it.id == products.first.id).isEmpty)
+        _products.addAll(products);
+
+      if (result.products.length < Config.paginationDefaultPerPage)
+        _disableInfiniteScroll();
+    }
+
+    widgets.add(
+      ResultsHeader(
+        result: result,
+        onSearchFilterButtonPressed: () =>
+            _navigateToLocationFilter(result?.location),
+      ),
+    );
+
+    widgets.add(
+      ProductGrid(products: _products),
+    );
+
+    widgets.addAll(
+      [
+        Spacing.vertical(Dimens.default_vertical_margin),
+        LoadingMore(opacity: _loadingWidgetOpacity),
+        Spacing.vertical(Dimens.default_vertical_margin),
+      ],
+    );
 
     return widgets;
+  }
+
+  _disableInfiniteScroll() {
+    _isInfiniteScrollOn = false;
+    _loadingWidgetOpacity = 0.0;
+  }
+
+  _enableInfiniteScroll() {
+    _currentPage = 0;
+    _isInfiniteScrollOn = true;
+    _products.clear();
+    _loadingWidgetOpacity = 1.0;
+  }
+
+  _fetchProducts({Location locationFilter, bool isHardFilter}) {
+    _currentPage++;
+
+    _bloc.fetchProducts(
+      categoryId: widget?.category?.id,
+      searchQuery: widget.searchQuery,
+      locationFilter: locationFilter,
+      isHardFilter: isHardFilter,
+      page: _currentPage,
+    );
   }
 
   _navigateToLocationFilter(Location location) async {
@@ -96,30 +156,38 @@ class _SearchResultState extends BaseState<SearchResult> {
       builder: (context, bloc, child) =>
           LocationFilter(bloc: bloc, location: location),
     ));
+
     if (result == null) return;
+
+    _enableInfiniteScroll();
     _fetchProducts(locationFilter: result, isHardFilter: true);
   }
 
-  _fetchProducts({Location locationFilter, bool isHardFilter}) {
-    _bloc.fetchProducts(
-        categoryId: widget?.category?.id,
-        searchQuery: widget.searchQuery,
-        locationFilter: locationFilter,
-        isHardFilter: isHardFilter);
+  _observeScrolling() {
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels ==
+              _scrollController.position.maxScrollExtent &&
+          _isInfiniteScrollOn) {
+        _fetchProducts();
+      }
+    });
   }
 }
 
 class SearchResultListView extends StatelessWidget {
   final List<Widget> children;
+  final ScrollController scrollController;
 
   const SearchResultListView({
     Key key,
     @required this.children,
+    @required this.scrollController,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ListView(
+      controller: scrollController,
       padding: EdgeInsets.symmetric(
         horizontal: Dimens.grid(4),
         vertical: Dimens.grid(8),
@@ -142,25 +210,28 @@ class ResultsHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final stringFunction = GetLocalizedStringFunction(context);
-    final quantity = result.products.length;
+    final quantity = result?.products?.length;
 
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: Dimens.grid(6)),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          BodyText(stringFunction(
-            'search_result_x_results',
-            formatArg: '$quantity',
-          )),
-          Spacing.horizontal(Dimens.default_horizontal_margin),
-          Flexible(
-            child: SearchFilterButton(
-              onPressed: onSearchFilterButtonPressed,
-              buttonText: result.location?.shortName,
-            ),
-          )
-        ],
+    return Opacity(
+      opacity: result == null ? 0.0 : 1.0,
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: Dimens.grid(6)),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            BodyText(stringFunction(
+              'search_result_x_results',
+              formatArg: '$quantity',
+            )),
+            Spacing.horizontal(Dimens.default_horizontal_margin),
+            Flexible(
+              child: SearchFilterButton(
+                onPressed: onSearchFilterButtonPressed,
+                buttonText: result?.location?.shortName,
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
@@ -186,6 +257,28 @@ class SearchFilterButton extends StatelessWidget {
       text: text,
       isFlexible: true,
       icon: Icon(Icons.tune, color: Colors.grey),
+    );
+  }
+}
+
+class LoadingMore extends StatelessWidget {
+  final double opacity;
+
+  const LoadingMore({Key key, @required this.opacity}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: <Widget>[
+        Flexible(
+          child: Center(
+            child: Opacity(
+              opacity: opacity,
+              child: CircularProgressIndicator(),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
