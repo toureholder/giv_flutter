@@ -48,6 +48,10 @@ class Strings {
       "en": "Filter",
       "pt": "Filtrar"
     },
+    "action_location_filter": {
+      "en": "Filter by location",
+      "pt": "Filtrar por localização"
+    },
     "filters_title": {
       "en": "Filters",
       "pt": "Filtros"

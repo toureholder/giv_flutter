@@ -17,7 +17,6 @@ import 'package:giv_flutter/util/presentation/custom_scaffold.dart';
 import 'package:giv_flutter/util/presentation/product_grid.dart';
 import 'package:giv_flutter/util/presentation/search_teaser_app_bar.dart';
 import 'package:giv_flutter/util/presentation/spacing.dart';
-import 'package:giv_flutter/util/presentation/typography.dart';
 import 'package:giv_flutter/values/dimens.dart';
 import 'package:provider/provider.dart';
 
@@ -209,9 +208,6 @@ class ResultsHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final stringFunction = GetLocalizedStringFunction(context);
-    final quantity = result?.products?.length;
-
     return Opacity(
       opacity: result == null ? 0.0 : 1.0,
       child: Container(
@@ -219,15 +215,10 @@ class ResultsHeader extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            BodyText(stringFunction(
-              'search_result_x_results',
-              formatArg: '$quantity',
-            )),
-            Spacing.horizontal(Dimens.default_horizontal_margin),
             Flexible(
               child: SearchFilterButton(
                 onPressed: onSearchFilterButtonPressed,
-                buttonText: result?.location?.shortName,
+                buttonText: result?.location?.mediumName,
               ),
             )
           ],
@@ -250,13 +241,13 @@ class SearchFilterButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final text =
-        buttonText ?? GetLocalizedStringFunction(context)('action_filter');
+        buttonText ?? GetLocalizedStringFunction(context)('action_location_filter');
 
-    return GreyIconButton(
+    return GreyOutlineIconButton(
       onPressed: onPressed,
       text: text,
       isFlexible: true,
-      icon: Icon(Icons.tune, color: Colors.grey),
+      iconData: Icons.tune,
     );
   }
 }

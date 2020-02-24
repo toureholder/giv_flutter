@@ -140,7 +140,7 @@ class GreyButton extends StatelessWidget {
         color: Colors.grey[300],
         textColor: Colors.black,
         disabledColor: Colors.grey[200],
-        disabledTextColor: Colors.white,
+        disabledTextColor: Colors.grey[200],
         onPressed: onPressed,
         child: Text(text),
       ),
@@ -152,11 +152,15 @@ class GreyIconButton extends StatelessWidget {
   final VoidCallback onPressed;
   final String text;
   final bool isFlexible;
-  final Icon icon;
+  final IconData iconData;
 
-  const GreyIconButton(
-      {Key key, this.onPressed, this.text, this.isFlexible = false, this.icon})
-      : super(key: key);
+  const GreyIconButton({
+    Key key,
+    this.onPressed,
+    this.text,
+    this.isFlexible = false,
+    this.iconData,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -168,13 +172,87 @@ class GreyIconButton extends StatelessWidget {
 
     var label = isFlexible ? Flexible(child: textWidget) : textWidget;
 
-    return FlatButton.icon(
-        color: Colors.grey[300],
-        onPressed: onPressed,
-        icon: icon,
-        label: label);
+    return MainButtonTheme(
+      child: FlatButton.icon(
+          color: Colors.grey[300],
+          onPressed: onPressed,
+          icon: Icon(iconData, color: Colors.grey),
+          label: label),
+    );
   }
 }
+
+class GreyOutlineButton extends StatelessWidget {
+  final VoidCallback onPressed;
+  final String text;
+  final bool fillWidth;
+
+  const GreyOutlineButton({Key key, this.onPressed, this.text, this.fillWidth = true})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return MainButtonTheme(
+      fillWidth: fillWidth,
+      child: OutlineButton(
+        borderSide: BorderSide(
+          color: Colors.grey[300],
+          style: BorderStyle.solid,
+          width: 0.8,
+        ),
+        color: Colors.grey[300],
+        textColor: Colors.black,
+        disabledBorderColor: Colors.grey[200],
+        disabledTextColor: Colors.white,
+        onPressed: onPressed,
+        child: Text(text),
+      ),
+    );
+  }
+}
+
+class GreyOutlineIconButton extends StatelessWidget {
+  final VoidCallback onPressed;
+  final String text;
+  final bool isFlexible;
+  final IconData iconData;
+
+  const GreyOutlineIconButton({
+    Key key,
+    this.onPressed,
+    this.text,
+    this.isFlexible = false,
+    this.iconData,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    var textWidget = Text(
+      text,
+      maxLines: 1,
+      overflow: TextOverflow.ellipsis,
+    );
+
+    var label = isFlexible ? Flexible(child: textWidget) : textWidget;
+
+    return MainButtonTheme(
+      child: OutlineButton.icon(
+          borderSide: BorderSide(
+            color: Colors.grey[300],
+            style: BorderStyle.solid,
+            width: 0.8,
+          ),
+          textColor: Colors.black,
+          onPressed: onPressed,
+          icon: Padding(
+            padding: const EdgeInsets.all(0.0),
+            child: Icon(iconData, color: Colors.black),
+          ),
+          label: label),
+    );
+  }
+}
+
 
 class FacebookButton extends StatelessWidget {
   final VoidCallback onPressed;

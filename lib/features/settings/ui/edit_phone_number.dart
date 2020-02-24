@@ -120,8 +120,8 @@ class _EditPhoneNumberState extends BaseState<EditPhoneNumber> {
     );
   }
 
-  GreyButton _testButton() {
-    return GreyButton(
+  GreyOutlineButton _testButton() {
+    return GreyOutlineButton(
       onPressed: _testWhatsApp,
       text: string('settings_edit_phone_number_test_button'),
       fillWidth: false,

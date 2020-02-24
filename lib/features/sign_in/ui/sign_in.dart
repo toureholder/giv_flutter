@@ -113,9 +113,9 @@ class _SignInState extends BaseState<SignIn> {
     );
   }
 
-  GreyButton _buildLoginButton(bool isFacebookLoading) {
+  GreyOutlineButton _buildLoginButton(bool isFacebookLoading) {
     final onPressed = isFacebookLoading ? null : _goToLogIn;
-    return GreyButton(
+    return GreyOutlineButton(
       text: string('sign_in_log_in'),
       onPressed: onPressed,
     );
