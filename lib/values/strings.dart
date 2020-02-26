@@ -560,6 +560,10 @@ class Strings {
       "en": "All",
       "pt": "Tudo de"
     },
+    "categories_everything_list_item_title": {
+      "en": "Everything, everything",
+      "pt": "Tudo"
+    },
     "error_upload_listing_report_message": {
       "en": "Hi! I was using Alguém Quer? and something went wrong when I tried to create a listing :/",
       "pt": "Oi! Eu estava usando o Alguém Quer? e deu ruim quando tentei criar um anúncio :/"

@@ -52,6 +52,14 @@ class ProductRepository {
         page: page,
       );
 
+  Future<HttpResponse<ProductSearchResult>> getAllProducts(
+      {Location location, bool isHardFilter, int page}) =>
+      productApi.getAllProducts(
+        location: location,
+        isHardFilter: isHardFilter,
+        page: page,
+      );
+
   Future<HttpResponse<List<ProductCategory>>> getSearchSuggestions(String q) =>
       productApi.getSearchSuggestions(q);
 

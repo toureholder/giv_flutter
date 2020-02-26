@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:giv_flutter/base/base_state.dart';
 import 'package:giv_flutter/features/product/categories/bloc/categories_bloc.dart';
 import 'package:giv_flutter/features/product/categories/ui/category_list_tile.dart';
+import 'package:giv_flutter/features/product/search_result/bloc/search_result_bloc.dart';
+import 'package:giv_flutter/features/product/search_result/ui/search_result.dart';
 import 'package:giv_flutter/model/product/product_category.dart';
 import 'package:giv_flutter/util/data/content_stream_builder.dart';
 import 'package:giv_flutter/util/presentation/custom_app_bar.dart';
@@ -9,6 +11,7 @@ import 'package:giv_flutter/util/presentation/custom_scaffold.dart';
 import 'package:giv_flutter/util/presentation/search_teaser_app_bar.dart';
 import 'package:giv_flutter/util/presentation/spacing.dart';
 import 'package:giv_flutter/values/dimens.dart';
+import 'package:provider/provider.dart';
 
 class Categories extends StatefulWidget {
   final bool showSearch;
@@ -87,15 +90,44 @@ class CategoryListView extends StatelessWidget {
 
     return ListView.builder(
         shrinkWrap: true,
-        itemCount: categories.length + 1,
+        itemCount: categories.length + 2,
         itemBuilder: (context, i) {
-          return i < categories.length
-              ? CategoryListTile(
-                  category: categories[i],
-                  returnChoice: returnChoice,
-                  hideThese: hideThese,
-                )
-              : Spacing.vertical(Dimens.default_vertical_margin);
+          return (i == 0)
+              ? AllProductsListTile()
+              : (i < categories.length + 1)
+                  ? CategoryListTile(
+                      category: categories[i - 1],
+                      returnChoice: returnChoice,
+                      hideThese: hideThese,
+                    )
+                  : Spacing.vertical(Dimens.default_vertical_margin);
         });
+  }
+}
+
+class AllProductsListTile extends StatefulWidget {
+  @override
+  _AllProductsListTileState createState() => _AllProductsListTileState();
+}
+
+class _AllProductsListTileState extends BaseState<AllProductsListTile> {
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
+
+    final categoryName = string('categories_everything_list_item_title');
+
+    return CategoryListTileUI(
+      categoryName: categoryName,
+      trailing: Icon(Icons.chevron_right),
+      onTap: () {
+        navigation.push(Consumer<SearchResultBloc>(
+          builder: (context, bloc, child) => SearchResult(
+            forcedName: categoryName,
+            bloc: bloc,
+          ),
+        ));
+      },
+    );
   }
 }

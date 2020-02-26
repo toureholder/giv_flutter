@@ -133,7 +133,6 @@ main() {
         await tester.pump();
 
         expect(find.byType(CircularProgressIndicator), findsOneWidget);
-        expect(find.byType(SearchResultListView), findsNothing);
 
         controller.close();
       },

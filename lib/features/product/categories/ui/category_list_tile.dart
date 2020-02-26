@@ -34,19 +34,10 @@ class _CategoryListTileState extends BaseState<CategoryListTile> {
     final onTap =
         widget.returnChoice ? _returnChoice : _goToSubCategoryOrResult;
 
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        ListTile(
-          title: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 18.0),
-            child: BodyText(category.simpleName),
-          ),
-          trailing: trailing,
-          onTap: onTap,
-        ),
-        CustomDivider(),
-      ],
+    return CategoryListTileUI(
+      categoryName: category.simpleName,
+      trailing: trailing,
+      onTap: onTap,
     );
   }
 
@@ -66,5 +57,36 @@ class _CategoryListTileState extends BaseState<CategoryListTile> {
 
   void _goToSubCategoryOrResult() {
     widget.category.goToSubCategoryOrResult(navigation);
+  }
+}
+
+class CategoryListTileUI extends StatelessWidget {
+  final String categoryName;
+  final Icon trailing;
+  final GestureTapCallback onTap;
+
+  const CategoryListTileUI({
+    Key key,
+    @required this.categoryName,
+    @required this.trailing,
+    @required this.onTap,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        ListTile(
+          title: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 18.0),
+            child: BodyText(categoryName),
+          ),
+          trailing: trailing,
+          onTap: onTap,
+        ),
+        CustomDivider(),
+      ],
+    );
   }
 }

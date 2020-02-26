@@ -25,6 +25,7 @@ class SearchResult extends StatefulWidget {
   final String searchQuery;
   final bool useCanonicalName;
   final SearchResultBloc bloc;
+  final String forcedName;
 
   const SearchResult({
     Key key,
@@ -32,6 +33,7 @@ class SearchResult extends StatefulWidget {
     this.category,
     this.searchQuery,
     this.useCanonicalName = false,
+    this.forcedName,
   }) : super(key: key);
 
   @override
@@ -66,13 +68,13 @@ class _SearchResultState extends BaseState<SearchResult> {
   Widget build(BuildContext context) {
     super.build(context);
 
-    var categoryName = widget.useCanonicalName
+    final categoryName = widget.useCanonicalName
         ? widget.category?.canonicalName
         : widget.category?.simpleName;
 
-    var title = categoryName ?? widget.searchQuery;
+    final title = widget.forcedName ?? categoryName;
 
-    var appBar = widget.category == null
+    final appBar = title == null
         ? SearchTeaserAppBar(q: widget.searchQuery)
         : CustomAppBar(title: title);
 
@@ -240,8 +242,8 @@ class SearchFilterButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final text =
-        buttonText ?? GetLocalizedStringFunction(context)('action_location_filter');
+    final text = buttonText ??
+        GetLocalizedStringFunction(context)('action_location_filter');
 
     return GreyOutlineIconButton(
       onPressed: onPressed,

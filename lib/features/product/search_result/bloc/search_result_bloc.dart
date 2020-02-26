@@ -25,7 +25,6 @@ class SearchResultBloc {
 
   dispose() => searchResultSubject.close();
 
-
   Future<List<ProductCategory>> getSearchSuggestions(String q) async {
     try {
       HttpResponse<List<ProductCategory>> response =
@@ -47,26 +46,33 @@ class SearchResultBloc {
     int page = 1,
   }) async {
     try {
-      if (categoryId == null && searchQuery == null)
-        throw FormatException('Expected categoryId or searchQuery');
-
       searchResultSubject.sink.add(StreamEvent.loading());
 
       locationFilter = locationFilter ?? diskStorage.getLocation();
 
-      var response = categoryId != null
-          ? await productRepository.getProductsByCategory(
-              categoryId: categoryId,
-              location: locationFilter,
-              isHardFilter: isHardFilter,
-              page: page,
-            )
-          : await productRepository.getProductsBySearchQuery(
-              q: searchQuery,
-              location: locationFilter,
-              isHardFilter: isHardFilter,
-              page: page,
-            );
+      HttpResponse<ProductSearchResult> response;
+
+      if (categoryId != null) {
+        response = await productRepository.getProductsByCategory(
+          categoryId: categoryId,
+          location: locationFilter,
+          isHardFilter: isHardFilter,
+          page: page,
+        );
+      } else if (searchQuery != null) {
+        response = await productRepository.getProductsBySearchQuery(
+          q: searchQuery,
+          location: locationFilter,
+          isHardFilter: isHardFilter,
+          page: page,
+        );
+      } else {
+        response = await productRepository.getAllProducts(
+          location: locationFilter,
+          isHardFilter: isHardFilter,
+          page: page,
+        );
+      }
 
       if (response.status == HttpStatus.ok)
         searchResultSubject.sink

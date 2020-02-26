@@ -122,6 +122,30 @@ class ProductApi extends BaseApi {
     }
   }
 
+  Future<HttpResponse<ProductSearchResult>> getAllProducts(
+      {Location location, bool isHardFilter, int page}) async {
+    HttpStatus status;
+    try {
+      final response =
+      await get('$baseUrl/listings', params: {
+        'city_id': location?.city?.id,
+        'state_id': location?.state?.id,
+        'country_id': location?.country?.id,
+        'is_hard_filter': isHardFilter,
+        'page': page,
+        'per_page': Config.paginationDefaultPerPage,
+      });
+
+      status = HttpResponse.codeMap[response.statusCode];
+      final data = ProductSearchResult.fromJson(jsonDecode(response.body));
+
+      return HttpResponse<ProductSearchResult>(status: status, data: data);
+    } catch (error) {
+      return HttpResponse<ProductSearchResult>(
+          status: status, message: error.toString());
+    }
+  }
+
   Future<HttpResponse<List<Product>>> getMyProducts() async {
     HttpStatus status;
     try {

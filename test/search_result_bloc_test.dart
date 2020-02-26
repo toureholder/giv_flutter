@@ -97,6 +97,7 @@ main() {
           categoryId: categoryId,
           location: anyNamed('location'),
           isHardFilter: false,
+          page: 1,
         )).called(1);
       },
     );
@@ -111,16 +112,20 @@ main() {
           q: searchQuery,
           location: anyNamed('location'),
           isHardFilter: false,
+          page: 1,
         )).called(1);
       },
     );
 
     test(
-      'adds FormatException to sink if neither search query or category id are supplied',
+      'gets all products if neither search query or category id are supplied',
       () async {
         await bloc.fetchProducts();
-        verify(mockResultSubject.addError(argThat(isA<FormatException>())))
-            .called(1);
+        verify(mockProductRepository.getAllProducts(
+          location: anyNamed('location'),
+          isHardFilter: false,
+          page: 1,
+        )).called(1);
       },
     );
 
@@ -150,13 +155,14 @@ main() {
       final searchQuery = 'books';
 
       when(mockProductRepository.getProductsBySearchQuery(
-              q: searchQuery,
-              location: anyNamed('location'),
-              isHardFilter: false))
-          .thenAnswer((_) async => HttpResponse<ProductSearchResult>(
-                status: HttpStatus.ok,
-                data: ProductSearchResult.fake(),
-              ));
+        q: searchQuery,
+        location: anyNamed('location'),
+        isHardFilter: false,
+        page: anyNamed('page'),
+      )).thenAnswer((_) async => HttpResponse<ProductSearchResult>(
+            status: HttpStatus.ok,
+            data: ProductSearchResult.fake(),
+          ));
 
       await bloc.fetchProducts(searchQuery: searchQuery);
 
@@ -169,13 +175,14 @@ main() {
       final errorMessage = 'Server down. Try again later';
 
       when(mockProductRepository.getProductsBySearchQuery(
-              q: searchQuery,
-              location: anyNamed('location'),
-              isHardFilter: false))
-          .thenAnswer((_) async => HttpResponse<ProductSearchResult>(
-              status: HttpStatus.internalServerError,
-              data: null,
-              message: errorMessage));
+        q: searchQuery,
+        location: anyNamed('location'),
+        isHardFilter: false,
+        page: anyNamed('page'),
+      )).thenAnswer((_) async => HttpResponse<ProductSearchResult>(
+          status: HttpStatus.internalServerError,
+          data: null,
+          message: errorMessage));
 
       await bloc.fetchProducts(searchQuery: searchQuery);
 
