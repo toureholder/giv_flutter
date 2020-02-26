@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:giv_flutter/base/my_material_app.dart';
+import 'package:giv_flutter/config/config.dart';
+import 'package:giv_flutter/util/presentation/image_precacher.dart';
 import 'package:provider/provider.dart';
 
 class MyApp extends StatefulWidget {
@@ -21,8 +23,15 @@ class _MyAppState extends State<MyApp> {
   }
 
   @override
-  Widget build(BuildContext context) => MultiProvider(
-        providers: dependencies,
-        child: MyMaterialApp(),
-      );
+  Widget build(BuildContext context) {
+    preCacheImages(
+        context,
+        svgAssets: Config.imageCacheSvgAssets
+    );
+
+    return MultiProvider(
+      providers: dependencies,
+      child: MyMaterialApp(),
+    );
+  }
 }

@@ -22,4 +22,14 @@ class Config {
   static const iTunesLink = 'https://itunes.apple.com/us/app/algu%C3%A9m-quer/id1457386822';
   static const googlePlayLink = 'https://play.google.com/store/apps/details?id=com.greenballoon.givflutter';
   static const website = 'https://alguemquer.com.br/';
+
+  static const imageCacheSvgAssets = <String>[
+    'images/mailbox.svg',
+    'images/logo.svg',
+    'images/undraw_empty_posts.svg',
+    'images/undraw_notify_orange.svg',
+    'images/undraw_synchronize_1e88e5.svg',
+    'images/undraw_thoughts_2196f3.svg',
+    'images/user_bw.svg',
+  ];
 }
