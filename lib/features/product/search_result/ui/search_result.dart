@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:giv_flutter/base/base_state.dart';
 import 'package:giv_flutter/config/config.dart';
 import 'package:giv_flutter/config/i18n/string_localizations.dart';
@@ -17,6 +18,7 @@ import 'package:giv_flutter/util/presentation/custom_scaffold.dart';
 import 'package:giv_flutter/util/presentation/product_grid.dart';
 import 'package:giv_flutter/util/presentation/search_teaser_app_bar.dart';
 import 'package:giv_flutter/util/presentation/spacing.dart';
+import 'package:giv_flutter/util/presentation/typography.dart';
 import 'package:giv_flutter/values/dimens.dart';
 import 'package:provider/provider.dart';
 
@@ -114,14 +116,24 @@ class _SearchResultState extends BaseState<SearchResult> {
     );
 
     widgets.add(
-      ProductGrid(products: _products),
+      ProductGrid(
+        products: _products,
+      ),
     );
+
+    if (_products.isEmpty && result != null)
+      widgets.add(
+        SearchResultEmptyState(
+          locationFilter: result.location,
+          searchQuery: widget.searchQuery,
+          category: widget.category,
+        ),
+      );
 
     widgets.addAll(
       [
         Spacing.vertical(Dimens.default_vertical_margin),
         LoadingMore(opacity: _loadingWidgetOpacity),
-        Spacing.vertical(Dimens.default_vertical_margin),
       ],
     );
 
@@ -273,5 +285,110 @@ class LoadingMore extends StatelessWidget {
         ),
       ],
     );
+  }
+}
+
+class SearchResultEmptyState extends StatefulWidget {
+  final Location locationFilter;
+  final ProductCategory category;
+  final String searchQuery;
+
+  const SearchResultEmptyState({
+    Key key,
+    @required this.locationFilter,
+    @required this.category,
+    @required this.searchQuery,
+  }) : super(key: key);
+
+  @override
+  _SearchResultEmptyStateState createState() => _SearchResultEmptyStateState();
+}
+
+class _SearchResultEmptyStateState extends BaseState<SearchResultEmptyState> {
+  Location _locationFilter;
+  ProductCategory _category;
+  String _searchQuery;
+
+  @override
+  void initState() {
+    super.initState();
+    _locationFilter = widget.locationFilter;
+    _category = widget.category;
+    _searchQuery = widget.searchQuery;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
+
+    final text = _getEmptySateText(_locationFilter, _category, _searchQuery);
+
+    return Container(
+      padding: EdgeInsets.symmetric(
+        vertical: Dimens.grid(48),
+        horizontal: Dimens.default_horizontal_margin,
+      ),
+      alignment: Alignment.center,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          SvgPicture.asset(
+            'images/undraw_thoughts_2196f3.svg',
+            width: 172.0,
+            fit: BoxFit.cover,
+          ),
+          Spacing.vertical(Dimens.grid(20)),
+          Body2Text(
+            string(text),
+            color: Colors.grey,
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
+    );
+  }
+
+  String _getEmptySateText(location, category, searchQuery) {
+    String text;
+
+    if (location?.city != null) {
+      if (category != null) {
+        text = string(
+            'search_result_empty_state_nothing_from_category_in_your_city',
+            formatArg: category.canonicalName);
+      } else if (searchQuery != null) {
+        text = string(
+            'search_result_empty_state_nothing_from_search_term_in_your_city',
+            formatArg: searchQuery);
+      } else {
+        text = string('search_result_empty_state_nothing_in_your_city');
+      }
+    } else if (location?.state != null) {
+      if (category != null) {
+        text = string(
+            'search_result_empty_state_nothing_from_category_in_your_state',
+            formatArg: category.canonicalName);
+      } else if (searchQuery != null) {
+        text = string(
+            'search_result_empty_state_nothing_from_search_term_in_your_state',
+            formatArg: searchQuery);
+      } else {
+        text = string('search_result_empty_state_nothing_in_your_state');
+      }
+    } else {
+      if (category != null) {
+        text = string(
+            'search_result_empty_state_nothing_from_category',
+            formatArg: category.canonicalName);
+      } else if (searchQuery != null) {
+        text = string(
+            'search_result_empty_state_nothing_from_search_term',
+            formatArg: searchQuery);
+      } else {
+        text = string('search_result_empty_state_nothing');
+      }
+    }
+
+    return text;
   }
 }

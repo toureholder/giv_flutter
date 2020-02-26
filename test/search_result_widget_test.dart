@@ -119,6 +119,51 @@ main() {
     );
 
     testWidgets(
+      'shows list when data is loaded',
+          (WidgetTester tester) async {
+        final controller = PublishSubject<StreamEvent<ProductSearchResult>>();
+
+        when(mockSearchResultBloc.result).thenAnswer((_) => controller.stream);
+
+        final testableWidget = makeTestableWidget(searchQuery: 'books');
+        await tester.pumpWidget(testableWidget);
+
+        controller.sink.add(StreamEvent<ProductSearchResult>(
+            state: StreamEventState.ready, data: ProductSearchResult.fake()));
+
+        await tester.pump();
+
+        expect(find.byType(SharedLoadingState), findsNothing);
+        expect(find.byType(SearchResultListView), findsOneWidget);
+
+        controller.close();
+      },
+    );
+
+    testWidgets(
+      'shows empty state when data is loaded and empty',
+          (WidgetTester tester) async {
+        final controller = PublishSubject<StreamEvent<ProductSearchResult>>();
+
+        when(mockSearchResultBloc.result).thenAnswer((_) => controller.stream);
+
+        final testableWidget = makeTestableWidget(searchQuery: 'books');
+        await tester.pumpWidget(testableWidget);
+
+        controller.sink.add(StreamEvent<ProductSearchResult>(
+            state: StreamEventState.ready, data: ProductSearchResult.fakeEmpty()));
+
+        await tester.pump();
+
+        expect(find.byType(SharedLoadingState), findsNothing);
+        expect(find.byType(SearchResultListView), findsOneWidget);
+        expect(find.byType(SearchResultEmptyState), findsOneWidget);
+
+        controller.close();
+      },
+    );
+
+    testWidgets(
       'shows a progress indicator when data is loading',
       (WidgetTester tester) async {
         final controller = PublishSubject<StreamEvent<ProductSearchResult>>();

@@ -14,4 +14,8 @@ class ProductSearchResult {
   ProductSearchResult.fake()
       : location = Location.fake(),
         products = Product.fakeList();
+
+  ProductSearchResult.fakeEmpty()
+      : location = Location.fake(),
+        products = [];
 }

@@ -44,6 +44,42 @@ class Strings {
       "en": "$formatItem Results",
       "pt": "$formatItem Resultados"
     },
+    "search_result_empty_state_nothing_in_your_city": {
+      "en": "We didn't find anything in your city",
+      "pt": "Não encontramos nada na sua cidade."
+    },
+    "search_result_empty_state_nothing_from_category_in_your_city": {
+      "en": "We didn't finy any $formatItem in your city.",
+      "pt": "Não encontramos nada de $formatItem na sua cidade."
+    },
+    "search_result_empty_state_nothing_from_search_term_in_your_city": {
+      "en": "We didn't finy anything for \"$formatItem\" in your city.",
+      "pt": "Não encontramos nada de \"$formatItem\" na sua cidade."
+    },
+    "search_result_empty_state_nothing_in_your_state": {
+      "en": "We didn't finy anything in your state.",
+      "pt": "Não encontramos nada no seu estado."
+    },
+    "search_result_empty_state_nothing_from_category_in_your_state": {
+      "en": "We didn't finy any $formatItem in your state.",
+      "pt": "Não encontramos nada de $formatItem no seu estado."
+    },
+    "search_result_empty_state_nothing_from_search_term_in_your_state": {
+      "en": "We didn't finy anything for \"$formatItem\" in your state.",
+      "pt": "Não encontramos nada de \"$formatItem\" no seu estado."
+    },
+    "search_result_empty_state_nothing": {
+      "en": "We didn't find anything.",
+      "pt": "Não encontramos nada."
+    },
+    "search_result_empty_state_nothing_from_category": {
+      "en": "We didn't find any $formatItem.",
+      "pt": "Não encontramos nada de $formatItem."
+    },
+    "search_result_empty_state_nothing_from_search_term": {
+      "en": "We didn't finy anything for \"$formatItem\".",
+      "pt": "Não encontramos nada de \"$formatItem\"."
+    },
     "action_filter": {
       "en": "Filter",
       "pt": "Filtrar"
