@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:giv_flutter/base/base_state.dart';
 import 'package:giv_flutter/config/i18n/string_localizations.dart';
 import 'package:giv_flutter/util/presentation/custom_divider.dart';
-import 'package:giv_flutter/util/presentation/custom_divider.dart';
-import 'package:giv_flutter/util/presentation/custom_divider.dart';
 import 'package:giv_flutter/util/presentation/termos_of_service_acceptance_caption.dart';
 import 'package:giv_flutter/util/presentation/typography.dart';
 import 'package:giv_flutter/util/util.dart';
@@ -61,21 +59,11 @@ class _IWantItDialogState extends BaseState<IWantItDialog> {
             onTap: _startPhoneApp,
           ),
           CustomDivider(),
-          _termsOfService()
+          if (!widget.isAuthenticated)
+            IWantItDialogTermsOfService(
+              util: _util,
+            )
         ],
-      ),
-    );
-  }
-
-  Widget _termsOfService() {
-    if (widget.isAuthenticated) return Container();
-
-    return Padding(
-      padding: EdgeInsets.symmetric(
-          horizontal: 8.0, vertical: Dimens.default_vertical_margin),
-      child: TermsOfServiceAcceptanceCaption(
-        util: _util,
-        prefix: 'terms_acceptance_caption_by_contacting_',
       ),
     );
   }
@@ -119,6 +107,25 @@ class StartPhoneAppTile extends StatelessWidget {
         GetLocalizedStringFunction(context)('i_want_it_dialog_call'),
       ),
       onTap: onTap,
+    );
+  }
+}
+
+class IWantItDialogTermsOfService extends StatelessWidget {
+  final Util util;
+
+  const IWantItDialogTermsOfService({Key key, @required this.util})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.symmetric(
+          horizontal: 8.0, vertical: Dimens.default_vertical_margin),
+      child: TermsOfServiceAcceptanceCaption(
+        util: util,
+        prefix: 'terms_acceptance_caption_by_contacting_',
+      ),
     );
   }
 }

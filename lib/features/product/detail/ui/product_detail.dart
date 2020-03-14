@@ -17,7 +17,9 @@ import 'package:giv_flutter/model/image/image.dart' as CustomImage;
 import 'package:giv_flutter/model/listing/repository/api/request/create_listing_request.dart';
 import 'package:giv_flutter/model/location/location.dart';
 import 'package:giv_flutter/model/product/product.dart';
+import 'package:giv_flutter/model/user/user.dart';
 import 'package:giv_flutter/util/data/stream_event.dart';
+import 'package:giv_flutter/util/navigation/navigation.dart';
 import 'package:giv_flutter/util/network/http_response.dart';
 import 'package:giv_flutter/util/presentation/avatar_image.dart';
 import 'package:giv_flutter/util/presentation/bottom_sheet.dart';
@@ -111,17 +113,38 @@ class _ProductDetailState extends BaseState<ProductDetail> {
 
   ListView _buildMainListView(BuildContext context) {
     return ListView(children: <Widget>[
-      _imageCarousel(context, _product.images),
-      _textPadding(H6Text(_product.title)),
-      _locationStreamBuilder(),
-      _maybeIWantItButton(),
-      _textPadding(Body2Text(_product.description)),
-      _publishedAt(),
-      Spacing.vertical(Dimens.grid(8)),
+      ProductDetailImageCarousel(
+        images: _product.images,
+        isProductActive: _product.isActive,
+        onTapIsHiddenAlert: _confirmHideOrActivate,
+      ),
+      DefualtVerticalSpacing(),
+      ProductDetailTitle(
+        title: _product.title,
+      ),
+      DefualtVerticalSpacing(),
+      ProductDetailLocationStreamBuilder(
+        stream: _productDetailBloc.locationStream,
+      ),
+      DefualtVerticalSpacing(),
+      if (!_isMine) IWantItButton(onPressed: _handleIWantItTap),
+      if (!_isMine) DefualtVerticalSpacing(),
+      ProductDetailDescription(
+        description: _product.description,
+      ),
+      DefualtVerticalSpacing(),
+      ProductDetailPublishedAt(
+        date: _product.updatedAt,
+      ),
+      DefualtVerticalSpacing(),
       Divider(),
-      Spacing.vertical(Dimens.grid(8)),
-      _userRow(),
-      Spacing.vertical(Dimens.grid(16)),
+      DefualtVerticalSpacing(),
+      ProductDetailUser(
+        user: _product.user,
+        onTap: _goToUserProfile,
+      ),
+      DefualtVerticalSpacing(),
+      DefualtVerticalSpacing(),
     ]);
   }
 
@@ -140,47 +163,6 @@ class _ProductDetailState extends BaseState<ProductDetail> {
         tiles: tiles, title: string('shared_title_options'));
   }
 
-  Padding _publishedAt() {
-    return _textPadding(Body2Text(string('published_on_',
-        formatArg:
-            DateFormat.yMMMMd(localeString).format(_product.updatedAt))));
-  }
-
-  Widget _locationStreamBuilder() {
-    return StreamBuilder<Location>(
-        stream: _productDetailBloc.locationStream,
-        builder: (context, AsyncSnapshot snapshot) {
-          return _locationWidget(snapshot.data);
-        });
-  }
-
-  Widget _locationWidget(Location location) {
-    if (location?.isOk ?? false) _product?.location = location;
-
-    Widget locationWidget = location == null
-        ? Padding(
-            padding: EdgeInsets.only(
-              left: Dimens.default_horizontal_margin,
-              right: 200.0,
-              top: 29.0,
-              bottom: 4.0,
-            ),
-            child: LinearProgressIndicator(
-              valueColor: AlwaysStoppedAnimation<Color>(Colors.grey[200]),
-              backgroundColor: Colors.grey[100],
-            ))
-        : _textPadding(Subtitle(
-            location?.mediumName ?? '',
-            weight: SyntheticFontWeight.semiBold,
-          ));
-
-    return locationWidget;
-  }
-
-  Widget _maybeIWantItButton() {
-    return _isMine ? Container() : IWantItButton(onPressed: _handleIWantItTap);
-  }
-
   _handleIWantItTap() {
     if (_product.user.phoneNumber != null)
       _showIWantItDialog(
@@ -189,67 +171,6 @@ class _ProductDetailState extends BaseState<ProductDetail> {
           formatArg: _product.title,
         ),
       );
-  }
-
-  Padding _userRow() {
-    final user = _product.user;
-    return Padding(
-      padding: EdgeInsets.only(
-          left: Dimens.default_horizontal_margin,
-          right: Dimens.default_horizontal_margin),
-      child: GestureDetector(
-        onTap: _goToUserProfile,
-        child: Row(
-          children: <Widget>[
-            AvatarImage(image: CustomImage.Image(url: user.avatarUrl)),
-            Spacing.horizontal(Dimens.grid(6)),
-            Body2Text(user.name)
-          ],
-        ),
-      ),
-    );
-  }
-
-  Padding _textPadding(Widget widget) {
-    return Padding(
-      padding: EdgeInsets.only(
-          top: Dimens.default_vertical_margin,
-          left: Dimens.default_horizontal_margin,
-          right: Dimens.default_horizontal_margin),
-      child: widget,
-    );
-  }
-
-  Widget _imageCarousel(BuildContext context, List<CustomImage.Image> images) {
-    final _pageController = PageController();
-
-    final imageUrls = images.map((it) => it.url).toList();
-
-    final carousel = _theCarouselItself(imageUrls, _pageController, images);
-
-    return _product.isActive
-        ? carousel
-        : Stack(
-            children: <Widget>[
-              carousel,
-              PositionedIsHiddenAlert(onTap: _confirmHideOrActivate),
-            ],
-          );
-  }
-
-  ImageCarousel _theCarouselItself(List<String> imageUrls,
-      PageController _pageController, List<CustomImage.Image> images) {
-    return ImageCarousel(
-      imageUrls: imageUrls,
-      height: 300.0,
-      pageController: _pageController,
-      onTap: () {
-        int index = _pageController.page.toInt();
-        navigation.push(PhotoViewPage(image: images[index]));
-      },
-      withIndicator: true,
-      isFaded: !_product.isActive,
-    );
   }
 
   void _confirmDelete() {
@@ -411,7 +332,8 @@ class IWantItButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.all(Dimens.default_horizontal_margin),
+      padding:
+          EdgeInsets.symmetric(horizontal: Dimens.default_horizontal_margin),
       child: PrimaryButton(
         text: GetLocalizedStringFunction(context)('i_want_it'),
         onPressed: onPressed,
@@ -522,4 +444,196 @@ class PositionedIsHiddenAlert extends StatelessWidget {
           ),
         ));
   }
+}
+
+class ProductDetailImageCarousel extends StatelessWidget {
+  final List<CustomImage.Image> images;
+  final GestureTapCallback onTapIsHiddenAlert;
+  final bool isProductActive;
+
+  const ProductDetailImageCarousel({
+    Key key,
+    @required this.images,
+    @required this.onTapIsHiddenAlert,
+    @required this.isProductActive,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final _pageController = PageController();
+
+    final imageUrls = images.map((it) => it.url).toList();
+
+    final carousel =
+        _theCarouselItself(context, imageUrls, _pageController, images);
+
+    return isProductActive
+        ? carousel
+        : Stack(
+            children: <Widget>[
+              carousel,
+              PositionedIsHiddenAlert(onTap: onTapIsHiddenAlert),
+            ],
+          );
+  }
+
+  ImageCarousel _theCarouselItself(BuildContext context, List<String> imageUrls,
+      PageController _pageController, List<CustomImage.Image> images) {
+    return ImageCarousel(
+      imageUrls: imageUrls,
+      height: 300.0,
+      pageController: _pageController,
+      onTap: () {
+        int index = _pageController.page.toInt();
+        Navigation(context).push(PhotoViewPage(image: images[index]));
+      },
+      withIndicator: true,
+      isFaded: !isProductActive,
+    );
+  }
+}
+
+class ProductDetailTitle extends StatelessWidget {
+  final String title;
+
+  const ProductDetailTitle({Key key, @required this.title}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) => ProductDetailHorizontalPadding(
+        child: H6Text(title),
+      );
+}
+
+class ProductDetailLocation extends StatelessWidget {
+  final Location location;
+
+  const ProductDetailLocation({Key key, this.location}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    Widget locationWidget = location == null
+        ? Padding(
+            padding: EdgeInsets.only(
+              left: Dimens.default_horizontal_margin,
+              right: 200.0,
+              top: 8.0,
+              bottom: 4.0,
+            ),
+            child: LinearProgressIndicator(
+              valueColor: AlwaysStoppedAnimation<Color>(Colors.grey[200]),
+              backgroundColor: Colors.grey[100],
+            ))
+        : ProductDetailHorizontalPadding(
+            child: Subtitle(
+              location?.mediumName ?? '',
+              weight: SyntheticFontWeight.semiBold,
+            ),
+          );
+
+    return locationWidget;
+  }
+}
+
+class ProductDetailLocationStreamBuilder extends StatelessWidget {
+  final Stream<Location> stream;
+
+  const ProductDetailLocationStreamBuilder({Key key, @required this.stream})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<Location>(
+        stream: stream,
+        builder: (context, AsyncSnapshot snapshot) {
+          return ProductDetailLocation(
+            location: snapshot.data,
+          );
+        });
+  }
+}
+
+class ProductDetailDescription extends StatelessWidget {
+  final String description;
+
+  const ProductDetailDescription({Key key, @required this.description})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) => ProductDetailHorizontalPadding(
+        child: Body2Text(
+          description,
+        ),
+      );
+}
+
+class ProductDetailPublishedAt extends StatefulWidget {
+  final DateTime date;
+
+  const ProductDetailPublishedAt({Key key, @required this.date})
+      : super(key: key);
+
+  @override
+  _ProductDetailPublishedAtState createState() =>
+      _ProductDetailPublishedAtState();
+}
+
+class _ProductDetailPublishedAtState
+    extends BaseState<ProductDetailPublishedAt> {
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
+    return ProductDetailHorizontalPadding(
+      child: Body2Text(
+        string(
+          'published_on_',
+          formatArg: DateFormat.yMMMMd(localeString).format(
+            widget.date,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class ProductDetailUser extends StatelessWidget {
+  final User user;
+  final GestureTapCallback onTap;
+
+  const ProductDetailUser({
+    Key key,
+    @required this.user,
+    @required this.onTap,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) => Padding(
+        padding: EdgeInsets.only(
+            left: Dimens.default_horizontal_margin,
+            right: Dimens.default_horizontal_margin),
+        child: GestureDetector(
+          onTap: onTap,
+          child: Row(
+            children: <Widget>[
+              AvatarImage(image: CustomImage.Image(url: user.avatarUrl)),
+              Spacing.horizontal(Dimens.grid(6)),
+              Body2Text(user.name)
+            ],
+          ),
+        ),
+      );
+}
+
+class ProductDetailHorizontalPadding extends StatelessWidget {
+  final Widget child;
+
+  const ProductDetailHorizontalPadding({Key key, @required this.child})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) => Padding(
+        padding: EdgeInsets.symmetric(
+          horizontal: Dimens.default_horizontal_margin,
+        ),
+        child: child,
+      );
 }
