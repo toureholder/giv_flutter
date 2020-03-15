@@ -617,8 +617,8 @@ class Strings {
       "pt": "Publicado em $formatItem às $formatItem"
     },
     "published_on_": {
-      "en": "Published on $formatItem.",
-      "pt": "Publicado em $formatItem."
+      "en": "Published on $formatItem",
+      "pt": "Publicado em $formatItem"
     },
     "location_filter_all_countries": {
       "en": "All countries",
@@ -759,6 +759,18 @@ class Strings {
     "product_detail_action_delete": {
       "en": "Delete listing",
       "pt": "Excluir anúncio"
+    },
+    "product_detail_no_shipping_alert": {
+      "en": "This item must be collected in person in $formatItem. It won't be sent by mail.",
+      "pt": "Este item deve ser retirado pessoalmente em $formatItem. Não será enviado pelos correios."
+    },
+    "product_detail_no_shipping_alert_null_location": {
+      "en": "This item must be collected in person. It won't be sent by mail.",
+      "pt": "Este item deve ser retirado pessoalmente. Não será enviado pelos correios."
+    },
+    "product_detail_i_want_it_dialog_no_shipping_alert": {
+      "en": "This item must be collected in person in $formatItem.",
+      "pt": "Atenção: Este item deve ser retirado pessoalmente em $formatItem."
     },
     "hide_listing_confirmation_title": {
       "en": "Hide listing?",

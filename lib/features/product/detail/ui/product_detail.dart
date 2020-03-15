@@ -25,6 +25,7 @@ import 'package:giv_flutter/util/presentation/avatar_image.dart';
 import 'package:giv_flutter/util/presentation/bottom_sheet.dart';
 import 'package:giv_flutter/util/presentation/buttons.dart';
 import 'package:giv_flutter/util/presentation/custom_app_bar.dart';
+import 'package:giv_flutter/util/presentation/custom_divider.dart';
 import 'package:giv_flutter/util/presentation/custom_scaffold.dart';
 import 'package:giv_flutter/util/presentation/icon_buttons.dart';
 import 'package:giv_flutter/util/presentation/image_carousel.dart';
@@ -54,12 +55,14 @@ class _ProductDetailState extends BaseState<ProductDetail> {
   Product _product;
   ProductDetailBloc _productDetailBloc;
   bool _isMine;
+  Location _detailedLocation;
 
   @override
   void initState() {
     super.initState();
     _product = widget.product;
     _productDetailBloc = widget.bloc;
+    _listenToLocationStream();
     _productDetailBloc.fetchLocationDetails(_product.location);
     _isMine = _productDetailBloc.isProductMine(_product.user.id);
     _listenToDeleteStream();
@@ -77,6 +80,12 @@ class _ProductDetailState extends BaseState<ProductDetail> {
     _productDetailBloc.updateListingStream
         ?.listen((HttpResponse<Product> response) {
       if (response.isReady) _onUpdateListingResponse(response);
+    });
+  }
+
+  void _listenToLocationStream() {
+    _productDetailBloc.locationStream?.listen((Location location) {
+      _detailedLocation = location;
     });
   }
 
@@ -128,23 +137,17 @@ class _ProductDetailState extends BaseState<ProductDetail> {
       ),
       DefualtVerticalSpacing(),
       if (!_isMine) IWantItButton(onPressed: _handleIWantItTap),
-      if (!_isMine) DefualtVerticalSpacing(),
       ProductDetailDescription(
         description: _product.description,
       ),
-      DefualtVerticalSpacing(),
-      ProductDetailPublishedAt(
-        date: _product.updatedAt,
+      ProductDetailNoShippingAlertStreamBuilder(
+        stream: _productDetailBloc.locationStream,
       ),
-      DefualtVerticalSpacing(),
-      Divider(),
-      DefualtVerticalSpacing(),
-      ProductDetailUser(
-        user: _product.user,
+      DefualtVerticalSpacingAndAHalf(),
+      ProductDetailPublishedByContainer(
+        product: _product,
         onTap: _goToUserProfile,
-      ),
-      DefualtVerticalSpacing(),
-      DefualtVerticalSpacing(),
+      )
     ]);
   }
 
@@ -170,6 +173,7 @@ class _ProductDetailState extends BaseState<ProductDetail> {
           'whatsapp_message_interested',
           formatArg: _product.title,
         ),
+        _detailedLocation,
       );
   }
 
@@ -261,7 +265,7 @@ class _ProductDetailState extends BaseState<ProductDetail> {
     ));
   }
 
-  _showIWantItDialog(String message) {
+  _showIWantItDialog(String message, Location location) {
     var isAuthenticated = _productDetailBloc.isAuthenticated();
 
     final fullPhoneNumber =
@@ -276,6 +280,7 @@ class _ProductDetailState extends BaseState<ProductDetail> {
             message: message,
             isAuthenticated: isAuthenticated,
             util: _productDetailBloc.util,
+            location: location,
           );
         });
   }
@@ -331,13 +336,18 @@ class IWantItButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding:
-          EdgeInsets.symmetric(horizontal: Dimens.default_horizontal_margin),
-      child: PrimaryButton(
-        text: GetLocalizedStringFunction(context)('i_want_it'),
-        onPressed: onPressed,
-      ),
+    return Column(
+      children: <Widget>[
+        Padding(
+          padding: EdgeInsets.symmetric(
+              horizontal: Dimens.default_horizontal_margin),
+          child: PrimaryButton(
+            text: GetLocalizedStringFunction(context)('i_want_it'),
+            onPressed: onPressed,
+          ),
+        ),
+        DefualtVerticalSpacing(),
+      ],
     );
   }
 }
@@ -595,6 +605,51 @@ class _ProductDetailPublishedAtState
   }
 }
 
+class ProductDetailNoShippingAlertStreamBuilder extends StatelessWidget {
+  final Stream<Location> stream;
+
+  const ProductDetailNoShippingAlertStreamBuilder(
+      {Key key, @required this.stream})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<Location>(
+        stream: stream,
+        builder: (context, AsyncSnapshot snapshot) {
+          return snapshot.data == null
+              ? Container()
+              : ProductDetailNoShippingAlert(
+                  location: snapshot.data,
+                );
+        });
+  }
+}
+
+class ProductDetailNoShippingAlert extends StatelessWidget {
+  final Location location;
+
+  const ProductDetailNoShippingAlert({Key key, @required this.location})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final stringFunction = GetLocalizedStringFunction(context);
+    return Column(children: [
+      DefualtVerticalSpacing(),
+      ProductDetailHorizontalPadding(
+        child: Body2Text(
+          stringFunction(
+            'product_detail_no_shipping_alert',
+            formatArg: location?.mediumName,
+          ),
+          weight: SyntheticFontWeight.semiBold,
+        ),
+      ),
+    ]);
+  }
+}
+
 class ProductDetailUser extends StatelessWidget {
   final User user;
   final GestureTapCallback onTap;
@@ -636,4 +691,35 @@ class ProductDetailHorizontalPadding extends StatelessWidget {
         ),
         child: child,
       );
+}
+
+class ProductDetailPublishedByContainer extends StatelessWidget {
+  final Product product;
+  final GestureTapCallback onTap;
+
+  const ProductDetailPublishedByContainer({
+    Key key,
+    @required this.product,
+    @required this.onTap,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: Colors.grey[50],
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Divider(height: 1.0, color: Colors.grey[100],),
+          DefualtVerticalSpacingAndAHalf(),
+          ProductDetailUser(
+            user: product.user,
+            onTap: onTap,
+          ),
+          DefualtVerticalSpacing(),
+          DefualtVerticalSpacing(),
+        ],
+      ),
+    );
+  }
 }

@@ -14,3 +14,12 @@ class DefualtVerticalSpacing extends StatelessWidget {
     );
   }
 }
+
+class DefualtVerticalSpacingAndAHalf extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Spacing.vertical(
+      Dimens.default_vertical_margin_and_a_half,
+    );
+  }
+}

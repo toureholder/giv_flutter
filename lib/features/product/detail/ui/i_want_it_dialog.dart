@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:giv_flutter/base/base_state.dart';
 import 'package:giv_flutter/config/i18n/string_localizations.dart';
+import 'package:giv_flutter/model/location/location.dart';
 import 'package:giv_flutter/util/presentation/custom_divider.dart';
+import 'package:giv_flutter/util/presentation/spacing.dart';
 import 'package:giv_flutter/util/presentation/termos_of_service_acceptance_caption.dart';
 import 'package:giv_flutter/util/presentation/typography.dart';
 import 'package:giv_flutter/util/util.dart';
@@ -13,6 +15,8 @@ class IWantItDialog extends StatefulWidget {
   final String message;
   final bool isAuthenticated;
   final Util util;
+  final Location location;
+  final bool isMailable;
 
   const IWantItDialog({
     Key key,
@@ -20,6 +24,8 @@ class IWantItDialog extends StatefulWidget {
     this.phoneNumber,
     this.message,
     this.isAuthenticated,
+    this.location,
+    this.isMailable = false,
   }) : super(key: key);
 
   @override
@@ -45,11 +51,7 @@ class _IWantItDialogState extends BaseState<IWantItDialog> {
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          Padding(
-              padding: EdgeInsets.symmetric(
-                  horizontal: 8.0, vertical: Dimens.default_vertical_margin),
-              child: Body2Text(string('i_want_it_dialog_title'),
-                  textAlign: TextAlign.center)),
+          IWantItDialogTitle(),
           CustomDivider(),
           StartWhatsAppTile(
             onTap: _startWhatsApp,
@@ -59,10 +61,16 @@ class _IWantItDialogState extends BaseState<IWantItDialog> {
             onTap: _startPhoneApp,
           ),
           CustomDivider(),
+          if (!widget.isMailable)
+            IWantItDialogNoShippingAlert(
+              location: widget.location,
+            ),
           if (!widget.isAuthenticated)
             IWantItDialogTermsOfService(
               util: _util,
-            )
+            ),
+          if (!widget.isMailable || !widget.isAuthenticated)
+            DefualtVerticalSpacing(),
         ],
       ),
     );
@@ -74,6 +82,33 @@ class _IWantItDialogState extends BaseState<IWantItDialog> {
 
   _startPhoneApp() {
     _util.openPhoneApp(_phoneNumber);
+  }
+}
+
+class IWantItDialogTitle extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final stringFunction = GetLocalizedStringFunction(context);
+
+    return Container(
+      color: Theme.of(context).primaryColor,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Padding(
+            padding: EdgeInsets.symmetric(
+              horizontal: 0.0,
+              vertical: Dimens.grid(8),
+            ),
+            child: Body2Text(
+              stringFunction('i_want_it_dialog_title'),
+              color: Colors.white,
+              weight: SyntheticFontWeight.semiBold,
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
 
@@ -119,13 +154,48 @@ class IWantItDialogTermsOfService extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(
-          horizontal: 8.0, vertical: Dimens.default_vertical_margin),
-      child: TermsOfServiceAcceptanceCaption(
-        util: util,
-        prefix: 'terms_acceptance_caption_by_contacting_',
-      ),
+    return Column(
+      children: <Widget>[
+        DefualtVerticalSpacing(),
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 0.0),
+          child: TermsOfServiceAcceptanceCaption(
+            util: util,
+            prefix: 'terms_acceptance_caption_by_contacting_',
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class IWantItDialogNoShippingAlert extends StatelessWidget {
+  final Location location;
+
+  const IWantItDialogNoShippingAlert({Key key, this.location})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final stringFunction = GetLocalizedStringFunction(context);
+
+    final text = location == null
+        ? stringFunction('product_detail_no_shipping_alert_null_location')
+        : stringFunction('product_detail_i_want_it_dialog_no_shipping_alert',
+            formatArg: location?.mediumName);
+
+    return Column(
+      children: <Widget>[
+        DefualtVerticalSpacing(),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 0.0),
+          child: Body2Text(
+            text,
+            textAlign: TextAlign.center,
+            weight: SyntheticFontWeight.semiBold,
+          ),
+        ),
+      ],
     );
   }
 }
