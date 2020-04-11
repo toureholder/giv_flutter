@@ -772,6 +772,18 @@ class Strings {
       "en": "This item must be collected in person in $formatItem.",
       "pt": "Atenção: Este item deve ser retirado pessoalmente em $formatItem."
     },
+    "product_detail_user_introduction": {
+      "en": "Hi! I'm $formatItem.",
+      "pt": "Oi! Sou $formatItem."
+    },
+    "product_detail_user_see_all_donations_part_1": {
+      "en": "Tap here",
+      "pt": "Toque aqui"
+    },
+    "product_detail_user_see_all_donations_part_2": {
+      "en": " to see all of my donations :)",
+      "pt": " se quiser ver todas as minhas doações :)"
+    },
     "hide_listing_confirmation_title": {
       "en": "Hide listing?",
       "pt": "Ocultar anúncio?"

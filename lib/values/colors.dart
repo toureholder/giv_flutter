@@ -7,4 +7,5 @@ class CustomColors {
   static Color inActiveForeground = Colors.white.withOpacity(0.8);
   static const Color backgroundColor = Colors.white;
   static const Color errorColor = Colors.red;
+  static const Color textLinkColor = Colors.blue;
 }

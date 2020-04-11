@@ -18,6 +18,7 @@ dependencies:
   flutter_localizations:
     sdk: flutter
 
+  bubble: ^1.1.9+1
   cached_network_image: ^2.0.0
   country_code_picker: ^1.1.7
   faker: ^1.1.1

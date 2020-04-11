@@ -25,6 +25,7 @@ import 'package:giv_flutter/util/presentation/avatar_image.dart';
 import 'package:giv_flutter/util/presentation/bottom_sheet.dart';
 import 'package:giv_flutter/util/presentation/buttons.dart';
 import 'package:giv_flutter/util/presentation/custom_app_bar.dart';
+import 'package:bubble/bubble.dart';
 import 'package:giv_flutter/util/presentation/custom_divider.dart';
 import 'package:giv_flutter/util/presentation/custom_scaffold.dart';
 import 'package:giv_flutter/util/presentation/icon_buttons.dart';
@@ -144,7 +145,7 @@ class _ProductDetailState extends BaseState<ProductDetail> {
         stream: _productDetailBloc.locationStream,
       ),
       DefualtVerticalSpacingAndAHalf(),
-      ProductDetailPublishedByContainer(
+      ProductDetailUserContainer(
         product: _product,
         onTap: _goToUserProfile,
       )
@@ -661,21 +662,56 @@ class ProductDetailUser extends StatelessWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) => Padding(
-        padding: EdgeInsets.only(
-            left: Dimens.default_horizontal_margin,
-            right: Dimens.default_horizontal_margin),
-        child: GestureDetector(
-          onTap: onTap,
-          child: Row(
-            children: <Widget>[
-              AvatarImage(image: CustomImage.Image(url: user.avatarUrl)),
-              Spacing.horizontal(Dimens.grid(6)),
-              Body2Text(user.name)
-            ],
-          ),
+  Widget build(BuildContext context) {
+    final stringFunction = GetLocalizedStringFunction(context);
+
+    return Padding(
+      padding: EdgeInsets.only(
+          left: Dimens.default_horizontal_margin,
+          right: Dimens.default_horizontal_margin),
+      child: GestureDetector(
+        onTap: onTap,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            AvatarImage(image: CustomImage.Image(url: user.avatarUrl)),
+            Spacing.horizontal(Dimens.grid(6)),
+            Flexible(
+              child: Bubble(
+                nip: BubbleNip.leftTop,
+                shadowColor: Colors.grey[50],
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      stringFunction(
+                        'product_detail_user_introduction',
+                        formatArg: user.name,
+                      ),
+                    ),
+                    Spacing.vertical(5.0),
+                    RichText(
+                      textAlign: TextAlign.start,
+                      text: TextSpan(children: [
+                        TextSpan(
+                          text: stringFunction('product_detail_user_see_all_donations_part_1'),
+                          style: new TextStyle(color: CustomColors.textLinkColor),
+                        ),
+                        TextSpan(
+                          text: stringFunction('product_detail_user_see_all_donations_part_2'),
+                          style: new TextStyle(color: Colors.black),
+                        )
+                      ]),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
         ),
-      );
+      ),
+    );
+  }
 }
 
 class ProductDetailHorizontalPadding extends StatelessWidget {
@@ -693,11 +729,11 @@ class ProductDetailHorizontalPadding extends StatelessWidget {
       );
 }
 
-class ProductDetailPublishedByContainer extends StatelessWidget {
+class ProductDetailUserContainer extends StatelessWidget {
   final Product product;
   final GestureTapCallback onTap;
 
-  const ProductDetailPublishedByContainer({
+  const ProductDetailUserContainer({
     Key key,
     @required this.product,
     @required this.onTap,
@@ -706,12 +742,10 @@ class ProductDetailPublishedByContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.grey[50],
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Divider(height: 1.0, color: Colors.grey[100],),
-          DefualtVerticalSpacingAndAHalf(),
+          DefualtVerticalSpacing(),
           ProductDetailUser(
             user: product.user,
             onTap: onTap,
