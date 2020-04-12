@@ -86,4 +86,6 @@ class ProductDetailBloc {
       updateListingPublishSubject.sink.addError(error);
     }
   }
+
+  reportListing(String message) => util.launchCustomerService(message);
 }

@@ -16,6 +16,7 @@ class Dimens {
   static const double bottom_action_button_container_height = 90.0;
   static const double settings_tile_icon_size = 18.0;
   static const double category_list_tile_vertical_padding = GRID * 9;
+  static const double user_avatar_small = 32.0;
 
   static double grid(int times) {
     return GRID * times;

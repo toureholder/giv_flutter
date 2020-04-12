@@ -6,7 +6,7 @@ class Spacing {
   static SizedBox horizontal(double width) => SizedBox(width: width);
 }
 
-class DefualtVerticalSpacing extends StatelessWidget {
+class DefaultVerticalSpacing extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Spacing.vertical(
@@ -15,7 +15,7 @@ class DefualtVerticalSpacing extends StatelessWidget {
   }
 }
 
-class DefualtVerticalSpacingAndAHalf extends StatelessWidget {
+class DefaultVerticalSpacingAndAHalf extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Spacing.vertical(

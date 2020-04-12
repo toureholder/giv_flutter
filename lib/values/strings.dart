@@ -784,6 +784,18 @@ class Strings {
       "en": " to see all of my donations :)",
       "pt": " se quiser ver todas as minhas doações :)"
     },
+    "product_detail_report_listing_title": {
+      "en": "Report",
+      "pt": "Denúncia"
+    },
+    "product_detail_report_listing_text": {
+      "en": "Is there something awry with this listing? Report it here.",
+      "pt": "Encontrou algo de errado com este anúncio? Denuncie-o aqui."
+    },
+    "product_detail_report_listing_message": {
+      "en": "Hi! I'd like to report the listing: '$formatItem...'",
+      "pt": "Olá! Quero denunciar o anúncio: '$formatItem...'"
+    },
     "hide_listing_confirmation_title": {
       "en": "Hide listing?",
       "pt": "Ocultar anúncio?"

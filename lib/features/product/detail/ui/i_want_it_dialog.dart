@@ -70,7 +70,7 @@ class _IWantItDialogState extends BaseState<IWantItDialog> {
               util: _util,
             ),
           if (!widget.isMailable || !widget.isAuthenticated)
-            DefualtVerticalSpacing(),
+            DefaultVerticalSpacing(),
         ],
       ),
     );
@@ -156,7 +156,7 @@ class IWantItDialogTermsOfService extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        DefualtVerticalSpacing(),
+        DefaultVerticalSpacing(),
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 0.0),
           child: TermsOfServiceAcceptanceCaption(
@@ -186,7 +186,7 @@ class IWantItDialogNoShippingAlert extends StatelessWidget {
 
     return Column(
       children: <Widget>[
-        DefualtVerticalSpacing(),
+        DefaultVerticalSpacing(),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 0.0),
           child: Body2Text(

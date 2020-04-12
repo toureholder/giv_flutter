@@ -1,3 +1,4 @@
+import 'package:bubble/bubble.dart';
 import 'package:flutter/material.dart';
 import 'package:giv_flutter/base/base_state.dart';
 import 'package:giv_flutter/config/i18n/string_localizations.dart';
@@ -25,7 +26,6 @@ import 'package:giv_flutter/util/presentation/avatar_image.dart';
 import 'package:giv_flutter/util/presentation/bottom_sheet.dart';
 import 'package:giv_flutter/util/presentation/buttons.dart';
 import 'package:giv_flutter/util/presentation/custom_app_bar.dart';
-import 'package:bubble/bubble.dart';
 import 'package:giv_flutter/util/presentation/custom_divider.dart';
 import 'package:giv_flutter/util/presentation/custom_scaffold.dart';
 import 'package:giv_flutter/util/presentation/icon_buttons.dart';
@@ -128,15 +128,15 @@ class _ProductDetailState extends BaseState<ProductDetail> {
         isProductActive: _product.isActive,
         onTapIsHiddenAlert: _confirmHideOrActivate,
       ),
-      DefualtVerticalSpacing(),
+      DefaultVerticalSpacing(),
       ProductDetailTitle(
         title: _product.title,
       ),
-      DefualtVerticalSpacing(),
+      DefaultVerticalSpacing(),
       ProductDetailLocationStreamBuilder(
         stream: _productDetailBloc.locationStream,
       ),
-      DefualtVerticalSpacing(),
+      DefaultVerticalSpacing(),
       if (!_isMine) IWantItButton(onPressed: _handleIWantItTap),
       ProductDetailDescription(
         description: _product.description,
@@ -144,11 +144,18 @@ class _ProductDetailState extends BaseState<ProductDetail> {
       ProductDetailNoShippingAlertStreamBuilder(
         stream: _productDetailBloc.locationStream,
       ),
-      DefualtVerticalSpacingAndAHalf(),
+      DefaultVerticalSpacingAndAHalf(),
       ProductDetailUserContainer(
         product: _product,
         onTap: _goToUserProfile,
-      )
+      ),
+      DefaultVerticalSpacing(),
+      CustomDivider(),
+      ProductDetailReportListingButton(
+        onTap: () {
+          _onReportListing(_product.title);
+        },
+      ),
     ]);
   }
 
@@ -328,6 +335,14 @@ class _ProductDetailState extends BaseState<ProductDetail> {
         ),
         hasAnimation: false);
   }
+
+  void _onReportListing(String productTitle) =>
+      _productDetailBloc.reportListing(
+        string(
+          'product_detail_report_listing_message',
+          formatArg: productTitle,
+        ),
+      );
 }
 
 class IWantItButton extends StatelessWidget {
@@ -347,7 +362,7 @@ class IWantItButton extends StatelessWidget {
             onPressed: onPressed,
           ),
         ),
-        DefualtVerticalSpacing(),
+        DefaultVerticalSpacing(),
       ],
     );
   }
@@ -637,7 +652,7 @@ class ProductDetailNoShippingAlert extends StatelessWidget {
   Widget build(BuildContext context) {
     final stringFunction = GetLocalizedStringFunction(context);
     return Column(children: [
-      DefualtVerticalSpacing(),
+      DefaultVerticalSpacing(),
       ProductDetailHorizontalPadding(
         child: Body2Text(
           stringFunction(
@@ -674,7 +689,11 @@ class ProductDetailUser extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            AvatarImage(image: CustomImage.Image(url: user.avatarUrl)),
+            AvatarImage(
+              image: CustomImage.Image(
+                url: user.avatarUrl,
+              ),
+            ),
             Spacing.horizontal(Dimens.grid(6)),
             Flexible(
               child: Bubble(
@@ -694,11 +713,14 @@ class ProductDetailUser extends StatelessWidget {
                       textAlign: TextAlign.start,
                       text: TextSpan(children: [
                         TextSpan(
-                          text: stringFunction('product_detail_user_see_all_donations_part_1'),
-                          style: new TextStyle(color: CustomColors.textLinkColor),
+                          text: stringFunction(
+                              'product_detail_user_see_all_donations_part_1'),
+                          style:
+                              new TextStyle(color: CustomColors.textLinkColor),
                         ),
                         TextSpan(
-                          text: stringFunction('product_detail_user_see_all_donations_part_2'),
+                          text: stringFunction(
+                              'product_detail_user_see_all_donations_part_2'),
                           style: new TextStyle(color: Colors.black),
                         )
                       ]),
@@ -745,14 +767,63 @@ class ProductDetailUserContainer extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          DefualtVerticalSpacing(),
+          DefaultVerticalSpacing(),
           ProductDetailUser(
             user: product.user,
             onTap: onTap,
           ),
-          DefualtVerticalSpacing(),
-          DefualtVerticalSpacing(),
+          DefaultVerticalSpacing(),
         ],
+      ),
+    );
+  }
+}
+
+class ProductDetailReportListingButton extends StatelessWidget {
+  final GestureTapCallback onTap;
+
+  const ProductDetailReportListingButton({
+    Key key,
+    @required this.onTap,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final stringFunction = GetLocalizedStringFunction(context);
+
+    return InkWell(
+      onTap: onTap,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: Dimens.default_horizontal_margin,
+          vertical: Dimens.default_vertical_margin,
+        ),
+        child: Row(
+          children: <Widget>[
+            Icon(
+              Icons.error_outline,
+              size: Dimens.user_avatar_small,
+            ),
+            Spacing.horizontal(Dimens.default_horizontal_margin),
+            Flexible(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Caption(
+                    stringFunction('product_detail_report_listing_title'),
+                    weight: SyntheticFontWeight.bold,
+                  ),
+                  Spacing.vertical(5.0),
+                  Caption(
+                    stringFunction('product_detail_report_listing_text'),
+                  ),
+                ],
+              ),
+            ),
+            Spacing.horizontal(Dimens.default_horizontal_margin),
+            Icon(Icons.chevron_right)
+          ],
+        ),
       ),
     );
   }
