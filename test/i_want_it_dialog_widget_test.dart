@@ -39,18 +39,36 @@ main() {
         ],
       );
 
-  testWidgets('doesn\'t show TOS if user is logged in',
-      (WidgetTester tester) async {
-    final testableWidget = makeTestableWidget(isAuthenticated: true);
-    await tester.pumpWidget(testableWidget);
-    expect(find.byType(TermsOfServiceAcceptanceCaption), findsNothing);
+  group('shows TOS appropriately', () {
+    testWidgets('doesn\'t show TOS if user is logged in',
+        (WidgetTester tester) async {
+      final testableWidget = makeTestableWidget(isAuthenticated: true);
+      await tester.pumpWidget(testableWidget);
+      expect(find.byType(TermsOfServiceAcceptanceCaption), findsNothing);
+    });
+
+    testWidgets('shows TOS if user is not logged in',
+        (WidgetTester tester) async {
+      final testableWidget = makeTestableWidget(isAuthenticated: false);
+      await tester.pumpWidget(testableWidget);
+      expect(find.byType(TermsOfServiceAcceptanceCaption), findsOneWidget);
+    });
   });
 
-  testWidgets('shows TOS if user is not logged in',
-      (WidgetTester tester) async {
-    final testableWidget = makeTestableWidget(isAuthenticated: false);
-    await tester.pumpWidget(testableWidget);
-    expect(find.byType(TermsOfServiceAcceptanceCaption), findsOneWidget);
+  group('shows no shipping alert appropriately', () {
+    testWidgets('doesn\'t show no shipping alert if item is mailable',
+        (WidgetTester tester) async {
+      final testableWidget = makeTestableWidget(isMailable: true);
+      await tester.pumpWidget(testableWidget);
+      expect(find.byType(IWantItDialogNoShippingAlert), findsNothing);
+    });
+
+    testWidgets('shows no shipping alert if item isn\'t mailable',
+        (WidgetTester tester) async {
+      final testableWidget = makeTestableWidget(isMailable: false);
+      await tester.pumpWidget(testableWidget);
+      expect(find.byType(IWantItDialogNoShippingAlert), findsOneWidget);
+    });
   });
 
   testWidgets('starts WhatsApp', (WidgetTester tester) async {

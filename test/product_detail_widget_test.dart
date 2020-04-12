@@ -63,7 +63,7 @@ main() {
     await tester.pump();
   }
 
-  group('interface shows appropriate widgets if product is mine', () {
+  group('shows appropriate widgets if product is mine', () {
     testWidgets('doesn\'t show MoreIconButton if product is not mine',
         (WidgetTester tester) async {
       final product = Product.fakeWithImageUrls(1);
@@ -104,6 +104,49 @@ main() {
       await tester.pumpWidget(testableWidget);
 
       expect(find.byType(IWantItButton), findsNothing);
+    });
+  });
+
+  group('shows appropriate widgets if product is mailable', () {
+    testWidgets('shows ProductDetailNoShippingAlert if product is not mailable',
+        (WidgetTester tester) async {
+      final locationSubject = PublishSubject<Location>();
+
+      when(mockBloc.locationStream).thenAnswer((_) => locationSubject.stream);
+
+      final product = Product.fakeNotMailable(1);
+      when(mockBloc.isProductMine(product.user.id)).thenReturn(true);
+
+      final testableWidget = makeTestableWidget(product);
+      await tester.pumpWidget(testableWidget);
+      expect(find.byType(ProductDetailNoShippingAlert), findsNothing);
+
+      locationSubject.sink.add(Location.fake());
+      await tester.pump(Duration.zero);
+      expect(find.byType(ProductDetailNoShippingAlert), findsOneWidget);
+
+      locationSubject.close();
+    });
+
+    testWidgets(
+        'doesn\'t shows ProductDetailNoShippingAlert if product is mailable',
+        (WidgetTester tester) async {
+      final locationSubject = PublishSubject<Location>();
+
+      when(mockBloc.locationStream).thenAnswer((_) => locationSubject.stream);
+
+      final product = Product.fakeMailable(1);
+      when(mockBloc.isProductMine(product.user.id)).thenReturn(true);
+
+      final testableWidget = makeTestableWidget(product);
+      await tester.pumpWidget(testableWidget);
+      expect(find.byType(ProductDetailNoShippingAlert), findsNothing);
+
+      locationSubject.sink.add(Location.fake());
+      await tester.pump(Duration.zero);
+      expect(find.byType(ProductDetailNoShippingAlert), findsNothing);
+
+      locationSubject.close();
     });
   });
 

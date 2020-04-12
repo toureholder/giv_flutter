@@ -105,14 +105,10 @@ class Product {
       .toList();
 
   factory Product.fakeWithImageUrls(int id, {int howManyImages}) {
-    final faker = new Faker();
-
-    final numberOfImages =
-        howManyImages ?? faker.randomGenerator.integer(8, min: 1);
-    final imageIds = faker.randomGenerator.numbers(1000, numberOfImages);
-    final images = imageIds.map((id) {
-      return Image(url: "https://picsum.photos/500/500/?image=$id");
-    }).toList();
+    final images = fakeImages(
+      howManyImages: howManyImages,
+      isUrl: true,
+    );
 
     return Product(
         id: id ?? faker.randomGenerator.integer(99, min: 1),
@@ -132,55 +128,88 @@ class Product {
   }
 
   factory Product.fakeWithImageFiles(int id, {int howManyImages}) {
-    final faker = new Faker();
-
-    final numberOfImages =
-        howManyImages ?? faker.randomGenerator.integer(8, min: 1);
-    final imageIds = faker.randomGenerator.numbers(1000, numberOfImages);
-    final images = imageIds.map((id) {
-      return Image(file: File('some/path/{$id}.jpg'));
-    }).toList();
+    final images = fakeImages(
+      howManyImages: howManyImages,
+      isUrl: false,
+    );
 
     return Product(
-        id: id ?? faker.randomGenerator.integer(99, min: 1),
-        title: faker.food.dish(),
-        location: Location.fake(),
-        description:
-            'Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. The quick brown fox jumps over the lazy dog. ',
-        images: images,
-        categories: [
-          ProductCategory(
-            id: 20,
-            simpleName: "Música e hobbies",
-          )
-        ],
-        user: User.fake());
+      id: id ?? faker.randomGenerator.integer(99, min: 1),
+      title: faker.food.dish(),
+      location: Location.fake(),
+      description:
+          'Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. The quick brown fox jumps over the lazy dog. ',
+      images: images,
+      categories: [
+        ProductCategory(
+          id: 20,
+          simpleName: "Música e hobbies",
+        )
+      ],
+      user: User.fake(),
+    );
   }
 
   factory Product.fakeWithIncompleteLocation(int id, {int howManyImages}) {
-    final faker = new Faker();
-
-    final numberOfImages =
-        howManyImages ?? faker.randomGenerator.integer(8, min: 1);
-    final imageIds = faker.randomGenerator.numbers(1000, numberOfImages);
-    final images = imageIds.map((id) {
-      return Image(file: File('some/path/{$id}.jpg'));
-    }).toList();
+    final images = fakeImages(howManyImages: howManyImages);
 
     return Product(
-        id: id ?? faker.randomGenerator.integer(99, min: 1),
-        title: faker.food.dish(),
-        location: Location.fakeMissingNames(),
-        description:
-            'Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. The quick brown fox jumps over the lazy dog. ',
-        images: images,
-        categories: [
-          ProductCategory(
-            id: 20,
-            simpleName: "Música e hobbies",
-          )
-        ],
-        user: User.fake());
+      id: id ?? faker.randomGenerator.integer(99, min: 1),
+      title: faker.food.dish(),
+      location: Location.fakeMissingNames(),
+      description:
+          'Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. The quick brown fox jumps over the lazy dog. ',
+      images: images,
+      categories: [
+        ProductCategory(
+          id: 20,
+          simpleName: "Música e hobbies",
+        )
+      ],
+      user: User.fake(),
+    );
+  }
+
+  factory Product.fakeMailable(int id, {int howManyImages}) {
+    final images = fakeImages(howManyImages: howManyImages);
+
+    return Product(
+      id: id ?? faker.randomGenerator.integer(99, min: 1),
+      title: faker.food.dish(),
+      location: Location.fakeMissingNames(),
+      isMailable: true,
+      description:
+          'Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. The quick brown fox jumps over the lazy dog. ',
+      images: images,
+      categories: [
+        ProductCategory(
+          id: 20,
+          simpleName: "Música e hobbies",
+        )
+      ],
+      user: User.fake(),
+    );
+  }
+
+  factory Product.fakeNotMailable(int id, {int howManyImages}) {
+    final images = fakeImages(howManyImages: howManyImages);
+
+    return Product(
+      id: id ?? faker.randomGenerator.integer(99, min: 1),
+      title: faker.food.dish(),
+      location: Location.fakeMissingNames(),
+      isMailable: false,
+      description:
+          'Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. The quick brown fox jumps over the lazy dog. ',
+      images: images,
+      categories: [
+        ProductCategory(
+          id: 20,
+          simpleName: "Música e hobbies",
+        )
+      ],
+      user: User.fake(),
+    );
   }
 
   static List<Product> fakeList({int quantity}) {
@@ -193,5 +222,25 @@ class Product {
       list.add(Product.fakeWithImageUrls(i + 1));
     }
     return list;
+  }
+
+  static List<Image> fakeImages({
+    int howManyImages,
+    bool isUrl = true,
+  }) {
+    final faker = new Faker();
+
+    final numberOfImages =
+        howManyImages ?? faker.randomGenerator.integer(8, min: 1);
+
+    final imageIds = faker.randomGenerator.numbers(1000, numberOfImages);
+
+    final images = imageIds.map((id) {
+      return isUrl
+          ? Image(url: "https://picsum.photos/500/500/?image=$id")
+          : Image(file: File('some/path/{$id}.jpg'));
+    }).toList();
+
+    return images;
   }
 }
