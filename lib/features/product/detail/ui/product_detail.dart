@@ -137,13 +137,17 @@ class _ProductDetailState extends BaseState<ProductDetail> {
         stream: _productDetailBloc.locationStream,
       ),
       DefaultVerticalSpacing(),
-      if (!_isMine) IWantItButton(onPressed: _handleIWantItTap),
+      if (!_isMine)
+        IWantItButton(
+          onPressed: _handleIWantItTap,
+        ),
       ProductDetailDescription(
         description: _product.description,
       ),
-      ProductDetailNoShippingAlertStreamBuilder(
-        stream: _productDetailBloc.locationStream,
-      ),
+      if (!_product.isMailable)
+        ProductDetailNoShippingAlertStreamBuilder(
+          stream: _productDetailBloc.locationStream,
+        ),
       DefaultVerticalSpacingAndAHalf(),
       ProductDetailUserContainer(
         product: _product,
@@ -288,6 +292,7 @@ class _ProductDetailState extends BaseState<ProductDetail> {
             message: message,
             isAuthenticated: isAuthenticated,
             util: _productDetailBloc.util,
+            isMailable: _product.isMailable,
             location: location,
           );
         });

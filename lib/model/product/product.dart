@@ -18,6 +18,7 @@ class Product {
   User user;
   List<ProductCategory> categories;
   bool isActive;
+  bool isMailable;
   DateTime updatedAt;
 
   Product({
@@ -29,6 +30,7 @@ class Product {
     this.user,
     this.categories,
     this.isActive = true,
+    this.isMailable = false,
     this.updatedAt,
   });
 
@@ -37,6 +39,7 @@ class Product {
         title = json['title'],
         description = json['description'],
         isActive = json['is_active'],
+        isMailable = false,
         updatedAt = DateTime.parse(json['updated_at']),
         location = Location.fromLocationPartIds(
             countryId: json['geonames_country_id'],

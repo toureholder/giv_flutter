@@ -20,13 +20,17 @@ main() {
     mockUtil = MockUtil();
   });
 
-  Widget makeTestableWidget({bool isAuthenticated = true}) =>
+  Widget makeTestableWidget({
+    bool isAuthenticated = true,
+    bool isMailable = false,
+  }) =>
       testUtil.makeTestableWidget(
         subject: IWantItDialog(
           util: mockUtil,
           message: message,
           phoneNumber: phoneNumber,
           isAuthenticated: isAuthenticated,
+          isMailable: isMailable,
         ),
         dependencies: [
           Provider<Util>(

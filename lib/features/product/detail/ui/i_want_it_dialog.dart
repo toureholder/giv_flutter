@@ -15,17 +15,17 @@ class IWantItDialog extends StatefulWidget {
   final String message;
   final bool isAuthenticated;
   final Util util;
-  final Location location;
   final bool isMailable;
+  final Location location;
 
   const IWantItDialog({
     Key key,
     @required this.util,
-    this.phoneNumber,
-    this.message,
-    this.isAuthenticated,
+    @required this.phoneNumber,
+    @required this.message,
+    @required this.isAuthenticated,
+    @required this.isMailable,
     this.location,
-    this.isMailable = false,
   }) : super(key: key);
 
   @override
