@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:giv_flutter/config/i18n/string_localizations.dart';
+import 'package:giv_flutter/util/data/content_stream_builder.dart';
 import 'package:giv_flutter/util/presentation/typography.dart';
 
 class AlertDialogTitle extends StatelessWidget {
@@ -91,17 +92,79 @@ class AlertDialogCancelButton extends StatelessWidget {
 
 class AlertDialogConfirmButton extends StatelessWidget {
   final VoidCallback onPressed;
+  final String text;
+  final Color textColor;
 
   const AlertDialogConfirmButton({
     Key key,
-    this.onPressed,
+    this.text,
+    this.textColor,
+    @required this.onPressed,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final finalText = text ?? GetLocalizedStringFunction(context)('common_ok');
+    final style = textColor == null ? null : TextStyle(color: textColor);
+
     return FlatButton(
-      child: Text(GetLocalizedStringFunction(context)('common_ok')),
+      child: Text(
+        finalText,
+        style: style,
+      ),
       onPressed: onPressed,
+    );
+  }
+}
+
+class CustomAlertDialog extends StatelessWidget {
+  final String title;
+  final String content;
+  final String confirmationText;
+  final Color confirmationTextColor;
+  final VoidCallback onConfirmationPressed;
+
+  const CustomAlertDialog({
+    Key key,
+    this.title,
+    this.content,
+    this.confirmationText,
+    this.confirmationTextColor,
+    @required this.onConfirmationPressed,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final titleWidget = title == null ? null : Text(title);
+    final contentWidget = content == null ? null : Text(content);
+
+    return AlertDialog(
+      title: titleWidget,
+      content: contentWidget,
+      actions: <Widget>[
+        AlertDialogCancelButton(
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+        AlertDialogConfirmButton(
+          text: confirmationText,
+          textColor: confirmationTextColor,
+          onPressed: onConfirmationPressed,
+        )
+      ],
+    );
+  }
+}
+
+class ProgressIndicatorDialog extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      content: SizedBox(
+        height: 100,
+        child: Center(
+          child: SharedLoadingState(),
+        ),
+      ),
     );
   }
 }

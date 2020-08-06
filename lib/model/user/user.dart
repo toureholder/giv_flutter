@@ -1,12 +1,30 @@
 import 'package:faker/faker.dart';
+import 'package:giv_flutter/config/hive/constants.dart';
+import 'package:hive/hive.dart';
 
-class User {
+part 'user.g.dart';
+
+@HiveType(typeId: HiveConstants.usersTypeId)
+class User extends HiveObject {
+  @HiveField(0)
   int id;
+
+  @HiveField(1)
   String name;
+
+  @HiveField(2)
   String avatarUrl;
+
+  @HiveField(3)
   String phoneNumber;
+
+  @HiveField(4)
   String countryCallingCode;
+
+  @HiveField(5)
   String bio;
+
+  @HiveField(6)
   DateTime createdAt;
 
   User(
@@ -49,11 +67,11 @@ class User {
 
   User copy() => User.fromJson(toJson());
 
-  static User fake({bool withPhoneNumber = true}) {
+  static User fake({int id, bool withPhoneNumber = true}) {
     final faker = new Faker();
     final fakePerson = faker.person;
     final String gender = faker.randomGenerator.boolean() ? "men" : "women";
-    final id = faker.randomGenerator.integer(99, min: 1);
+    final finalId = id ?? faker.randomGenerator.integer(99, min: 1);
 
     String phoneNumber;
     String countryCallingCode;
@@ -64,11 +82,12 @@ class User {
     }
 
     return User(
-      id: id,
+      id: finalId,
       name: "${fakePerson.firstName()} ${fakePerson.lastName()}",
       avatarUrl: "https://randomuser.me/api/portraits/$gender/$id.jpg",
       phoneNumber: phoneNumber,
       countryCallingCode: countryCallingCode,
+      createdAt: DateTime.now(),
     );
   }
 

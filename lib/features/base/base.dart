@@ -143,6 +143,9 @@ class _BaseState extends BaseState<Base> implements HomeListener {
     }
   }
 
+  int _getIndexByActionId(String actionId) =>
+      _pages.indexWhere((it) => it.actionId == actionId);
+
   @override
   void invokeActionById(String actionId) {
     if (actionId == Base.actionIdSearch) {
@@ -155,9 +158,6 @@ class _BaseState extends BaseState<Base> implements HomeListener {
       return;
     }
   }
-
-  int _getIndexByActionId(String actionId) =>
-      _pages.indexWhere((it) => it.actionId == actionId);
 }
 
 class BasePageFab extends StatelessWidget {

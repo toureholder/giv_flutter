@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -6,6 +7,12 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:giv_flutter/config/i18n/string_localizations.dart';
 import 'package:giv_flutter/features/force_update/bloc/force_update_bloc.dart';
+import 'package:giv_flutter/features/groups/create_group/bloc/create_group_bloc.dart';
+import 'package:giv_flutter/features/groups/edit_group/bloc/edit_group_bloc.dart';
+import 'package:giv_flutter/features/groups/group_detail/bloc/group_detail_bloc.dart';
+import 'package:giv_flutter/features/groups/group_information/bloc/group_information_bloc.dart';
+import 'package:giv_flutter/features/groups/join_group/bloc/join_group_bloc.dart';
+import 'package:giv_flutter/features/groups/my_groups/bloc/my_groups_bloc.dart';
 import 'package:giv_flutter/features/home/bloc/home_bloc.dart';
 import 'package:giv_flutter/features/home/ui/home.dart';
 import 'package:giv_flutter/features/listing/bloc/my_listings_bloc.dart';
@@ -22,8 +29,16 @@ import 'package:giv_flutter/features/user_profile/bloc/user_profile_bloc.dart';
 import 'package:giv_flutter/model/api_response/api_response.dart';
 import 'package:giv_flutter/model/app_config/repository/api/app_config_api.dart';
 import 'package:giv_flutter/model/app_config/repository/app_config_repository.dart';
+import 'package:giv_flutter/model/authenticated_user_updated_action.dart';
 import 'package:giv_flutter/model/carousel/repository/api/carousel_api.dart';
 import 'package:giv_flutter/model/carousel/repository/carousel_repository.dart';
+import 'package:giv_flutter/model/group/group.dart';
+import 'package:giv_flutter/model/group/repository/api/group_api.dart';
+import 'package:giv_flutter/model/group/repository/group_repository.dart';
+import 'package:giv_flutter/model/group_membership/group_membership.dart';
+import 'package:giv_flutter/model/group_updated_action.dart';
+import 'package:giv_flutter/model/group_membership/repository/api/group_membership_api.dart';
+import 'package:giv_flutter/model/group_membership/repository/group_membership_repository.dart';
 import 'package:giv_flutter/model/listing/repository/api/listing_api.dart';
 import 'package:giv_flutter/model/listing/repository/listing_repository.dart';
 import 'package:giv_flutter/model/location/location.dart';
@@ -43,12 +58,14 @@ import 'package:giv_flutter/util/firebase/firebase_storage_util_provider.dart';
 import 'package:giv_flutter/util/network/http_client_wrapper.dart';
 import 'package:giv_flutter/util/network/http_response.dart';
 import 'package:giv_flutter/util/util.dart';
+import 'package:hive/hive.dart';
 import 'package:http/http.dart';
 import 'package:mockito/mockito.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 // Miscellaneous
+
 class MockClient extends Mock implements HttpClientWrapper {}
 
 class MockDiskStorageProvider extends Mock implements DiskStorageProvider {}
@@ -70,6 +87,12 @@ class MockSessionProvider extends Mock implements SessionProvider {}
 
 class MockUtil extends Mock implements Util {}
 
+class MockHomeListener extends Mock implements HomeListener {}
+
+class MockFile extends Mock implements File {}
+
+class MockBuildContext extends Mock implements BuildContext {}
+
 // Firebase storage
 
 class MockFirebaseStorageUtilProvider extends Mock
@@ -85,6 +108,11 @@ class MockStorageTaskEventStream extends Mock
     implements Stream<StorageTaskEvent> {}
 
 class MockStorageTaskEvent extends Mock implements StorageTaskEvent {}
+
+class MockSuccessStorageTaskEvent extends Mock implements StorageTaskEvent {
+  @override
+  StorageTaskEventType get type => StorageTaskEventType.success;
+}
 
 class MockStorageTaskSnapshot extends Mock implements StorageTaskSnapshot {}
 
@@ -102,6 +130,10 @@ class MockProductApi extends Mock implements ProductApi {}
 
 class MockUserApi extends Mock implements UserApi {}
 
+class MockGroupMembershipApi extends Mock implements GroupMembershipApi {}
+
+class MockGroupApi extends Mock implements GroupApi {}
+
 // Mock Repositories
 
 class MockAppConfigRepository extends Mock implements AppConfigRepository {}
@@ -115,6 +147,21 @@ class MockLocationRepository extends Mock implements LocationRepository {}
 class MockProductRepository extends Mock implements ProductRepository {}
 
 class MockUserRepository extends Mock implements UserRepository {}
+
+class MockGroupMembershipRepository extends Mock
+    implements GroupMembershipRepository {}
+
+class MockGroupRepository extends Mock implements GroupRepository {}
+
+// Mock Boxes
+class MockGroupMembershipsBox extends Mock implements Box<GroupMembership> {}
+
+class MockGroupsBox extends Mock implements Box<Group> {}
+
+// Mock ChangeNotifiers
+class MockGroupUpdatedAction extends Mock implements GroupUpdatedAction {}
+
+class MockAuthUserUpdatedAction extends Mock implements AuthUserUpdatedAction {}
 
 // Mock Caches
 
@@ -150,7 +197,19 @@ class MockSplashBloc extends Mock implements SplashBloc {}
 
 class MockUserProfileBloc extends Mock implements UserProfileBloc {}
 
-//
+class MockJoinGroupBloc extends Mock implements JoinGroupBloc {}
+
+class MockCreateGroupBloc extends Mock implements CreateGroupBloc {}
+
+class MockMyGroupsBloc extends Mock implements MyGroupsBloc {}
+
+class MockGroupDetailBloc extends Mock implements GroupDetailBloc {}
+
+class MockGroupInformationBloc extends Mock implements GroupInformationBloc {}
+
+class MockEditGroupBloc extends Mock implements EditGroupBloc {}
+
+// Mock Rx Subjects and Streams
 
 class MockApiHttpResponseSubject extends Mock
     implements PublishSubject<HttpResponse<ApiResponse>> {}
@@ -180,11 +239,9 @@ class MockStreamEventStateSubject extends Mock
 class MockStreamEventStateStreamSink extends Mock
     implements StreamSink<StreamEventState> {}
 
-class MockBooleanSubject extends Mock
-    implements PublishSubject<bool> {}
+class MockBooleanSubject extends Mock implements PublishSubject<bool> {}
 
-class MockBooleanStreamSink extends Mock
-    implements StreamSink<bool> {}
+class MockBooleanStreamSink extends Mock implements StreamSink<bool> {}
 
 class MockProductListPublishSubject extends Mock
     implements PublishSubject<List<Product>> {}
@@ -192,6 +249,20 @@ class MockProductListPublishSubject extends Mock
 class MockProductListStreamSink extends Mock
     implements StreamSink<List<Product>> {}
 
-//
+class MockGroupMembershipHttpResponsePublishSubject extends Mock
+    implements PublishSubject<HttpResponse<GroupMembership>> {}
 
-class MockHomeListener extends Mock implements HomeListener {}
+class MockGroupMembershipHttpResponseStreamSink extends Mock
+    implements StreamSink<HttpResponse<GroupMembership>> {}
+
+class MockGroupHttpResponsePublishSubject extends Mock
+    implements PublishSubject<HttpResponse<Group>> {}
+
+class MockGroupHttpResponseStreamSink extends Mock
+    implements StreamSink<HttpResponse<Group>> {}
+
+class MockGroupMembershipListPublishSubject extends Mock
+    implements PublishSubject<List<GroupMembership>> {}
+
+class MockGroupMembershipListStreamSink extends Mock
+    implements StreamSink<List<GroupMembership>> {}

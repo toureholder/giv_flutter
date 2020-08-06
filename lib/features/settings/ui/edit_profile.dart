@@ -17,6 +17,7 @@ import 'package:giv_flutter/util/presentation/bottom_sheet.dart';
 import 'package:giv_flutter/util/presentation/custom_app_bar.dart';
 import 'package:giv_flutter/util/presentation/custom_divider.dart';
 import 'package:giv_flutter/util/presentation/custom_scaffold.dart';
+import 'package:giv_flutter/util/presentation/edit_information_tile.dart';
 import 'package:giv_flutter/util/presentation/typography.dart';
 import 'package:giv_flutter/values/dimens.dart';
 import 'package:image_cropper/image_cropper.dart';
@@ -164,7 +165,7 @@ class _EditProfileState extends BaseState<EditProfile> {
           onTap: _openGallery),
     ];
 
-    CustomBottomSheet.show(context,
+    TiledBottomSheet.show(context,
         tiles: tiles, title: string('profile_image_picker_modal_title'));
   }
 
@@ -320,50 +321,10 @@ class EditProfileSectionTitle extends StatelessWidget {
             right: Dimens.default_horizontal_margin,
             top: Dimens.default_vertical_margin,
             bottom: 8.0),
-        child: Subtitle(text,
-            weight: SyntheticFontWeight.bold,
-            color: Theme.of(context).primaryColor),
-      ),
-    );
-  }
-}
-
-class EditProfileTile extends StatelessWidget {
-  final String value;
-  final String caption;
-  final String emptyStateCaption;
-  final GestureTapCallback onTap;
-
-  const EditProfileTile({
-    Key key,
-    @required this.value,
-    @required this.caption,
-    @required this.emptyStateCaption,
-    @required this.onTap,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    final computedValue =
-        (value != null && value.trim().isEmpty) ? null : value;
-
-    var finalValue = computedValue ?? caption;
-    var finalCaption = computedValue == null ? emptyStateCaption : caption;
-
-    return Material(
-      color: Colors.white,
-      child: InkWell(
-        onTap: onTap,
-        child: Padding(
-          padding: EdgeInsets.symmetric(
-              vertical: 12.0, horizontal: Dimens.default_horizontal_margin),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              BodyText(finalValue),
-              Body2Text(finalCaption, color: Colors.grey)
-            ],
-          ),
+        child: Subtitle(
+          text,
+          weight: SyntheticFontWeight.bold,
+          color: Theme.of(context).primaryColor,
         ),
       ),
     );
@@ -384,7 +345,7 @@ class PhoneNumberTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final stringFunction = GetLocalizedStringFunction(context);
 
-    return EditProfileTile(
+    return EditInformationTile(
       value: user.phoneNumber == null
           ? null
           : '+${user.countryCallingCode} ${user.phoneNumber}',
@@ -409,7 +370,7 @@ class NameTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final stringFunction = GetLocalizedStringFunction(context);
 
-    return EditProfileTile(
+    return EditInformationTile(
       value: value,
       caption: stringFunction('settings_name'),
       emptyStateCaption: stringFunction('settings_name_empty_state'),
@@ -432,7 +393,7 @@ class BioTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final stringFunction = GetLocalizedStringFunction(context);
 
-    return EditProfileTile(
+    return EditInformationTile(
       value: value,
       caption: stringFunction('settings_bio'),
       emptyStateCaption: stringFunction('settings_bio_empty_state'),

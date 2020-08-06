@@ -377,12 +377,10 @@ class _SearchResultEmptyStateState extends BaseState<SearchResultEmptyState> {
       }
     } else {
       if (category != null) {
-        text = string(
-            'search_result_empty_state_nothing_from_category',
+        text = string('search_result_empty_state_nothing_from_category',
             formatArg: category.canonicalName);
       } else if (searchQuery != null) {
-        text = string(
-            'search_result_empty_state_nothing_from_search_term',
+        text = string('search_result_empty_state_nothing_from_search_term',
             formatArg: searchQuery);
       } else {
         text = string('search_result_empty_state_nothing');

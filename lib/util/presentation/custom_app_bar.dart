@@ -1,14 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:giv_flutter/base/base_state.dart';
+import 'package:giv_flutter/values/colors.dart';
 import 'package:giv_flutter/values/dimens.dart';
 
 class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
   final String title;
   final List<Widget> actions;
   final Widget leading;
+  final double titleOpacity;
 
-  const CustomAppBar({Key key, this.title = "", this.actions, this.leading})
-      : super(key: key);
+  const CustomAppBar({
+    Key key,
+    this.title = "",
+    this.actions,
+    this.leading,
+    this.titleOpacity = 1.0,
+  }) : super(key: key);
 
   @override
   _CustomAppBarState createState() => _CustomAppBarState();
@@ -23,9 +30,15 @@ class _CustomAppBarState extends BaseState<CustomAppBar> {
     super.build(context);
 
     return AppBar(
-        title: new Text(
-          widget.title,
-          style: TextStyle(color: Colors.black87),
+        title: AnimatedOpacity(
+          duration: Duration(milliseconds: 50),
+          opacity: widget.titleOpacity,
+          child: Text(
+            widget.title,
+            style: TextStyle(
+              color: CustomColors.appBarTextColor,
+            ),
+          ),
         ),
         leading: widget.leading,
         elevation: 0.0,

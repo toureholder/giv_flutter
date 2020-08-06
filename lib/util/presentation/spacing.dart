@@ -23,3 +23,12 @@ class DefaultVerticalSpacingAndAHalf extends StatelessWidget {
     );
   }
 }
+
+class DefaultHorizontalSpacing extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Spacing.horizontal(
+      Dimens.default_horizontal_margin,
+    );
+  }
+}

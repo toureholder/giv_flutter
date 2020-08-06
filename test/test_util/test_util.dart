@@ -47,9 +47,24 @@ class TestUtil {
     });
   }
 
+  Finder findDialogByContent(String localizationKey) {
+    final dialog = find.byType(AlertDialog);
+    final content = findInternationalizedText(localizationKey);
+    return find.descendant(of: dialog, matching: content);
+  }
+
   T getWidgetByKey<T>(String key) =>
       find.byKey(Key(key)).evaluate().single.widget as T;
 
-  T getWidgetByType<T>() =>
-      find.byType(T).evaluate().single.widget as T;
+  T getWidgetByType<T>({bool skipOffstage = true}) {
+    return find.byType(T, skipOffstage: skipOffstage).evaluate().single.widget
+        as T;
+  }
+
+  Future<void> closeBottomSheetOrDialog(WidgetTester tester,
+      {Type type}) async {
+    final finalType = type ?? AppBar;
+    await tester.tap(find.byType(finalType));
+    await tester.pump();
+  }
 }

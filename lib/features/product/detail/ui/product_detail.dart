@@ -1,4 +1,3 @@
-import 'package:bubble/bubble.dart';
 import 'package:flutter/material.dart';
 import 'package:giv_flutter/base/base_state.dart';
 import 'package:giv_flutter/config/i18n/string_localizations.dart';
@@ -41,11 +40,13 @@ import 'package:provider/provider.dart';
 class ProductDetail extends StatefulWidget {
   final Product product;
   final ProductDetailBloc bloc;
+  final bool addLinkToUserProfile;
 
   const ProductDetail({
     Key key,
     @required this.bloc,
     @required this.product,
+    this.addLinkToUserProfile = true,
   }) : super(key: key);
 
   @override
@@ -57,10 +58,12 @@ class _ProductDetailState extends BaseState<ProductDetail> {
   ProductDetailBloc _productDetailBloc;
   bool _isMine;
   Location _detailedLocation;
+  bool _addLinkToUserProfile;
 
   @override
   void initState() {
     super.initState();
+    _addLinkToUserProfile = widget.addLinkToUserProfile;
     _product = widget.product;
     _productDetailBloc = widget.bloc;
     _listenToLocationStream();
@@ -148,14 +151,14 @@ class _ProductDetailState extends BaseState<ProductDetail> {
         ProductDetailNoShippingAlertStreamBuilder(
           stream: _productDetailBloc.locationStream,
         ),
-      DefaultVerticalSpacingAndAHalf(),
-      ProductDetailUserContainer(
-        product: _product,
-        onTap: _goToUserProfile,
+      Spacing.vertical(Dimens.grid(5)),
+      ProductDetailUserTile(
+        localeString: localeString,
+        user: _product.user,
+        onTap: _addLinkToUserProfile ? _goToUserProfile : null,
       ),
-      DefaultVerticalSpacing(),
       CustomDivider(),
-      ProductDetailReportListingButton(
+      ProductDetailReportListingTile(
         onTap: () {
           _onReportListing(_product.title);
         },
@@ -174,7 +177,7 @@ class _ProductDetailState extends BaseState<ProductDetail> {
       DeleteBottomSheetTile(onTap: _confirmDelete),
     ];
 
-    CustomBottomSheet.show(context,
+    TiledBottomSheet.show(context,
         tiles: tiles, title: string('shared_title_options'));
   }
 
@@ -524,6 +527,21 @@ class ProductDetailImageCarousel extends StatelessWidget {
   }
 }
 
+class ProductDetailHorizontalPadding extends StatelessWidget {
+  final Widget child;
+
+  const ProductDetailHorizontalPadding({Key key, @required this.child})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) => Padding(
+        padding: EdgeInsets.symmetric(
+          horizontal: Dimens.default_horizontal_margin,
+        ),
+        child: child,
+      );
+}
+
 class ProductDetailTitle extends StatelessWidget {
   final String title;
 
@@ -671,123 +689,64 @@ class ProductDetailNoShippingAlert extends StatelessWidget {
   }
 }
 
-class ProductDetailUser extends StatelessWidget {
+class ProductDetailUserTile extends StatelessWidget {
   final User user;
   final GestureTapCallback onTap;
+  final String localeString;
 
-  const ProductDetailUser({
+  const ProductDetailUserTile({
     Key key,
     @required this.user,
     @required this.onTap,
+    @required this.localeString,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final stringFunction = GetLocalizedStringFunction(context);
 
-    return Padding(
-      padding: EdgeInsets.only(
-          left: Dimens.default_horizontal_margin,
-          right: Dimens.default_horizontal_margin),
-      child: GestureDetector(
-        onTap: onTap,
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            AvatarImage(
-              image: CustomImage.Image(
-                url: user.avatarUrl,
-              ),
-            ),
-            Spacing.horizontal(Dimens.grid(6)),
-            Flexible(
-              child: Bubble(
-                nip: BubbleNip.leftTop,
-                shadowColor: Colors.grey[50],
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      stringFunction(
-                        'product_detail_user_introduction',
-                        formatArg: user.name,
-                      ),
-                    ),
-                    Spacing.vertical(5.0),
-                    RichText(
-                      textAlign: TextAlign.start,
-                      text: TextSpan(children: [
-                        TextSpan(
-                          text: stringFunction(
-                              'product_detail_user_see_all_donations_part_1'),
-                          style:
-                              new TextStyle(color: CustomColors.textLinkColor),
-                        ),
-                        TextSpan(
-                          text: stringFunction(
-                              'product_detail_user_see_all_donations_part_2'),
-                          style: new TextStyle(color: Colors.black),
-                        )
-                      ]),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
+    final trailing = (onTap == null)
+        ? null
+        : Icon(
+            Icons.chevron_right,
+            color: Colors.black87,
+          );
+
+    return ListTile(
+      contentPadding: EdgeInsets.symmetric(
+        vertical: Dimens.grid(6),
+        horizontal: 16.0,
       ),
-    );
-  }
-}
-
-class ProductDetailHorizontalPadding extends StatelessWidget {
-  final Widget child;
-
-  const ProductDetailHorizontalPadding({Key key, @required this.child})
-      : super(key: key);
-
-  @override
-  Widget build(BuildContext context) => Padding(
-        padding: EdgeInsets.symmetric(
-          horizontal: Dimens.default_horizontal_margin,
-        ),
-        child: child,
-      );
-}
-
-class ProductDetailUserContainer extends StatelessWidget {
-  final Product product;
-  final GestureTapCallback onTap;
-
-  const ProductDetailUserContainer({
-    Key key,
-    @required this.product,
-    @required this.onTap,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          DefaultVerticalSpacing(),
-          ProductDetailUser(
-            user: product.user,
-            onTap: onTap,
+      leading: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          AvatarImage(
+            image: CustomImage.Image(
+              url: user.avatarUrl,
+            ),
           ),
-          DefaultVerticalSpacing(),
         ],
       ),
+      title: Caption(
+        user.name,
+        weight: SyntheticFontWeight.bold,
+      ),
+      subtitle: Caption(
+        stringFunction(
+          'member_since_',
+          formatArg: DateFormat.yMMMM(localeString).format(user.createdAt),
+        ),
+      ),
+      trailing: trailing,
+      onTap: onTap,
     );
   }
 }
 
-class ProductDetailReportListingButton extends StatelessWidget {
+class ProductDetailReportListingTile extends StatelessWidget {
   final GestureTapCallback onTap;
 
-  const ProductDetailReportListingButton({
+  const ProductDetailReportListingTile({
     Key key,
     @required this.onTap,
   }) : super(key: key);
@@ -796,40 +755,31 @@ class ProductDetailReportListingButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final stringFunction = GetLocalizedStringFunction(context);
 
-    return InkWell(
-      onTap: onTap,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: Dimens.default_horizontal_margin,
-          vertical: Dimens.default_vertical_margin,
-        ),
-        child: Row(
-          children: <Widget>[
-            Icon(
-              Icons.error_outline,
-              size: Dimens.user_avatar_small,
-            ),
-            Spacing.horizontal(Dimens.default_horizontal_margin),
-            Flexible(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Caption(
-                    stringFunction('product_detail_report_listing_title'),
-                    weight: SyntheticFontWeight.bold,
-                  ),
-                  Spacing.vertical(5.0),
-                  Caption(
-                    stringFunction('product_detail_report_listing_text'),
-                  ),
-                ],
-              ),
-            ),
-            Spacing.horizontal(Dimens.default_horizontal_margin),
-            Icon(Icons.chevron_right)
-          ],
+    return ListTile(
+      contentPadding: EdgeInsets.symmetric(
+        vertical: Dimens.grid(12),
+        horizontal: 16.0,
+      ),
+      leading: Icon(
+        Icons.error_outline,
+        size: Dimens.user_avatar_small,
+        color: Colors.black87,
+      ),
+      title: Caption(
+        stringFunction('product_detail_report_listing_title'),
+        weight: SyntheticFontWeight.bold,
+      ),
+      subtitle: Padding(
+        padding: const EdgeInsets.only(top: 6.0),
+        child: Caption(
+          stringFunction('product_detail_report_listing_text'),
         ),
       ),
+      trailing: Icon(
+        Icons.chevron_right,
+        color: Colors.black87,
+      ),
+      onTap: onTap,
     );
   }
 }

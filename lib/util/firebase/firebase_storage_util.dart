@@ -34,8 +34,20 @@ class FirebaseStorageUtil implements FirebaseStorageUtilProvider {
         .child('$timeStamp-${Uuid().v1()}.jpg');
   }
 
+  @override
+  StorageReference getGroupImageRef(int groupId) {
+    final timeStamp = DateTime.now().millisecondsSinceEpoch;
+    return firebaseStorage
+        .ref()
+        .child(groupsFolder)
+        .child('$groupId')
+        .child(photosFolder)
+        .child('$timeStamp-${Uuid().v1()}.jpg');
+  }
+
   static const listingsFolder = 'listings';
   static const usersFolder = 'users';
   static const photosFolder = 'photos';
+  static const groupsFolder = 'groups';
   static const devFolder = 'dev';
 }

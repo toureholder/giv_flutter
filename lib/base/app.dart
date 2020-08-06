@@ -7,7 +7,10 @@ import 'package:provider/provider.dart';
 class MyApp extends StatefulWidget {
   final List<SingleChildCloneableWidget> dependencies;
 
-  const MyApp({Key key, this.dependencies}) : super(key: key);
+  const MyApp({
+    Key key,
+    @required this.dependencies,
+  }) : super(key: key);
 
   @override
   _MyAppState createState() => _MyAppState();
@@ -24,10 +27,7 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    preCacheImages(
-        context,
-        svgAssets: Config.imageCacheSvgAssets
-    );
+    preCacheImages(context, svgAssets: Config.imageCacheSvgAssets);
 
     return MultiProvider(
       providers: dependencies,

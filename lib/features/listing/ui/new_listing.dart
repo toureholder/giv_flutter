@@ -12,6 +12,7 @@ import 'package:giv_flutter/features/listing/ui/edit_categories.dart';
 import 'package:giv_flutter/features/listing/ui/edit_description.dart';
 import 'package:giv_flutter/features/listing/ui/edit_title.dart';
 import 'package:giv_flutter/features/listing/ui/my_listings.dart';
+import 'package:giv_flutter/features/listing/ui/new_listing_for_radio_group.dart';
 import 'package:giv_flutter/features/log_in/bloc/log_in_bloc.dart';
 import 'package:giv_flutter/features/product/categories/bloc/categories_bloc.dart';
 import 'package:giv_flutter/features/product/categories/ui/categories.dart';
@@ -44,9 +45,14 @@ import 'package:provider/provider.dart';
 class NewListing extends StatefulWidget {
   final Product product;
   final NewListingBloc bloc;
+  final bool isPrivateByDefault;
 
-  const NewListing({Key key, @required this.bloc, this.product})
-      : super(key: key);
+  const NewListing({
+    Key key,
+    @required this.bloc,
+    this.product,
+    this.isPrivateByDefault = false,
+  }) : super(key: key);
 
   @override
   _NewListingState createState() => _NewListingState();
@@ -71,7 +77,10 @@ class _NewListingState extends BaseState<NewListing> {
   void initState() {
     super.initState();
     _isEditing = widget.product != null;
-    _product = widget.product?.copy() ?? Product();
+    _product = widget.product?.copy() ??
+        Product(
+          isPrivate: widget.isPrivateByDefault,
+        );
     _product.images = _product.images ?? <CustomImage.Image>[];
     _bloc = NewListingBloc.from(widget.bloc, _isEditing);
     _user = _bloc.getUser();
@@ -111,7 +120,9 @@ class _NewListingState extends BaseState<NewListing> {
               appBar: CustomAppBar(
                 title: string(title),
               ),
-              body: _uploadStatusStreamBuilder(),
+              body: SafeArea(
+                child: _uploadStatusStreamBuilder(),
+              ),
             ),
           )
         : Consumer<LogInBloc>(
@@ -161,9 +172,22 @@ class _NewListingState extends BaseState<NewListing> {
       controller: _listViewController,
       children: <Widget>[
         _activeTile(),
+        _sectionTitle(string('new_listing_section_title_for_who')),
+        NewListingForRadioGroup(
+          onValueChanged: (ListingFor option) {
+            setState(() {
+              _product.isPrivate = option == ListingFor.myGroups;
+            });
+          },
+          isListingPrivate: _product.isPrivate,
+        ),
+        Spacing.vertical(Dimens.default_vertical_margin),
+        CustomDivider(),
         _sectionTitle(string('new_listing_section_title_photos')),
         _emptyImagesErrorMessage(),
         _buildImageList(context),
+        Spacing.vertical(Dimens.default_vertical_margin),
+        CustomDivider(),
         _sectionTitle(string('new_listing_section_title_about')),
         ListingTitleListTile(
           value: _product.title,
@@ -202,14 +226,18 @@ class _NewListingState extends BaseState<NewListing> {
             });
           },
           title: Padding(
-            padding: const EdgeInsets.only(top: 8.0),
+            padding: const EdgeInsets.only(
+              top: Dimens.default_vertical_margin,
+            ),
             child: BodyText(
               string(title),
               weight: SyntheticFontWeight.semiBold,
             ),
           ),
           subtitle: Padding(
-            padding: const EdgeInsets.only(bottom: 8.0),
+            padding: const EdgeInsets.only(
+              bottom: Dimens.default_vertical_margin,
+            ),
             child: Body2Text(
               string(subtitle),
               color: Colors.grey,
@@ -308,20 +336,18 @@ class _NewListingState extends BaseState<NewListing> {
       bottom: 0.0,
       left: 0.0,
       right: 0.0,
-      child: SafeArea(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            CustomDivider(),
-            Container(
-              color: Colors.white,
-              padding: const EdgeInsets.symmetric(
-                  horizontal: Dimens.default_horizontal_margin, vertical: 12.0),
-              alignment: Alignment.center,
-              child: child,
-            )
-          ],
-        ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          CustomDivider(),
+          Container(
+            color: Colors.white,
+            padding: const EdgeInsets.symmetric(
+                horizontal: Dimens.default_horizontal_margin, vertical: 12.0),
+            alignment: Alignment.center,
+            child: child,
+          )
+        ],
       ),
     );
   }
@@ -428,8 +454,10 @@ class _NewListingState extends BaseState<NewListing> {
       user: user,
     ));
     if (result != null) {
-      _isTelephoneError = false;
-      _user = _bloc.getUser();
+      setState(() {
+        _isTelephoneError = false;
+        _user = _bloc.getUser();
+      });
     }
   }
 
@@ -528,7 +556,7 @@ class _NewListingState extends BaseState<NewListing> {
           onTap: _openGallery),
     ];
 
-    CustomBottomSheet.show(context,
+    TiledBottomSheet.show(context,
         tiles: tiles, title: string('image_picker_modal_title'));
   }
 
@@ -621,7 +649,7 @@ class _NewListingState extends BaseState<NewListing> {
   }
 
   _onSaveSuccess(Product product) {
-    if (_isEditing)
+    if (_isEditing || widget.isPrivateByDefault)
       navigation.pop(product);
     else
       navigation.pushReplacement(Consumer<MyListingsBloc>(
@@ -794,7 +822,13 @@ class NewListingDetailTile extends StatelessWidget {
     final captionColor = isError ? CustomColors.errorColor : Colors.grey;
 
     final captionRowChildren = <Widget>[
-      Body2Text(finalCaption, color: captionColor, weight: fontWeight),
+      Flexible(
+        child: Body2Text(
+          finalCaption,
+          color: captionColor,
+          weight: fontWeight,
+        ),
+      ),
     ];
 
     if (!isEmpty) {
@@ -937,6 +971,32 @@ class ListingCategoryListTile extends StatelessWidget {
       caption: stringFunction('new_listing_tile_category'),
       emptyStateCaption:
           stringFunction('new_listing_tile_category_empty_state'),
+      onTap: onTap,
+      isError: isError,
+    );
+  }
+}
+
+class ListingGroupListTile extends StatelessWidget {
+  final String value;
+  final GestureTapCallback onTap;
+  final bool isError;
+
+  const ListingGroupListTile({
+    Key key,
+    @required this.onTap,
+    @required this.isError,
+    @required this.value,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final stringFunction = GetLocalizedStringFunction(context);
+
+    return NewListingDetailTile(
+      value: value,
+      caption: stringFunction('new_listing_tile_group'),
+      emptyStateCaption: stringFunction('new_listing_tile_group_empty_state'),
       onTap: onTap,
       isError: isError,
     );

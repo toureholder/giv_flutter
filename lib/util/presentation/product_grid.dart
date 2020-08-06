@@ -12,9 +12,13 @@ import 'package:provider/provider.dart';
 
 class ProductGrid extends StatefulWidget {
   final List<Product> products;
+  final bool addLinkToUserProfile;
 
-  const ProductGrid({Key key, @required this.products})
-      : super(key: key);
+  const ProductGrid({
+    Key key,
+    @required this.products,
+    this.addLinkToUserProfile = true,
+  }) : super(key: key);
 
   @override
   _ProductGridState createState() => _ProductGridState();
@@ -22,11 +26,13 @@ class ProductGrid extends StatefulWidget {
 
 class _ProductGridState extends BaseState<ProductGrid> {
   List<Product> _products;
+  bool _addLinkToUserProfile;
 
   @override
   void initState() {
     super.initState();
     _products = widget.products;
+    _addLinkToUserProfile = widget.addLinkToUserProfile;
   }
 
   @override
@@ -139,6 +145,7 @@ class _ProductGridState extends BaseState<ProductGrid> {
       builder: (context, bloc, child) => ProductDetail(
         product: product,
         bloc: bloc,
+        addLinkToUserProfile: _addLinkToUserProfile,
       ),
     ));
 

@@ -1,9 +1,16 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
+import 'package:giv_flutter/config/hive/constants.dart';
 import 'package:giv_flutter/features/about/bloc/about_bloc.dart';
 import 'package:giv_flutter/features/customer_service/bloc/customer_service_dialog_bloc.dart';
 import 'package:giv_flutter/features/force_update/bloc/force_update_bloc.dart';
+import 'package:giv_flutter/features/groups/create_group/bloc/create_group_bloc.dart';
+import 'package:giv_flutter/features/groups/edit_group/bloc/edit_group_bloc.dart';
+import 'package:giv_flutter/features/groups/group_detail/bloc/group_detail_bloc.dart';
+import 'package:giv_flutter/features/groups/group_information/bloc/group_information_bloc.dart';
+import 'package:giv_flutter/features/groups/join_group/bloc/join_group_bloc.dart';
+import 'package:giv_flutter/features/groups/my_groups/bloc/my_groups_bloc.dart';
 import 'package:giv_flutter/features/home/bloc/home_bloc.dart';
 import 'package:giv_flutter/features/home/model/home_content.dart';
 import 'package:giv_flutter/features/listing/bloc/my_listings_bloc.dart';
@@ -20,8 +27,16 @@ import 'package:giv_flutter/features/user_profile/bloc/user_profile_bloc.dart';
 import 'package:giv_flutter/model/api_response/api_response.dart';
 import 'package:giv_flutter/model/app_config/repository/api/app_config_api.dart';
 import 'package:giv_flutter/model/app_config/repository/app_config_repository.dart';
+import 'package:giv_flutter/model/authenticated_user_updated_action.dart';
 import 'package:giv_flutter/model/carousel/repository/api/carousel_api.dart';
 import 'package:giv_flutter/model/carousel/repository/carousel_repository.dart';
+import 'package:giv_flutter/model/group/group.dart';
+import 'package:giv_flutter/model/group/repository/api/group_api.dart';
+import 'package:giv_flutter/model/group/repository/group_repository.dart';
+import 'package:giv_flutter/model/group_membership/group_membership.dart';
+import 'package:giv_flutter/model/group_membership/repository/api/group_membership_api.dart';
+import 'package:giv_flutter/model/group_membership/repository/group_membership_repository.dart';
+import 'package:giv_flutter/model/group_updated_action.dart';
 import 'package:giv_flutter/model/listing/repository/api/listing_api.dart';
 import 'package:giv_flutter/model/listing/repository/listing_repository.dart';
 import 'package:giv_flutter/model/location/location.dart';
@@ -47,6 +62,7 @@ import 'package:giv_flutter/util/firebase/firebase_storage_util.dart';
 import 'package:giv_flutter/util/network/http_client_wrapper.dart';
 import 'package:giv_flutter/util/network/http_response.dart';
 import 'package:giv_flutter/util/util.dart';
+import 'package:hive/hive.dart';
 import 'package:http/http.dart';
 import 'package:provider/provider.dart';
 import 'package:rxdart/rxdart.dart';
@@ -64,34 +80,88 @@ Future<List<SingleChildCloneableWidget>> getAppDependencies() async {
   final firebaseStorageUtil = FirebaseStorageUtil(
       diskStorage: diskStorage, firebaseStorage: firebaseStorage);
   final util = Util(diskStorage: diskStorage);
-
-  final productApi = ProductApi(client: customHttpClient);
-  final userApi = UserApi(client: customHttpClient);
-  final locationApi = LocationApi(client: customHttpClient);
-  final listingApi = ListingApi(client: customHttpClient);
-  final carouselApi = CarouselApi(client: customHttpClient);
-  final appConfigApi = AppConfigApi(client: customHttpClient);
-
   final productCache = ProductCache(diskStorage: diskStorage);
   final locationCache = LocationCache(diskStorage: diskStorage);
 
+  Hive.registerAdapter(UserAdapter());
+  Hive.registerAdapter(GroupAdapter());
+  Hive.registerAdapter(GroupMembershipAdapter());
+
+  final groupsBox = await Hive.openBox<Group>(
+    HiveConstants.groupsBoxName,
+  );
+
+  final groupMembershipsBox = await Hive.openBox<GroupMembership>(
+    HiveConstants.groupMembershipsBoxName,
+  );
+
+  // APIs
+  final productApi = ProductApi(
+    client: customHttpClient,
+  );
+  final userApi = UserApi(
+    client: customHttpClient,
+  );
+  final locationApi = LocationApi(
+    client: customHttpClient,
+  );
+  final listingApi = ListingApi(
+    client: customHttpClient,
+  );
+  final carouselApi = CarouselApi(
+    client: customHttpClient,
+  );
+  final appConfigApi = AppConfigApi(
+    client: customHttpClient,
+  );
+  final groupMembershipApi = GroupMembershipApi(
+    clientWrapper: customHttpClient,
+  );
+  final groupApi = GroupApi(
+    clientWrapper: customHttpClient,
+  );
+
+  // Repositories
   final productRepository = ProductRepository(
     productCache: productCache,
     productApi: productApi,
   );
 
-  final userRepository = UserRepository(userApi: userApi);
+  final userRepository = UserRepository(
+    userApi: userApi,
+  );
 
   final locationRepository = LocationRepository(
     locationApi: locationApi,
     locationCache: locationCache,
   );
 
-  final listingRepository = ListingRepository(listingApi: listingApi);
+  final listingRepository = ListingRepository(
+    listingApi: listingApi,
+  );
 
-  final carouselRepository = CarouselRepository(carouselApi: carouselApi);
+  final carouselRepository = CarouselRepository(
+    carouselApi: carouselApi,
+  );
 
-  final appConfigRepository = AppConfigRepository(appConfigApi: appConfigApi);
+  final appConfigRepository = AppConfigRepository(
+    appConfigApi: appConfigApi,
+  );
+
+  final groupMembershipRepository = GroupMembershipRepository(
+    api: groupMembershipApi,
+    box: groupMembershipsBox,
+    groupsBox: groupsBox,
+  );
+
+  final groupRepository = GroupRepository(
+    api: groupApi,
+    box: groupsBox,
+    membershipsBox: groupMembershipsBox,
+  );
+
+  final authUserUpdatedAction = AuthUserUpdatedAction();
+  final groupUpdatedAction = GroupUpdatedAction();
 
   return <SingleChildCloneableWidget>[
     Provider<LogInBloc>(
@@ -104,6 +174,7 @@ Future<List<SingleChildCloneableWidget>> getAppDependencies() async {
         firebaseAuth: firebaseAuth,
         facebookLogin: facebookLogin,
         util: util,
+        authUserUpdatedAction: authUserUpdatedAction,
       ),
     ),
     Provider<UserProfileBloc>(
@@ -188,6 +259,7 @@ Future<List<SingleChildCloneableWidget>> getAppDependencies() async {
         userUpdatePublishSubject: PublishSubject<HttpResponse<User>>(),
         firebaseStorageUtil: firebaseStorageUtil,
         util: util,
+        authUserUpdatedAction: authUserUpdatedAction,
       ),
     ),
     Provider<CustomerServiceDialogBloc>(
@@ -212,8 +284,64 @@ Future<List<SingleChildCloneableWidget>> getAppDependencies() async {
         util: util,
       ),
     ),
+    Provider<JoinGroupBloc>(
+      builder: (_) => JoinGroupBloc(
+        groupMembershipRepository: groupMembershipRepository,
+        groupMembershipSubject: PublishSubject<HttpResponse<GroupMembership>>(),
+        diskStorage: diskStorage,
+      ),
+    ),
+    Provider<CreateGroupBloc>(
+      builder: (_) => CreateGroupBloc(
+        groupRepository: groupRepository,
+        groupSubject: PublishSubject<HttpResponse<Group>>(),
+        diskStorage: diskStorage,
+      ),
+    ),
+    Provider<MyGroupsBloc>(
+      builder: (_) => MyGroupsBloc(
+        repository: groupMembershipRepository,
+        subject: PublishSubject<List<GroupMembership>>(),
+        diskStorage: diskStorage,
+        util: util,
+      ),
+    ),
+    Provider<GroupDetailBloc>(
+      builder: (_) => GroupDetailBloc(
+        groupRepository: groupRepository,
+        groupMembershipRepository: groupMembershipRepository,
+        productsSubject: PublishSubject<List<Product>>(),
+        leaveGroupSubject: PublishSubject<HttpResponse<GroupMembership>>(),
+        diskStorage: diskStorage,
+        util: util,
+      ),
+    ),
+    Provider<GroupInformationBloc>(
+      builder: (_) => GroupInformationBloc(
+        memberhipsRepository: groupMembershipRepository,
+        loadMembershipsSubject: PublishSubject<List<GroupMembership>>(),
+        diskStorage: diskStorage,
+        util: util,
+      ),
+    ),
+    Provider<EditGroupBloc>(
+      builder: (_) => EditGroupBloc(
+        groupRepository: groupRepository,
+        groupSubject: PublishSubject<HttpResponse<Group>>(),
+        diskStorage: diskStorage,
+        firebaseStorageUtil: firebaseStorageUtil,
+        util: util,
+        groupUpdatedAction: groupUpdatedAction,
+      ),
+    ),
     Provider<Util>(
       builder: (_) => util,
     ),
+    ChangeNotifierProvider<GroupUpdatedAction>(
+      builder: (context) => groupUpdatedAction,
+    ),
+    ChangeNotifierProvider<AuthUserUpdatedAction>(
+      builder: (context) => authUserUpdatedAction,
+    )
   ];
 }

@@ -49,9 +49,9 @@ class BaseState<T extends StatefulWidget> extends State<T> {
 
   void _onLoginSuccess(Widget redirect) {
     if (redirect == null) {
-      Navigation(context).push(Base(), clearStack: true);
+      navigation.push(Base(), clearStack: true);
     } else {
-      Navigation(context).pushReplacement(redirect);
+      navigation.pushReplacement(redirect);
     }
   }
 

@@ -8,11 +8,13 @@ import 'package:giv_flutter/values/dimens.dart';
 class ContentStreamBuilder<T> extends StatelessWidget {
   final Function onHasData;
   final Stream<T> stream;
+  final Widget loadingState;
 
   const ContentStreamBuilder({
     Key key,
     @required this.onHasData,
     @required this.stream,
+    this.loadingState,
   }) : super(key: key);
 
   @override
@@ -25,7 +27,7 @@ class ContentStreamBuilder<T> extends StatelessWidget {
           } else if (snapshot.hasError) {
             return SharedErrorState();
           } else {
-            return SharedLoadingState();
+            return loadingState ?? SharedLoadingState();
           }
         });
   }

@@ -8,6 +8,7 @@ import 'package:giv_flutter/features/listing/ui/new_listing.dart';
 import 'package:giv_flutter/features/log_in/bloc/log_in_bloc.dart';
 import 'package:giv_flutter/features/product/categories/bloc/categories_bloc.dart';
 import 'package:giv_flutter/features/product/categories/ui/categories.dart';
+import 'package:giv_flutter/model/authenticated_user_updated_action.dart';
 import 'package:giv_flutter/util/util.dart';
 import 'package:mockito/mockito.dart';
 import 'package:provider/provider.dart';
@@ -48,12 +49,15 @@ main() {
         Provider<Util>(
           builder: (_) => MockUtil(),
         ),
+        ChangeNotifierProvider<AuthUserUpdatedAction>(
+          builder: (context) => AuthUserUpdatedAction(),
+        ),
       ],
       navigatorObservers: [mockNavigationObserver],
     );
   });
 
-  tearDown((){
+  tearDown(() {
     reset(mockNavigationObserver);
   });
 

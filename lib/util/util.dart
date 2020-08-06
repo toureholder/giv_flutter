@@ -1,7 +1,11 @@
 import 'package:flutter/widgets.dart';
+import 'package:giv_flutter/config/config.dart';
+import 'package:giv_flutter/config/i18n/string_localizations.dart';
 import 'package:giv_flutter/model/app_config/app_config.dart';
+import 'package:giv_flutter/model/group/group.dart';
 import 'package:giv_flutter/service/preferences/disk_storage_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:share/share.dart';
 
 class Util {
   final DiskStorageProvider diskStorage;
@@ -46,6 +50,19 @@ class Util {
       openWhatsApp(appConfig.customerServiceNumber, message);
   }
 
+  Future<void> share(String text) => Share.share(text);
+
+  Future<void> shareGroup(BuildContext context, Group group) {
+    final text = GetLocalizedStringFunction(context)(
+      'share_group_text',
+      formatArg: group.name,
+      formatArg2: Config.website,
+      formatArg3: group.accessToken,
+    );
+
+    return this.share(text);
+  }
+
   String getCurrentLocaleString(BuildContext context) {
     final locale = Localizations.localeOf(context);
     if (locale == null) return null;
@@ -65,5 +82,18 @@ class Util {
     }
 
     return buffer.toString();
+  }
+
+  String getRandomBackgroundImageUrl(dynamic key) {
+    final appConfig = diskStorage.getAppConfiguration();
+    final randomBackgrounds = appConfig?.randomBackgrounds;
+
+    if (randomBackgrounds == null || randomBackgrounds.length == 0) {
+      return null;
+    }
+
+    final listLength = randomBackgrounds.length;
+    final index = (key.hashCode + listLength) % listLength;
+    return randomBackgrounds[index];
   }
 }

@@ -29,6 +29,7 @@ main() {
   MockFirebaseAuth mockFirebaseAuth;
   MockFacebookLogin mockFacebookLogin;
   MockUtil mockUtil;
+  MockAuthUserUpdatedAction mockAuthUserUpdatedAction;
   LogInBloc bloc;
 
   setUp(() {
@@ -40,6 +41,7 @@ main() {
     mockApiHttpResponseStreamSink = MockApiHttpResponseStreamSink();
     mockFirebaseAuth = MockFirebaseAuth();
     mockFacebookLogin = MockFacebookLogin();
+    mockAuthUserUpdatedAction = MockAuthUserUpdatedAction();
     mockUtil = MockUtil();
 
     bloc = LogInBloc(
@@ -50,6 +52,7 @@ main() {
       userRepository: mockUserRepository,
       session: mockSessionProvider,
       facebookLogin: mockFacebookLogin,
+      authUserUpdatedAction: mockAuthUserUpdatedAction,
     );
 
     when(mockLoginHttpResponsePublishSubject.sink)
@@ -248,6 +251,43 @@ main() {
 
     verifyNever(
         mockFirebaseAuth.signInWithCustomToken(token: anyNamed('token')));
+  });
+
+  test('calls auth user updated changenotifier notify if login succeeds',
+      () async {
+    when(mockUserRepository.login(any))
+        .thenAnswer((_) async => HttpResponse<LogInResponse>(
+              data: LogInResponse.fake(),
+              status: HttpStatus.ok,
+            ));
+
+    when(mockSessionProvider.logUserIn(any)).thenAnswer((_) async => [true]);
+
+    when(mockFirebaseAuth.signInWithCustomToken(token: anyNamed('token')))
+        .thenAnswer((_) async => null);
+
+    await bloc.login(LogInRequest.fake());
+
+    verify(mockAuthUserUpdatedAction.notify()).called(1);
+  });
+
+  test(
+      'calls auth user updated changenotifier notify if login with provider succeeds',
+      () async {
+    when(mockUserRepository.loginWithProvider(any))
+        .thenAnswer((_) async => HttpResponse<LogInResponse>(
+              data: LogInResponse.fake(),
+              status: HttpStatus.ok,
+            ));
+
+    when(mockSessionProvider.logUserIn(any)).thenAnswer((_) async => [true]);
+
+    when(mockFirebaseAuth.signInWithCustomToken(token: anyNamed('token')))
+        .thenAnswer((_) async => null);
+
+    await bloc.loginWithProvider(LogInWithProviderRequest.fake());
+
+    verify(mockAuthUserUpdatedAction.notify()).called(1);
   });
 
   test('gets contoller streams', () async {

@@ -238,6 +238,7 @@ flutter_*.png
 linked_*.ds
 unlinked.ds
 unlinked_spec.ds
+*.g.dart
 
 # Android related
 **/android/**/gradle-wrapper.jar
@@ -274,6 +275,7 @@ unlinked_spec.ds
 **/ios/ServiceDefinitions.json
 **/ios/Runner/GeneratedPluginRegistrant.*
 **/ios/Flutter/flutter_export_environment.sh
+**/ios/Flutter/.last_build_id
 
 # Exceptions to above rules.
 !**/ios/**/default.mode1v3

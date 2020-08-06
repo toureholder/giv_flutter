@@ -1,3 +1,5 @@
+import 'package:giv_flutter/base/base_bloc_with_auth.dart';
+import 'package:giv_flutter/model/authenticated_user_updated_action.dart';
 import 'package:giv_flutter/model/user/repository/user_repository.dart';
 import 'package:giv_flutter/model/user/user.dart';
 import 'package:giv_flutter/service/preferences/disk_storage_provider.dart';
@@ -8,13 +10,14 @@ import 'package:giv_flutter/util/util.dart';
 import 'package:meta/meta.dart';
 import 'package:rxdart/rxdart.dart';
 
-class SettingsBloc {
+class SettingsBloc extends BaseBlocWithAuth {
   final PublishSubject<HttpResponse<User>> userUpdatePublishSubject;
   final UserRepository userRepository;
   final DiskStorageProvider diskStorage;
   final SessionProvider session;
   final FirebaseStorageUtilProvider firebaseStorageUtil;
   final Util util;
+  final AuthUserUpdatedAction authUserUpdatedAction;
 
   SettingsBloc({
     @required this.userRepository,
@@ -23,14 +26,13 @@ class SettingsBloc {
     @required this.userUpdatePublishSubject,
     @required this.firebaseStorageUtil,
     @required this.util,
-  });
+    @required this.authUserUpdatedAction,
+  }) : super(diskStorage: diskStorage);
 
   Observable<HttpResponse<User>> get userUpdateStream =>
       userUpdatePublishSubject.stream;
 
   dispose() => userUpdatePublishSubject.close();
-
-  User getUser() => diskStorage.getUser();
 
   getProfilePhotoRef() => firebaseStorageUtil.getProfilePhotoRef();
 
@@ -42,7 +44,10 @@ class SettingsBloc {
 
       var response = await userRepository.updateMe(userUpdate);
 
-      if (response.data != null) await diskStorage.setUser(response.data);
+      if (response.data != null) {
+        await diskStorage.setUser(response.data);
+        authUserUpdatedAction.notify();
+      }
 
       userUpdatePublishSubject.sink.add(response);
     } catch (error) {
@@ -50,5 +55,8 @@ class SettingsBloc {
     }
   }
 
-  logout() => session.logUserOut();
+  Future<List<bool>> logout() async {
+    authUserUpdatedAction.notify();
+    return session.logUserOut();
+  }
 }

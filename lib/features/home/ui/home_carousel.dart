@@ -112,7 +112,7 @@ class _HomeCarouselState extends State<HomeCarousel> {
       backgroundArt,
       Container(
         decoration: BoxDecoration(
-          gradient: Gradients.carousel(),
+          gradient: Gradients.carouselBottomLeft(),
         ),
       ),
       Positioned(

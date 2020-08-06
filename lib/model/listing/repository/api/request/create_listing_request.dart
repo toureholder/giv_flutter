@@ -11,23 +11,27 @@ class CreateListingRequest {
   final String geoNamesCountryId;
   final List<ListingImage> images;
   final List<int> categoryIds;
+  final List<int> groupIds;
   final bool isActive;
+  final bool isPrivate;
 
-  CreateListingRequest(
-      {this.id,
-      this.title,
-      this.description,
-      this.geoNamesCityId,
-      this.geoNamesStateId,
-      this.geoNamesCountryId,
-      this.images,
-      this.categoryIds,
-      this.isActive = true});
+  CreateListingRequest({
+    this.id,
+    this.title,
+    this.description,
+    this.geoNamesCityId,
+    this.geoNamesStateId,
+    this.geoNamesCountryId,
+    this.images,
+    this.categoryIds,
+    this.groupIds,
+    this.isActive = true,
+    this.isPrivate = false,
+  });
 
   Map<String, dynamic> toHttpRequestBody() {
     final listingImages =
         images.map((image) => image.toHttpRequestBody()).toList();
-    final listingCategoryIds = categoryIds;
 
     return {
       'title': title,
@@ -36,8 +40,10 @@ class CreateListingRequest {
       'geonames_state_id': geoNamesStateId,
       'geonames_country_id': geoNamesCountryId,
       'listing_images': listingImages,
-      'category_ids': listingCategoryIds,
+      'category_ids': categoryIds,
+      'group_ids': groupIds,
       'is_active': isActive,
+      'is_private': isPrivate,
     };
   }
 
@@ -52,10 +58,14 @@ class CreateListingRequest {
         geoNamesStateId: '456',
         geoNamesCountryId: '789',
         categoryIds: <int>[1, 2],
+        groupIds: <int>[1, 2],
         isActive: true,
+        isPrivate: true,
         images: <ListingImage>[
           ListingImage(
-              url: 'https://picsum.photos/500/500/?image=336', position: 0)
+            url: 'https://picsum.photos/500/500/?image=336',
+            position: 0,
+          )
         ],
       );
 }
@@ -64,7 +74,10 @@ class UpdateListingActiveStatusRequest {
   final int id;
   final bool isActive;
 
-  UpdateListingActiveStatusRequest(this.id, this.isActive);
+  UpdateListingActiveStatusRequest(
+    this.id,
+    this.isActive,
+  );
 
   Map<String, dynamic> toHttpRequestBody() => {'is_active': isActive};
 

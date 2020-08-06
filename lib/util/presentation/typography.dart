@@ -6,6 +6,12 @@ class CustomTypography {
 
   static TextStyle base = TextStyle(color: baseColor);
 
+  static TextStyle h4 = base.copyWith(
+      fontSize: 24.0, fontWeight: FontWeight.w500, letterSpacing: 0.15);
+
+  static TextStyle h5 = base.copyWith(
+      fontSize: 22.0, fontWeight: FontWeight.w500, letterSpacing: 0.15);
+
   static TextStyle h6 = base.copyWith(
       fontSize: 20.0, fontWeight: FontWeight.w500, letterSpacing: 0.15);
 
@@ -102,6 +108,23 @@ class H6Text extends BaseText {
             textAlign: textAlign);
 }
 
+class H4Text extends BaseText {
+  final String data;
+  final SyntheticFontWeight weight;
+  final Color color;
+  final List<Shadow> shadows;
+  final TextAlign textAlign;
+
+  H4Text(this.data,
+      {Key key, this.weight, this.color, this.shadows, this.textAlign})
+      : super(data,
+            textStyle: CustomTypography.h4,
+            syntheticWeight: weight,
+            color: color,
+            shadows: shadows,
+            textAlign: textAlign);
+}
+
 class Title extends BaseText {
   final String data;
   final SyntheticFontWeight weight;
@@ -158,15 +181,28 @@ class BodyText extends BaseText {
   final Color color;
   final List<Shadow> shadows;
   final TextAlign textAlign;
+  final int maxLines;
+  final TextOverflow overflow;
 
-  BodyText(this.data,
-      {Key key, this.weight, this.color, this.shadows, this.textAlign})
-      : super(data,
-            textStyle: CustomTypography.body,
-            syntheticWeight: weight,
-            color: color,
-            shadows: shadows,
-            textAlign: textAlign);
+  BodyText(
+    this.data, {
+    Key key,
+    this.weight,
+    this.color,
+    this.shadows,
+    this.textAlign,
+    this.maxLines,
+    this.overflow,
+  }) : super(
+          data,
+          textStyle: CustomTypography.body,
+          syntheticWeight: weight,
+          color: color,
+          shadows: shadows,
+          textAlign: textAlign,
+          maxLines: maxLines,
+          overflow: overflow,
+        );
 }
 
 class Body2Text extends BaseText {
@@ -178,22 +214,25 @@ class Body2Text extends BaseText {
   final int maxLines;
   final TextOverflow overflow;
 
-  Body2Text(this.data,
-      {Key key,
-      this.weight,
-      this.color,
-      this.shadows,
-      this.textAlign,
-      this.maxLines,
-      this.overflow})
-      : super(data,
-            textStyle: CustomTypography.body2,
-            syntheticWeight: weight,
-            color: color,
-            shadows: shadows,
-            textAlign: textAlign,
-            maxLines: maxLines,
-            overflow: overflow);
+  Body2Text(
+    this.data, {
+    Key key,
+    this.weight,
+    this.color,
+    this.shadows,
+    this.textAlign,
+    this.maxLines,
+    this.overflow,
+  }) : super(
+          data,
+          textStyle: CustomTypography.body2,
+          syntheticWeight: weight,
+          color: color,
+          shadows: shadows,
+          textAlign: textAlign,
+          maxLines: maxLines,
+          overflow: overflow,
+        );
 }
 
 class Caption extends BaseText {

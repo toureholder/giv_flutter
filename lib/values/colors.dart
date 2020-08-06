@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 class CustomColors {
@@ -8,4 +10,18 @@ class CustomColors {
   static const Color backgroundColor = Colors.white;
   static const Color errorColor = Colors.red;
   static const Color textLinkColor = Colors.blue;
+  static const Color emptyStateTextColor = Colors.grey;
+  static const Color appBarTextColor = Colors.black87;
+  static Color random() {
+    final index = new Random().nextInt(hat.length - 0);
+    return hat[index];
+  }
 }
+
+final hat = <Color>[
+  Colors.blue[100],
+  Colors.amber[100],
+  Colors.green[100],
+  Colors.red[100],
+  Colors.purple[100],
+];

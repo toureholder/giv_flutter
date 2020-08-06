@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:giv_flutter/base/base_bloc_with_auth.dart';
 import 'package:giv_flutter/model/image/image.dart';
 import 'package:giv_flutter/model/listing/listing_image.dart';
 import 'package:giv_flutter/model/listing/repository/api/request/create_listing_request.dart';
@@ -8,7 +9,6 @@ import 'package:giv_flutter/model/listing/repository/listing_repository.dart';
 import 'package:giv_flutter/model/location/location.dart';
 import 'package:giv_flutter/model/location/repository/location_repository.dart';
 import 'package:giv_flutter/model/product/product.dart';
-import 'package:giv_flutter/model/user/user.dart';
 import 'package:giv_flutter/service/preferences/disk_storage_provider.dart';
 import 'package:giv_flutter/util/data/stream_event.dart';
 import 'package:giv_flutter/util/firebase/firebase_storage_util_provider.dart';
@@ -16,7 +16,7 @@ import 'package:giv_flutter/util/network/http_response.dart';
 import 'package:meta/meta.dart';
 import 'package:rxdart/rxdart.dart';
 
-class NewListingBloc {
+class NewListingBloc extends BaseBlocWithAuth {
   final ListingRepository listingRepository;
   final LocationRepository locationRepository;
   final DiskStorageProvider diskStorage;
@@ -33,7 +33,7 @@ class NewListingBloc {
     @required this.uploadStatusPublishSubject,
     @required this.savedProductPublishSubject,
     @required this.firebaseStorageUtil,
-  });
+  }) : super(diskStorage: diskStorage);
 
   bool isEditing;
 
@@ -70,8 +70,6 @@ class NewListingBloc {
     uploadStatusPublishSubject.close();
     savedProductPublishSubject.close();
   }
-
-  User getUser() => diskStorage.getUser();
 
   Location getPreferredLocation() => diskStorage.getLocation();
 
@@ -160,7 +158,8 @@ class NewListingBloc {
     }
   }
 
-  // TODO: Find a way to determine original position of uploaded images. (Makes rearranging possible.)
+  // TODO: Find a way to determine original position of uploaded images.
+  // (Makes rearranging possible.)
   _createListingImages() async {
     final beginAt = _listingImages.length;
     for (StorageReference ref in _storageReferences)

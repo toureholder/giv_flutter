@@ -4,42 +4,15 @@ class Strings {
   static String formatItem = StringLocalizations.formatItemSymbol;
 
   static Map<String, Map<String, String>> map = {
-    "app_name": {
-      "en": "Alguém Quer?",
-      "pt": "Alguém Quer?"
-    },
-    "home_title": {
-      "en": "Home",
-      "pt": "Início"
-    },
-    "common_more": {
-      "en": "More",
-      "pt": "Mais"
-    },
-    "base_page_title_home": {
-      "en": "Home",
-      "pt": "Início"
-    },
-    "base_page_title_search": {
-      "en": "Search",
-      "pt": "Explorar"
-    },
-    "base_page_title_post": {
-      "en": "Post",
-      "pt": "Alguém Quer?"
-    },
-    "base_page_title_messages": {
-      "en": "Messages",
-      "pt": "Mensagens"
-    },
-    "base_page_title_projects": {
-      "en": "Projects",
-      "pt": "Projetos"
-    },
-    "search_hint": {
-      "en": "search...",
-      "pt": "busque..."
-    },
+    "app_name": {"en": "Alguém Quer?", "pt": "Alguém Quer?"},
+    "home_title": {"en": "Home", "pt": "Início"},
+    "common_more": {"en": "More", "pt": "Mais"},
+    "base_page_title_home": {"en": "Home", "pt": "Início"},
+    "base_page_title_search": {"en": "Search", "pt": "Explorar"},
+    "base_page_title_post": {"en": "Post", "pt": "Alguém Quer?"},
+    "base_page_title_messages": {"en": "Messages", "pt": "Mensagens"},
+    "base_page_title_projects": {"en": "Projects", "pt": "Projetos"},
+    "search_hint": {"en": "search...", "pt": "busque..."},
     "search_result_x_results": {
       "en": "$formatItem Results",
       "pt": "$formatItem Resultados"
@@ -80,82 +53,31 @@ class Strings {
       "en": "We didn't finy anything for \"$formatItem\".",
       "pt": "Não encontramos nada de \"$formatItem\"."
     },
-    "action_filter": {
-      "en": "Filter",
-      "pt": "Filtrar"
-    },
+    "action_filter": {"en": "Filter", "pt": "Filtrar"},
     "action_location_filter": {
       "en": "Filter by location",
       "pt": "Filtrar por localização"
     },
-    "filters_title": {
-      "en": "Filters",
-      "pt": "Filtros"
-    },
-    "common_country": {
-      "en": "Country",
-      "pt": "País"
-    },
-    "common_state": {
-      "en": "State",
-      "pt": "Estado"
-    },
-    "common_city": {
-      "en": "City",
-      "pt": "Cidade"
-    },
-    "filters_subtitle_nearby": {
-      "en": "Nearby",
-      "pt": "Perto de mim"
-    },
-    "common_loading": {
-      "en": "Loading...",
-      "pt": "Carregando..."
-    },
-    "location_filter_title": {
-      "en": "Location",
-      "pt": "Localização"
-    },
-    "i_want_it": {
-      "en": "I want it",
-      "pt": "Eu quero"
-    },
-    "home_see_more": {
-      "en": "View all",
-      "pt": "Veja mais"
-    },
-    "shared_action_create_ad": {
-      "en": "Donate stuff",
-      "pt": "Anunciar"
-    },
-    "shared_action_sign_in": {
-      "en": "Sign in",
-      "pt": "Entrar"
-    },
+    "filters_title": {"en": "Filters", "pt": "Filtros"},
+    "common_country": {"en": "Country", "pt": "País"},
+    "common_state": {"en": "State", "pt": "Estado"},
+    "common_city": {"en": "City", "pt": "Cidade"},
+    "filters_subtitle_nearby": {"en": "Nearby", "pt": "Perto de mim"},
+    "common_loading": {"en": "Loading...", "pt": "Carregando..."},
+    "location_filter_title": {"en": "Location", "pt": "Localização"},
+    "i_want_it": {"en": "I want it", "pt": "Eu quero"},
+    "home_see_more": {"en": "View all", "pt": "Veja mais"},
+    "shared_action_create_ad": {"en": "Donate stuff", "pt": "Anunciar"},
+    "shared_action_sign_in": {"en": "Sign in", "pt": "Entrar"},
     "sign_in_continue_with_facebook": {
       "en": "Continue with Facebook",
       "pt": "Continuar com Facebook"
     },
-    "sign_in_sign_up": {
-      "en": "Sign up",
-      "pt": "Criar conta"
-    },
-    "sign_in_log_in": {
-      "en": "Log in",
-      "pt": "Entrar"
-    },
-    "sign_in_form_name": {
-      "en": "Name",
-      "pt": "Nome"
-    },
-    "sign_in_form_email": {
-      "en": "Email",
-      "pt": "E-mail"
-    },
-    "sign_in_form_password": {
-      "en": "Password",
-      "pt": "Senha"
-    },
+    "sign_in_sign_up": {"en": "Sign up", "pt": "Criar conta"},
+    "sign_in_log_in": {"en": "Log in", "pt": "Entrar"},
+    "sign_in_form_name": {"en": "Name", "pt": "Nome"},
+    "sign_in_form_email": {"en": "Email", "pt": "E-mail"},
+    "sign_in_form_password": {"en": "Password", "pt": "Senha"},
     "sign_in_already_have_an_acount": {
       "en": "Already have an account?",
       "pt": "Já tem uma conta?"
@@ -189,11 +111,13 @@ class Strings {
       "pt": "Te enviamos um e-mail"
     },
     "sign_in_verify_email_message": {
-      "en": "You'll soon receive an email with a link to activate your account.",
+      "en":
+          "You'll soon receive an email with a link to activate your account.",
       "pt": "Você vai receber um e-mail com um link para ativar sua conta."
     },
     "sign_in_verify_email_message_login": {
-      "en": "Please check your mailbox for an email with a link to activate your account.",
+      "en":
+          "Please check your mailbox for an email with a link to activate your account.",
       "pt": "Por favor ative sua conta com o link que enviamos por e-mail."
     },
     "forgot_password_success_title": {
@@ -201,37 +125,31 @@ class Strings {
       "pt": "Te enviamos um e-mail"
     },
     "forgot_password_success_message": {
-      "en": "You'll soon receive an email with instructions to reset your password.",
-      "pt": "Você vai receber um e-mail com instruções para recuperar sua senha."
+      "en":
+          "You'll soon receive an email with instructions to reset your password.",
+      "pt":
+          "Você vai receber um e-mail com instruções para recuperar sua senha."
     },
-    "common_ok": {
-      "en": "OK",
-      "pt": "OK"
-    },
+    "common_ok": {"en": "OK", "pt": "OK"},
     "validation_message_required": {
       "en": "Please fill in this field",
       "pt": "Por favor preencha este campo"
     },
     "whatsapp_message_interested": {
-      "en": "Hello! I'm interested in the '$formatItem' that you listed on Alguém Quer? :)",
-      "pt": "Olá! Me interessei pelo seu anúncio '$formatItem' no Alguém Quer? :)"
-    },''
-    "settings_title": {''
-      "en": "Settings",
+      "en":
+          "Hello! I'm interested in the '$formatItem' that you listed on Alguém Quer? :)",
+      "pt":
+          "Olá! Me interessei pelo seu anúncio '$formatItem' no Alguém Quer? :)"
+    },
+    ''
+        "settings_title": {
+      ''
+          "en": "Settings",
       "pt": "Configurações"
     },
-    "profile_title": {
-      "en": "Profile",
-      "pt": "Perfil"
-    },
-    "settings_section_account": {
-      "en": "Account",
-      "pt": "Conta"
-    },
-    "settings_section_profile": {
-      "en": "My info",
-      "pt": "Meus dados"
-    },
+    "profile_title": {"en": "Profile", "pt": "Perfil"},
+    "settings_section_account": {"en": "Account", "pt": "Conta"},
+    "settings_section_profile": {"en": "My info", "pt": "Meus dados"},
     "settings_phone_number": {
       "en": "WhatsApp phone number",
       "pt": "Telefone WhatsApp"
@@ -244,138 +162,111 @@ class Strings {
       "en": "Tap to add a mobile phone number",
       "pt": "Toque para adicionar um telefone móvel"
     },
-    "settings_name": {
-      "en": "Name",
-      "pt": "Nome"
-    },
+    "settings_name": {"en": "Name", "pt": "Nome"},
     "settings_name_empty_state": {
       "en": "What's your name?",
       "pt": "Como você se chama?"
     },
-    "settings_bio": {
-      "en": "Bio",
-      "pt": "Bio"
-    },
+    "settings_bio": {"en": "Bio", "pt": "Bio"},
     "settings_bio_empty_state": {
       "en": "Add a few words about yourself",
       "pt": "Fale um pouco sobre você"
     },
-    "settings_logout": {
-      "en": "Log out",
-      "pt": "Sair"
-    },
+    "settings_logout": {"en": "Log out", "pt": "Sair"},
     "settings_edit_bio_hint": {
       "en": "You can add a few lines about yourself to your public profile.",
-      "pt": "Você pode adicionar algumas linhas sobre você ao seu perfil público."
+      "pt":
+          "Você pode adicionar algumas linhas sobre você ao seu perfil público."
     },
     "settings_edit_name_hint": {
       "en": "What's your name?",
       "pt": "Como você se chama?"
     },
     "settings_edit_phone_number_hint": {
-      "en": "People interested in your donations will use WhatsApp to get in touch with you. ",
-      "pt": "Pessoas interessadas nos seus anúncios vão usar o WhatsApp para entrar em contato contigo."
+      "en":
+          "People interested in your donations will use WhatsApp to get in touch with you. ",
+      "pt":
+          "Pessoas interessadas nos seus anúncios vão usar o WhatsApp para entrar em contato contigo."
     },
-    "settings_edit_phone_number_test_button": {
-      "en": "Test",
-      "pt": "Testar"
-    },
+    "settings_edit_phone_number_test_button": {"en": "Test", "pt": "Testar"},
     "settings_edit_phone_number_test_message": {
-      "en": "If WhatsApp opened a chat with yourself, that means that the number is correct! Now you can go back to the app to save it.",
-      "pt": "Se o WhatsApp abriu um chat com você mesmo (hehe), significa que o número está certo! Volte para o aplicativo para salvá-lo."
+      "en":
+          "If WhatsApp opened a chat with yourself, that means that the number is correct! Now you can go back to the app to save it.",
+      "pt":
+          "Se o WhatsApp abriu um chat com você mesmo (hehe), significa que o número está certo! Volte para o aplicativo para salvá-lo."
     },
-    "shared_action_save": {
-      "en": "Save",
-      "pt": "Salvar"
-    },
-    "logout_confirmation_title": {
-      "en": "Log out?",
-      "pt": "Sair?"
-    },
-    "logout_confirmation_accept_button": {
-      "en": "Log out",
-      "pt": "Sair"
-    },
-    "shared_action_cancel": {
-      "en": "Cancel",
-      "pt": "Cancelar"
-    },
-    "new_listing_title": {
-      "en": "New listing",
-      "pt": "Novo anúncio"
-    },
-    "edit_listing_title": {
-      "en": "Edit listing",
-      "pt": "Editar anúncio"
-    },
+    "shared_action_save": {"en": "Save", "pt": "Salvar"},
+    "logout_confirmation_title": {"en": "Log out?", "pt": "Sair?"},
+    "logout_confirmation_accept_button": {"en": "Log out", "pt": "Sair"},
+    "shared_action_cancel": {"en": "Cancel", "pt": "Cancelar"},
+    "new_listing_title": {"en": "New listing", "pt": "Novo anúncio"},
+    "edit_listing_title": {"en": "Edit listing", "pt": "Editar anúncio"},
     "new_listing_section_title_photos": {
-      "en": "Beautiful photos of the product",
-      "pt": "Fotos maneiras do produto"
+      "en": "Beautiful photos of the item being donated",
+      "pt": "Fotos maneiras do item sendo doado"
     },
     "new_listing_section_title_about": {
-      "en": "About the product",
-      "pt": "Sobre o produto"
+      "en": "About the donations",
+      "pt": "Sobre a doação"
+    },
+    "new_listing_section_title_for_who": {
+      "en": "Who is this donation for",
+      "pt": "Quem poderá ver este anúncio?"
+    },
+    "new_listing_for_who_everyone": {"en": "Anyone", "pt": "Todo mundo"},
+    "new_listing_for_who_only_groups": {
+      "en": "Just my groups",
+      "pt": "Somente meus grupos"
     },
     "new_listing_action_create": {
       "en": "Create listing",
       "pt": "Criar anúncio"
     },
-    "edit_listing_action_save": {
-      "en": "Save",
-      "pt": "Salvar"
-    },
-    "new_listing_tile_name": {
-      "en": "Title",
-      "pt": "Título"
-    },
+    "edit_listing_action_save": {"en": "Save", "pt": "Salvar"},
+    "new_listing_tile_name": {"en": "Title", "pt": "Título"},
     "new_listing_tile_name_empty_state": {
       "en": "Tap to give your listing a title",
       "pt": "Toque para adicionar o título do anúncio"
     },
-    "new_listing_tile_description": {
-      "en": "Description",
-      "pt": "Descrição"
-    },
+    "new_listing_tile_description": {"en": "Description", "pt": "Descrição"},
     "new_listing_tile_description_empty_state": {
       "en": "Describe what you are donating",
       "pt": "Fale um pouco sobre o que você está doando"
     },
-    "new_listing_tile_category": {
-      "en": "Category",
-      "pt": "Categoria"
-    },
+    "new_listing_tile_category": {"en": "Category", "pt": "Categoria"},
     "new_listing_tile_category_empty_state": {
       "en": "Choose up to 3 categories ;)",
       "pt": "Você pode escolher até 3 categorias ;)"
     },
-    "new_listing_tile_location": {
-      "en": "Location",
-      "pt": "Localização"
+    "new_listing_tile_group": {"en": "Private groups", "pt": "Grupos privados"},
+    "new_listing_tile_group_empty_state": {
+      "en": "Tap here if this donation is only for members of your groups",
+      "pt": "Toque aqui se esta doação for apenas para membros dos seus grupos"
     },
+    "new_listing_tile_location": {"en": "Location", "pt": "Localização"},
     "new_listing_tile_location_empty_state": {
       "en": "Where can this donation be picked up?",
       "pt": "Onde esta doação pode ser retirada?"
     },
     "new_listing_tile_phone_number_empty_state": {
       "en": "Add a mobile phone number",
-      "pt": "Adicione o número do seu celular"
+      "pt": "Adicione um telefone de contato"
     },
     "new_listing_images_hint": {
       "en": "Don't forget to add some photos :)",
-      "pt": "Bota umas fotos aí ;)"
+      "pt": "Bote umas fotos aí ;)"
     },
     "new_listing_edit_title_hint": {
       "en": "Give your listing a title",
       "pt": "Dê um título para seu anúncio"
     },
     "new_listing_edit_description_hint": {
-      "en": "Add a few lines about the level of wear and tear of the donation and anything else you find relevant :)",
-      "pt": "Fale um pouco sobre o estado de conservação da doação e qualquer outra coisa que achar relevante :)"
+      "en":
+          "Add a few lines about the level of wear and tear of the donation and anything else you find relevant :)",
+      "pt":
+          "Fale um pouco sobre o estado de conservação da doação e qualquer outra coisa que achar relevante :)"
     },
-    "page_title_categories": {
-      "en": "Categories",
-      "pt": "Categorias"
-    },
+    "page_title_categories": {"en": "Categories", "pt": "Categorias"},
     "edit_categories_title": {
       "en": "Edit categories",
       "pt": "Editar categorias"
@@ -388,30 +279,15 @@ class Strings {
       "en": "You can choose up to 3 categories",
       "pt": "Você pode escolher até 3 categorias"
     },
-    "image_picker_modal_title": {
-      "en": "Add a new image",
-      "pt": "Nova imagem"
-    },
-    "image_picker_modal_camera": {
-      "en": "Camera",
-      "pt": "Câmera"
-    },
-    "image_picker_modal_gallery": {
-      "en": "Gallery",
-      "pt": "Galeria"
-    },
-    "image_picker_modal_remove": {
-      "en": "Remove image",
-      "pt": "Remover foto"
-    },
+    "image_picker_modal_title": {"en": "Add a new image", "pt": "Nova imagem"},
+    "image_picker_modal_camera": {"en": "Camera", "pt": "Câmera"},
+    "image_picker_modal_gallery": {"en": "Gallery", "pt": "Galeria"},
+    "image_picker_modal_remove": {"en": "Remove image", "pt": "Remover foto"},
     "new_listing_uploading": {
       "en": "Creating listing...",
       "pt": "Criando anúncio..."
     },
-    "edit_listing_uploading": {
-      "en": "Saving...",
-      "pt": "Salvando..."
-    },
+    "edit_listing_uploading": {"en": "Saving...", "pt": "Salvando..."},
     "new_listing_cancel_confirmation_title": {
       "en": "Cancel?",
       "pt": "Cancelar?"
@@ -424,26 +300,12 @@ class Strings {
       "en": "Your changes will not be saved. Are you sure you want to cancel?",
       "pt": "Suas alterações não serão salvas. Quer mesmo cancelar?"
     },
-    "common_yes": {
-      "en": "Yes",
-      "pt": "Sim"
-    },
-    "common_no": {
-      "en": "No",
-      "pt": "Não"
-    },
-    "common_me": {
-      "en": "Me",
-      "pt": "Eu"
-    },
-    "me_listings": {
-      "en": "My listings",
-      "pt": "Meus anúncios"
-    },
-    "common_help": {
-      "en": "Help",
-      "pt": "Quero ajuda"
-    },
+    "common_yes": {"en": "Yes", "pt": "Sim"},
+    "common_no": {"en": "No", "pt": "Não"},
+    "common_me": {"en": "Me", "pt": "Eu"},
+    "me_listings": {"en": "My listings", "pt": "Meus anúncios"},
+    "me_groups": {"en": "My groups", "pt": "Meus grupos"},
+    "common_help": {"en": "Help", "pt": "Fale conosco"},
     "help_message": {
       "en": "Hi! I'm using Alguém Quer? and I need some help :)",
       "pt": "Oi! Eu estou usando o Alguém Quer? e eu queria uma ajuda :)"
@@ -453,21 +315,12 @@ class Strings {
       "pt": "Você ainda não criou nenhum anúncio."
     },
     "my_listings_empty_state_button": {
-      "en": "Donate something now",
-      "pt": "Doar agora"
+      "en": "Give something now",
+      "pt": "Crie um anúncio agora"
     },
-    "common_remove": {
-      "en": "Delete",
-      "pt": "Remover"
-    },
-    "common_edit": {
-      "en": "Edit",
-      "pt": "Editar"
-    },
-    "common_delete": {
-      "en": "Delete",
-      "pt": "Excluir"
-    },
+    "common_remove": {"en": "Delete", "pt": "Remover"},
+    "common_edit": {"en": "Edit", "pt": "Editar"},
+    "common_delete": {"en": "Delete", "pt": "Excluir"},
     "edit_listing_is_active_hint": {
       "en": "This listing will be visible to other users",
       "pt": "Este anúncio estará visível para outros usuários"
@@ -476,14 +329,8 @@ class Strings {
       "en": "This listing will not be visile to other users",
       "pt": "Este anúncio não estará visível para outros usuários"
     },
-    "edit_listing_is_active": {
-      "en": "Active",
-      "pt": "Ativo"
-    },
-    "edit_listing_is_inactive": {
-      "en": "Inactive",
-      "pt": "Inativo"
-    },
+    "edit_listing_is_active": {"en": "Active", "pt": "Ativo"},
+    "edit_listing_is_inactive": {"en": "Inactive", "pt": "Inativo"},
     "log_in_forgot_password": {
       "en": "Forgot your password?",
       "pt": "Esqueceu sua senha?"
@@ -493,17 +340,18 @@ class Strings {
       "pt": "Não recebeu o e-mail para ativar sua conta?"
     },
     "log_in_forgot_password_instructions": {
-      "en": "Enter your email address and we'll send you instructions to reset your password.",
-      "pt": "Informe o e-mail usado para acessar sua conta e te enviaremos instruções para alterar sua senha."
+      "en":
+          "Enter your email address and we'll send you instructions to reset your password.",
+      "pt":
+          "Informe o e-mail usado para acessar sua conta e te enviaremos instruções para alterar sua senha."
     },
     "log_in_didnt_get_verification_email_instructions": {
-      "en": "Enter your email address and we'll resend you the link to activate your account.",
-      "pt": "Informe o e-mail usado para acessar sua conta e te enviaremos um link para ativar sua conta."
+      "en":
+          "Enter your email address and we'll resend you the link to activate your account.",
+      "pt":
+          "Informe o e-mail usado para acessar sua conta e te enviaremos um link para ativar sua conta."
     },
-    "log_in_error_bad_credentials_title": {
-      "en": "Oops",
-      "pt": "Ops"
-    },
+    "log_in_error_bad_credentials_title": {"en": "Oops", "pt": "Ops"},
     "log_in_error_bad_credentials_message": {
       "en": "Wrong email or password.",
       "pt": "Verifique seu e-mail e senha e tente novamente."
@@ -513,7 +361,8 @@ class Strings {
       "pt": "Quase lá..."
     },
     "log_in_error_not_activated_message": {
-      "en": "Please check your mailbox for an email with a link to activate your account.",
+      "en":
+          "Please check your mailbox for an email with a link to activate your account.",
       "pt": "Por favor ative sua conta com o link que enviamos por e-mail."
     },
     "resend_activation_error_already_activated_title": {
@@ -521,21 +370,17 @@ class Strings {
       "pt": "Opa!"
     },
     "resend_activation_error_already_activated_message": {
-      "en": "This account has already been activated. You can login with your email and password.",
-      "pt": "Esta conta já foi ativada. Você pode fazer login com seu e-mail e senha."
+      "en":
+          "This account has already been activated. You can login with your email and password.",
+      "pt":
+          "Esta conta já foi ativada. Você pode fazer login com seu e-mail e senha."
     },
-    "login_assistance_email_not_found_title": {
-      "en": "Oh, my!",
-      "pt": "Eita!"
-    },
+    "login_assistance_email_not_found_title": {"en": "Oh, my!", "pt": "Eita!"},
     "login_assistance_email_not_found_message": {
       "en": "We couldn't find any users with that email address.",
       "pt": "Não encontramos nenhum usuário com esse e-mail."
     },
-    "common_send": {
-      "en": "Send",
-      "pt": "Enviar"
-    },
+    "common_send": {"en": "Send", "pt": "Enviar"},
     "log_in_help_me": {
       "en": "Need help logging in?",
       "pt": "Precisa de ajuda para acessar sua conta?"
@@ -552,10 +397,7 @@ class Strings {
       "en": "Hello! I need help creating my Alguém Quer? account.",
       "pt": "Olá! Preciso de ajuda para criar minha conta no Alguém Quer?."
     },
-    "sign_up_error_409_title": {
-      "en": "Oh, my!",
-      "pt": "Eita!"
-    },
+    "sign_up_error_409_title": {"en": "Oh, my!", "pt": "Eita!"},
     "sign_up_error_409_messge": {
       "en": "That email address is already taken.",
       "pt": "Já existe um usuário com esse e-mail."
@@ -576,10 +418,7 @@ class Strings {
       "en": "Hi! I was using Alguém Quer? and something went wrong when ...",
       "pt": "Oi! Eu estava usando o Alguém Quer? e deu ruim quando ..."
     },
-    "action_report": {
-      "en": "Report",
-      "pt": "Reportar"
-    },
+    "action_report": {"en": "Report", "pt": "Reportar"},
     "profile_image_picker_modal_title": {
       "en": "Profile picture",
       "pt": "Foto de perfil"
@@ -589,20 +428,20 @@ class Strings {
       "pt": "Cancelar upload?"
     },
     "profile_cancel_upload_confirmation_message": {
-      "en": "Your new picture is still being uploaded. Are you sure you want to cancel?",
+      "en":
+          "Your new picture is still being uploaded. Are you sure you want to cancel?",
       "pt": "A nova foto ainda não foi salva. Quer mesmo cancelar?"
     },
-    "sub_categories_parent_category_prefix": {
-      "en": "All",
-      "pt": "Tudo de"
-    },
+    "sub_categories_parent_category_prefix": {"en": "All", "pt": "Tudo de"},
     "categories_everything_list_item_title": {
       "en": "Everything, everything",
       "pt": "Tudo"
     },
     "error_upload_listing_report_message": {
-      "en": "Hi! I was using Alguém Quer? and something went wrong when I tried to create a listing :/",
-      "pt": "Oi! Eu estava usando o Alguém Quer? e deu ruim quando tentei criar um anúncio :/"
+      "en":
+          "Hi! I was using Alguém Quer? and something went wrong when I tried to create a listing :/",
+      "pt":
+          "Oi! Eu estava usando o Alguém Quer? e deu ruim quando tentei criar um anúncio :/"
     },
     "facebook_login_cancelled_message": {
       "en": "Facebook login cancelled.",
@@ -637,12 +476,14 @@ class Strings {
       "pt": "Vamos te ajudar!"
     },
     "customer_service_dialog_content": {
-      "en": "You will be taken to a WhatsApp chat with someone from our support team.",
-      "pt": "Você será redirecionado para uma conversa WhatsApp com alguém da equipe de suporte."
+      "en":
+          "You will be taken to a WhatsApp chat with someone from our support team.",
+      "pt":
+          "Você será redirecionado para uma conversa WhatsApp com alguém da equipe de suporte."
     },
     "member_since_": {
-      "en": "On Alguém Quer? since $formatItem.",
-      "pt": "No Alguém Quer? desde $formatItem."
+      "en": "On Alguém Quer since $formatItem.",
+      "pt": "No Alguém Quer desde $formatItem."
     },
     "shared_dont_show_this_again": {
       "en": "Don't show this again",
@@ -660,18 +501,12 @@ class Strings {
       "en": "By continuing, you agree to our  ",
       "pt": "Ao entrar em contato com o anunciante, declaro que aceito a "
     },
-    "terms_acceptance_caption_read_": {
-      "en": "Read our  ",
-      "pt": "Confira a "
-    },
+    "terms_acceptance_caption_read_": {"en": "Read our  ", "pt": "Confira a "},
     "terms_acceptance_caption_termos": {
       "en": "Terms of service",
       "pt": "Termos de serviço"
     },
-    "terms_acceptance_caption_and_the_": {
-      "en": " and the ",
-      "pt": " e os "
-    },
+    "terms_acceptance_caption_and_the_": {"en": " and the ", "pt": " e os "},
     "terms_acceptance_caption_privacy": {
       "en": "Privacy policy",
       "pt": "Política de privacidade"
@@ -680,26 +515,16 @@ class Strings {
       "en": "Get in touch with the owner",
       "pt": "Entre em contato com o anunciante"
     },
-    "i_want_it_dialog_whatsapp": {
-      "en": "WhatsApp",
-      "pt": "WhatsApp"
-    },
-    "i_want_it_dialog_call": {
-      "en": "Call",
-      "pt": "Ligar"
-    },
+    "i_want_it_dialog_whatsapp": {"en": "WhatsApp", "pt": "WhatsApp"},
+    "i_want_it_dialog_call": {"en": "Call", "pt": "Ligar"},
     "error_network_layer_generic": {
-      "en": "Something went wrong. Make sure you're connected to the internet and try again.",
-      "pt": "Houve um erro. Verifique se tem conexão à internet e tente novamente."
+      "en":
+          "Something went wrong. Make sure you're connected to the internet and try again.",
+      "pt":
+          "Houve um erro. Verifique se tem conexão à internet e tente novamente."
     },
-    "image_cropper_toolbar_title": {
-      "en": "Edit photo",
-      "pt": "Editar foto"
-    },
-    "settings_about": {
-      "en": "About",
-      "pt": "Sobre"
-    },
+    "image_cropper_toolbar_title": {"en": "Edit photo", "pt": "Editar foto"},
+    "settings_about": {"en": "About", "pt": "Sobre"},
     "about_version_x": {
       "en": "Version $formatItem",
       "pt": "Versão $formatItem"
@@ -728,17 +553,16 @@ class Strings {
       "en": "Deleting...",
       "pt": "Excluindo..."
     },
-    "delete_listing_accept_button": {
-      "en": "Delete",
-      "pt": "Excluir"
-    },
+    "delete_listing_accept_button": {"en": "Delete", "pt": "Excluir"},
     "force_update_title": {
       "en": "We're better than ever",
       "pt": "Estamos melhores que nunca!"
     },
     "force_update_message": {
-      "en": "A new version of the app is available and this version is no longer supported.",
-      "pt": "Temos uma nova versão do aplicativo disponível e não suportamos mais esta versão."
+      "en":
+          "A new version of the app is available and this version is no longer supported.",
+      "pt":
+          "Temos uma nova versão do aplicativo disponível e não suportamos mais esta versão."
     },
     "force_update_button": {
       "en": "Update the app now",
@@ -761,12 +585,15 @@ class Strings {
       "pt": "Excluir anúncio"
     },
     "product_detail_no_shipping_alert": {
-      "en": "This item must be collected in person in $formatItem. It won't be sent by mail.",
-      "pt": "Este item deve ser retirado pessoalmente em $formatItem. Não será enviado pelos correios."
+      "en":
+          "This item must be collected in person in $formatItem. It won't be sent by mail.",
+      "pt":
+          "Este item deve ser retirado pessoalmente em $formatItem. Não será enviado pelos correios."
     },
     "product_detail_no_shipping_alert_null_location": {
       "en": "This item must be collected in person. It won't be sent by mail.",
-      "pt": "Este item deve ser retirado pessoalmente. Não será enviado pelos correios."
+      "pt":
+          "Este item deve ser retirado pessoalmente. Não será enviado pelos correios."
     },
     "product_detail_i_want_it_dialog_no_shipping_alert": {
       "en": "This item must be collected in person in $formatItem.",
@@ -784,10 +611,7 @@ class Strings {
       "en": " to see all of my donations :)",
       "pt": " se quiser ver todas as minhas doações :)"
     },
-    "product_detail_report_listing_title": {
-      "en": "Report",
-      "pt": "Denúncia"
-    },
+    "product_detail_report_listing_title": {"en": "Report", "pt": "Denúncia"},
     "product_detail_report_listing_text": {
       "en": "Is there something awry with this listing? Report it here.",
       "pt": "Encontrou algo de errado com este anúncio? Denuncie-o aqui."
@@ -802,7 +626,8 @@ class Strings {
     },
     "hide_listing_confirmation_content": {
       "en": "This listing will no longer be visile to other users.",
-      "pt": "Este anúncio não estará mais visível para outros usuários.\n\nVocê pode reativá-lo quando quiser."
+      "pt":
+          "Este anúncio não estará mais visível para outros usuários.\n\nVocê pode reativá-lo quando quiser."
     },
     "hide_listing_accept_button": {
       "en": "Hide listing",
@@ -824,9 +649,136 @@ class Strings {
       "en": "Reactivate listing",
       "pt": "Reativar anúncio"
     },
-    "shared_title_options": {
-      "en": "Options",
-      "pt": "Opções"
+    "shared_title_options": {"en": "Options", "pt": "Opções"},
+    "quick_menu_title": {
+      "en": "What do you want to do today?",
+      "pt": "O que você quer fazer hoje?"
+    },
+    "quick_menu_option_join_group": {
+      "en": "Join a group",
+      "pt": "Entrar em um grupo"
+    },
+    "quick_menu_option_create_listing": {
+      "en": "Create a listing",
+      "pt": "Criar um anúncio"
+    },
+    "quick_menu_option_create_group": {
+      "en": "Create a group",
+      "pt": "Criar um grupo"
+    },
+    "quick_menu_option_browse_listing": {
+      "en": "Browse listings",
+      "pt": "Explorar anúncios"
+    },
+    "quick_menu_option_go_to_my_groups": {
+      "en": "Go to my groups",
+      "pt": "Acessar meus grupos"
+    },
+    "join_group_screen_title": {
+      "en": "Join a group",
+      "pt": "Entrar em um grupo"
+    },
+    "join_group_screen_input_prompt": {
+      "en": "Enter the group's code.",
+      "pt": "Digite o código do grupo"
+    },
+    "join_group_screen_group_not_found_title": {
+      "en": "Group not found",
+      "pt": "Grupo não encontrado"
+    },
+    "join_group_screen_group_not_found_text": {
+      "en": "We couldn't find groups for that code.",
+      "pt": "Não encontramos nenhum grupo que corresponda a esse código."
+    },
+    "join_group_screen_group_already_a_member_title": {
+      "en": "You are already a member of this group",
+      "pt": "Você já é membro deste grupo"
+    },
+    "join_group_screen_group_already_a_member_text": {
+      "en": "Go to 'My Groups' to see a list of your groups.",
+      "pt": "Acesse 'Meus Grupos' para ver a lista dos seus grupos."
+    },
+    "join_group_screen_group_what_code_is_this_title": {
+      "en": "What code is this?",
+      "pt": "Que código é esse?"
+    },
+    "join_group_screen_group_what_code_is_this_text": {
+      "en":
+          "Groups are private giving groups e their access codes are secrets. If you were invited to a group, the group owner needs to give you the access code.",
+      "pt":
+          "Os grupos são grupos de doação privados e os códigos de acesso são segredos. Se você foi convidado para um grupo, o adminstrador precisa te dar o código de accesso."
+    },
+    "shared_try_again": {"en": "Try again", "pt": "Tente novamente"},
+    "create_group_screen_title": {
+      "en": "Create a group",
+      "pt": "Criar um grupo"
+    },
+    "create_group_form_name_label": {
+      "en": "Give your group a name",
+      "pt": "Dê um nome para seu grupo"
+    },
+    "create_group_form_submit_button_text": {
+      "en": "Create group",
+      "pt": "Criar grupo"
+    },
+    "my_groups_screen_title": {"en": "My groups", "pt": "Meus grupos"},
+    "leave_group_confirmation_title": {
+      "en": "Leave group?",
+      "pt": "Sair do grupo?"
+    },
+    "leave_group_confirmation_content": {
+      "en": "You'll need to use the access code to join again.",
+      "pt":
+          "Você vai precisar usar o código de acesso se quiser ingressar de novo."
+    },
+    "leave_group_confirmation_button_text": {
+      "en": "Leave group",
+      "pt": "Sair do grupo"
+    },
+    "edit_group_screen_title": {"en": "Edit group", "pt": "Editar grupo"},
+    "edit_group_information_subtitle": {
+      "en": "Group information",
+      "pt": "Informações do grupo"
+    },
+    "edit_group_information_description_empty_state": {
+      "en": "This group has no description.",
+      "pt": "Nenhuma descrição para este groupo."
+    },
+    "edit_group_name_tile_caption": {"en": "Group name", "pt": "Nome do grupo"},
+    "edit_group_name_tile_empty_state_caption": {
+      "en": "Tap to edit",
+      "pt": "Toque para editar"
+    },
+    "edit_group_description_tile_caption": {
+      "en": "Group description",
+      "pt": "Descrição do grupo"
+    },
+    "edit_group_description_tile_empty_state_caption": {
+      "en": "Tap to add a description",
+      "pt": "Toque para adicionar uma descrição"
+    },
+    "group_detail_screen_description_empty_state": {
+      "en": "Nothing in this group yet. 🤷🏽",
+      "pt": "Nenhum anúncio neste grupo ainda. 🤷🏽"
+    },
+    "group_information_screen_acess_code": {
+      "en": "Access code",
+      "pt": "Código de acesso"
+    },
+    "group_information_screen_description": {
+      "en": "Description",
+      "pt": "Descrição"
+    },
+    "group_information_screen_members": {"en": "Members", "pt": "Membros"},
+    "group_information_member_tile_admin_label": {
+      "en": "Group admin",
+      "pt": "Admin do grupo"
+    },
+    "share_group_text": {
+      "en":
+          "Hi! I'd like to invite you to our giving group! 😃\n\nGo to \"$formatItem\" to download the app.\n\nOut group's access code is $formatItem. 😉",
+      "pt":
+          "Oi! Quero te convidar para o grupo de doações e trocas \"$formatItem\" que criamos no app Alguém Quer! 😃\n\nBaixe o app em $formatItem.\n\nO código para entrar no nosso grupo é $formatItem. 😉"
     }
   };
 }

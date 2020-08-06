@@ -24,6 +24,7 @@ main() {
   MockSessionProvider mockSessionProvider;
   MockFirebaseStorageUtilProvider mockFirebaseStorageUtilProvider;
   MockUtil mockUtil;
+  MockAuthUserUpdatedAction mockAuthUserUpdatedAction;
 
   SettingsBloc bloc;
 
@@ -35,6 +36,7 @@ main() {
     mockSessionProvider = MockSessionProvider();
     mockFirebaseStorageUtilProvider = MockFirebaseStorageUtilProvider();
     mockUtil = MockUtil();
+    mockAuthUserUpdatedAction = MockAuthUserUpdatedAction();
 
     bloc = SettingsBloc(
       userRepository: mockUserRepository,
@@ -43,6 +45,7 @@ main() {
       userUpdatePublishSubject: mockUserHttpResponseSubject,
       firebaseStorageUtil: mockFirebaseStorageUtilProvider,
       util: mockUtil,
+      authUserUpdatedAction: mockAuthUserUpdatedAction,
     );
 
     when(mockUserHttpResponseSubject.stream)
@@ -78,6 +81,11 @@ main() {
     verify(mockSessionProvider.logUserOut()).called(1);
   });
 
+  test('calls auth user update change notifier when user logs out', () {
+    bloc.logout();
+    verify(mockAuthUserUpdatedAction.notify()).called(1);
+  });
+
   group('updates user', () {
     test('adds loading state to sink', () async {
       await bloc.updateUser(<String, dynamic>{'attribute': 'value'});
@@ -105,6 +113,21 @@ main() {
           verify(mockUserHttpResponseStreamSink.add(captureAny)).captured.last;
 
       expect(response.status, HttpStatus.ok);
+    });
+
+    test('calls auth user update change notifier when repository call succeeds',
+        () async {
+      when(mockUserRepository.updateMe(any))
+          .thenAnswer((_) async => HttpResponse<User>(
+                status: HttpStatus.ok,
+                data: User.fake(),
+              ));
+
+      await bloc.updateUser(<String, dynamic>{'attribute': 'value'});
+
+      verify(mockUserRepository.updateMe(any)).called(1);
+
+      verify(mockAuthUserUpdatedAction.notify()).called(1);
     });
 
     test('saves user to disk storage when repository call succeeds', () async {
@@ -140,6 +163,7 @@ main() {
         userUpdatePublishSubject: mockUserHttpResponseSubject,
         firebaseStorageUtil: mockFirebaseStorageUtilProvider,
         util: mockUtil,
+        authUserUpdatedAction: mockAuthUserUpdatedAction,
       );
 
       await bloc.updateUser(<String, dynamic>{'attribute': 'value'});

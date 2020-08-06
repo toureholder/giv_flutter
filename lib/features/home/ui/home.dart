@@ -2,9 +2,18 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:giv_flutter/base/base_state.dart';
 import 'package:giv_flutter/config/i18n/string_localizations.dart';
+import 'package:giv_flutter/features/base/base.dart';
+import 'package:giv_flutter/features/groups/create_group/bloc/create_group_bloc.dart';
+import 'package:giv_flutter/features/groups/create_group/ui/create_group_sceen.dart';
+import 'package:giv_flutter/features/groups/join_group/bloc/join_group_bloc.dart';
+import 'package:giv_flutter/features/groups/join_group/ui/join_group_screen.dart';
+import 'package:giv_flutter/features/groups/my_groups/bloc/my_groups_bloc.dart';
+import 'package:giv_flutter/features/groups/my_groups/ui/my_groups_screen.dart';
 import 'package:giv_flutter/features/home/bloc/home_bloc.dart';
 import 'package:giv_flutter/features/home/model/home_content.dart';
+import 'package:giv_flutter/features/home/ui/home_app_bar_actions.dart';
 import 'package:giv_flutter/features/home/ui/home_carousel.dart';
+import 'package:giv_flutter/features/home/ui/home_quick_menu.dart';
 import 'package:giv_flutter/features/log_in/bloc/log_in_bloc.dart';
 import 'package:giv_flutter/features/product/detail/bloc/product_detail_bloc.dart';
 import 'package:giv_flutter/features/product/detail/ui/product_detail.dart';
@@ -15,6 +24,7 @@ import 'package:giv_flutter/features/settings/ui/settings.dart';
 import 'package:giv_flutter/features/sign_in/ui/sign_in.dart';
 import 'package:giv_flutter/features/user_profile/bloc/user_profile_bloc.dart';
 import 'package:giv_flutter/features/user_profile/ui/user_profile.dart';
+import 'package:giv_flutter/model/authenticated_user_updated_action.dart';
 import 'package:giv_flutter/model/carousel/carousel_item.dart';
 import 'package:giv_flutter/model/image/image.dart' as CustomImage;
 import 'package:giv_flutter/model/product/product.dart';
@@ -33,6 +43,12 @@ import 'package:provider/provider.dart';
 class Home extends StatefulWidget {
   final HomeListener listener;
   final HomeBloc bloc;
+
+  static String actionIdSearch = Base.actionIdSearch;
+  static String actionIdPost = Base.actionIdPost;
+  static const String actionIdJoinGroup = "JOIN_GROUP";
+  static const String actionIdCreateGroup = "CREATE_GROUP";
+  static const String actionIdMyGroups = "MY_GROUPS";
 
   const Home({
     Key key,
@@ -61,7 +77,15 @@ class _HomeState extends BaseState<Home> {
     return CustomScaffold(
       appBar: CustomAppBar(
         title: string('home_title'),
-        actions: <Widget>[_buildAppBarActionsRow()],
+        actions: <Widget>[
+          Consumer<AuthUserUpdatedAction>(
+            builder: (context, state, child) => AppBarActionsRow(
+              homeBloc: _homeBloc,
+              onSignInButtonPressed: _navigateToSignIn,
+              onHomeUserAvatarTap: _navigateToSettings,
+            ),
+          ),
+        ],
       ),
       body: ContentStreamBuilder(
           stream: _homeBloc.content,
@@ -71,33 +95,27 @@ class _HomeState extends BaseState<Home> {
     );
   }
 
-  Row _buildAppBarActionsRow() {
-    final authenticatedUser = _homeBloc.getUser();
-    final userWidget = authenticatedUser == null
-        ? SignInButton(onPressed: _navigateToSignIn)
-        : HomeUserAvatar(
-            imageUrl: authenticatedUser.avatarUrl,
-            onTap: _navigateToSettings,
-          );
-
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: <Widget>[
-        userWidget,
-      ],
-    );
-  }
-
   List<Widget> _buildContent(BuildContext context, HomeContent content) {
     final categories = content.productCategories;
     final heroItems = content.heroItems;
+    final quickMenuItems = content.quickMenuItems;
 
+    // Carousel
     var widgets = <Widget>[
       _buildCarouselContainer(heroItems),
       Spacing.vertical(Dimens.grid(15))
     ];
 
+    // Quick menu items
+    widgets.addAll(<Widget>[
+      HomeQuickMenuSectionTitle(),
+      HomeQuickMenuOptions(
+        items: quickMenuItems,
+        onTap: _handleQuickMenuClick,
+      )
+    ]);
+
+    // Categories
     categories.forEach((category) {
       widgets.add(_buildSectionHeader(context, category));
       widgets.add(_buildItemList(context, category.products, category.id));
@@ -205,6 +223,45 @@ class _HomeState extends BaseState<Home> {
           bloc: bloc,
         ),
       ));
+
+  void _handleQuickMenuClick(String actionId) {
+    final baseWidgetActions = <String>[Base.actionIdSearch, Base.actionIdPost];
+
+    if (baseWidgetActions.contains(actionId)) {
+      widget.listener.invokeActionById(actionId);
+      return;
+    }
+
+    _handleHomeWidgetAction(actionId);
+  }
+
+  void _navigateToJoinGroup() => navigation.push(Consumer<JoinGroupBloc>(
+        builder: (context, bloc, child) => JoinGroupScreen(bloc: bloc),
+      ));
+
+  void _navigateToCreateGroup() => navigation.push(Consumer<CreateGroupBloc>(
+        builder: (context, bloc, child) => CreateGroupScreen(bloc: bloc),
+      ));
+
+  void _navigateToMyGroups() => navigation.push(Consumer<MyGroupsBloc>(
+        builder: (context, bloc, child) => MyGroupsScreen(bloc: bloc),
+      ));
+
+  void _handleHomeWidgetAction(String actionId) {
+    switch (actionId) {
+      case Home.actionIdJoinGroup:
+        _navigateToJoinGroup();
+        break;
+      case Home.actionIdCreateGroup:
+        _navigateToCreateGroup();
+        break;
+      case Home.actionIdMyGroups:
+        _navigateToMyGroups();
+        break;
+      default:
+      // no-op
+    }
+  }
 }
 
 class SignInButton extends StatelessWidget {

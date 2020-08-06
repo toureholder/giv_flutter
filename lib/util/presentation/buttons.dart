@@ -187,7 +187,8 @@ class GreyOutlineButton extends StatelessWidget {
   final String text;
   final bool fillWidth;
 
-  const GreyOutlineButton({Key key, this.onPressed, this.text, this.fillWidth = true})
+  const GreyOutlineButton(
+      {Key key, this.onPressed, this.text, this.fillWidth = true})
       : super(key: key);
 
   @override
@@ -245,14 +246,13 @@ class GreyOutlineIconButton extends StatelessWidget {
           textColor: Colors.black,
           onPressed: onPressed,
           icon: Padding(
-            padding: const EdgeInsets.all(0.0),
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: Icon(iconData, color: Colors.black),
           ),
           label: label),
     );
   }
 }
-
 
 class FacebookButton extends StatelessWidget {
   final VoidCallback onPressed;

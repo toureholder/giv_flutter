@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:giv_flutter/features/home/bloc/home_bloc.dart';
 import 'package:giv_flutter/features/home/model/home_content.dart';
+import 'package:giv_flutter/features/home/model/quick_menu_item.dart';
 import 'package:giv_flutter/features/home/ui/home.dart';
 import 'package:giv_flutter/features/home/ui/home_carousel.dart';
+import 'package:giv_flutter/features/home/ui/home_quick_menu.dart';
 import 'package:giv_flutter/features/product/detail/bloc/product_detail_bloc.dart';
 import 'package:giv_flutter/features/product/search_result/bloc/search_result_bloc.dart';
+import 'package:giv_flutter/model/authenticated_user_updated_action.dart';
 import 'package:giv_flutter/model/carousel/carousel_item.dart';
 import 'package:giv_flutter/model/product/product_category.dart';
 import 'package:giv_flutter/model/user/user.dart';
@@ -52,6 +55,9 @@ main() {
         ),
         Provider<Util>(
           builder: (_) => MockUtil(),
+        ),
+        ChangeNotifierProvider<AuthUserUpdatedAction>(
+          builder: (context) => AuthUserUpdatedAction(),
         ),
       ],
       navigatorObservers: [mockNavigationObserver],
@@ -177,7 +183,9 @@ main() {
 
       await publishSubject.close();
     });
+  });
 
+  group('handles carousel taps correctly', () {
     testWidgets('call listener function when action carousel item is tapped',
         (WidgetTester tester) async {
       final publishSubject = PublishSubject<HomeContent>();
@@ -187,6 +195,7 @@ main() {
       await tester.pumpWidget(testableWidget);
 
       publishSubject.sink.add(HomeContent(
+        quickMenuItems: QuickMenuItem.fakeList(),
         productCategories: ProductCategory.fakeListHomeContent(),
         heroItems: CarouselItem.fakeListWithOneAction(),
       ));
@@ -209,8 +218,9 @@ main() {
       await tester.pumpWidget(testableWidget);
 
       publishSubject.sink.add(HomeContent(
+        quickMenuItems: QuickMenuItem.fakeList(),
         productCategories: ProductCategory.fakeListHomeContent(),
-        heroItems: CarouselItem.fakeListWithOneCategory(),
+        heroItems: CarouselItem.fakeListWithOneAction(),
       ));
 
       await tester.pump(Duration.zero);
@@ -231,8 +241,9 @@ main() {
       await tester.pumpWidget(testableWidget);
 
       publishSubject.sink.add(HomeContent(
+        quickMenuItems: QuickMenuItem.fakeList(),
         productCategories: ProductCategory.fakeListHomeContent(),
-        heroItems: CarouselItem.fakeListWithOneUser(),
+        heroItems: CarouselItem.fakeListWithOneAction(),
       ));
 
       await tester.pump(Duration.zero);
@@ -242,6 +253,38 @@ main() {
       verify(mockNavigationObserver.didPush(any, any));
 
       await publishSubject.close();
+    });
+  });
+
+  group('quick menu tests', () {
+    PublishSubject<HomeContent> publishSubject;
+    HomeContent fakeHomeContent;
+
+    setUp(() {
+      publishSubject = PublishSubject<HomeContent>();
+      when(mockHomeBloc.content).thenAnswer((_) => publishSubject.stream);
+    });
+
+    testWidgets('should render quick menu items', (WidgetTester tester) async {
+      // Given
+      final quickMenuItens = QuickMenuItem.fakeList();
+      fakeHomeContent = HomeContent(
+          productCategories: ProductCategory.fakeListHomeContent(),
+          heroItems: CarouselItem.fakeListWithOneUser(),
+          quickMenuItems: quickMenuItens);
+
+      // Act / When
+      await tester.pumpWidget(testableWidget);
+      publishSubject.sink.add(fakeHomeContent);
+      await tester.pump();
+
+      // Assert / Then
+      expect(
+          find.byType(QuickMenuOption), findsNWidgets(quickMenuItens.length));
+    });
+
+    tearDown(() {
+      publishSubject.close();
     });
   });
 }

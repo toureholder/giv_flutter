@@ -4,6 +4,8 @@ import 'package:giv_flutter/config/i18n/string_localizations.dart';
 import 'package:giv_flutter/features/about/bloc/about_bloc.dart';
 import 'package:giv_flutter/features/about/ui/about.dart';
 import 'package:giv_flutter/features/base/base.dart';
+import 'package:giv_flutter/features/groups/my_groups/bloc/my_groups_bloc.dart';
+import 'package:giv_flutter/features/groups/my_groups/ui/my_groups_screen.dart';
 import 'package:giv_flutter/features/listing/bloc/my_listings_bloc.dart';
 import 'package:giv_flutter/features/listing/ui/my_listings.dart';
 import 'package:giv_flutter/features/settings/bloc/settings_bloc.dart';
@@ -62,9 +64,11 @@ class _SettingsState extends BaseState<Settings> {
         CustomDivider(),
         MyListingsTile(onTap: _goToMyListings),
         CustomDivider(),
-        HelpTile(onTap: _whatsAppCustomerService),
+        MyGroupsTile(onTap: _navigateToMyGroups),
         CustomDivider(),
         AboutTheAppTile(onTap: _goToAbout),
+        CustomDivider(),
+        HelpTile(onTap: _whatsAppCustomerService),
         CustomDivider(),
         LogOutTile(onTap: _confirmLogout),
         CustomDivider()
@@ -142,6 +146,10 @@ class _SettingsState extends BaseState<Settings> {
     ));
   }
 
+  void _navigateToMyGroups() => navigation.push(Consumer<MyGroupsBloc>(
+        builder: (context, bloc, child) => MyGroupsScreen(bloc: bloc),
+      ));
+
   void _goToAbout() {
     navigation.push(Consumer<AboutBloc>(
       builder: (context, bloc, child) => About(
@@ -213,6 +221,24 @@ class MyListingsTile extends StatelessWidget {
   }
 }
 
+class MyGroupsTile extends StatelessWidget {
+  final GestureTapCallback onTap;
+
+  const MyGroupsTile({Key key, @required this.onTap}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SettingsListTile(
+      leading: Padding(
+        padding: const EdgeInsets.only(left: 4.0),
+        child: Icon(Icons.group),
+      ),
+      text: GetLocalizedStringFunction(context)('me_groups'),
+      onTap: onTap,
+    );
+  }
+}
+
 class HelpTile extends StatelessWidget {
   final GestureTapCallback onTap;
 
@@ -221,9 +247,7 @@ class HelpTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SettingsListTile(
-      leading: Icon(
-        Icons.help_outline,
-      ),
+      leading: Icon(Icons.help_outline),
       text: GetLocalizedStringFunction(context)('common_help'),
       onTap: onTap,
       hideTrailing: true,
@@ -266,8 +290,6 @@ class AboutTheAppTile extends StatelessWidget {
       ),
       text: GetLocalizedStringFunction(context)('settings_about'),
       onTap: onTap,
-      hideTrailing: true,
     );
   }
 }
-

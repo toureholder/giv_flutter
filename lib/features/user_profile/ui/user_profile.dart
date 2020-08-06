@@ -78,9 +78,11 @@ class _UserProfileState extends BaseState<UserProfile> {
 
   Widget _userSince() {
     if (_user.createdAt == null) return Container();
-    final text = string('member_since_',
-        formatArg: DateFormat.yMMMM(localeString).format(_user.createdAt));
-    return _textPadding(Body2Text(
+    final text = string(
+      'member_since_',
+      formatArg: DateFormat.yMMMM(localeString).format(_user.createdAt),
+    );
+    return _textPadding(Caption(
       text,
       textAlign: TextAlign.center,
     ));

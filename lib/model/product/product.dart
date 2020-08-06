@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:faker/faker.dart';
+import 'package:giv_flutter/model/group/group.dart';
 import 'package:giv_flutter/model/image/image.dart';
 import 'package:giv_flutter/model/listing/listing_image.dart';
 import 'package:giv_flutter/model/listing/repository/api/request/create_listing_request.dart';
@@ -17,6 +18,8 @@ class Product {
   List<Image> images;
   User user;
   List<ProductCategory> categories;
+  List<Group> groups;
+  bool isPrivate;
   bool isActive;
   bool isMailable;
   DateTime updatedAt;
@@ -29,6 +32,8 @@ class Product {
     this.images,
     this.user,
     this.categories,
+    this.groups,
+    this.isPrivate = false,
     this.isActive = true,
     this.isMailable = false,
     this.updatedAt,
@@ -39,6 +44,7 @@ class Product {
         title = json['title'],
         description = json['description'],
         isActive = json['is_active'],
+        isPrivate = json['is_private'],
         isMailable = false,
         updatedAt = DateTime.parse(json['updated_at']),
         location = Location.fromLocationPartIds(
@@ -47,6 +53,8 @@ class Product {
             cityId: json['geonames_city_id']),
         user = User.fromJson(json['user']),
         categories = ProductCategory.fromDynamicList(json['categories']),
+        groups =
+            json['groups'] != null ? Group.fromDynamicList(json['groups']) : [],
         images = Image.fromListingImageList(
             ListingImage.fromDynamicList(json['listing_images']));
 
@@ -68,35 +76,44 @@ class Product {
   bool get isLocationComplete => location?.isOk ?? false;
 
   Product copy() {
-    var images = List<Image>.from(this.images);
-
-    var categories = List<ProductCategory>.from(this.categories);
+    var images = this.images == null ? null : List<Image>.from(this.images);
+    var categories = this.categories == null
+        ? null
+        : List<ProductCategory>.from(this.categories);
+    var groups = this.groups == null ? null : List<Group>.from(this.groups);
 
     return Product(
-        id: id,
-        title: title,
-        description: description,
-        isActive: isActive,
-        location: Location(
-            country: location?.country,
-            state: location?.state,
-            city: location?.city),
-        user: user,
-        images: images,
-        categories: categories);
+      id: id,
+      title: title,
+      description: description,
+      isActive: isActive,
+      isMailable: isMailable,
+      isPrivate: isPrivate,
+      location: Location(
+          country: location?.country,
+          state: location?.state,
+          city: location?.city),
+      user: user,
+      images: images,
+      categories: categories,
+      groups: groups,
+    );
   }
 
   CreateListingRequest toListingRequest(List<ListingImage> images) {
     return CreateListingRequest(
-        id: id,
-        title: title,
-        description: description,
-        geoNamesCityId: location?.city?.id,
-        geoNamesStateId: location?.state?.id,
-        geoNamesCountryId: location?.country?.id,
-        images: images,
-        categoryIds: categories.map((it) => it.id).toList(),
-        isActive: isActive);
+      id: id,
+      title: title,
+      description: description,
+      geoNamesCityId: location?.city?.id,
+      geoNamesStateId: location?.state?.id,
+      geoNamesCountryId: location?.country?.id,
+      images: images,
+      categoryIds: categories.map((it) => it.id).toList(),
+      groupIds: groups?.map((it) => it.id)?.toList(),
+      isActive: isActive,
+      isPrivate: isPrivate,
+    );
   }
 
   List<File> get imageFiles => images
@@ -123,6 +140,7 @@ class Product {
             simpleName: "Música e hobbies",
           )
         ],
+        groups: Group.fakeList(),
         updatedAt: DateTime(1982, 8, 11),
         user: User.fake());
   }
@@ -146,6 +164,7 @@ class Product {
           simpleName: "Música e hobbies",
         )
       ],
+      groups: Group.fakeList(),
       user: User.fake(),
     );
   }
@@ -166,6 +185,7 @@ class Product {
           simpleName: "Música e hobbies",
         )
       ],
+      groups: Group.fakeList(),
       user: User.fake(),
     );
   }
@@ -187,6 +207,7 @@ class Product {
           simpleName: "Música e hobbies",
         )
       ],
+      groups: Group.fakeList(),
       user: User.fake(),
     );
   }
@@ -208,6 +229,7 @@ class Product {
           simpleName: "Música e hobbies",
         )
       ],
+      groups: Group.fakeList(),
       user: User.fake(),
     );
   }

@@ -36,4 +36,10 @@ main() {
     verifyZeroInteractions(mockDiskStorage);
     verify(mockFirebaseStorage.ref()).called(1);
   });
+
+  test('gets group image reference from firebase instance', () {
+    firebaseStorageUtil.getGroupImageRef(1);
+    verifyZeroInteractions(mockDiskStorage);
+    verify(mockFirebaseStorage.ref()).called(1);
+  });
 }

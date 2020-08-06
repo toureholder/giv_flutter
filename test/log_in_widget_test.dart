@@ -6,6 +6,7 @@ import 'package:giv_flutter/features/log_in/ui/log_in.dart';
 import 'package:giv_flutter/features/log_in/ui/log_in_assistance.dart';
 import 'package:giv_flutter/features/sign_up/bloc/sign_up_bloc.dart';
 import 'package:giv_flutter/features/sign_up/ui/sign_up.dart';
+import 'package:giv_flutter/model/authenticated_user_updated_action.dart';
 import 'package:giv_flutter/model/user/repository/api/response/log_in_response.dart';
 import 'package:giv_flutter/util/data/stream_event.dart';
 import 'package:giv_flutter/util/form/email_form_field.dart';
@@ -52,6 +53,9 @@ main() {
         ),
         Provider<Util>(
           builder: (_) => MockUtil(),
+        ),
+        ChangeNotifierProvider<AuthUserUpdatedAction>(
+          builder: (context) => AuthUserUpdatedAction(),
         ),
       ],
       navigatorObservers: [
@@ -298,10 +302,10 @@ main() {
 
         await tester.pump(Duration.zero);
 
-        final Finder dialog = find.byType(AlertDialog);
-        final Finder content = testUtil
-            .findInternationalizedText('log_in_error_bad_credentials_title');
-        expect(find.descendant(of: dialog, matching: content), findsOneWidget);
+        expect(
+          testUtil.findDialogByContent('log_in_error_bad_credentials_title'),
+          findsOneWidget,
+        );
       },
     );
 
@@ -315,10 +319,10 @@ main() {
 
         await tester.pump(Duration.zero);
 
-        final Finder dialog = find.byType(AlertDialog);
-        final Finder content = testUtil
-            .findInternationalizedText('log_in_error_not_activated_title');
-        expect(find.descendant(of: dialog, matching: content), findsOneWidget);
+        expect(
+          testUtil.findDialogByContent('log_in_error_not_activated_title'),
+          findsOneWidget,
+        );
       },
     );
   });

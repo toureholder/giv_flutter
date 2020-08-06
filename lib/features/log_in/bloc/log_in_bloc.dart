@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:giv_flutter/model/api_response/api_response.dart';
+import 'package:giv_flutter/model/authenticated_user_updated_action.dart';
 import 'package:giv_flutter/model/user/repository/api/request/log_in_request.dart';
 import 'package:giv_flutter/model/user/repository/api/request/log_in_with_provider_request.dart';
 import 'package:giv_flutter/model/user/repository/api/request/login_assistance_request.dart';
@@ -21,6 +22,7 @@ class LogInBloc {
     @required this.firebaseAuth,
     @required this.facebookLogin,
     @required this.util,
+    @required this.authUserUpdatedAction,
   });
 
   final UserRepository userRepository;
@@ -30,6 +32,7 @@ class LogInBloc {
   final FirebaseAuth firebaseAuth;
   final FacebookLogin facebookLogin;
   final Util util;
+  final AuthUserUpdatedAction authUserUpdatedAction;
 
   Observable<HttpResponse<LogInResponse>> get loginResponseStream =>
       loginPublishSubject.stream;
@@ -93,7 +96,9 @@ class LogInBloc {
   Future<void> _saveToPreferences(LogInResponse response) async {
     await Future.wait([
       session.logUserIn(response),
-      firebaseAuth.signInWithCustomToken(token: response.firebaseAuthToken)
+      firebaseAuth.signInWithCustomToken(token: response.firebaseAuthToken),
     ]);
+
+    authUserUpdatedAction.notify();
   }
 }
