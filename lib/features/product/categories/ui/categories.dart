@@ -92,11 +92,13 @@ class CategoryListView extends StatelessWidget {
         shrinkWrap: true,
         itemCount: categories.length + 2,
         itemBuilder: (context, i) {
-          return (i == 0)
+          int index;
+          index = returnChoice == true ? i + 1 : i;
+          return (index == 0)
               ? AllProductsListTile()
-              : (i < categories.length + 1)
+              : (index < categories.length + 1)
                   ? CategoryListTile(
-                      category: categories[i - 1],
+                      category: categories[index - 1],
                       returnChoice: returnChoice,
                       hideThese: hideThese,
                     )
