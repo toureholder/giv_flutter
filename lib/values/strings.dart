@@ -73,6 +73,10 @@ class Strings {
       "en": "Continue with Facebook",
       "pt": "Continuar com Facebook"
     },
+    "sign_in_continue_with_apple": {
+      "en": "Sign in with Apple",
+      "pt": "Continuar com Apple"
+    },
     "sign_in_sign_up": {"en": "Sign up", "pt": "Criar conta"},
     "sign_in_log_in": {"en": "Log in", "pt": "Entrar"},
     "sign_in_form_name": {"en": "Name", "pt": "Nome"},

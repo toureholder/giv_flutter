@@ -84,7 +84,7 @@ class CustomIconButton extends StatelessWidget {
                   Text(text),
                 ],
               ),
-              Positioned(left: 10.0, child: icon)
+              Positioned(left: 4.0, child: icon)
             ],
           );
 
