@@ -58,7 +58,13 @@ class LogInBloc {
     }
   }
 
-  loginToFacebook() => facebookLogin.logInWithReadPermissions(['email']);
+  Future<FacebookLoginResult> loginToFacebook(
+      {FacebookLoginBehavior behavior}) {
+    if (behavior != null) {
+      facebookLogin.loginBehavior = behavior;
+    }
+    return facebookLogin.logIn(['email']);
+  }
 
   loginWithProvider(LogInWithProviderRequest request) async {
     try {

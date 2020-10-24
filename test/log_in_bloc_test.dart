@@ -74,7 +74,7 @@ main() {
 
   test('logs in to facebook', () {
     bloc.loginToFacebook();
-    verify(mockFacebookLogin.logInWithReadPermissions(any));
+    verify(mockFacebookLogin.logIn(any));
   });
 
   test('adds loading and data events to sink if login succeeds', () async {
