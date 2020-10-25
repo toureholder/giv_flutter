@@ -710,7 +710,7 @@ class Strings {
       "en":
           "Groups are private giving groups e their access codes are secrets. If you were invited to a group, the group owner needs to give you the access code.",
       "pt":
-          "Os grupos são grupos de doação privados e os códigos de acesso são segredos. Se você foi convidado para um grupo, o adminstrador precisa te dar o código de accesso."
+          "Os grupos do Alguém Quer? são grupos de doação privados criados pelos usuários do aplicativo. Se você foi convidado para um grupo, algum membro do grupo precisa te dar o código de accesso."
     },
     "shared_try_again": {"en": "Try again", "pt": "Tente novamente"},
     "create_group_screen_title": {
