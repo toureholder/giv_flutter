@@ -182,13 +182,17 @@ class _EditProfileState extends BaseState<EditProfile> {
   Future<Null> _cropImage(File imageFile) async {
     File croppedFile = await ImageCropper.cropImage(
       sourcePath: imageFile.path,
-      ratioX: Config.croppedProfileImageRatioX,
-      ratioY: Config.croppedProfileImageRatioY,
+      aspectRatio: CropAspectRatio(
+        ratioX: Config.croppedProfileImageRatioX,
+        ratioY: Config.croppedProfileImageRatioY,
+      ),
       maxWidth: Config.croppedProfileImageMaxHeight,
       maxHeight: Config.croppedProfileImageMaxWidth,
-      toolbarTitle: string('image_cropper_toolbar_title'),
-      toolbarColor: Colors.black,
-      toolbarWidgetColor: Colors.white,
+      androidUiSettings: AndroidUiSettings(
+        toolbarTitle: string('image_cropper_toolbar_title'),
+        toolbarColor: Colors.black,
+        toolbarWidgetColor: Colors.white,
+      ),
     );
 
     if (croppedFile == null) return;

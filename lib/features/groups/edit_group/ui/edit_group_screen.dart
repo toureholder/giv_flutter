@@ -9,8 +9,8 @@ import 'package:giv_flutter/features/groups/edit_group/bloc/edit_group_bloc.dart
 import 'package:giv_flutter/features/groups/edit_group/ui/edit_group_image_widget.dart';
 import 'package:giv_flutter/features/groups/edit_group/ui/edit_group_name_screen.dart';
 import 'package:giv_flutter/model/group/group.dart';
-import 'package:giv_flutter/model/group_updated_action.dart';
 import 'package:giv_flutter/model/image/image.dart' as CustomImage;
+import 'package:giv_flutter/util/network/http_response.dart';
 import 'package:giv_flutter/util/presentation/bottom_sheet.dart';
 import 'package:giv_flutter/util/presentation/custom_app_bar.dart';
 import 'package:giv_flutter/util/presentation/custom_divider.dart';
@@ -20,7 +20,6 @@ import 'package:giv_flutter/util/presentation/section_title.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
-import 'package:giv_flutter/util/network/http_response.dart';
 
 class EditGroupScreen extends StatefulWidget {
   final EditGroupBloc bloc;
@@ -186,13 +185,17 @@ class _EditGroupScreenContentState extends BaseState<EditGroupScreenContent> {
   Future<Null> _cropImage(File imageFile) async {
     File croppedFile = await ImageCropper.cropImage(
       sourcePath: imageFile.path,
-      ratioX: Config.croppedGroupImageRatioX,
-      ratioY: Config.croppedGroupImageRatioY,
+      aspectRatio: CropAspectRatio(
+        ratioX: Config.croppedGroupImageRatioX,
+        ratioY: Config.croppedGroupImageRatioY,
+      ),
+      androidUiSettings: AndroidUiSettings(
+        toolbarTitle: string('image_cropper_toolbar_title'),
+        toolbarColor: Colors.black,
+        toolbarWidgetColor: Colors.white,
+      ),
       maxWidth: Config.croppedGroupImageMaxHeight,
       maxHeight: Config.croppedGroupImageMaxWidth,
-      toolbarTitle: string('image_cropper_toolbar_title'),
-      toolbarColor: Colors.black,
-      toolbarWidgetColor: Colors.white,
     );
 
     if (croppedFile == null) return;

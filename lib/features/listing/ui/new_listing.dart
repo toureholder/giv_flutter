@@ -573,13 +573,17 @@ class _NewListingState extends BaseState<NewListing> {
   Future<Null> _cropImage(File imageFile) async {
     File croppedFile = await ImageCropper.cropImage(
       sourcePath: imageFile.path,
-      ratioX: Config.croppedProductImageRatioX,
-      ratioY: Config.croppedProductImageRatioY,
+      aspectRatio: CropAspectRatio(
+        ratioX: Config.croppedProductImageRatioX,
+        ratioY: Config.croppedProductImageRatioY,
+      ),
       maxWidth: Config.croppedProductImageMaxHeight,
       maxHeight: Config.croppedProductImageMaxWidth,
-      toolbarTitle: string('image_cropper_toolbar_title'),
-      toolbarColor: Colors.black,
-      toolbarWidgetColor: Colors.white,
+      androidUiSettings: AndroidUiSettings(
+        toolbarTitle: string('image_cropper_toolbar_title'),
+        toolbarColor: Colors.black,
+        toolbarWidgetColor: Colors.white,
+      ),
     );
 
     if (croppedFile == null) return;
