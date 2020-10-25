@@ -37,10 +37,10 @@ main() {
         ),
         dependencies: [
           Provider<CategoriesBloc>(
-            builder: (_) => mockCategoriesBloc,
+            create: (_) => mockCategoriesBloc,
           ),
           Provider<Util>(
-            builder: (_) => MockUtil(),
+            create: (_) => MockUtil(),
           ),
         ],
         navigatorObservers: [
@@ -178,11 +178,11 @@ main() {
 
   testWidgets(
     'WIP: pops navigation stack if list is not empty',
-        (WidgetTester tester) async {
+    (WidgetTester tester) async {
       final initialQuantity = 2;
 
       final productCategories =
-      ProductCategory.fakeList(quantity: initialQuantity);
+          ProductCategory.fakeList(quantity: initialQuantity);
 
       final testableWidget = makeTestableWidget(productCategories);
 

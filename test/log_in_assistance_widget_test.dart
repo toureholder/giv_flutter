@@ -43,10 +43,10 @@ main() {
         ),
         dependencies: [
           Provider<LogInBloc>(
-            builder: (_) => mockLoginBloc,
+            create: (_) => mockLoginBloc,
           ),
           Provider<Util>(
-            builder: (_) => MockUtil(),
+            create: (_) => MockUtil(),
           ),
         ],
         navigatorObservers: [
@@ -238,7 +238,7 @@ main() {
     });
   });
 
-  tearDownAll((){
+  tearDownAll(() {
     apiResponseSubject.close();
   });
 }

@@ -10,12 +10,11 @@ import 'package:provider/provider.dart';
 import 'test_util/mocks.dart';
 import 'test_util/test_util.dart';
 
-main(){
+main() {
   MockForceUpdateBloc mockForceUpdateBloc;
   Widget testableWidget;
 
-
-  setUp((){
+  setUp(() {
     mockForceUpdateBloc = MockForceUpdateBloc();
 
     testableWidget = TestUtil().makeTestableWidget(
@@ -24,16 +23,16 @@ main(){
       ),
       dependencies: [
         Provider<ForceUpdateBloc>(
-          builder: (_) => mockForceUpdateBloc,
+          create: (_) => mockForceUpdateBloc,
         ),
         Provider<Util>(
-          builder: (_) => MockUtil(),
+          create: (_) => MockUtil(),
         ),
       ],
     );
   });
 
-  tearDown((){
+  tearDown(() {
     reset(mockForceUpdateBloc);
   });
 

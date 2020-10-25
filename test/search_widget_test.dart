@@ -36,10 +36,10 @@ main() {
         ),
         dependencies: [
           Provider<SearchResultBloc>(
-            builder: (_) => mockSearchResultBloc,
+            create: (_) => mockSearchResultBloc,
           ),
           Provider<Util>(
-            builder: (_) => mockUtil,
+            create: (_) => mockUtil,
           ),
         ],
         navigatorObservers: [
@@ -96,12 +96,12 @@ main() {
 
   testWidgets(
     'searches by query on text input search action',
-        (WidgetTester tester) async {
+    (WidgetTester tester) async {
       final searchQuery = 'book';
       final suggestionsQuantity = 5;
 
       when(mockSearchResultBloc.getSearchSuggestions(any)).thenAnswer(
-              (_) async => ProductCategory.fakeList(quantity: suggestionsQuantity));
+          (_) async => ProductCategory.fakeList(quantity: suggestionsQuantity));
 
       final testableWidget = makeTestableWidget();
       await tester.pumpWidget(testableWidget);

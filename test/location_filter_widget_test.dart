@@ -57,10 +57,10 @@ main() {
         subject: LocationFilter(bloc: mockLocationFilterBloc),
         dependencies: [
           Provider<LocationFilterBloc>(
-            builder: (_) => mockLocationFilterBloc,
+            create: (_) => mockLocationFilterBloc,
           ),
           Provider<Util>(
-            builder: (_) => MockUtil(),
+            create: (_) => MockUtil(),
           ),
         ],
         navigatorObservers: [

@@ -34,7 +34,7 @@ main() {
         ),
         dependencies: [
           Provider<Util>(
-            builder: (_) => mockUtil,
+            create: (_) => mockUtil,
           ),
         ],
       );

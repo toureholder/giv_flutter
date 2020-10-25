@@ -65,19 +65,19 @@ main() {
         ),
         dependencies: [
           Provider<NewListingBloc>(
-            builder: (_) => mockNewListingBloc,
+            create: (_) => mockNewListingBloc,
           ),
           Provider<LogInBloc>(
-            builder: (_) => mockLoginBloc,
+            create: (_) => mockLoginBloc,
           ),
           Provider<CategoriesBloc>(
-            builder: (_) => mockCategoriesBloc,
+            create: (_) => mockCategoriesBloc,
           ),
           Provider<LocationFilterBloc>(
-            builder: (_) => mockLocationFilterBloc,
+            create: (_) => mockLocationFilterBloc,
           ),
           Provider<Util>(
-            builder: (_) => MockUtil(),
+            create: (_) => MockUtil(),
           ),
         ],
         navigatorObservers: [mockNavigationObserver],

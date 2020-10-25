@@ -36,10 +36,10 @@ main() {
         ),
         dependencies: [
           Provider<SearchResultBloc>(
-            builder: (_) => MockSearchResultBloc(),
+            create: (_) => MockSearchResultBloc(),
           ),
           Provider<Util>(
-            builder: (_) => MockUtil(),
+            create: (_) => MockUtil(),
           ),
         ],
         navigatorObservers: [

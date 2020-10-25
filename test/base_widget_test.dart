@@ -35,22 +35,22 @@ main() {
       subject: Base(),
       dependencies: [
         Provider<NewListingBloc>(
-          builder: (_) => mockNewListingBloc,
+          create: (_) => mockNewListingBloc,
         ),
         Provider<HomeBloc>(
-          builder: (_) => mockHomeBloc,
+          create: (_) => mockHomeBloc,
         ),
         Provider<CategoriesBloc>(
-          builder: (_) => mockCategoriesBloc,
+          create: (_) => mockCategoriesBloc,
         ),
         Provider<LogInBloc>(
-          builder: (_) => mockLoginBloc,
+          create: (_) => mockLoginBloc,
         ),
         Provider<Util>(
-          builder: (_) => MockUtil(),
+          create: (_) => MockUtil(),
         ),
         ChangeNotifierProvider<AuthUserUpdatedAction>(
-          builder: (context) => AuthUserUpdatedAction(),
+          create: (context) => AuthUserUpdatedAction(),
         ),
       ],
       navigatorObservers: [mockNavigationObserver],

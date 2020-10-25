@@ -45,19 +45,19 @@ main() {
       ),
       dependencies: [
         Provider<HomeBloc>(
-          builder: (_) => mockHomeBloc,
+          create: (_) => mockHomeBloc,
         ),
         Provider<SearchResultBloc>(
-          builder: (_) => mockSearchResultBloc,
+          create: (_) => mockSearchResultBloc,
         ),
         Provider<ProductDetailBloc>(
-          builder: (_) => mockProductDetailBloc,
+          create: (_) => mockProductDetailBloc,
         ),
         Provider<Util>(
-          builder: (_) => MockUtil(),
+          create: (_) => MockUtil(),
         ),
         ChangeNotifierProvider<AuthUserUpdatedAction>(
-          builder: (context) => AuthUserUpdatedAction(),
+          create: (context) => AuthUserUpdatedAction(),
         ),
       ],
       navigatorObservers: [mockNavigationObserver],

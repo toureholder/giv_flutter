@@ -28,10 +28,10 @@ main() {
       ),
       dependencies: [
         Provider<MyListingsBloc>(
-          builder: (_) => mockMyListingsBloc,
+          create: (_) => mockMyListingsBloc,
         ),
         Provider<Util>(
-          builder: (_) => MockUtil(),
+          create: (_) => MockUtil(),
         ),
       ],
       navigatorObservers: [mockNavigationObserver],

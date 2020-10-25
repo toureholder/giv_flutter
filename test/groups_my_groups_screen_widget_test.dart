@@ -33,16 +33,16 @@ main() {
         subject: MyGroupsScreen(bloc: mockMyGroupsBloc),
         dependencies: [
           ChangeNotifierProvider<GroupUpdatedAction>(
-            builder: (context) => GroupUpdatedAction(),
+            create: (context) => GroupUpdatedAction(),
           ),
           Provider<MyGroupsBloc>(
-            builder: (_) => mockMyGroupsBloc,
+            create: (_) => mockMyGroupsBloc,
           ),
           Provider<LogInBloc>(
-            builder: (_) => MockLoginBloc(),
+            create: (_) => MockLoginBloc(),
           ),
           Provider<Util>(
-            builder: (_) => MockUtil(),
+            create: (_) => MockUtil(),
           ),
         ]);
 

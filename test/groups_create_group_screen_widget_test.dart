@@ -34,13 +34,13 @@ main() {
         subject: CreateGroupScreen(bloc: mockCreateGroupBloc),
         dependencies: [
           Provider<CreateGroupBloc>(
-            builder: (_) => mockCreateGroupBloc,
+            create: (_) => mockCreateGroupBloc,
           ),
           Provider<LogInBloc>(
-            builder: (_) => MockLoginBloc(),
+            create: (_) => MockLoginBloc(),
           ),
           Provider<Util>(
-            builder: (_) => MockUtil(),
+            create: (_) => MockUtil(),
           )
         ]);
 

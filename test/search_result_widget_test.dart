@@ -48,13 +48,13 @@ main() {
         ),
         dependencies: [
           Provider<SearchResultBloc>(
-            builder: (_) => mockSearchResultBloc,
+            create: (_) => mockSearchResultBloc,
           ),
           Provider<Util>(
-            builder: (_) => mockUtil,
+            create: (_) => mockUtil,
           ),
           Provider<LocationFilterBloc>(
-            builder: (_) => MockLocationFilterBloc(),
+            create: (_) => MockLocationFilterBloc(),
           ),
         ],
         navigatorObservers: [
@@ -120,7 +120,7 @@ main() {
 
     testWidgets(
       'shows list when data is loaded',
-          (WidgetTester tester) async {
+      (WidgetTester tester) async {
         final controller = PublishSubject<StreamEvent<ProductSearchResult>>();
 
         when(mockSearchResultBloc.result).thenAnswer((_) => controller.stream);
@@ -142,7 +142,7 @@ main() {
 
     testWidgets(
       'shows empty state when data is loaded and empty',
-          (WidgetTester tester) async {
+      (WidgetTester tester) async {
         final controller = PublishSubject<StreamEvent<ProductSearchResult>>();
 
         when(mockSearchResultBloc.result).thenAnswer((_) => controller.stream);
@@ -151,7 +151,8 @@ main() {
         await tester.pumpWidget(testableWidget);
 
         controller.sink.add(StreamEvent<ProductSearchResult>(
-            state: StreamEventState.ready, data: ProductSearchResult.fakeEmpty()));
+            state: StreamEventState.ready,
+            data: ProductSearchResult.fakeEmpty()));
 
         await tester.pump();
 
@@ -187,7 +188,7 @@ main() {
   group('navigates to location filter', () {
     testWidgets(
       'navigates to location filter when button is tapped',
-          (WidgetTester tester) async {
+      (WidgetTester tester) async {
         final controller = PublishSubject<StreamEvent<ProductSearchResult>>();
 
         when(mockSearchResultBloc.result).thenAnswer((_) => controller.stream);

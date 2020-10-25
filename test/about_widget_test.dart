@@ -23,10 +23,10 @@ main() {
       ),
       dependencies: [
         Provider<AboutBloc>(
-          builder: (_) => mockAboutBloc,
+          create: (_) => mockAboutBloc,
         ),
         Provider<Util>(
-          builder: (_) => MockUtil(),
+          create: (_) => MockUtil(),
         ),
       ],
     );

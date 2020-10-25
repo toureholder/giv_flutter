@@ -32,13 +32,13 @@ main() {
       ),
       dependencies: [
         Provider<SplashBloc>(
-          builder: (_) => mockSplashBloc,
+          create: (_) => mockSplashBloc,
         ),
         Provider<ForceUpdateBloc>(
-          builder: (_) => MockForceUpdateBloc(),
+          create: (_) => MockForceUpdateBloc(),
         ),
         Provider<Util>(
-          builder: (_) => MockUtil(),
+          create: (_) => MockUtil(),
         ),
       ],
       navigatorObservers: [
@@ -50,7 +50,7 @@ main() {
         .thenAnswer((_) => tasksSuccessSubject.stream);
   });
 
-  tearDown((){
+  tearDown(() {
     tasksSuccessSubject.close();
   });
 
@@ -74,7 +74,8 @@ main() {
     verify(mockNavigatorObserver.didPush(any, any));
   });
 
-  testWidgets('navigates when tasks fail with force update error', (WidgetTester tester) async {
+  testWidgets('navigates when tasks fail with force update error',
+      (WidgetTester tester) async {
     await tester.pumpWidget(testableWidget);
 
     expect(find.byType(AppIcon), findsOneWidget);

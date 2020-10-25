@@ -33,16 +33,16 @@ main() {
         ),
         dependencies: [
           ChangeNotifierProvider<GroupUpdatedAction>(
-            builder: (context) => GroupUpdatedAction(),
+            create: (context) => GroupUpdatedAction(),
           ),
           Provider<MockEditGroupBloc>(
-            builder: (_) => mockBloc,
+            create: (_) => mockBloc,
           ),
           Provider<LogInBloc>(
-            builder: (_) => MockLoginBloc(),
+            create: (_) => MockLoginBloc(),
           ),
           Provider<Util>(
-            builder: (_) => MockUtil(),
+            create: (_) => MockUtil(),
           )
         ]);
 

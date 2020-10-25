@@ -43,19 +43,19 @@ main() {
       ),
       dependencies: [
         Provider<LogInBloc>(
-          builder: (_) => mockLoginBloc,
+          create: (_) => mockLoginBloc,
         ),
         Provider<SignUpBloc>(
-          builder: (_) => mockSignUpBloc,
+          create: (_) => mockSignUpBloc,
         ),
         Provider<HomeBloc>(
-          builder: (_) => MockHomeBloc(),
+          create: (_) => MockHomeBloc(),
         ),
         Provider<Util>(
-          builder: (_) => MockUtil(),
+          create: (_) => MockUtil(),
         ),
         ChangeNotifierProvider<AuthUserUpdatedAction>(
-          builder: (context) => AuthUserUpdatedAction(),
+          create: (context) => AuthUserUpdatedAction(),
         ),
       ],
       navigatorObservers: [

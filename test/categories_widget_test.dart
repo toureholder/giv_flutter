@@ -39,10 +39,10 @@ main() {
         ),
         dependencies: [
           Provider<CategoriesBloc>(
-            builder: (_) => mockCategoriesBloc,
+            create: (_) => mockCategoriesBloc,
           ),
           Provider<Util>(
-            builder: (_) => MockUtil(),
+            create: (_) => MockUtil(),
           ),
         ],
       );

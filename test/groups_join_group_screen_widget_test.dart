@@ -35,13 +35,13 @@ main() {
         subject: JoinGroupScreen(bloc: mockJoinGroupBloc),
         dependencies: [
           Provider<JoinGroupBloc>(
-            builder: (_) => mockJoinGroupBloc,
+            create: (_) => mockJoinGroupBloc,
           ),
           Provider<LogInBloc>(
-            builder: (_) => MockLoginBloc(),
+            create: (_) => MockLoginBloc(),
           ),
           Provider<Util>(
-            builder: (_) => MockUtil(),
+            create: (_) => MockUtil(),
           )
         ]);
 

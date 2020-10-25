@@ -33,19 +33,19 @@ main() {
       ),
       dependencies: [
         Provider<SettingsBloc>(
-          builder: (_) => mockSettingsBloc,
+          create: (_) => mockSettingsBloc,
         ),
         Provider<MyListingsBloc>(
-          builder: (_) => MockMyListingsBloc(),
+          create: (_) => MockMyListingsBloc(),
         ),
         Provider<AboutBloc>(
-          builder: (_) => MockAboutBloc(),
+          create: (_) => MockAboutBloc(),
         ),
         Provider<HomeBloc>(
-          builder: (_) => MockHomeBloc(),
+          create: (_) => MockHomeBloc(),
         ),
         Provider<Util>(
-          builder: (_) => MockUtil(),
+          create: (_) => MockUtil(),
         ),
       ],
       navigatorObservers: [

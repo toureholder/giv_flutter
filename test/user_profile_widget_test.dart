@@ -41,10 +41,10 @@ main() {
         ),
         dependencies: [
           Provider<UserProfileBloc>(
-            builder: (_) => mockUserProfileBloc,
+            create: (_) => mockUserProfileBloc,
           ),
           Provider<Util>(
-            builder: (_) => MockUtil(),
+            create: (_) => MockUtil(),
           ),
         ],
         navigatorObservers: [mockNavigationObserver],

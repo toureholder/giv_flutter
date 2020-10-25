@@ -34,10 +34,10 @@ main() {
       ),
       dependencies: [
         Provider<SettingsBloc>(
-          builder: (_) => mockSettingsBloc,
+          create: (_) => mockSettingsBloc,
         ),
         Provider<Util>(
-          builder: (_) => MockUtil(),
+          create: (_) => MockUtil(),
         ),
       ],
       navigatorObservers: [

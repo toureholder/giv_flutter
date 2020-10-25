@@ -29,10 +29,10 @@ main() {
       ),
       dependencies: [
         Provider<CustomerServiceDialogBloc>(
-          builder: (_) => mockCustomerServiceDialogBloc,
+          create: (_) => mockCustomerServiceDialogBloc,
         ),
         Provider<Util>(
-          builder: (_) => MockUtil(),
+          create: (_) => MockUtil(),
         ),
       ],
     );

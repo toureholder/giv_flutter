@@ -41,13 +41,13 @@ main() {
       ),
       dependencies: [
         Provider<LogInBloc>(
-          builder: (_) => mockLoginBloc,
+          create: (_) => mockLoginBloc,
         ),
         Provider<SignUpBloc>(
-          builder: (_) => mockSignUpBloc,
+          create: (_) => mockSignUpBloc,
         ),
         Provider<Util>(
-          builder: (_) => MockUtil(),
+          create: (_) => MockUtil(),
         ),
       ],
       navigatorObservers: [

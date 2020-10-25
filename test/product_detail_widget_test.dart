@@ -44,13 +44,13 @@ main() {
         ),
         dependencies: [
           Provider<ProductDetailBloc>(
-            builder: (_) => mockBloc,
+            create: (_) => mockBloc,
           ),
           Provider<NewListingBloc>(
-            builder: (_) => mockNewListingBloc,
+            create: (_) => mockNewListingBloc,
           ),
           Provider<Util>(
-            builder: (_) => mockUtil,
+            create: (_) => mockUtil,
           ),
         ],
         navigatorObservers: [

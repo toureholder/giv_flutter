@@ -165,7 +165,7 @@ Future<List<SingleChildCloneableWidget>> getAppDependencies() async {
 
   return <SingleChildCloneableWidget>[
     Provider<LogInBloc>(
-      builder: (_) => LogInBloc(
+      create: (_) => LogInBloc(
         userRepository: userRepository,
         session: session,
         loginPublishSubject: PublishSubject<HttpResponse<LogInResponse>>(),
@@ -178,38 +178,38 @@ Future<List<SingleChildCloneableWidget>> getAppDependencies() async {
       ),
     ),
     Provider<UserProfileBloc>(
-      builder: (_) => UserProfileBloc(
+      create: (_) => UserProfileBloc(
         productRepository: productRepository,
         productsPublishSubject: PublishSubject<List<Product>>(),
       ),
     ),
     Provider<SearchResultBloc>(
-      builder: (_) => SearchResultBloc(
+      create: (_) => SearchResultBloc(
         productRepository: productRepository,
         diskStorage: diskStorage,
         searchResultSubject: PublishSubject<StreamEvent<ProductSearchResult>>(),
       ),
     ),
     Provider<MyListingsBloc>(
-      builder: (_) => MyListingsBloc(
+      create: (_) => MyListingsBloc(
         productRepository: productRepository,
         productsPublishSubject: PublishSubject<List<Product>>(),
       ),
     ),
     Provider<HomeBloc>(
-      builder: (_) => HomeBloc(
+      create: (_) => HomeBloc(
           productRepository: productRepository,
           carouselRepository: carouselRepository,
           diskStorage: diskStorage,
           contentPublishSubject: PublishSubject<HomeContent>()),
     ),
     Provider<CategoriesBloc>(
-      builder: (_) => CategoriesBloc(
+      create: (_) => CategoriesBloc(
           productRepository: productRepository,
           categoriesSubject: BehaviorSubject<List<ProductCategory>>()),
     ),
     Provider<SplashBloc>(
-      builder: (_) => SplashBloc(
+      create: (_) => SplashBloc(
         userRepository: userRepository,
         locationRepository: locationRepository,
         appConfigRepository: appConfigRepository,
@@ -219,7 +219,7 @@ Future<List<SingleChildCloneableWidget>> getAppDependencies() async {
       ),
     ),
     Provider<LocationFilterBloc>(
-      builder: (_) => LocationFilterBloc(
+      create: (_) => LocationFilterBloc(
         locationRepository: locationRepository,
         diskStorage: diskStorage,
         citiesSubject: PublishSubject<StreamEvent<List<City>>>(),
@@ -228,7 +228,7 @@ Future<List<SingleChildCloneableWidget>> getAppDependencies() async {
       ),
     ),
     Provider<NewListingBloc>(
-      builder: (_) => NewListingBloc(
+      create: (_) => NewListingBloc(
         locationRepository: locationRepository,
         listingRepository: listingRepository,
         diskStorage: diskStorage,
@@ -239,7 +239,7 @@ Future<List<SingleChildCloneableWidget>> getAppDependencies() async {
       ),
     ),
     Provider<ProductDetailBloc>(
-      builder: (_) => ProductDetailBloc(
+      create: (_) => ProductDetailBloc(
         locationRepository: locationRepository,
         listingRepository: listingRepository,
         session: session,
@@ -252,7 +252,7 @@ Future<List<SingleChildCloneableWidget>> getAppDependencies() async {
       ),
     ),
     Provider<SettingsBloc>(
-      builder: (_) => SettingsBloc(
+      create: (_) => SettingsBloc(
         userRepository: userRepository,
         diskStorage: diskStorage,
         session: session,
@@ -263,43 +263,43 @@ Future<List<SingleChildCloneableWidget>> getAppDependencies() async {
       ),
     ),
     Provider<CustomerServiceDialogBloc>(
-      builder: (_) => CustomerServiceDialogBloc(
+      create: (_) => CustomerServiceDialogBloc(
         diskStorage: diskStorage,
         util: util,
       ),
     ),
     Provider<SignUpBloc>(
-      builder: (_) => SignUpBloc(
+      create: (_) => SignUpBloc(
         userRepository: userRepository,
         responsePublishSubject: PublishSubject<HttpResponse<ApiResponse>>(),
       ),
     ),
     Provider<AboutBloc>(
-      builder: (_) => AboutBloc(
+      create: (_) => AboutBloc(
         util: util,
       ),
     ),
     Provider<ForceUpdateBloc>(
-      builder: (_) => ForceUpdateBloc(
+      create: (_) => ForceUpdateBloc(
         util: util,
       ),
     ),
     Provider<JoinGroupBloc>(
-      builder: (_) => JoinGroupBloc(
+      create: (_) => JoinGroupBloc(
         groupMembershipRepository: groupMembershipRepository,
         groupMembershipSubject: PublishSubject<HttpResponse<GroupMembership>>(),
         diskStorage: diskStorage,
       ),
     ),
     Provider<CreateGroupBloc>(
-      builder: (_) => CreateGroupBloc(
+      create: (_) => CreateGroupBloc(
         groupRepository: groupRepository,
         groupSubject: PublishSubject<HttpResponse<Group>>(),
         diskStorage: diskStorage,
       ),
     ),
     Provider<MyGroupsBloc>(
-      builder: (_) => MyGroupsBloc(
+      create: (_) => MyGroupsBloc(
         repository: groupMembershipRepository,
         subject: PublishSubject<List<GroupMembership>>(),
         diskStorage: diskStorage,
@@ -307,7 +307,7 @@ Future<List<SingleChildCloneableWidget>> getAppDependencies() async {
       ),
     ),
     Provider<GroupDetailBloc>(
-      builder: (_) => GroupDetailBloc(
+      create: (_) => GroupDetailBloc(
         groupRepository: groupRepository,
         groupMembershipRepository: groupMembershipRepository,
         productsSubject: PublishSubject<List<Product>>(),
@@ -317,7 +317,7 @@ Future<List<SingleChildCloneableWidget>> getAppDependencies() async {
       ),
     ),
     Provider<GroupInformationBloc>(
-      builder: (_) => GroupInformationBloc(
+      create: (_) => GroupInformationBloc(
         memberhipsRepository: groupMembershipRepository,
         loadMembershipsSubject: PublishSubject<List<GroupMembership>>(),
         diskStorage: diskStorage,
@@ -325,7 +325,7 @@ Future<List<SingleChildCloneableWidget>> getAppDependencies() async {
       ),
     ),
     Provider<EditGroupBloc>(
-      builder: (_) => EditGroupBloc(
+      create: (_) => EditGroupBloc(
         groupRepository: groupRepository,
         groupSubject: PublishSubject<HttpResponse<Group>>(),
         diskStorage: diskStorage,
@@ -335,13 +335,13 @@ Future<List<SingleChildCloneableWidget>> getAppDependencies() async {
       ),
     ),
     Provider<Util>(
-      builder: (_) => util,
+      create: (_) => util,
     ),
     ChangeNotifierProvider<GroupUpdatedAction>(
-      builder: (context) => groupUpdatedAction,
+      create: (context) => groupUpdatedAction,
     ),
     ChangeNotifierProvider<AuthUserUpdatedAction>(
-      builder: (context) => authUserUpdatedAction,
+      create: (context) => authUserUpdatedAction,
     )
   ];
 }
