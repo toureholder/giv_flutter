@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:giv_flutter/features/phone_verification/bloc/phone_verification_bloc.dart';
 import 'package:giv_flutter/features/settings/bloc/settings_bloc.dart';
 import 'package:giv_flutter/features/settings/ui/edit_bio.dart';
 import 'package:giv_flutter/features/settings/ui/edit_name.dart';
-import 'package:giv_flutter/features/settings/ui/edit_phone_number.dart';
+import 'package:giv_flutter/features/settings/ui/edit_phone_number/edit_phone_number_screen.dart';
 import 'package:giv_flutter/features/settings/ui/edit_profile.dart';
 import 'package:giv_flutter/model/user/user.dart';
 import 'package:giv_flutter/util/network/http_response.dart';
@@ -17,16 +18,21 @@ import 'test_util/test_util.dart';
 
 main() {
   MockSettingsBloc mockSettingsBloc;
+  MockPhoneVerificationBloc mockPhoneVerificationBloc;
   Widget testableWidget;
   TestUtil testUtil;
   MockNavigatorObserver mockNavigatorObserver;
   PublishSubject<HttpResponse<User>> userUpdateSubject;
+  PublishSubject<PhoneVerificationStatus> phoneVerificationSubject;
 
   setUp(() {
     mockSettingsBloc = MockSettingsBloc();
+    mockPhoneVerificationBloc = MockPhoneVerificationBloc();
     testUtil = TestUtil();
     mockNavigatorObserver = MockNavigatorObserver();
+
     userUpdateSubject = PublishSubject<HttpResponse<User>>();
+    phoneVerificationSubject = PublishSubject<PhoneVerificationStatus>();
 
     testableWidget = testUtil.makeTestableWidget(
       subject: EditProfile(
@@ -35,6 +41,9 @@ main() {
       dependencies: [
         Provider<SettingsBloc>(
           create: (_) => mockSettingsBloc,
+        ),
+        Provider<PhoneVerificationBloc>(
+          create: (_) => mockPhoneVerificationBloc,
         ),
         Provider<Util>(
           create: (_) => MockUtil(),
@@ -48,10 +57,14 @@ main() {
     when(mockSettingsBloc.getUser()).thenReturn(User.fake());
     when(mockSettingsBloc.userUpdateStream)
         .thenAnswer((_) => userUpdateSubject.stream);
+
+    when(mockPhoneVerificationBloc.verificationStatusStream)
+        .thenAnswer((_) => phoneVerificationSubject.stream);
   });
 
   tearDown(() {
     userUpdateSubject.close();
+    phoneVerificationSubject.close();
   });
 
   Future<void> closeBottomSheet(WidgetTester tester) async {
@@ -94,6 +107,7 @@ main() {
 
       await tester.pumpAndSettle();
 
+      expect(find.byType(EditPhoneNumber), findsNothing);
       expect(find.byType(EditProfile), findsOneWidget);
     });
 

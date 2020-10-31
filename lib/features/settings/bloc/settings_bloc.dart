@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:giv_flutter/base/base_bloc_with_auth.dart';
 import 'package:giv_flutter/model/authenticated_user_updated_action.dart';
 import 'package:giv_flutter/model/user/repository/user_repository.dart';
@@ -18,6 +19,7 @@ class SettingsBloc extends BaseBlocWithAuth {
   final FirebaseStorageUtilProvider firebaseStorageUtil;
   final Util util;
   final AuthUserUpdatedAction authUserUpdatedAction;
+  final TargetPlatform platform;
 
   SettingsBloc({
     @required this.userRepository,
@@ -27,6 +29,7 @@ class SettingsBloc extends BaseBlocWithAuth {
     @required this.firebaseStorageUtil,
     @required this.util,
     @required this.authUserUpdatedAction,
+    @required this.platform,
   }) : super(diskStorage: diskStorage);
 
   Observable<HttpResponse<User>> get userUpdateStream =>

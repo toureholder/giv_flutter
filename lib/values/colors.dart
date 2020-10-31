@@ -12,6 +12,7 @@ class CustomColors {
   static const Color textLinkColor = Colors.blue;
   static const Color emptyStateTextColor = Colors.grey;
   static const Color appBarTextColor = Colors.black87;
+  static const Color lighterTextColor = Colors.black54;
   static Color random() {
     final index = new Random().nextInt(hat.length - 0);
     return hat[index];

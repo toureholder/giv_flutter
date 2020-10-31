@@ -18,6 +18,7 @@ import 'package:giv_flutter/features/home/ui/home.dart';
 import 'package:giv_flutter/features/listing/bloc/my_listings_bloc.dart';
 import 'package:giv_flutter/features/listing/bloc/new_listing_bloc.dart';
 import 'package:giv_flutter/features/log_in/bloc/log_in_bloc.dart';
+import 'package:giv_flutter/features/phone_verification/bloc/phone_verification_bloc.dart';
 import 'package:giv_flutter/features/product/categories/bloc/categories_bloc.dart';
 import 'package:giv_flutter/features/product/detail/bloc/product_detail_bloc.dart';
 import 'package:giv_flutter/features/product/filters/bloc/location_filter_bloc.dart';
@@ -92,6 +93,10 @@ class MockHomeListener extends Mock implements HomeListener {}
 class MockFile extends Mock implements File {}
 
 class MockBuildContext extends Mock implements BuildContext {}
+
+class MockAuthCredential extends Mock implements AuthCredential {}
+
+class MockFirebaseUser extends Mock implements FirebaseUser {}
 
 // Firebase storage
 
@@ -209,6 +214,8 @@ class MockGroupInformationBloc extends Mock implements GroupInformationBloc {}
 
 class MockEditGroupBloc extends Mock implements EditGroupBloc {}
 
+class MockPhoneVerificationBloc extends Mock implements PhoneVerificationBloc {}
+
 // Mock Rx Subjects and Streams
 
 class MockApiHttpResponseSubject extends Mock
@@ -266,3 +273,9 @@ class MockGroupMembershipListPublishSubject extends Mock
 
 class MockGroupMembershipListStreamSink extends Mock
     implements StreamSink<List<GroupMembership>> {}
+
+class MockPhoneVerificationStatusPublishSubject extends Mock
+    implements PublishSubject<PhoneVerificationStatus> {}
+
+class MockPhoneVerificationStatusStreamSink extends Mock
+    implements StreamSink<PhoneVerificationStatus> {}

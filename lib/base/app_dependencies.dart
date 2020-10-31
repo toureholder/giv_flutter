@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:giv_flutter/config/hive/constants.dart';
 import 'package:giv_flutter/features/about/bloc/about_bloc.dart';
@@ -16,6 +17,7 @@ import 'package:giv_flutter/features/home/model/home_content.dart';
 import 'package:giv_flutter/features/listing/bloc/my_listings_bloc.dart';
 import 'package:giv_flutter/features/listing/bloc/new_listing_bloc.dart';
 import 'package:giv_flutter/features/log_in/bloc/log_in_bloc.dart';
+import 'package:giv_flutter/features/phone_verification/bloc/phone_verification_bloc.dart';
 import 'package:giv_flutter/features/product/categories/bloc/categories_bloc.dart';
 import 'package:giv_flutter/features/product/detail/bloc/product_detail_bloc.dart';
 import 'package:giv_flutter/features/product/filters/bloc/location_filter_bloc.dart';
@@ -41,7 +43,7 @@ import 'package:giv_flutter/model/listing/repository/api/listing_api.dart';
 import 'package:giv_flutter/model/listing/repository/listing_repository.dart';
 import 'package:giv_flutter/model/location/location.dart';
 import 'package:giv_flutter/model/location/location_list.dart';
-import 'package:giv_flutter/model/location/location_part.dart';
+import 'package:giv_flutter/model/location/location_part.dart' as LocationPart;
 import 'package:giv_flutter/model/location/repository/api/location_api.dart';
 import 'package:giv_flutter/model/location/repository/cache/location_cache.dart';
 import 'package:giv_flutter/model/location/repository/location_repository.dart';
@@ -68,7 +70,15 @@ import 'package:provider/provider.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'dart:io' show Platform;
+
 Future<List<SingleChildCloneableWidget>> getAppDependencies() async {
+  final platform = Platform.isAndroid
+      ? TargetPlatform.android
+      : Platform.isIOS
+          ? TargetPlatform.iOS
+          : null;
+
   final sharedPreferences = await SharedPreferences.getInstance();
   final httpClient = Client();
   final diskStorage = SharedPreferencesStorage(sharedPreferences);
@@ -222,8 +232,8 @@ Future<List<SingleChildCloneableWidget>> getAppDependencies() async {
       create: (_) => LocationFilterBloc(
         locationRepository: locationRepository,
         diskStorage: diskStorage,
-        citiesSubject: PublishSubject<StreamEvent<List<City>>>(),
-        statesSubject: PublishSubject<StreamEvent<List<State>>>(),
+        citiesSubject: PublishSubject<StreamEvent<List<LocationPart.City>>>(),
+        statesSubject: PublishSubject<StreamEvent<List<LocationPart.State>>>(),
         listSubject: BehaviorSubject<LocationList>(),
       ),
     ),
@@ -260,6 +270,7 @@ Future<List<SingleChildCloneableWidget>> getAppDependencies() async {
         firebaseStorageUtil: firebaseStorageUtil,
         util: util,
         authUserUpdatedAction: authUserUpdatedAction,
+        platform: platform,
       ),
     ),
     Provider<CustomerServiceDialogBloc>(
@@ -332,6 +343,14 @@ Future<List<SingleChildCloneableWidget>> getAppDependencies() async {
         firebaseStorageUtil: firebaseStorageUtil,
         util: util,
         groupUpdatedAction: groupUpdatedAction,
+      ),
+    ),
+    Provider<PhoneVerificationBloc>(
+      create: (_) => PhoneVerificationBloc(
+        firebaseAuth: firebaseAuth,
+        verificationStatusSubject: PublishSubject<PhoneVerificationStatus>(),
+        userRepository: userRepository,
+        diskStorage: diskStorage,
       ),
     ),
     Provider<Util>(

@@ -10,6 +10,7 @@ import 'package:giv_flutter/util/presentation/custom_app_bar.dart';
 import 'package:giv_flutter/util/presentation/custom_scaffold.dart';
 import 'package:giv_flutter/util/presentation/spacing.dart';
 import 'package:giv_flutter/util/presentation/typography.dart';
+import 'package:giv_flutter/values/colors.dart';
 import 'package:giv_flutter/values/dimens.dart';
 
 class EditName extends StatefulWidget {
@@ -42,7 +43,7 @@ class _EditNameState extends BaseState<EditName> {
     _controller = widget.user?.name == null
         ? TextEditingController()
         : TextEditingController.fromValue(
-        new TextEditingValue(text: widget.user.name));
+            new TextEditingValue(text: widget.user.name));
   }
 
   @override
@@ -76,7 +77,7 @@ class _EditNameState extends BaseState<EditName> {
             children: <Widget>[
               Body2Text(
                 string('settings_edit_name_hint'),
-                color: Colors.grey,
+                color: CustomColors.lighterTextColor,
               ),
               Spacing.vertical(Dimens.default_vertical_margin),
               TextFormField(
@@ -112,9 +113,7 @@ class _EditNameState extends BaseState<EditName> {
       return;
     }
 
-    final update = {
-      User.nameKey: _controller.text
-    };
+    final update = {User.nameKey: _controller.text};
 
     _settingsBloc.updateUser(update);
   }

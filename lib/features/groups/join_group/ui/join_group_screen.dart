@@ -9,7 +9,6 @@ import 'package:giv_flutter/features/groups/my_groups/bloc/my_groups_bloc.dart';
 import 'package:giv_flutter/features/groups/my_groups/ui/my_groups_screen.dart';
 import 'package:giv_flutter/features/log_in/bloc/log_in_bloc.dart';
 import 'package:giv_flutter/features/sign_in/ui/sign_in.dart';
-import 'package:giv_flutter/model/group/group.dart';
 import 'package:giv_flutter/model/group_membership/group_membership.dart';
 import 'package:giv_flutter/model/group_membership/repository/api/request/join_group_request.dart';
 import 'package:giv_flutter/model/user/user.dart';
@@ -76,13 +75,15 @@ class _JoinGroupScreenState extends BaseState<JoinGroupScreen> {
         break;
       case HttpStatus.notFound:
         showInformationDialog(
-            title: string('join_group_screen_group_not_found_title'),
-            content: string('join_group_screen_group_not_found_text'));
+          title: string('join_group_screen_group_not_found_title'),
+          content: string('join_group_screen_group_not_found_text'),
+        );
         break;
       case HttpStatus.conflict:
         showInformationDialog(
-            title: string('join_group_screen_group_already_a_member_title'),
-            content: string('join_group_screen_group_already_a_member_text'));
+          title: string('join_group_screen_group_already_a_member_title'),
+          content: string('join_group_screen_group_already_a_member_text'),
+        );
         break;
       default:
         _handleUnknownError(null);

@@ -14,12 +14,13 @@ import 'package:giv_flutter/features/listing/ui/edit_title.dart';
 import 'package:giv_flutter/features/listing/ui/my_listings.dart';
 import 'package:giv_flutter/features/listing/ui/new_listing_for_radio_group.dart';
 import 'package:giv_flutter/features/log_in/bloc/log_in_bloc.dart';
+import 'package:giv_flutter/features/phone_verification/bloc/phone_verification_bloc.dart';
 import 'package:giv_flutter/features/product/categories/bloc/categories_bloc.dart';
 import 'package:giv_flutter/features/product/categories/ui/categories.dart';
 import 'package:giv_flutter/features/product/filters/bloc/location_filter_bloc.dart';
 import 'package:giv_flutter/features/product/filters/ui/location_filter.dart';
 import 'package:giv_flutter/features/settings/bloc/settings_bloc.dart';
-import 'package:giv_flutter/features/settings/ui/edit_phone_number.dart';
+import 'package:giv_flutter/features/settings/ui/edit_phone_number/edit_phone_number_screen.dart';
 import 'package:giv_flutter/features/sign_in/ui/sign_in.dart';
 import 'package:giv_flutter/model/image/image.dart' as CustomImage;
 import 'package:giv_flutter/model/location/location.dart';
@@ -449,11 +450,13 @@ class _NewListingState extends BaseState<NewListing> {
   }
 
   void _editPhoneNumber(User user) async {
-    final result = await navigation.push(EditPhoneNumber(
+    await navigation.push(EditPhoneNumber(
       settingsBloc: Provider.of<SettingsBloc>(context),
+      phoneVerificationBloc: Provider.of<PhoneVerificationBloc>(context),
       user: user,
     ));
-    if (result != null) {
+
+    if (_bloc.getUser().hasPhoneNumber) {
       setState(() {
         _isTelephoneError = false;
         _user = _bloc.getUser();

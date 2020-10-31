@@ -5,10 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:giv_flutter/base/base_state.dart';
 import 'package:giv_flutter/config/config.dart';
 import 'package:giv_flutter/config/i18n/string_localizations.dart';
+import 'package:giv_flutter/features/phone_verification/bloc/phone_verification_bloc.dart';
 import 'package:giv_flutter/features/settings/bloc/settings_bloc.dart';
 import 'package:giv_flutter/features/settings/ui/edit_bio.dart';
 import 'package:giv_flutter/features/settings/ui/edit_name.dart';
-import 'package:giv_flutter/features/settings/ui/edit_phone_number.dart';
+import 'package:giv_flutter/features/settings/ui/edit_phone_number/edit_phone_number_screen.dart';
 import 'package:giv_flutter/model/image/image.dart' as CustomImage;
 import 'package:giv_flutter/model/user/user.dart';
 import 'package:giv_flutter/util/network/http_response.dart';
@@ -61,12 +62,12 @@ class _EditProfileState extends BaseState<EditProfile> {
         appBar: CustomAppBar(
           title: string('profile_title'),
         ),
-        body: _buildListView(),
+        body: _buildListView(context),
       ),
     );
   }
 
-  ListView _buildListView() {
+  ListView _buildListView(BuildContext context) {
     return ListView(
       children: <Widget>[
         StreamBuilder(
@@ -77,7 +78,12 @@ class _EditProfileState extends BaseState<EditProfile> {
           },
         ),
         EditProfileSectionTitle(string('settings_section_profile')),
-        PhoneNumberTile(user: _user, onTap: _editPhoneNumber),
+        PhoneNumberTile(
+          user: _user,
+          onTap: () {
+            _editPhoneNumber(context);
+          },
+        ),
         CustomDivider(),
         NameTile(value: _user.name, onTap: _editName),
         CustomDivider(),
@@ -137,14 +143,15 @@ class _EditProfileState extends BaseState<EditProfile> {
     if (result != null) _reloadUser();
   }
 
-  void _editPhoneNumber() async {
-    final result = await navigation.push(Consumer<SettingsBloc>(
-      builder: (context, bloc, child) => EditPhoneNumber(
-        settingsBloc: bloc,
+  void _editPhoneNumber(BuildContext context) async {
+    final result = await navigation.push(
+      EditPhoneNumber(
+        settingsBloc: Provider.of<SettingsBloc>(context),
+        phoneVerificationBloc: Provider.of<PhoneVerificationBloc>(context),
         user: _user,
       ),
-    ));
-    if (result != null) _reloadUser();
+    );
+    _reloadUser();
   }
 
   void _reloadUser() {

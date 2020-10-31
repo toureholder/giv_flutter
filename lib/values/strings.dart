@@ -154,17 +154,14 @@ class Strings {
     "profile_title": {"en": "Profile", "pt": "Perfil"},
     "settings_section_account": {"en": "Account", "pt": "Conta"},
     "settings_section_profile": {"en": "My info", "pt": "Meus dados"},
-    "settings_phone_number": {
-      "en": "WhatsApp phone number",
-      "pt": "Telefone WhatsApp"
-    },
+    "settings_phone_number": {"en": "Phone number", "pt": "Telefone"},
     "settings_phone_number_edit_text_hint": {
       "en": "61 912345678",
       "pt": "61 912345678"
     },
     "settings_phone_number_empty_state": {
       "en": "Tap to add a mobile phone number",
-      "pt": "Toque para adicionar um telefone móvel"
+      "pt": "Toque para adicionar o número do seu telefone"
     },
     "settings_name": {"en": "Name", "pt": "Nome"},
     "settings_name_empty_state": {
@@ -188,9 +185,86 @@ class Strings {
     },
     "settings_edit_phone_number_hint": {
       "en":
-          "People interested in your donations will use WhatsApp to get in touch with you. ",
+          "People interested in your donations will use WhatsApp to get in touch with you.\n\nWe need to send you a verification code to verify your number.",
       "pt":
-          "Pessoas interessadas nos seus anúncios vão usar o WhatsApp para entrar em contato contigo."
+          "Pessoas interessadas nos seus anúncios vão usar o WhatsApp para entrar em contato contigo.\n\nVamos confirmar seu número, te enviando um código de verificação."
+    },
+    "settings_edit_phone_number_input_number_title": {
+      "en": "Confirm your phone number",
+      "pt": "Confirme seu número de telefone"
+    },
+    "settings_edit_phone_number_input_code_title": {
+      "en": "Enter 6-digit code",
+      "pt": "Insira o código de 6 dígitos"
+    },
+    "settings_edit_phone_number_input_code_message": {
+      "en": "We've sent a code to $formatItem. Enter the code in that message.",
+      "pt":
+          "Enviamos o código para $formatItem. O SMS pode levar alguns segundos para chegar."
+    },
+    "settings_edit_phone_number_input_code_message_auto_retrieval_failed": {
+      "en":
+          "We were unable to automatically detect the SMS that we sent to $formatItem. If you got the SMS, enter the code.",
+      "pt":
+          "Não conseguimos detectar automaticmanete o SMS que enviamos para $formatItem.\n\nSe você recebeu o SMS, insira o código."
+    },
+    "settings_edit_phone_number_code_not_sent_quota_dialog_message": {
+      "en": "Hi! I'm editing my phone number and I got this error: ",
+      "pt":
+          "Olá! Eu estou editando meu número de telefone e recebi esta messagem de erro: "
+    },
+    "settings_edit_phone_number_code_not_sent_quota_dialog_content": {
+      "en":
+          "We have blocked all requests from this device due to unusual activity.\n\nTry again later.",
+      "pt":
+          "Bloqueamos o envio de SMS para esse número devido a atividade incomum.\n\nTente novamente mais tarde."
+    },
+    "settings_edit_phone_number_verification_failed_invalid_code_dialog_title":
+        {"en": "Oops!", "pt": "Código incorreto"},
+    "settings_edit_phone_number_verification_failed_invalid_code_dialog_content":
+        {
+      "en": "It looks like you entered the wrong code. Please try again.",
+      "pt":
+          "Parece que você digitou o código errado. Tente novamente por favor."
+    },
+    "settings_edit_phone_number_auto_retrieval_screen_title": {
+      "en": "Wait for it...",
+      "pt": "Aguarde a verificação automática"
+    },
+    "settings_edit_phone_number_auto_retrieval_screen_message": {
+      "en":
+          "We've sent a code to $formatItem. Please wait a few seconds while we attempt to automatically verify the receival.",
+      "pt":
+          "Enviamos um código para $formatItem. Aguarde alguns segundos enquanto fazemos a verificação automática do recebimento."
+    },
+    "settings_edit_phone_number_auto_retrieval_screen_i_want_to_type_code_button":
+        {
+      "en": "I got the code. Let me type it in.",
+      "pt": "Recebi o código. Quero digitá-lo."
+    },
+    "settings_edit_phone_number_input_code_screen_resend_code_button": {
+      "en": "Resend code",
+      "pt": "Reenviar código"
+    },
+    "settings_edit_phone_number_resending_code_screen_title": {
+      "en": "Resending code...",
+      "pt": "Reenviando código..."
+    },
+    "settings_edit_phone_number_validating_code_screen_title": {
+      "en": "Validating code...",
+      "pt": "Validando código..."
+    },
+    "settings_edit_phone_number_validation_complete_screen_title": {
+      "en": "Thank you!",
+      "pt": "Obrigado!"
+    },
+    "settings_edit_phone_number_validation_complete_screen_message": {
+      "en": "Your phone number has been verified and updated!",
+      "pt": "Seu número de telefone foi verificado e atualizado com sucesso!"
+    },
+    "settings_edit_phone_number_shared_change_number_button": {
+      "en": "Change my number",
+      "pt": "Mudar o número"
     },
     "settings_edit_phone_number_test_button": {"en": "Test", "pt": "Testar"},
     "settings_edit_phone_number_test_message": {
@@ -198,6 +272,10 @@ class Strings {
           "If WhatsApp opened a chat with yourself, that means that the number is correct! Now you can go back to the app to save it.",
       "pt":
           "Se o WhatsApp abriu um chat com você mesmo (hehe), significa que o número está certo! Volte para o aplicativo para salvá-lo."
+    },
+    "settings_edit_phone_verify_button": {
+      "en": "Send verification code",
+      "pt": "Enviar código de verificação"
     },
     "shared_action_save": {"en": "Save", "pt": "Salvar"},
     "logout_confirmation_title": {"en": "Log out?", "pt": "Sair?"},

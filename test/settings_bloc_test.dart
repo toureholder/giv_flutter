@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/material.dart';
 import 'package:giv_flutter/features/settings/bloc/settings_bloc.dart';
 import 'package:giv_flutter/model/user/user.dart';
 import 'package:giv_flutter/util/data/stream_event.dart';
@@ -46,6 +47,7 @@ main() {
       firebaseStorageUtil: mockFirebaseStorageUtilProvider,
       util: mockUtil,
       authUserUpdatedAction: mockAuthUserUpdatedAction,
+      platform: TargetPlatform.android,
     );
 
     when(mockUserHttpResponseSubject.stream)
@@ -57,6 +59,27 @@ main() {
 
   tearDown(() {
     mockUserHttpResponseSubject.close();
+  });
+
+  group('exposes platform', () {
+    test('android', () {
+      expect(bloc.platform, TargetPlatform.android);
+    });
+
+    test('ios', () {
+      bloc = SettingsBloc(
+        userRepository: mockUserRepository,
+        diskStorage: mockDiskStorageProvider,
+        session: mockSessionProvider,
+        userUpdatePublishSubject: mockUserHttpResponseSubject,
+        firebaseStorageUtil: mockFirebaseStorageUtilProvider,
+        util: mockUtil,
+        authUserUpdatedAction: mockAuthUserUpdatedAction,
+        platform: TargetPlatform.iOS,
+      );
+
+      expect(bloc.platform, TargetPlatform.iOS);
+    });
   });
 
   test('gets user from disk storage', () {
@@ -164,6 +187,7 @@ main() {
         firebaseStorageUtil: mockFirebaseStorageUtilProvider,
         util: mockUtil,
         authUserUpdatedAction: mockAuthUserUpdatedAction,
+        platform: TargetPlatform.iOS,
       );
 
       await bloc.updateUser(<String, dynamic>{'attribute': 'value'});

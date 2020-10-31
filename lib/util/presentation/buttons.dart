@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:giv_flutter/util/presentation/typography.dart';
+import 'package:giv_flutter/values/colors.dart';
 import 'package:giv_flutter/values/custom_icons_icons.dart';
 import 'package:giv_flutter/values/dimens.dart';
 
@@ -356,7 +357,9 @@ class TextFlatButton extends StatelessWidget {
       onPressed: onPressed,
       child: Text(
         text,
-        style: CustomTypography.body2,
+        style: CustomTypography.body2.copyWith(
+          color: CustomColors.textLinkColor,
+        ),
         textAlign: TextAlign.center,
       ),
     );

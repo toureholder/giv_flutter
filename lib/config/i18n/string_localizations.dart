@@ -60,8 +60,16 @@ class GetLocalizedStringFunction {
 
   GetLocalizedStringFunction(this.context);
 
-  String call(String key,
-          {String formatArg, String formatArg2, String formatArg3}) =>
-      StringLocalizations.of(context).get(key,
-          formatArg: formatArg, formatArg2: formatArg2, formatArg3: formatArg3);
+  String call(
+    String key, {
+    String formatArg,
+    String formatArg2,
+    String formatArg3,
+  }) =>
+      StringLocalizations.of(context).get(
+        key,
+        formatArg: formatArg,
+        formatArg2: formatArg2,
+        formatArg3: formatArg3,
+      );
 }

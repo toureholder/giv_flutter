@@ -11,6 +11,7 @@ import 'package:giv_flutter/util/presentation/custom_app_bar.dart';
 import 'package:giv_flutter/util/presentation/custom_scaffold.dart';
 import 'package:giv_flutter/util/presentation/spacing.dart';
 import 'package:giv_flutter/util/presentation/typography.dart';
+import 'package:giv_flutter/values/colors.dart';
 import 'package:giv_flutter/values/dimens.dart';
 
 class EditBio extends StatefulWidget {
@@ -74,7 +75,7 @@ class _EditBioState extends BaseState<EditBio> {
             children: <Widget>[
               Body2Text(
                 string('settings_edit_bio_hint'),
-                color: Colors.grey,
+                color: CustomColors.lighterTextColor,
               ),
               Spacing.vertical(Dimens.default_vertical_margin),
               TextFormField(
