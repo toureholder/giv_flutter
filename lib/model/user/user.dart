@@ -40,6 +40,7 @@ class User extends HiveObject {
   static final String nameKey = 'name';
   static final String avatarUrlKey = 'image_url';
   static final String phoneNumberKey = 'phone_number';
+  static final String isPhoneVerifiedKey = 'is_phone_verified';
   static final String countryCallingCodeKey = 'country_calling_code';
   static final String bioKey = 'bio';
 

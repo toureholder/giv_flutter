@@ -141,6 +141,7 @@ class PhoneVerificationBloc {
       var response = await userRepository.updateMe({
         User.countryCallingCodeKey: _countryCode,
         User.phoneNumberKey: _phoneNumber,
+        User.isPhoneVerifiedKey: true,
       });
 
       if (response.data != null) {
