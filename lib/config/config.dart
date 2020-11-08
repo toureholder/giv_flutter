@@ -1,6 +1,6 @@
 class Config {
-  static const versionName = '1.6.3';
-  static const buildNumber = 20;
+  static const versionName = '1.7.0';
+  static const buildNumber = 21;
   static const clientName = 'mobile';
   static const baseUrl = 'https://giv-api.herokuapp.com';
   static const defaultCountryCallingCode = '55';
