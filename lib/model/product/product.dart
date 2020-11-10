@@ -71,6 +71,7 @@ class Product {
       title != null ||
       description != null ||
       (images != null && images.isNotEmpty) ||
+      (groups != null && groups.isNotEmpty) ||
       (categories != null && categories.isNotEmpty);
 
   bool get isLocationComplete => location?.isOk ?? false;

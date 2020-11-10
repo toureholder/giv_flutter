@@ -300,6 +300,14 @@ class Strings {
       "en": "Just my groups",
       "pt": "Somente meus grupos"
     },
+    "new_listing_for_who_only_one_group": {
+      "en": "Just this group:",
+      "pt": "Somente este grupo:"
+    },
+    "new_listing_for_who_only_these_groups": {
+      "en": "Just these groups:",
+      "pt": "Somente estes grupos:"
+    },
     "new_listing_action_create": {
       "en": "Create listing",
       "pt": "Criar anúncio"
@@ -347,6 +355,14 @@ class Strings {
           "Add a few lines about the level of wear and tear of the donation and anything else you find relevant :)",
       "pt":
           "Fale um pouco sobre o estado de conservação da doação e qualquer outra coisa que achar relevante :)"
+    },
+    "new_listing_edit_groups_screen_title": {
+      "en": "Select groups",
+      "pt": "Selecionar grupos"
+    },
+    "new_listing_all_my_groups": {
+      "en": "All of my groups",
+      "pt": "Todos meus grupos"
     },
     "page_title_categories": {"en": "Categories", "pt": "Categorias"},
     "edit_categories_title": {
@@ -818,13 +834,17 @@ class Strings {
       "pt": "Sair do grupo"
     },
     "edit_group_screen_title": {"en": "Edit group", "pt": "Editar grupo"},
+    "edit_group_screen_add_image_moda_title": {
+      "en": "Group image",
+      "pt": "Imagem do grupo"
+    },
     "edit_group_information_subtitle": {
       "en": "Group information",
       "pt": "Informações do grupo"
     },
     "edit_group_information_description_empty_state": {
       "en": "This group has no description.",
-      "pt": "Nenhuma descrição para este groupo."
+      "pt": "Nenhuma descrição para este grupo."
     },
     "edit_group_name_tile_caption": {"en": "Group name", "pt": "Nome do grupo"},
     "edit_group_name_tile_empty_state_caption": {

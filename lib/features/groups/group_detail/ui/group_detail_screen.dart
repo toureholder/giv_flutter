@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:giv_flutter/base/authenticated_state.dart';
 import 'package:giv_flutter/base/base_state.dart';
 import 'package:giv_flutter/config/config.dart';
@@ -194,7 +193,7 @@ class _GroupDetailScreenContentState
           );
         },
       ),
-      floatingActionButton: GroupDetailFAB(onPressed: _goToPostPage),
+      floatingActionButton: GroupDetailFAB(onPressed: _showAddImageModal),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
@@ -329,7 +328,7 @@ class _GroupDetailScreenContentState
     final result = await navigation.push(
       NewListing(
         bloc: Provider.of<NewListingBloc>(context),
-        isPrivateByDefault: true,
+        initialGroup: _group,
       ),
     );
 
@@ -337,6 +336,22 @@ class _GroupDetailScreenContentState
       _enableInfiniteScroll();
       _fetchProducts(addLoadingState: true);
     }
+  }
+
+  void _showAddImageModal() {
+    final tiles = <BottomSheetTile>[
+      BottomSheetTile(
+          iconData: Icons.library_books_outlined,
+          text: string('Quero escolher dos meus anúncios existentes'),
+          onTap: () {}),
+      BottomSheetTile(
+          iconData: Icons.design_services_outlined,
+          text: string('Quero criar um novo anúncio'),
+          onTap: _goToPostPage),
+    ];
+
+    TiledBottomSheet.show(context,
+        tiles: tiles, title: string('Anunciar neste grupo'));
   }
 }
 

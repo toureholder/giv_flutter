@@ -169,7 +169,7 @@ class _EditGroupScreenContentState extends BaseState<EditGroupScreenContent> {
     ];
 
     TiledBottomSheet.show(context,
-        tiles: tiles, title: string('Imagem do grupo'));
+        tiles: tiles, title: string('edit_group_screen_add_image_moda_title'));
   }
 
   Future _openCamera() async {

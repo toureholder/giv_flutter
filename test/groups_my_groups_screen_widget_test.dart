@@ -6,6 +6,7 @@ import 'package:giv_flutter/features/groups/my_groups/ui/my_groups_join_group_ct
 import 'package:giv_flutter/features/groups/my_groups/ui/my_groups_membership_list_item.dart';
 import 'package:giv_flutter/features/groups/my_groups/ui/my_groups_screen.dart';
 import 'package:giv_flutter/features/groups/my_groups/ui/my_groups_subtitle.dart';
+import 'package:giv_flutter/features/listing/ui/edit_groups.dart';
 import 'package:giv_flutter/features/log_in/bloc/log_in_bloc.dart';
 import 'package:giv_flutter/features/sign_in/ui/sign_in.dart';
 import 'package:giv_flutter/model/group_membership/group_membership.dart';
@@ -176,6 +177,18 @@ main() {
       await loadMembershipList(tester: tester);
 
       expect(find.byType(CircularProgressIndicator), findsNothing);
+    });
+
+    testWidgets('shows list when list is added to sink',
+        (WidgetTester tester) async {
+      await tester.pumpWidget(testableWidget);
+
+      await loadMembershipList(tester: tester);
+
+      expect(
+        find.byType(NewListingGroupsList),
+        findsNothing,
+      );
     });
   });
 }

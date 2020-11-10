@@ -6,10 +6,12 @@ import 'package:flutter/material.dart';
 import 'package:giv_flutter/base/base_state.dart';
 import 'package:giv_flutter/config/config.dart';
 import 'package:giv_flutter/config/i18n/string_localizations.dart';
+import 'package:giv_flutter/features/groups/my_groups/bloc/my_groups_bloc.dart';
 import 'package:giv_flutter/features/listing/bloc/my_listings_bloc.dart';
 import 'package:giv_flutter/features/listing/bloc/new_listing_bloc.dart';
 import 'package:giv_flutter/features/listing/ui/edit_categories.dart';
 import 'package:giv_flutter/features/listing/ui/edit_description.dart';
+import 'package:giv_flutter/features/listing/ui/edit_groups.dart';
 import 'package:giv_flutter/features/listing/ui/edit_title.dart';
 import 'package:giv_flutter/features/listing/ui/my_listings.dart';
 import 'package:giv_flutter/features/listing/ui/new_listing_for_radio_group.dart';
@@ -22,6 +24,7 @@ import 'package:giv_flutter/features/product/filters/ui/location_filter.dart';
 import 'package:giv_flutter/features/settings/bloc/settings_bloc.dart';
 import 'package:giv_flutter/features/settings/ui/edit_phone_number/edit_phone_number_screen.dart';
 import 'package:giv_flutter/features/sign_in/ui/sign_in.dart';
+import 'package:giv_flutter/model/group/group.dart';
 import 'package:giv_flutter/model/image/image.dart' as CustomImage;
 import 'package:giv_flutter/model/location/location.dart';
 import 'package:giv_flutter/model/product/product.dart';
@@ -46,13 +49,13 @@ import 'package:provider/provider.dart';
 class NewListing extends StatefulWidget {
   final Product product;
   final NewListingBloc bloc;
-  final bool isPrivateByDefault;
+  final Group initialGroup;
 
   const NewListing({
     Key key,
     @required this.bloc,
     this.product,
-    this.isPrivateByDefault = false,
+    this.initialGroup,
   }) : super(key: key);
 
   @override
@@ -63,6 +66,7 @@ class _NewListingState extends BaseState<NewListing> {
   NewListingBloc _bloc;
   ScrollController _listViewController = ScrollController();
   Product _product;
+  bool _isGroupsError = false;
   bool _isTitleError = false;
   bool _isDescriptionError = false;
   bool _isCategoryError = false;
@@ -73,21 +77,33 @@ class _NewListingState extends BaseState<NewListing> {
   bool _userNeedsToAddPhoneNumber = false;
   User _user;
   bool _isEditing = false;
+  Group _initialGroup;
 
   @override
   void initState() {
     super.initState();
     _isEditing = widget.product != null;
+
+    _initialGroup = widget.initialGroup;
+
+    final initialGroups =
+        _initialGroup == null ? <Group>[] : <Group>[_initialGroup];
+
     _product = widget.product?.copy() ??
         Product(
-          isPrivate: widget.isPrivateByDefault,
+          isPrivate: initialGroups.isNotEmpty,
+          groups: initialGroups,
+          images: [],
         );
-    _product.images = _product.images ?? <CustomImage.Image>[];
+
     _bloc = NewListingBloc.from(widget.bloc, _isEditing);
+
     _user = _bloc.getUser();
+
     _userNeedsToAddPhoneNumber = (_user?.hasPhoneNumber ?? false) == false;
 
     _resolveLocation();
+
     _listenToSavedProductStream();
   }
 
@@ -179,8 +195,14 @@ class _NewListingState extends BaseState<NewListing> {
             setState(() {
               _product.isPrivate = option == ListingFor.myGroups;
             });
+
+            if (option == ListingFor.myGroups) {
+              _editGroups();
+            }
           },
           isListingPrivate: _product.isPrivate,
+          groups: _product.groups,
+          isError: _isGroupsError,
         ),
         Spacing.vertical(Dimens.default_vertical_margin),
         CustomDivider(),
@@ -522,6 +544,22 @@ class _NewListingState extends BaseState<NewListing> {
     }
   }
 
+  void _editGroups() async {
+    final result = await navigation.push(
+      EditGroups(
+        myGroupsBloc: Provider.of<MyGroupsBloc>(context),
+        initialSelectedGroups: _product.groups,
+      ),
+    );
+
+    if (result != null) {
+      setState(() {
+        _product.groups = result;
+        _isGroupsError = false;
+      });
+    }
+  }
+
   void _addFirstCategory() async {
     final result = await navigation.push(Categories(
       bloc: Provider.of<CategoriesBloc>(context),
@@ -624,6 +662,7 @@ class _NewListingState extends BaseState<NewListing> {
   bool _validateForm() {
     setState(() {
       _isTitleError = _product.title == null || _product.title.isEmpty;
+      _isGroupsError = _product.isPrivate && _product.groups.isEmpty;
       _isDescriptionError =
           _product.description == null || _product.description.isEmpty;
       _isCategoryError =
@@ -634,6 +673,7 @@ class _NewListingState extends BaseState<NewListing> {
           _product.location == null || _product.location.equals(Location());
 
       _isInformationValid = !_isTitleError &&
+          !_isGroupsError &&
           !_isDescriptionError &&
           !_isCategoryError &&
           !_isTelephoneError &&
@@ -656,7 +696,7 @@ class _NewListingState extends BaseState<NewListing> {
   }
 
   _onSaveSuccess(Product product) {
-    if (_isEditing || widget.isPrivateByDefault)
+    if (_isEditing || _initialGroup != null)
       navigation.pop(product);
     else
       navigation.pushReplacement(Consumer<MyListingsBloc>(
