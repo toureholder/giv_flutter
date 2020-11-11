@@ -81,6 +81,7 @@ main() {
       verify(mockUserRepository.updateMe({
         User.countryCallingCodeKey: countryCode,
         User.phoneNumberKey: phoneNumber,
+        User.isPhoneVerifiedKey: true,
       })).called(1);
     });
   });
@@ -284,6 +285,7 @@ main() {
       verify(mockUserRepository.updateMe({
         User.countryCallingCodeKey: countryCode,
         User.phoneNumberKey: phoneNumber,
+        User.isPhoneVerifiedKey: true,
       })).called(1);
     });
 
@@ -368,6 +370,7 @@ main() {
       verify(mockUserRepository.updateMe({
         User.countryCallingCodeKey: countryCode,
         User.phoneNumberKey: phoneNumber,
+        User.isPhoneVerifiedKey: true,
       })).called(1);
     });
 
