@@ -156,18 +156,22 @@ class _GroupDetailScreenContentState
 
           // Infinite scroll code
           // Widgets rebuild whenever they want and I don't want to duplicate items
-          if (_products.where((it) => it.id == products.first.id).isEmpty)
+          if (products.isNotEmpty &&
+              _products.where((it) => it.id == products.first.id).isEmpty) {
             _products.addAll(products);
+          }
 
-          if (products.length < Config.paginationDefaultPerPage)
+          if (products.length < Config.paginationDefaultPerPage) {
             _disableInfiniteScroll();
+          }
 
           // Empty state
-          if (_products.length == 0)
+          if (_products.length == 0) {
             widgets.add(GroupDetailProductsEmptyState());
+          }
 
           // Not empty state
-          if (_products.length > 0)
+          if (_products.length > 0) {
             widgets.addAll([
               Padding(
                 padding: const EdgeInsets.symmetric(
@@ -181,6 +185,7 @@ class _GroupDetailScreenContentState
               Spacing.vertical(Dimens.default_vertical_margin),
               LoadingMore(opacity: _loadingWidgetOpacity),
             ]);
+          }
 
           return ListView(
             children: widgets,
