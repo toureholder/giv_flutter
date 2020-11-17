@@ -13,7 +13,7 @@ class MyGroupsJoinGroupCTA extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final text = GetLocalizedStringFunction(context)(
-      'Entrar em um grupo',
+      'my_groups_join_group_cta',
     );
 
     return GreyOutlineIconButton(

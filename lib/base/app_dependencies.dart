@@ -323,6 +323,7 @@ Future<List<SingleChildCloneableWidget>> getAppDependencies() async {
         groupMembershipRepository: groupMembershipRepository,
         productsSubject: PublishSubject<List<Product>>(),
         leaveGroupSubject: PublishSubject<HttpResponse<GroupMembership>>(),
+        addListingsSubject: PublishSubject<HttpResponse<void>>(),
         diskStorage: diskStorage,
         util: util,
       ),

@@ -22,7 +22,10 @@ main() {
     testUtil = TestUtil();
     mockMyGroupsBloc = MockMyGroupsBloc();
     testableWidget = testUtil.makeTestableWidget(
-        subject: EditGroups(myGroupsBloc: mockMyGroupsBloc),
+        subject: EditGroups(
+          myGroupsBloc: mockMyGroupsBloc,
+          initialSelectedGroups: [],
+        ),
         dependencies: [
           Provider<MyGroupsBloc>(
             create: (_) => mockMyGroupsBloc,

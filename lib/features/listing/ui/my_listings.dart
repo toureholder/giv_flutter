@@ -18,8 +18,15 @@ import 'package:provider/provider.dart';
 
 class MyListings extends StatefulWidget {
   final MyListingsBloc bloc;
+  final bool isSelecting;
+  final int groupId;
 
-  const MyListings({Key key, @required this.bloc}) : super(key: key);
+  const MyListings({
+    Key key,
+    @required this.bloc,
+    this.isSelecting = false,
+    this.groupId,
+  }) : super(key: key);
 
   @override
   _MyListingsState createState() => _MyListingsState();
@@ -27,31 +34,55 @@ class MyListings extends StatefulWidget {
 
 class _MyListingsState extends BaseState<MyListings> {
   MyListingsBloc _myListingsBloc;
+  bool _isSelecting;
+  int _groupId;
+  final List<int> selectedListingsIds = [];
 
   @override
   void initState() {
     super.initState();
     _myListingsBloc = widget.bloc;
     _myListingsBloc.fetchMyProducts();
+    _isSelecting = widget.isSelecting;
+    _groupId = widget.groupId;
   }
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
 
+    final List<Widget> actions = _isSelecting
+        ? [
+            MediumFlatPrimaryButton(
+              text: selectedListingsIds.isEmpty
+                  ? string('my_listings_select_items')
+                  : string('common_add'),
+              onPressed:
+                  selectedListingsIds.isEmpty ? null : _returnWithSelectedIds,
+            ),
+          ]
+        : [
+            IconButton(
+              icon: Icon(Icons.add),
+              onPressed: _createNewListing,
+            ),
+          ];
+
     return CustomScaffold(
       appBar: CustomAppBar(
-        title: string('me_listings'),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.add),
-            onPressed: _createNewListing,
-          )
-        ],
+        title: _isSelecting ? '' : string('me_listings'),
+        actions: actions,
       ),
       body: ContentStreamBuilder(
         stream: _myListingsBloc.productsStream,
-        onHasData: (data) {
+        onHasData: (List<Product> data) {
+          if (_isSelecting && _groupId != null) {
+            data.removeWhere((listing) =>
+                (listing.groups.indexWhere((group) => group.id == _groupId) >
+                    -1) ||
+                listing.isActive == false);
+          }
+
           return _buildSingleChildScrollView(data);
         },
       ),
@@ -62,10 +93,14 @@ class _MyListingsState extends BaseState<MyListings> {
     return products.isNotEmpty
         ? MyListingsScrollView(
             products: products,
+            isSelecting: _isSelecting,
+            onItemSelected: _toggleSelectedListingId,
+            selectedListingsIds: selectedListingsIds,
           )
         : MyListingsEmptyState(
             stringFunction: string,
             onPressed: _createNewListing,
+            isSelecting: _isSelecting,
           );
   }
 
@@ -76,18 +111,49 @@ class _MyListingsState extends BaseState<MyListings> {
       ),
     ));
   }
+
+  _toggleSelectedListingId(int value) {
+    setState(() {
+      if (selectedListingsIds.contains(value)) {
+        selectedListingsIds.remove(value);
+      } else {
+        selectedListingsIds.add(value);
+      }
+    });
+  }
+
+  _returnWithSelectedIds() {
+    if (selectedListingsIds.isEmpty) {
+      return;
+    }
+
+    navigation.pop(selectedListingsIds);
+  }
 }
 
 class MyListingsScrollView extends StatelessWidget {
   final List<Product> products;
+  final bool isSelecting;
+  final Function onItemSelected;
+  final List<int> selectedListingsIds;
 
-  const MyListingsScrollView({Key key, @required this.products})
-      : super(key: key);
+  const MyListingsScrollView({
+    Key key,
+    @required this.products,
+    @required this.isSelecting,
+    @required this.onItemSelected,
+    @required this.selectedListingsIds,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      child: ProductGrid(products: products),
+      child: ProductGrid(
+        products: products,
+        isSelecting: isSelecting,
+        onItemSelected: onItemSelected,
+        selectedListingsIds: selectedListingsIds,
+      ),
     );
   }
 }
@@ -95,15 +161,21 @@ class MyListingsScrollView extends StatelessWidget {
 class MyListingsEmptyState extends StatelessWidget {
   final GetLocalizedStringFunction stringFunction;
   final VoidCallback onPressed;
+  final bool isSelecting;
 
   const MyListingsEmptyState({
     Key key,
     @required this.stringFunction,
     @required this.onPressed,
+    this.isSelecting = false,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final text = isSelecting
+        ? 'my_listings_empty_state_is_selecting'
+        : 'my_listings_empty_state';
+
     return Container(
       padding: EdgeInsets.symmetric(horizontal: Dimens.grid(32)),
       alignment: Alignment.center,
@@ -111,7 +183,7 @@ class MyListingsEmptyState extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Body2Text(
-            stringFunction('my_listings_empty_state'),
+            stringFunction(text),
             color: Colors.grey,
             textAlign: TextAlign.center,
           ),
@@ -122,11 +194,12 @@ class MyListingsEmptyState extends StatelessWidget {
             fit: BoxFit.cover,
           ),
           Spacing.vertical(Dimens.grid(20)),
-          PrimaryButton(
-            text: stringFunction('my_listings_empty_state_button'),
-            onPressed: onPressed,
-            fillWidth: false,
-          )
+          if (!isSelecting)
+            PrimaryButton(
+              text: stringFunction('my_listings_empty_state_button'),
+              onPressed: onPressed,
+              fillWidth: false,
+            )
         ],
       ),
     );

@@ -1,8 +1,10 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:giv_flutter/config/config.dart';
 import 'package:giv_flutter/model/group/group.dart';
+import 'package:giv_flutter/model/group/repository/api/request/add_many_listings_to_group_request.dart';
 import 'package:giv_flutter/model/group/repository/api/request/create_group_request.dart';
 import 'package:giv_flutter/model/product/product.dart';
 import 'package:giv_flutter/util/network/base_api.dart';
@@ -78,6 +80,28 @@ class GroupApi extends BaseApi {
     }
   }
 
+  Future<HttpResponse<void>> addManyListingsToGroup(
+      AddManyListingsToGroupRequest request) async {
+    HttpStatus status;
+
+    try {
+      final response = await post(
+        '$baseUrl/${GroupApi.GROUPS_ENDPOINT}/${request.groupId}/${GroupApi.LISTINGS_PATH}/${GroupApi.MANY_PATH}',
+        request.toHttpRequestBody(),
+      );
+
+      status = HttpResponse.codeMap[response.statusCode];
+
+      return HttpResponse<void>(status: status);
+    } catch (error) {
+      return HttpResponse<List<Product>>(
+        status: status,
+        message: error.toString(),
+      );
+    }
+  }
+
   static const String GROUPS_ENDPOINT = 'groups';
   static const String LISTINGS_PATH = 'listings';
+  static const String MANY_PATH = 'many';
 }

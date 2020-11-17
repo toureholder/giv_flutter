@@ -398,6 +398,7 @@ class Strings {
       "en": "Your changes will not be saved. Are you sure you want to cancel?",
       "pt": "Suas alterações não serão salvas. Quer mesmo cancelar?"
     },
+    "common_add": {"en": "Add", "pt": "Adicionar"},
     "common_yes": {"en": "Yes", "pt": "Sim"},
     "common_no": {"en": "No", "pt": "Não"},
     "common_me": {"en": "Me", "pt": "Eu"},
@@ -408,9 +409,17 @@ class Strings {
       "en": "Hi! I'm using Alguém Quer? and I need some help :)",
       "pt": "Oi! Eu estou usando o Alguém Quer? e eu queria uma ajuda :)"
     },
+    "my_listings_select_items": {
+      "en": "Select listings",
+      "pt": "Selecionar anúncios"
+    },
     "my_listings_empty_state": {
       "en": "You haven't made any donations yet.",
       "pt": "Você ainda não criou nenhum anúncio."
+    },
+    "my_listings_empty_state_is_selecting": {
+      "en": "You don't have any new donations to add.",
+      "pt": "Você não tem novos anúncios para adicionar."
     },
     "my_listings_empty_state_button": {
       "en": "Give something now",
@@ -820,6 +829,14 @@ class Strings {
       "pt": "Criar grupo"
     },
     "my_groups_screen_title": {"en": "My groups", "pt": "Meus grupos"},
+    "my_groups_create_group_cta": {
+      "en": "Create a new group",
+      "pt": "Criar um novo grupo"
+    },
+    "my_groups_join_group_cta": {
+      "en": "Join a group",
+      "pt": "Entrar em um grupo"
+    },
     "leave_group_confirmation_title": {
       "en": "Leave group?",
       "pt": "Sair do grupo?"
@@ -862,6 +879,14 @@ class Strings {
     "group_detail_screen_description_empty_state": {
       "en": "Nothing in this group yet. 🤷🏽",
       "pt": "Nenhum anúncio neste grupo ainda. 🤷🏽"
+    },
+    "group_detail_screen_create_new_listing": {
+      "en": "Create a new listing",
+      "pt": "Criar um anúncio novo"
+    },
+    "group_detail_screen_add_my_listings": {
+      "en": "Add some of my listings",
+      "pt": "Adicionar alguns dos meus anúncios"
     },
     "group_information_screen_acess_code": {
       "en": "Access code",

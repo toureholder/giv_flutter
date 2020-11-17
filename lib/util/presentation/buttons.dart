@@ -308,6 +308,8 @@ class MediumFlatPrimaryButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final color = onPressed == null ? Colors.grey : Colors.blue;
+
     return FlatButton(
       onPressed: onPressed,
       child: Text(
@@ -315,7 +317,7 @@ class MediumFlatPrimaryButton extends StatelessWidget {
         style: TextStyle(
             fontSize: 15.0,
             letterSpacing: 0.1,
-            color: Colors.blue,
+            color: color,
             fontWeight: FontWeight.bold),
       ),
     );

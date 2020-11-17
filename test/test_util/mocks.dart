@@ -279,3 +279,6 @@ class MockPhoneVerificationStatusPublishSubject extends Mock
 
 class MockPhoneVerificationStatusStreamSink extends Mock
     implements StreamSink<PhoneVerificationStatus> {}
+
+class MockVoidHttpResponsePublishSubject extends Mock
+    implements PublishSubject<HttpResponse<void>> {}

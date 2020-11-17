@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:giv_flutter/features/listing/bloc/my_listings_bloc.dart';
@@ -5,6 +6,7 @@ import 'package:giv_flutter/features/listing/ui/my_listings.dart';
 import 'package:giv_flutter/model/product/product.dart';
 import 'package:giv_flutter/util/data/content_stream_builder.dart';
 import 'package:giv_flutter/util/presentation/buttons.dart';
+import 'package:giv_flutter/util/presentation/custom_app_bar.dart';
 import 'package:giv_flutter/util/util.dart';
 import 'package:mockito/mockito.dart';
 import 'package:provider/provider.dart';
@@ -17,8 +19,10 @@ main() {
   MockMyListingsBloc mockMyListingsBloc;
   Widget testableWidget;
   MockNavigatorObserver mockNavigationObserver;
+  TestUtil testUtil;
 
   setUp(() {
+    testUtil = TestUtil();
     mockMyListingsBloc = MockMyListingsBloc();
     mockNavigationObserver = MockNavigatorObserver();
 
@@ -41,6 +45,100 @@ main() {
   tearDown(() {
     reset(mockMyListingsBloc);
     reset(mockNavigationObserver);
+  });
+
+  Widget makeTestableWidget({
+    bool isSelecting = false,
+    int groupId,
+  }) =>
+      testUtil.makeTestableWidget(
+        subject: MyListings(
+          bloc: mockMyListingsBloc,
+          isSelecting: isSelecting,
+          groupId: groupId,
+        ),
+        dependencies: [
+          Provider<MyListingsBloc>(
+            create: (_) => mockMyListingsBloc,
+          ),
+          Provider<Util>(
+            create: (_) => MockUtil(),
+          ),
+        ],
+        navigatorObservers: [mockNavigationObserver],
+      );
+
+  group('ui', () {
+    testWidgets('builds', (WidgetTester tester) async {
+      testableWidget = makeTestableWidget();
+      await tester.pumpWidget(testableWidget);
+
+      expect(find.byType(MyListings), findsOneWidget);
+    });
+
+    testWidgets('shows "My listings" title when isSelecting is false',
+        (WidgetTester tester) async {
+      testableWidget = makeTestableWidget();
+      await tester.pumpWidget(testableWidget);
+
+      expect(
+        find.descendant(
+          of: find.byType(CustomAppBar),
+          matching: testUtil.findInternationalizedText('me_listings'),
+        ),
+        findsOneWidget,
+      );
+    });
+
+    testWidgets('does not show "My listings" title when isSelecting is true',
+        (WidgetTester tester) async {
+      testableWidget = makeTestableWidget(
+        isSelecting: true,
+      );
+      await tester.pumpWidget(testableWidget);
+
+      expect(
+        find.descendant(
+          of: find.byType(CustomAppBar),
+          matching: testUtil.findInternationalizedText('me_listings'),
+        ),
+        findsNothing,
+      );
+    });
+
+    testWidgets('shows "Select items" text button when isSelecting is true',
+        (WidgetTester tester) async {
+      testableWidget = makeTestableWidget(
+        isSelecting: true,
+      );
+      await tester.pumpWidget(testableWidget);
+
+      expect(
+        find.descendant(
+          of: find.byType(CustomAppBar),
+          matching: find.descendant(
+            of: find.byType(MediumFlatPrimaryButton),
+            matching:
+                testUtil.findInternationalizedText('my_listings_select_items'),
+          ),
+        ),
+        findsOneWidget,
+      );
+    });
+
+    testWidgets('shows add icon button when isSelecting is false',
+        (WidgetTester tester) async {
+      testableWidget = makeTestableWidget();
+      await tester.pumpWidget(testableWidget);
+
+      expect(
+        find.descendant(
+          of: find.byType(CustomAppBar),
+          matching: find.byType(IconButton),
+        ),
+        findsOneWidget,
+      );
+    });
   });
 
   group('loads content correctly', () {

@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart' as flutter_test;
 import 'package:giv_flutter/config/config.dart';
 import 'package:giv_flutter/model/group/group.dart';
 import 'package:giv_flutter/model/group/repository/api/group_api.dart';
+import 'package:giv_flutter/model/group/repository/api/request/add_many_listings_to_group_request.dart';
 import 'package:giv_flutter/model/group/repository/api/request/create_group_request.dart';
 import 'package:giv_flutter/model/product/product.dart';
 import 'package:giv_flutter/util/network/http_client_wrapper.dart';
@@ -236,6 +237,73 @@ main() {
 
         // Then
         expect(response.data, isNull);
+        expect(response.message, equals(errorMessage));
+      });
+    });
+
+    group('#addManyListingsToGroup', () {
+      int groupId;
+      AddManyListingsToGroupRequest request;
+
+      setUp(() {
+        groupId = 18;
+        request = AddManyListingsToGroupRequest(groupId: groupId, ids: [1, 2]);
+      });
+
+      test('sends add many listings to group request', () async {
+        // When
+        await api.addManyListingsToGroup(request);
+
+        // Then
+        final captured = verify(
+          mockHttp.post(
+            captureAny,
+            body: captureAnyNamed('body'),
+            headers: anyNamed('headers'),
+          ),
+        ).captured;
+
+        final capturedUrl = captured[0];
+        final capturedBody = jsonDecode(captured[1]);
+        expect(
+          capturedUrl,
+          '${api.baseUrl}/${GroupApi.GROUPS_ENDPOINT}/$groupId/${GroupApi.LISTINGS_PATH}/${GroupApi.MANY_PATH}',
+        );
+
+        expect(capturedBody['ids'], equals(request.ids));
+      });
+
+      test('returns http response', () async {
+        when(
+          mockHttp.post(
+            captureAny,
+            body: captureAnyNamed('body'),
+            headers: anyNamed('headers'),
+          ),
+        ).thenAnswer((_) async => Response('', 201));
+
+        // When
+        final response = await api.addManyListingsToGroup(request);
+
+        // Then
+        expect(response.status, HttpStatus.created);
+      });
+
+      test('returns http response when api request throws', () async {
+        // Given
+        final errorMessage = 'some error';
+        when(
+          mockHttp.post(
+            captureAny,
+            body: captureAnyNamed('body'),
+            headers: anyNamed('headers'),
+          ),
+        ).thenThrow(errorMessage);
+
+        // When
+        final response = await api.addManyListingsToGroup(request);
+
+        // Then
         expect(response.message, equals(errorMessage));
       });
     });

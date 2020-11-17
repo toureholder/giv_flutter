@@ -19,7 +19,6 @@ class FirebaseStorageUtil implements FirebaseStorageUtilProvider {
     final timeStamp = DateTime.now().millisecondsSinceEpoch;
     return firebaseStorage
         .ref()
-        .child(devFolder)
         .child(usersFolder)
         .child('${user.id}')
         .child(photosFolder)
@@ -31,7 +30,6 @@ class FirebaseStorageUtil implements FirebaseStorageUtilProvider {
     final timeStamp = DateTime.now().millisecondsSinceEpoch;
     return firebaseStorage
         .ref()
-        .child(devFolder)
         .child(listingsFolder)
         .child('$timeStamp-${Uuid().v1()}.jpg');
   }
@@ -41,7 +39,6 @@ class FirebaseStorageUtil implements FirebaseStorageUtilProvider {
     final timeStamp = DateTime.now().millisecondsSinceEpoch;
     return firebaseStorage
         .ref()
-        .child(devFolder)
         .child(groupsFolder)
         .child('$groupId')
         .child(photosFolder)

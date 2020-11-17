@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:giv_flutter/model/group/group.dart';
 import 'package:giv_flutter/model/group/repository/api/group_api.dart';
+import 'package:giv_flutter/model/group/repository/api/request/add_many_listings_to_group_request.dart';
 import 'package:giv_flutter/model/group/repository/api/request/create_group_request.dart';
 import 'package:giv_flutter/model/group_membership/group_membership.dart';
 import 'package:giv_flutter/model/product/product.dart';
@@ -66,5 +67,10 @@ class GroupRepository {
 
   Group getGroupById(int id) {
     return box.get(id);
+  }
+
+  Future<HttpResponse<void>> addManyListingsToGroup(
+      AddManyListingsToGroupRequest request) {
+    return api.addManyListingsToGroup(request);
   }
 }

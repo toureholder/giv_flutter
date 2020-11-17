@@ -2,7 +2,7 @@ class Config {
   static const versionName = '1.7.0';
   static const buildNumber = 21;
   static const clientName = 'mobile';
-  static const baseUrl = 'https://0efb40fc0a01.ngrok.io';
+  static const baseUrl = 'https://api.alguemquer.com.br';
   static const defaultCountryCallingCode = '55';
   static const maxLengthName = 50;
   static const maxLengthBio = 140;

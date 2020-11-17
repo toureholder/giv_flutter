@@ -1,4 +1,5 @@
 import 'package:giv_flutter/model/group/group.dart';
+import 'package:giv_flutter/model/group/repository/api/request/add_many_listings_to_group_request.dart';
 import 'package:giv_flutter/model/group/repository/api/request/create_group_request.dart';
 import 'package:giv_flutter/model/group/repository/group_repository.dart';
 import 'package:giv_flutter/model/group_membership/group_membership.dart';
@@ -198,6 +199,19 @@ main() {
         // Then
         expect(response, isA<HttpResponse<List<Product>>>());
         expect(response.data[0].id, equals(Product.fakeList()[0].id));
+      });
+    });
+
+    group('#addManyListingsToGroup', () {
+      test('calls api', () async {
+        // Given
+        final request = AddManyListingsToGroupRequest.fake();
+
+        // When
+        await repository.addManyListingsToGroup(request);
+
+        // Then
+        verify(mockApi.addManyListingsToGroup(request)).called(1);
       });
     });
   });

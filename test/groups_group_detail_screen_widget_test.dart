@@ -23,6 +23,7 @@ main() {
   MockGroupDetailBloc mockBloc;
   PublishSubject<List<Product>> subject;
   PublishSubject<HttpResponse<GroupMembership>> leaveGroupSubject;
+  PublishSubject<HttpResponse<void>> addManyListingsSubject;
   int fakeMembershipId;
 
   setUp(() {
@@ -48,9 +49,13 @@ main() {
 
     subject = PublishSubject<List<Product>>();
     leaveGroupSubject = PublishSubject<HttpResponse<GroupMembership>>();
+    addManyListingsSubject = PublishSubject<HttpResponse<void>>();
 
     when(mockBloc.productsStream).thenAnswer((_) => subject.stream);
     when(mockBloc.leaveGroupStream).thenAnswer((_) => leaveGroupSubject.stream);
+    when(mockBloc.addListingsStream).thenAnswer(
+      (_) => addManyListingsSubject.stream,
+    );
 
     when(mockBloc.getMembershipById(any)).thenReturn(GroupMembership.fake());
   });
@@ -58,6 +63,7 @@ main() {
   tearDown(() {
     subject.close();
     leaveGroupSubject.close();
+    addManyListingsSubject.close();
   });
 
   userIsLoggedIn() {

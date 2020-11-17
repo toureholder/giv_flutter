@@ -13,7 +13,7 @@ class MyGroupsCreateGroupCTA extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final text = GetLocalizedStringFunction(context)(
-      'Criar um novo grupo',
+      'my_groups_create_group_cta',
     );
 
     return GreyOutlineIconButton(

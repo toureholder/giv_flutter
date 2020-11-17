@@ -10,10 +10,13 @@ import 'package:giv_flutter/features/groups/group_information/bloc/group_informa
 import 'package:giv_flutter/features/groups/group_information/ui/group_information_screen.dart';
 import 'package:giv_flutter/features/groups/my_groups/bloc/my_groups_bloc.dart';
 import 'package:giv_flutter/features/groups/my_groups/ui/my_groups_screen.dart';
+import 'package:giv_flutter/features/listing/bloc/my_listings_bloc.dart';
 import 'package:giv_flutter/features/listing/bloc/new_listing_bloc.dart';
+import 'package:giv_flutter/features/listing/ui/my_listings.dart';
 import 'package:giv_flutter/features/listing/ui/new_listing.dart';
 import 'package:giv_flutter/features/product/search_result/ui/search_result.dart';
 import 'package:giv_flutter/model/group/group.dart';
+import 'package:giv_flutter/model/group/repository/api/request/add_many_listings_to_group_request.dart';
 import 'package:giv_flutter/model/product/product.dart';
 import 'package:giv_flutter/util/data/content_stream_builder.dart';
 import 'package:giv_flutter/util/network/http_response.dart';
@@ -88,6 +91,8 @@ class _GroupDetailScreenContentState
 
     _listenToLeaveGroupStream();
 
+    _listenToAddListingsStream();
+
     // Infinite scroll code
     _scrollController = ScrollController();
     _enableInfiniteScroll();
@@ -122,6 +127,17 @@ class _GroupDetailScreenContentState
 
       showGenericErrorDialog();
     });
+  }
+
+  void _listenToAddListingsStream() {
+    _bloc.addListingsStream.listen(
+      (_) {},
+      onError: _handleAddListingsError,
+    );
+  }
+
+  void _handleAddListingsError(error) {
+    showGenericErrorDialog(message: error);
   }
 
   @override
@@ -338,16 +354,39 @@ class _GroupDetailScreenContentState
     }
   }
 
+  void _goToMyListingsPage() async {
+    final result = await navigation.push(
+      MyListings(
+        bloc: Provider.of<MyListingsBloc>(context),
+        isSelecting: true,
+        groupId: _group.id,
+      ),
+    );
+
+    if (result != null) {
+      print('send request');
+      _enableInfiniteScroll();
+      _bloc.addManyListings(
+        request: AddManyListingsToGroupRequest(
+          groupId: _group.id,
+          ids: result,
+        ),
+      );
+    }
+  }
+
   void _showAddImageModal() {
     final tiles = <BottomSheetTile>[
       BottomSheetTile(
-          iconData: Icons.library_books_outlined,
-          text: string('Quero escolher dos meus anúncios existentes'),
-          onTap: () {}),
+        iconData: Icons.create,
+        text: string('group_detail_screen_create_new_listing'),
+        onTap: _goToPostPage,
+      ),
       BottomSheetTile(
-          iconData: Icons.design_services_outlined,
-          text: string('Quero criar um novo anúncio'),
-          onTap: _goToPostPage),
+        iconData: Icons.copy,
+        text: string('group_detail_screen_add_my_listings'),
+        onTap: _goToMyListingsPage,
+      ),
     ];
 
     TiledBottomSheet.show(context,

@@ -41,6 +41,7 @@ main() {
       groupMembershipRepository: mockGroupMembershipRepository,
       productsSubject: mockProductsSubject,
       leaveGroupSubject: mockLeaveGroupSubject,
+      addListingsSubject: MockVoidHttpResponsePublishSubject(),
       diskStorage: mockDiskStorage,
       util: mockUtil,
     );
