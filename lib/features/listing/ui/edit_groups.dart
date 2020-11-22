@@ -142,7 +142,13 @@ class NewListingGroupsList extends StatelessWidget {
 class NewListingGroupsListEmptyState extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Center(child: Text('NewListingGroupsListEmptyState'));
+    return Center(
+        child: Body2Text(
+      GetLocalizedStringFunction(context)(
+          'new_listing_edit_groups_empty_state'),
+      color: Colors.grey,
+      textAlign: TextAlign.center,
+    ));
   }
 }
 

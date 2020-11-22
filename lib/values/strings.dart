@@ -283,6 +283,10 @@ class Strings {
     "shared_action_cancel": {"en": "Cancel", "pt": "Cancelar"},
     "new_listing_title": {"en": "New listing", "pt": "Novo anúncio"},
     "edit_listing_title": {"en": "Edit listing", "pt": "Editar anúncio"},
+    "new_listing_edit_groups_empty_state": {
+      "en": "You aren't a member of any groups.",
+      "pt": "Você não faz parte de nenhum grupo."
+    },
     "new_listing_section_title_photos": {
       "en": "Beautiful photos of the item being donated",
       "pt": "Fotos maneiras do item sendo doado"
