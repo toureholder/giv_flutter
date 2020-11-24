@@ -38,6 +38,7 @@ class InformationBottomSheet {
           children.add(BottomSheetTextBlock(
             text: text,
           ));
+
           children.add(Spacing.vertical(Dimens.default_vertical_margin));
 
           return BottomSheetColumn(children: children);

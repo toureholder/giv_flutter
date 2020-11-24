@@ -7,7 +7,6 @@ import 'package:giv_flutter/features/listing/bloc/new_listing_bloc.dart';
 import 'package:giv_flutter/features/listing/ui/my_listings.dart';
 import 'package:giv_flutter/features/listing/ui/new_listing.dart';
 import 'package:giv_flutter/features/product/detail/bloc/product_detail_bloc.dart';
-import 'package:giv_flutter/features/product/detail/ui/i_want_it_dialog.dart';
 import 'package:giv_flutter/features/settings/bloc/settings_bloc.dart';
 import 'package:giv_flutter/features/settings/ui/settings.dart';
 import 'package:giv_flutter/features/user_profile/bloc/user_profile_bloc.dart';
@@ -31,8 +30,10 @@ import 'package:giv_flutter/util/presentation/icon_buttons.dart';
 import 'package:giv_flutter/util/presentation/image_carousel.dart';
 import 'package:giv_flutter/util/presentation/photo_view_page.dart';
 import 'package:giv_flutter/util/presentation/spacing.dart';
+import 'package:giv_flutter/util/presentation/termos_of_service_acceptance_caption.dart';
 import 'package:giv_flutter/util/presentation/typography.dart';
 import 'package:giv_flutter/values/colors.dart';
+import 'package:giv_flutter/values/custom_icons_icons.dart';
 import 'package:giv_flutter/values/dimens.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -57,8 +58,8 @@ class _ProductDetailState extends BaseState<ProductDetail> {
   Product _product;
   ProductDetailBloc _productDetailBloc;
   bool _isMine;
-  Location _detailedLocation;
   bool _addLinkToUserProfile;
+  String _fullPhoneNumber;
 
   @override
   void initState() {
@@ -66,11 +67,12 @@ class _ProductDetailState extends BaseState<ProductDetail> {
     _addLinkToUserProfile = widget.addLinkToUserProfile;
     _product = widget.product;
     _productDetailBloc = widget.bloc;
-    _listenToLocationStream();
     _productDetailBloc.fetchLocationDetails(_product.location);
     _isMine = _productDetailBloc.isProductMine(_product.user.id);
     _listenToDeleteStream();
     _listenToUpdateStream();
+    _fullPhoneNumber =
+        '${_product?.user?.countryCallingCode}${_product?.user?.phoneNumber}';
   }
 
   void _listenToDeleteStream() {
@@ -84,12 +86,6 @@ class _ProductDetailState extends BaseState<ProductDetail> {
     _productDetailBloc.updateListingStream
         ?.listen((HttpResponse<Product> response) {
       if (response.isReady) _onUpdateListingResponse(response);
-    });
-  }
-
-  void _listenToLocationStream() {
-    _productDetailBloc.locationStream?.listen((Location location) {
-      _detailedLocation = location;
     });
   }
 
@@ -140,18 +136,19 @@ class _ProductDetailState extends BaseState<ProductDetail> {
         stream: _productDetailBloc.locationStream,
       ),
       DefaultVerticalSpacing(),
-      if (!_isMine)
-        IWantItButton(
-          onPressed: _handleIWantItTap,
-        ),
-      ProductDetailDescription(
-        description: _product.description,
-      ),
       if (!_product.isMailable)
         ProductDetailNoShippingAlertStreamBuilder(
           stream: _productDetailBloc.locationStream,
         ),
       Spacing.vertical(Dimens.grid(5)),
+      if (!_isMine)
+        IWantItButton(
+          onPressed: _showContactListerBottomSheet,
+        ),
+      ProductDetailDescription(
+        description: _product.description,
+      ),
+      DefaultVerticalSpacing(),
       ProductDetailUserTile(
         localeString: localeString,
         user: _product.user,
@@ -181,15 +178,31 @@ class _ProductDetailState extends BaseState<ProductDetail> {
         tiles: tiles, title: string('shared_title_options'));
   }
 
-  _handleIWantItTap() {
-    if (_product.user.phoneNumber != null)
-      _showIWantItDialog(
-        string(
-          'whatsapp_message_interested',
-          formatArg: _product.title,
+  void _showContactListerBottomSheet() {
+    final tiles = <Widget>[
+      BottomSheetTile(
+        iconData: CustomIcons.whatsapp,
+        text: string('i_want_it_dialog_whatsapp'),
+        onTap: () {
+          _productDetailBloc.util.openWhatsApp(
+              _fullPhoneNumber,
+              string(
+                'whatsapp_message_interested',
+                formatArg: _product.title,
+              ));
+        },
+      ),
+      Padding(
+        padding: const EdgeInsets.all(Dimens.default_horizontal_margin),
+        child: TermsOfServiceAcceptanceCaption(
+          util: _productDetailBloc.util,
+          prefix: 'terms_acceptance_caption_by_contacting_',
         ),
-        _detailedLocation,
-      );
+      )
+    ];
+
+    TiledBottomSheet.show(context,
+        tiles: tiles, title: string('i_want_it_dialog_title'));
   }
 
   void _confirmDelete() {
@@ -278,27 +291,6 @@ class _ProductDetailState extends BaseState<ProductDetail> {
         user: _product.user,
       ),
     ));
-  }
-
-  _showIWantItDialog(String message, Location location) {
-    var isAuthenticated = _productDetailBloc.isAuthenticated();
-
-    final fullPhoneNumber =
-        '${_product?.user?.countryCallingCode}${_product?.user?.phoneNumber}';
-
-    showDialog(
-        context: context,
-        barrierDismissible: true,
-        builder: (context) {
-          return IWantItDialog(
-            phoneNumber: fullPhoneNumber,
-            message: message,
-            isAuthenticated: isAuthenticated,
-            util: _productDetailBloc.util,
-            isMailable: _product.isMailable,
-            location: location,
-          );
-        });
   }
 
   _onDeleteListingResponse(HttpResponse<ApiModelResponse> response) {
@@ -609,8 +601,21 @@ class ProductDetailDescription extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => ProductDetailHorizontalPadding(
-        child: Body2Text(
-          description,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Caption(
+              GetLocalizedStringFunction(context)(
+                'product_detail_description_subtitle',
+              ),
+              color: Colors.grey,
+              weight: SyntheticFontWeight.bold,
+            ),
+            DefaultVerticalSpacing(),
+            Body2Text(
+              description,
+            ),
+          ],
         ),
       );
 }
@@ -675,14 +680,24 @@ class ProductDetailNoShippingAlert extends StatelessWidget {
   Widget build(BuildContext context) {
     final stringFunction = GetLocalizedStringFunction(context);
     return Column(children: [
-      DefaultVerticalSpacing(),
       ProductDetailHorizontalPadding(
-        child: Body2Text(
-          stringFunction(
-            'product_detail_no_shipping_alert',
-            formatArg: location?.mediumName,
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.yellow[200],
+            border: Border.all(color: Colors.yellow[500]),
+            borderRadius: BorderRadius.all(
+              Radius.circular(Dimens.default_rounded_corner_border_radius),
+            ),
           ),
-          weight: SyntheticFontWeight.semiBold,
+          padding: EdgeInsets.all(Dimens.default_horizontal_margin),
+          child: Body2Text(
+            stringFunction(
+              'product_detail_i_want_it_dialog_no_shipping_alert',
+              formatArg: location?.mediumName,
+            ),
+            weight: SyntheticFontWeight.semiBold,
+            color: Colors.brown[800],
+          ),
         ),
       ),
     ]);
@@ -715,7 +730,7 @@ class ProductDetailUserTile extends StatelessWidget {
     return ListTile(
       contentPadding: EdgeInsets.symmetric(
         vertical: Dimens.grid(6),
-        horizontal: 16.0,
+        horizontal: Dimens.default_horizontal_margin,
       ),
       leading: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -758,7 +773,7 @@ class ProductDetailReportListingTile extends StatelessWidget {
     return ListTile(
       contentPadding: EdgeInsets.symmetric(
         vertical: Dimens.grid(12),
-        horizontal: 16.0,
+        horizontal: Dimens.default_horizontal_margin,
       ),
       leading: Icon(
         Icons.error_outline,

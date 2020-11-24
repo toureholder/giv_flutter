@@ -699,7 +699,7 @@ class Strings {
       "en":
           "This item must be collected in person in $formatItem. It won't be sent by mail.",
       "pt":
-          "Este item deve ser retirado pessoalmente em $formatItem. Não será enviado pelos correios."
+          "Este item deve ser retirado em $formatItem.\n\nAtenção: Não será enviado pelos correios."
     },
     "product_detail_no_shipping_alert_null_location": {
       "en": "This item must be collected in person. It won't be sent by mail.",
@@ -708,7 +708,8 @@ class Strings {
     },
     "product_detail_i_want_it_dialog_no_shipping_alert": {
       "en": "This item must be collected in person in $formatItem.",
-      "pt": "Atenção: Este item deve ser retirado pessoalmente em $formatItem."
+      "pt":
+          "Atenção: Este item deve ser retirado pessoalmente em $formatItem.\n\nNão será enviado pelos correios."
     },
     "product_detail_user_introduction": {
       "en": "Hi! I'm $formatItem.",
@@ -730,6 +731,10 @@ class Strings {
     "product_detail_report_listing_message": {
       "en": "Hi! I'd like to report the listing: '$formatItem...'",
       "pt": "Olá! Quero denunciar o anúncio: '$formatItem...'"
+    },
+    "product_detail_description_subtitle": {
+      "en": "Description",
+      "pt": "Descrição"
     },
     "hide_listing_confirmation_title": {
       "en": "Hide listing?",

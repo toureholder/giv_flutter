@@ -57,10 +57,6 @@ class _IWantItDialogState extends BaseState<IWantItDialog> {
             onTap: _startWhatsApp,
           ),
           CustomDivider(),
-          StartPhoneAppTile(
-            onTap: _startPhoneApp,
-          ),
-          CustomDivider(),
           if (!widget.isMailable)
             IWantItDialogNoShippingAlert(
               location: widget.location,
