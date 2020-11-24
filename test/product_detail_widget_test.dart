@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:giv_flutter/features/listing/bloc/new_listing_bloc.dart';
 import 'package:giv_flutter/features/product/detail/bloc/product_detail_bloc.dart';
-import 'package:giv_flutter/features/product/detail/ui/i_want_it_dialog.dart';
 import 'package:giv_flutter/features/product/detail/ui/product_detail.dart';
 import 'package:giv_flutter/model/location/location.dart';
 import 'package:giv_flutter/model/product/product.dart';
@@ -381,24 +380,5 @@ main() {
     verify(mockNavigatorObserver.didPush(any, any));
 
 //    expect(find.byType(PhotoViewPage), findsOneWidget); :(
-  });
-
-  group('\'I want it\' dialog', () {
-    testWidgets('\'I want it\' button opens dialog',
-        (WidgetTester tester) async {
-      final product = Product.fakeWithImageUrls(1);
-
-      when(mockBloc.isProductMine(product.user.id)).thenReturn(false);
-      when(mockBloc.isAuthenticated()).thenReturn(true);
-
-      final testableWidget = makeTestableWidget(product);
-      await tester.pumpWidget(testableWidget);
-
-      await tester.tap(find.byType(IWantItButton));
-
-      await tester.pump();
-
-      expect(find.byType(IWantItDialog), findsOneWidget);
-    });
   });
 }
