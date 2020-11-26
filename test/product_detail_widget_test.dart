@@ -107,7 +107,29 @@ main() {
   });
 
   group('shows appropriate widgets if product is mailable', () {
-    testWidgets('shows ProductDetailNoShippingAlert if product is not mailable',
+    testWidgets(
+        'shows ProductDetailNoShippingAlert if product is not mailable and is not mine',
+        (WidgetTester tester) async {
+      final locationSubject = PublishSubject<Location>();
+
+      when(mockBloc.locationStream).thenAnswer((_) => locationSubject.stream);
+
+      final product = Product.fakeNotMailable(1);
+      when(mockBloc.isProductMine(product.user.id)).thenReturn(false);
+
+      final testableWidget = makeTestableWidget(product);
+      await tester.pumpWidget(testableWidget);
+      expect(find.byType(ProductDetailNoShippingAlert), findsNothing);
+
+      locationSubject.sink.add(Location.fake());
+      await tester.pump(Duration.zero);
+      expect(find.byType(ProductDetailNoShippingAlert), findsOneWidget);
+
+      locationSubject.close();
+    });
+
+    testWidgets(
+        'doesn\'t show ProductDetailNoShippingAlert if product is not mailable and is mine',
         (WidgetTester tester) async {
       final locationSubject = PublishSubject<Location>();
 
@@ -122,13 +144,13 @@ main() {
 
       locationSubject.sink.add(Location.fake());
       await tester.pump(Duration.zero);
-      expect(find.byType(ProductDetailNoShippingAlert), findsOneWidget);
+      expect(find.byType(ProductDetailNoShippingAlert), findsNothing);
 
       locationSubject.close();
     });
 
     testWidgets(
-        'doesn\'t shows ProductDetailNoShippingAlert if product is mailable',
+        'doesn\'t show ProductDetailNoShippingAlert if product is mailable',
         (WidgetTester tester) async {
       final locationSubject = PublishSubject<Location>();
 

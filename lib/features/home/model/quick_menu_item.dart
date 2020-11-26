@@ -6,8 +6,11 @@ class QuickMenuItem {
   final List<Color> colorList;
   final String actionId;
 
-  QuickMenuItem(
-      {@required this.text, @required this.colorList, @required this.actionId});
+  QuickMenuItem({
+    @required this.text,
+    @required this.colorList,
+    @required this.actionId,
+  });
 
   static List<QuickMenuItem> fakeList() => [
         QuickMenuItem(
@@ -32,7 +35,7 @@ class QuickMenuItem {
         QuickMenuItem(
           text: 'quick_menu_option_create_listing',
           colorList: [Colors.deepPurple[50], Colors.deepPurple[100]],
-          actionId: Home.actionIdPost,
+          actionId: Home.actionIdOpenPostBottomSheet,
         ),
         QuickMenuItem(
           text: 'quick_menu_option_create_group',

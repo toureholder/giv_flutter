@@ -6,6 +6,7 @@ class Dimens {
   static const double default_vertical_margin_and_a_half = GRID * 15;
   static const double double_default_margin = GRID * 20;
   static const double default_rounded_corner_border_radius = 5.0;
+  static const double default_chip_border_radius = 30;
   static const double button_border_radius = 2.5;
 
   static const double home_product_image_dimension = GRID * 60;

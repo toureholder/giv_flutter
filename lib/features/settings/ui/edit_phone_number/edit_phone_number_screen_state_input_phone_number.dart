@@ -1,6 +1,7 @@
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:giv_flutter/config/i18n/string_localizations.dart';
+import 'package:giv_flutter/model/listing/listing_type.dart';
 import 'package:giv_flutter/util/presentation/buttons.dart';
 import 'package:giv_flutter/util/presentation/spacing.dart';
 import 'package:giv_flutter/util/presentation/typography.dart';
@@ -16,6 +17,7 @@ class EditPhoneNumberStateInputPhoneNumber extends StatelessWidget {
     @required this.onCountryCodeChanged,
     @required this.startPhoneVerification,
     @required this.isSendingCode,
+    this.listingType,
   }) : super(key: key);
 
   final String selectedCode;
@@ -24,6 +26,7 @@ class EditPhoneNumberStateInputPhoneNumber extends StatelessWidget {
   final Function onCountryCodeChanged;
   final Function startPhoneVerification;
   final bool isSendingCode;
+  final ListingType listingType;
 
   @override
   Widget build(BuildContext context) {
@@ -63,6 +66,7 @@ class EditPhoneNumberStateInputPhoneNumber extends StatelessWidget {
           EditPhoneNumberVerifyButton(
             onPressed: startPhoneVerification,
             isLoading: isSendingCode,
+            listingType: listingType,
           )
         ],
       ),
@@ -99,21 +103,31 @@ class EditPhoneNumberFormField extends StatelessWidget {
 class EditPhoneNumberVerifyButton extends StatelessWidget {
   final bool isLoading;
   final VoidCallback onPressed;
+  final ListingType listingType;
 
   const EditPhoneNumberVerifyButton({
     Key key,
     @required this.onPressed,
     @required this.isLoading,
+    @required this.listingType,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return PrimaryButton(
-      text: GetLocalizedStringFunction(context)(
-        'settings_edit_phone_verify_button',
-      ),
-      onPressed: onPressed,
-      isLoading: isLoading,
+    final text = GetLocalizedStringFunction(context)(
+      'settings_edit_phone_verify_button',
     );
+
+    return listingType == ListingType.donationRequest
+        ? AccentButton(
+            text: text,
+            onPressed: onPressed,
+            isLoading: isLoading,
+          )
+        : PrimaryButton(
+            text: text,
+            onPressed: onPressed,
+            isLoading: isLoading,
+          );
   }
 }

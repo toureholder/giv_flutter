@@ -293,6 +293,8 @@ class ProfileAvatarAddImageFab extends StatelessWidget {
       bottom: 24.0,
       right: 24.0,
       child: FloatingActionButton(
+        backgroundColor: Theme.of(context).primaryColor,
+        foregroundColor: Colors.white,
         onPressed: onPressed,
         child: Icon(Icons.camera_alt),
         elevation: 2.0,

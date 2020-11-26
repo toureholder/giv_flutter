@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:giv_flutter/base/base_state.dart';
 import 'package:giv_flutter/config/i18n/string_localizations.dart';
 import 'package:giv_flutter/features/product/filters/bloc/location_filter_bloc.dart';
+import 'package:giv_flutter/model/listing/listing_type.dart';
 import 'package:giv_flutter/model/location/location.dart';
 import 'package:giv_flutter/model/location/location_list.dart';
 import 'package:giv_flutter/model/location/location_part.dart' as LocationPart;
@@ -17,12 +18,14 @@ class LocationFilter extends StatefulWidget {
   final Location location;
   final bool showSaveButton;
   final LocationFilterBloc bloc;
+  final ListingType listingType;
 
   const LocationFilter({
     Key key,
     @required this.bloc,
     this.location,
     this.showSaveButton = false,
+    this.listingType,
   }) : super(key: key);
 
   @override
@@ -33,10 +36,12 @@ class _LocationFilterState extends BaseState<LocationFilter> {
   LocationFilterBloc _locationFilterBloc;
   LocationList _locationList;
   Location _currentLocation;
+  ListingType _listingType;
 
   @override
   void initState() {
     super.initState();
+    _listingType = widget.listingType;
     _currentLocation = widget.location?.copy() ?? Location();
     _locationFilterBloc = widget.bloc;
     _listenForErrors();
@@ -216,7 +221,15 @@ class _LocationFilterState extends BaseState<LocationFilter> {
 
     var res = widget.showSaveButton ? 'shared_action_save' : 'action_filter';
 
-    return PrimaryButton(text: string(res), onPressed: onPressed);
+    return (_listingType == ListingType.donationRequest)
+        ? AccentButton(
+            text: string(res),
+            onPressed: onPressed,
+          )
+        : PrimaryButton(
+            text: string(res),
+            onPressed: onPressed,
+          );
   }
 
   bool _hasChangedLocation() => !_currentLocation.equals(widget.location);

@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:giv_flutter/base/base_state.dart';
+import 'package:giv_flutter/config/i18n/string_localizations.dart';
 import 'package:giv_flutter/features/product/detail/bloc/product_detail_bloc.dart';
 import 'package:giv_flutter/features/product/detail/ui/product_detail.dart';
 import 'package:giv_flutter/model/product/product.dart';
@@ -117,20 +118,16 @@ class _ProductGridState extends BaseState<ProductGrid> {
       ),
     ];
 
-    final icon = isSelected ? Icons.check_circle : Icons.radio_button_off;
-
     if (_isSelecting) {
+      final icon = isSelected ? Icons.check_circle : Icons.radio_button_off;
+
       stack.add(
-        Positioned(
-          child: Icon(
-            icon,
-            color: Colors.white,
-            size: 36.0,
-          ),
-          top: Dimens.grid(4),
-          left: Dimens.grid(4),
-        ),
+        ProductGridSelectionRadio(icon: icon),
       );
+    }
+
+    if (product.isDonationRequest) {
+      stack.add(ProductGrodDonationRequestBadge());
     }
 
     final onTap = _isSelecting
@@ -204,5 +201,55 @@ class _ProductGridState extends BaseState<ProductGrid> {
         _products[productIndex] = result;
       });
     }
+  }
+}
+
+class ProductGridSelectionRadio extends StatelessWidget {
+  const ProductGridSelectionRadio({
+    Key key,
+    @required this.icon,
+  }) : super(key: key);
+
+  final IconData icon;
+
+  @override
+  Widget build(BuildContext context) {
+    return Positioned(
+      child: Icon(
+        icon,
+        color: Colors.white,
+        size: 36.0,
+      ),
+      top: Dimens.grid(4),
+      left: Dimens.grid(4),
+    );
+  }
+}
+
+class ProductGrodDonationRequestBadge extends StatelessWidget {
+  const ProductGrodDonationRequestBadge({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Positioned(
+      child: Container(
+        decoration: BoxDecoration(
+          color: Theme.of(context).accentColor,
+          borderRadius: BorderRadius.all(
+            Radius.circular(Dimens.default_chip_border_radius),
+          ),
+        ),
+        padding: EdgeInsets.symmetric(vertical: 4.0, horizontal: 10.0),
+        child: Body2Text(
+          GetLocalizedStringFunction(context)('common_donation_request'),
+          color: CustomColors.accentColorText,
+          weight: SyntheticFontWeight.semiBold,
+        ),
+      ),
+      top: Dimens.search_result_image_height - Dimens.grid(19),
+      left: Dimens.grid(6),
+    );
   }
 }

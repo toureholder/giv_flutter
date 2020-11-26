@@ -26,6 +26,7 @@ import 'package:giv_flutter/features/settings/ui/edit_phone_number/edit_phone_nu
 import 'package:giv_flutter/features/sign_in/ui/sign_in.dart';
 import 'package:giv_flutter/model/group/group.dart';
 import 'package:giv_flutter/model/image/image.dart' as CustomImage;
+import 'package:giv_flutter/model/listing/listing_type.dart';
 import 'package:giv_flutter/model/location/location.dart';
 import 'package:giv_flutter/model/product/product.dart';
 import 'package:giv_flutter/model/product/product_category.dart';
@@ -36,6 +37,7 @@ import 'package:giv_flutter/util/presentation/buttons.dart';
 import 'package:giv_flutter/util/presentation/custom_app_bar.dart';
 import 'package:giv_flutter/util/presentation/custom_divider.dart';
 import 'package:giv_flutter/util/presentation/custom_scaffold.dart';
+import 'package:giv_flutter/util/presentation/get_listing_type_color.dart';
 import 'package:giv_flutter/util/presentation/photo_view_page.dart';
 import 'package:giv_flutter/util/presentation/rounded_corners.dart';
 import 'package:giv_flutter/util/presentation/spacing.dart';
@@ -50,16 +52,45 @@ class NewListing extends StatefulWidget {
   final Product product;
   final NewListingBloc bloc;
   final Group initialGroup;
+  final ListingType listingType;
 
   const NewListing({
     Key key,
     @required this.bloc,
     this.product,
     this.initialGroup,
+    this.listingType = ListingType.donation,
   }) : super(key: key);
 
   @override
   _NewListingState createState() => _NewListingState();
+
+  static Map<String, Map<ListingType, String>> listingTypeStringMap = {
+    "photos": {
+      ListingType.donation: "new_listing_section_title_photos",
+      ListingType.donationRequest:
+          "new_donation_request_listing_section_title_photos",
+    },
+    "about": {
+      ListingType.donation: "new_listing_section_title_about",
+      ListingType.donationRequest:
+          "new_donation_request_listing_section_title_about",
+    },
+    "submit_button": {
+      ListingType.donation: "new_listing_action_create",
+      ListingType.donationRequest: "new_donation_request_listing_action_create",
+    },
+    "title_empty_state": {
+      ListingType.donation: "new_listing_tile_name_empty_state",
+      ListingType.donationRequest:
+          "new_donation_request_listing_tile_name_empty_state",
+    },
+    "description_empty_state": {
+      ListingType.donation: "new_listing_tile_name_empty_state",
+      ListingType.donationRequest:
+          "new_donation_request_listing_tile_description_empty_state",
+    },
+  };
 }
 
 class _NewListingState extends BaseState<NewListing> {
@@ -78,6 +109,7 @@ class _NewListingState extends BaseState<NewListing> {
   User _user;
   bool _isEditing = false;
   Group _initialGroup;
+  ListingType _type;
 
   @override
   void initState() {
@@ -85,6 +117,8 @@ class _NewListingState extends BaseState<NewListing> {
     _isEditing = widget.product != null;
 
     _initialGroup = widget.initialGroup;
+
+    _type = widget.listingType;
 
     final initialGroups =
         _initialGroup == null ? <Group>[] : <Group>[_initialGroup];
@@ -94,6 +128,7 @@ class _NewListingState extends BaseState<NewListing> {
           isPrivate: initialGroups.isNotEmpty,
           groups: initialGroups,
           images: [],
+          listingType: _type,
         );
 
     _bloc = NewListingBloc.from(widget.bloc, _isEditing);
@@ -108,8 +143,10 @@ class _NewListingState extends BaseState<NewListing> {
   }
 
   void _listenToSavedProductStream() {
-    _bloc.savedProductStream
-        ?.listen(_onSaveSuccess, onError: _handleUploadError);
+    _bloc.savedProductStream?.listen(
+      _onSaveSuccess,
+      onError: _handleUploadError,
+    );
   }
 
   void _resolveLocation() {
@@ -145,7 +182,10 @@ class _NewListingState extends BaseState<NewListing> {
         : Consumer<LogInBloc>(
             builder: (context, bloc, child) => SignIn(
               bloc: bloc,
-              redirect: NewListing(bloc: widget.bloc),
+              redirect: NewListing(
+                bloc: widget.bloc,
+                listingType: _product.listingType,
+              ),
             ),
           );
 
@@ -185,42 +225,65 @@ class _NewListingState extends BaseState<NewListing> {
   }
 
   ListView _buildMainListView(BuildContext context) {
+    final listingType = _product.listingType;
+
+    final sectionTitleColor = <ListingType, Color>{
+      ListingType.donation: Theme.of(context).primaryColor,
+      ListingType.donationRequest: Colors.black,
+    }[listingType];
+
     return ListView(
       controller: _listViewController,
       children: <Widget>[
         _activeTile(),
-        _sectionTitle(string('new_listing_section_title_for_who')),
-        NewListingForRadioGroup(
-          onValueChanged: (ListingFor option) {
-            setState(() {
-              _product.isPrivate = option == ListingFor.myGroups;
-            });
+        if (_product.isDonation)
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _sectionTitle(text: string('new_listing_section_title_for_who')),
+              NewListingForRadioGroup(
+                onValueChanged: (ListingFor option) {
+                  setState(() {
+                    _product.isPrivate = option == ListingFor.myGroups;
+                  });
 
-            if (option == ListingFor.myGroups) {
-              _editGroups();
-            }
-          },
-          isListingPrivate: _product.isPrivate,
-          groups: _product.groups,
-          isError: _isGroupsError,
+                  if (option == ListingFor.myGroups) {
+                    _editGroups();
+                  }
+                },
+                isListingPrivate: _product.isPrivate,
+                groups: _product.groups,
+                isError: _isGroupsError,
+              ),
+              Spacing.vertical(Dimens.default_vertical_margin),
+              CustomDivider(),
+            ],
+          ),
+        _sectionTitle(
+          text: string(NewListing.listingTypeStringMap['photos'][listingType]),
+          color: sectionTitleColor,
         ),
-        Spacing.vertical(Dimens.default_vertical_margin),
-        CustomDivider(),
-        _sectionTitle(string('new_listing_section_title_photos')),
         _emptyImagesErrorMessage(),
         _buildImageList(context),
         Spacing.vertical(Dimens.default_vertical_margin),
         CustomDivider(),
-        _sectionTitle(string('new_listing_section_title_about')),
+        _sectionTitle(
+          text: string(NewListing.listingTypeStringMap['about'][listingType]),
+          color: sectionTitleColor,
+        ),
         ListingTitleListTile(
           value: _product.title,
           onTap: _editTitle,
           isError: _isTitleError,
+          listingType: listingType,
         ),
         ListingDescriptionListTile(
-            value: _product.description,
-            onTap: _editDescription,
-            isError: _isDescriptionError),
+          value: _product.description,
+          onTap: _editDescription,
+          isError: _isDescriptionError,
+          listingType: listingType,
+        ),
         _categoriesTile(_product.categories),
         _phoneNumberTile(),
         _locationComponent(),
@@ -242,6 +305,10 @@ class _NewListingState extends BaseState<NewListing> {
     return Column(
       children: <Widget>[
         SwitchListTile(
+          activeColor: getListingTypeColor(
+            Theme.of(context),
+            _product.listingType,
+          ),
           value: _product.isActive,
           onChanged: (bool value) {
             setState(() {
@@ -283,6 +350,7 @@ class _NewListingState extends BaseState<NewListing> {
         _editLocation(location);
       },
       isError: _isLocationError,
+      listingType: _product.listingType,
     );
   }
 
@@ -333,26 +401,36 @@ class _NewListingState extends BaseState<NewListing> {
     );
   }
 
-  Widget _sectionTitle(String text) {
+  Widget _sectionTitle({String text, Color color}) {
+    final finalColor = color ?? Theme.of(context).primaryColor;
+
     return Padding(
       padding: EdgeInsets.only(
           left: Dimens.default_horizontal_margin,
           right: Dimens.default_horizontal_margin,
           top: 32.0,
           bottom: 8.0),
-      child: Subtitle(text,
-          weight: SyntheticFontWeight.bold,
-          color: Theme.of(context).primaryColor),
+      child: Subtitle(
+        text,
+        weight: SyntheticFontWeight.bold,
+        color: finalColor,
+      ),
     );
   }
 
   Positioned _buildActionPositioned({StreamEvent<double> uploadStatus}) {
+    final listingType = _product.listingType;
+
     final child = (uploadStatus != null && uploadStatus.isLoading)
-        ? _buildProgressIndicator(uploadStatus.data)
+        ? _buildProgressIndicator(
+            uploadStatus.data,
+            listingType,
+          )
         : NewListingSubmitButton(
             isEditing: _isEditing,
             stringFunction: string,
             onPressed: _submitForm,
+            listingType: listingType,
           );
 
     return Positioned(
@@ -375,9 +453,17 @@ class _NewListingState extends BaseState<NewListing> {
     );
   }
 
-  Widget _buildProgressIndicator(double value) {
+  Widget _buildProgressIndicator(
+    double value,
+    ListingType listingType,
+  ) {
     final text =
         _isEditing ? 'edit_listing_uploading' : 'new_listing_uploading';
+
+    final listingTypeColorMap = <ListingType, Color>{
+      ListingType.donation: Colors.blue[300],
+      ListingType.donationRequest: Color(0xBFf9be90),
+    };
 
     return Stack(
       children: [
@@ -387,7 +473,9 @@ class _NewListingState extends BaseState<NewListing> {
               height: Dimens.button_flat_height,
               child: LinearProgressIndicator(
                 value: value,
-                valueColor: AlwaysStoppedAnimation<Color>(Colors.blue[300]),
+                valueColor: AlwaysStoppedAnimation<Color>(
+                  listingTypeColorMap[listingType],
+                ),
                 backgroundColor: Colors.grey[200],
               ),
             )),
@@ -472,11 +560,14 @@ class _NewListingState extends BaseState<NewListing> {
   }
 
   void _editPhoneNumber(User user) async {
-    await navigation.push(EditPhoneNumber(
-      settingsBloc: Provider.of<SettingsBloc>(context),
-      phoneVerificationBloc: Provider.of<PhoneVerificationBloc>(context),
-      user: user,
-    ));
+    await navigation.push(
+      EditPhoneNumber(
+        settingsBloc: Provider.of<SettingsBloc>(context),
+        phoneVerificationBloc: Provider.of<PhoneVerificationBloc>(context),
+        user: user,
+        listingType: _product.listingType,
+      ),
+    );
 
     if (_bloc.getUser().hasPhoneNumber) {
       setState(() {
@@ -487,9 +578,12 @@ class _NewListingState extends BaseState<NewListing> {
   }
 
   void _editTitle() async {
-    final result = await navigation.push(EditTitle(
-      title: _product.title,
-    ));
+    final result = await navigation.push(
+      EditTitle(
+        title: _product.title,
+        listingType: _product.listingType,
+      ),
+    );
 
     if (result != null) {
       setState(() {
@@ -502,6 +596,7 @@ class _NewListingState extends BaseState<NewListing> {
   void _editDescription() async {
     final result = await navigation.push(EditDescription(
       description: _product.description,
+      listingType: _product.listingType,
     ));
 
     if (result != null) {
@@ -518,6 +613,7 @@ class _NewListingState extends BaseState<NewListing> {
         bloc: bloc,
         location: location,
         showSaveButton: true,
+        listingType: _product.listingType,
       ),
     ));
 
@@ -533,8 +629,12 @@ class _NewListingState extends BaseState<NewListing> {
     final editedList = <ProductCategory>[];
     editedList.addAll(_product.categories);
 
-    final result =
-        await navigation.push(EditCategories(categories: editedList));
+    final result = await navigation.push(
+      EditCategories(
+        categories: editedList,
+        listingType: _product.listingType,
+      ),
+    );
 
     if (result != null) {
       setState(() {
@@ -822,20 +922,32 @@ class NewListingSubmitButton extends StatelessWidget {
   final GetLocalizedStringFunction stringFunction;
   final VoidCallback onPressed;
   final bool isEditing;
+  final ListingType listingType;
 
   const NewListingSubmitButton({
     Key key,
     @required this.isEditing,
     @required this.onPressed,
     @required this.stringFunction,
+    @required this.listingType,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final text =
-        isEditing ? 'edit_listing_action_save' : 'new_listing_action_create';
+    final key = isEditing
+        ? 'edit_listing_action_save'
+        : NewListing.listingTypeStringMap['submit_button'][listingType];
 
-    return PrimaryButton(text: stringFunction(text), onPressed: onPressed);
+    final text = stringFunction(key);
+
+    final buttonMap = <ListingType, Widget>{
+      ListingType.donation:
+          PrimaryButton(text: stringFunction(text), onPressed: onPressed),
+      ListingType.donationRequest:
+          AccentButton(text: stringFunction(text), onPressed: onPressed),
+    };
+
+    return buttonMap[listingType];
   }
 }
 
@@ -948,12 +1060,14 @@ class ListingTitleListTile extends StatelessWidget {
   final String value;
   final GestureTapCallback onTap;
   final bool isError;
+  final ListingType listingType;
 
   const ListingTitleListTile({
     Key key,
     @required this.onTap,
     @required this.isError,
     @required this.value,
+    @required this.listingType,
   }) : super(key: key);
 
   @override
@@ -963,7 +1077,9 @@ class ListingTitleListTile extends StatelessWidget {
     return NewListingDetailTile(
       value: value,
       caption: stringFunction('new_listing_tile_name'),
-      emptyStateCaption: stringFunction('new_listing_tile_name_empty_state'),
+      emptyStateCaption: stringFunction(
+        NewListing.listingTypeStringMap['title_empty_state'][listingType],
+      ),
       onTap: onTap,
       isError: isError,
     );
@@ -974,12 +1090,14 @@ class ListingDescriptionListTile extends StatelessWidget {
   final String value;
   final GestureTapCallback onTap;
   final bool isError;
+  final ListingType listingType;
 
   const ListingDescriptionListTile({
     Key key,
     @required this.onTap,
     @required this.isError,
     @required this.value,
+    @required this.listingType,
   }) : super(key: key);
 
   @override
@@ -989,8 +1107,9 @@ class ListingDescriptionListTile extends StatelessWidget {
     return NewListingDetailTile(
       value: value,
       caption: stringFunction('new_listing_tile_description'),
-      emptyStateCaption:
-          stringFunction('new_listing_tile_description_empty_state'),
+      emptyStateCaption: stringFunction(
+        NewListing.listingTypeStringMap['description_empty_state'][listingType],
+      ),
       onTap: onTap,
       isError: isError,
     );
@@ -1054,23 +1173,32 @@ class ListingLocationListTile extends StatelessWidget {
   final String value;
   final GestureTapCallback onTap;
   final bool isError;
+  final ListingType listingType;
 
   const ListingLocationListTile({
     Key key,
     @required this.onTap,
     @required this.isError,
     @required this.value,
+    @required this.listingType,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final stringFunction = GetLocalizedStringFunction(context);
 
+    final listingTypeEmptySateTextMap = <ListingType, String>{
+      ListingType.donation: 'new_listing_tile_location_empty_state',
+      ListingType.donationRequest:
+          'new_donation_request_listing_tile_location_empty_state',
+    };
+
     return NewListingDetailTile(
       value: value,
       caption: stringFunction('new_listing_tile_location'),
-      emptyStateCaption:
-          stringFunction('new_listing_tile_location_empty_state'),
+      emptyStateCaption: stringFunction(
+        listingTypeEmptySateTextMap[listingType],
+      ),
       onTap: onTap,
       isError: isError,
     );

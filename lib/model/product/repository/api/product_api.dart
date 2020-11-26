@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:giv_flutter/config/config.dart';
+import 'package:giv_flutter/model/listing/listing_type.dart';
 import 'package:giv_flutter/model/location/location.dart';
 import 'package:giv_flutter/model/product/product.dart';
 import 'package:giv_flutter/model/product/product_category.dart';
@@ -38,11 +39,25 @@ class ProductApi extends BaseApi {
   }
 
   Future<HttpResponse<List<ProductCategory>>> getSearchCategories(
-      {bool fetchAll = false}) async {
+      {bool fetchAll = false, ListingType type}) async {
     HttpStatus status;
     try {
-      final response =
-          await get('$baseUrl/categories', params: {'has_listings': !fetchAll});
+      final params = <String, dynamic>{
+        'has_listings': !fetchAll,
+      };
+
+      if (type != null) {
+        params.addAll(
+          {
+            'type': listingTypeToStringMap[type],
+          },
+        );
+      }
+
+      final response = await get(
+        '$baseUrl/${ProductApi.CATEGORIES_ENDPOINT}',
+        params: params,
+      );
 
       status = HttpResponse.codeMap[response.statusCode];
       final data = ProductCategory.parseList(response.body);
@@ -74,19 +89,26 @@ class ProductApi extends BaseApi {
     }
   }
 
-  Future<HttpResponse<ProductSearchResult>> getProductsByCategory(
-      {int categoryId, Location location, bool isHardFilter, int page}) async {
+  Future<HttpResponse<ProductSearchResult>> getProductsByCategory({
+    int categoryId,
+    Location location,
+    bool isHardFilter,
+    int page,
+    ListingType type,
+  }) async {
     HttpStatus status;
     try {
-      final response =
-          await get('$baseUrl/listings/categories/$categoryId', params: {
-        'city_id': location?.city?.id,
-        'state_id': location?.state?.id,
-        'country_id': location?.country?.id,
-        'is_hard_filter': isHardFilter,
-        'page': page,
-        'per_page': Config.paginationDefaultPerPage,
-      });
+      final response = await get(
+          '$baseUrl/$LISTINGS_ENDPOINT/$CATEGORIES_ENDPOINT/$categoryId',
+          params: {
+            'city_id': location?.city?.id,
+            'state_id': location?.state?.id,
+            'country_id': location?.country?.id,
+            'is_hard_filter': isHardFilter,
+            'type': listingTypeToStringMap[type],
+            'page': page,
+            'per_page': Config.paginationDefaultPerPage,
+          });
 
       status = HttpResponse.codeMap[response.statusCode];
       final data = ProductSearchResult.fromJson(jsonDecode(response.body));
@@ -122,16 +144,20 @@ class ProductApi extends BaseApi {
     }
   }
 
-  Future<HttpResponse<ProductSearchResult>> getAllProducts(
-      {Location location, bool isHardFilter, int page}) async {
+  Future<HttpResponse<ProductSearchResult>> getAllProducts({
+    Location location,
+    bool isHardFilter,
+    int page,
+    ListingType type,
+  }) async {
     HttpStatus status;
     try {
-      final response =
-      await get('$baseUrl/listings', params: {
+      final response = await get('$baseUrl/$LISTINGS_ENDPOINT', params: {
         'city_id': location?.city?.id,
         'state_id': location?.state?.id,
         'country_id': location?.country?.id,
         'is_hard_filter': isHardFilter,
+        'type': listingTypeToStringMap[type],
         'page': page,
         'per_page': Config.paginationDefaultPerPage,
       });
@@ -139,10 +165,15 @@ class ProductApi extends BaseApi {
       status = HttpResponse.codeMap[response.statusCode];
       final data = ProductSearchResult.fromJson(jsonDecode(response.body));
 
-      return HttpResponse<ProductSearchResult>(status: status, data: data);
+      return HttpResponse<ProductSearchResult>(
+        status: status,
+        data: data,
+      );
     } catch (error) {
       return HttpResponse<ProductSearchResult>(
-          status: status, message: error.toString());
+        status: status,
+        message: error.toString(),
+      );
     }
   }
 
@@ -175,4 +206,7 @@ class ProductApi extends BaseApi {
           status: status, message: error.toString());
     }
   }
+
+  static const String CATEGORIES_ENDPOINT = 'categories';
+  static const String LISTINGS_ENDPOINT = 'listings';
 }

@@ -1,3 +1,4 @@
+import 'package:giv_flutter/model/listing/listing_type.dart';
 import 'package:giv_flutter/model/product/product_category.dart';
 import 'package:giv_flutter/model/product/repository/cache/product_cache_provider.dart';
 import 'package:giv_flutter/service/preferences/disk_storage_provider.dart';
@@ -5,16 +6,18 @@ import 'package:giv_flutter/util/cache/cache_payload.dart';
 import 'package:meta/meta.dart';
 
 class ProductCache implements ProductCacheProvider {
-  static final ttlProductCategoryCache = 180;
-  static final String _productCategoriesCacheKey = 'cache_product_categories';
+  static final productCategoryCacheTTLInSeconds = 180;
 
   final DiskStorageProvider diskStorage;
 
   ProductCache({@required this.diskStorage});
 
   @override
-  List<ProductCategory> getCategories(bool fetchAll) {
-    final cacheKey = _getCategoriesCacheKey(fetchAll);
+  List<ProductCategory> getCategories({
+    bool fetchAll,
+    ListingType type,
+  }) {
+    final cacheKey = _getCategoriesCacheKey(fetchAll: fetchAll, type: type);
 
     try {
       CachePayload payload = diskStorage.getCachePayloadItem(cacheKey);
@@ -28,17 +31,34 @@ class ProductCache implements ProductCacheProvider {
 
   @override
   Future<CachePayload> saveCategories(
-      String responseBody, bool fetchAll) async {
-    final cacheKey = _getCategoriesCacheKey(fetchAll);
+    String responseBody, {
+    bool fetchAll,
+    ListingType type,
+  }) async {
+    final cacheKey = _getCategoriesCacheKey(fetchAll: fetchAll, type: type);
+
     final payload = CachePayload(
-        ttlInSeconds: ttlProductCategoryCache, serializedData: responseBody);
+        ttlInSeconds: productCategoryCacheTTLInSeconds,
+        serializedData: responseBody);
+
     await diskStorage.setCachePayloadItem(cacheKey, payload);
+
     return payload;
   }
 
-  String _getCategoriesCacheKey(bool fetchAll) {
-    final cacheKeyBuffer = StringBuffer(_productCategoriesCacheKey);
-    if (fetchAll) cacheKeyBuffer.write('_fetch_all');
+  String _getCategoriesCacheKey({bool fetchAll, ListingType type}) {
+    final cacheKeyBuffer = StringBuffer(PRODUCT_CATEGORIES_CACHE_KEY);
+
+    if (fetchAll != null && fetchAll) {
+      cacheKeyBuffer.write('__fetch_all');
+    }
+
+    if (type != null) {
+      cacheKeyBuffer.write('__type_${listingTypeToStringMap[type]}');
+    }
+
     return cacheKeyBuffer.toString();
   }
+
+  static const String PRODUCT_CATEGORIES_CACHE_KEY = 'cache_product_categories';
 }

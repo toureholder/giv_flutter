@@ -10,24 +10,28 @@ import 'package:giv_flutter/features/settings/ui/edit_phone_number/edit_phone_nu
 import 'package:giv_flutter/features/settings/ui/edit_phone_number/edit_phone_number_screen_state_resending_code.dart';
 import 'package:giv_flutter/features/settings/ui/edit_phone_number/edit_phone_number_screen_state_verification_in_progress.dart';
 import 'package:giv_flutter/features/settings/ui/edit_phone_number/edit_phone_number_screen_state_verification_success.dart';
+import 'package:giv_flutter/model/listing/listing_type.dart';
 import 'package:giv_flutter/model/user/user.dart';
 import 'package:giv_flutter/util/form/text_editing_controller_builder.dart';
 import 'package:giv_flutter/util/network/http_response.dart';
 import 'package:giv_flutter/util/presentation/android_theme.dart';
 import 'package:giv_flutter/util/presentation/custom_app_bar.dart';
 import 'package:giv_flutter/util/presentation/custom_scaffold.dart';
+import 'package:giv_flutter/util/presentation/get_listing_type_color.dart';
 import 'package:giv_flutter/values/dimens.dart';
 
 class EditPhoneNumber extends StatefulWidget {
   final User user;
   final SettingsBloc settingsBloc;
   final PhoneVerificationBloc phoneVerificationBloc;
+  final ListingType listingType;
 
   const EditPhoneNumber({
     Key key,
     @required this.settingsBloc,
     @required this.phoneVerificationBloc,
     @required this.user,
+    this.listingType,
   }) : super(key: key);
 
   @override
@@ -40,10 +44,12 @@ class _EditPhoneNumberState extends BaseState<EditPhoneNumber> {
   PhoneVerificationBloc _phoneVerificationBloc;
   String _defaultCode = Config.defaultCountryCallingCode;
   String _selectedCode;
+  ListingType _listingType;
 
   @override
   void initState() {
     super.initState();
+    _listingType = widget.listingType;
     _settingsBloc = widget.settingsBloc;
     _phoneVerificationBloc = widget.phoneVerificationBloc;
 
@@ -77,6 +83,10 @@ class _EditPhoneNumberState extends BaseState<EditPhoneNumber> {
         stream: _phoneVerificationBloc.verificationStatusStream,
         builder: (context, snapshot) {
           return AndroidTheme(
+            primaryColor: getListingTypeColor(
+              Theme.of(context),
+              _listingType,
+            ),
             child: _buildSingleChildScrollView(
               snapshot.data,
             ),
@@ -106,6 +116,7 @@ class _EditPhoneNumberState extends BaseState<EditPhoneNumber> {
           onCountryCodeChanged: null,
           startPhoneVerification: null,
           isSendingCode: true,
+          listingType: _listingType,
         );
         break;
 
@@ -164,6 +175,7 @@ class _EditPhoneNumberState extends BaseState<EditPhoneNumber> {
           onCountryCodeChanged: _onCountryChange,
           startPhoneVerification: _startPhoneVerification,
           isSendingCode: false,
+          listingType: _listingType,
         );
     }
 

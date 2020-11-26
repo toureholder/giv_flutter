@@ -1,3 +1,4 @@
+import 'package:giv_flutter/model/listing/listing_type.dart';
 import 'package:giv_flutter/model/location/location.dart';
 import 'package:giv_flutter/model/product/product.dart';
 import 'package:giv_flutter/model/product/product_category.dart';
@@ -16,9 +17,14 @@ class ProductRepository {
   Future<HttpResponse<List<ProductCategory>>> getFeaturedProductsCategories() =>
       productApi.getFeaturedProductsCategories();
 
-  Future<HttpResponse<List<ProductCategory>>> getSearchCategories(
-      {bool fetchAll}) async {
-    List<ProductCategory> validCache = productCache.getCategories(fetchAll);
+  Future<HttpResponse<List<ProductCategory>>> getSearchCategories({
+    bool fetchAll,
+    ListingType type,
+  }) async {
+    List<ProductCategory> validCache = productCache.getCategories(
+      fetchAll: fetchAll,
+      type: type,
+    );
 
     if (validCache != null) {
       return HttpResponse<List<ProductCategory>>(
@@ -26,21 +32,37 @@ class ProductRepository {
         data: validCache,
       );
     } else {
-      final response = await productApi.getSearchCategories(fetchAll: fetchAll);
+      final response = await productApi.getSearchCategories(
+        fetchAll: fetchAll,
+        type: type,
+      );
+
       final originalResponseBody = response.originalBody;
+
       if (originalResponseBody != null)
-        productCache.saveCategories(originalResponseBody, fetchAll);
+        productCache.saveCategories(
+          originalResponseBody,
+          fetchAll: fetchAll,
+          type: type,
+        );
+
       return response;
     }
   }
 
-  Future<HttpResponse<ProductSearchResult>> getProductsByCategory(
-          {int categoryId, Location location, bool isHardFilter, int page}) =>
+  Future<HttpResponse<ProductSearchResult>> getProductsByCategory({
+    int categoryId,
+    Location location,
+    bool isHardFilter,
+    int page,
+    ListingType type,
+  }) =>
       productApi.getProductsByCategory(
         categoryId: categoryId,
         location: location,
         isHardFilter: isHardFilter,
         page: page,
+        type: type,
       );
 
   Future<HttpResponse<ProductSearchResult>> getProductsBySearchQuery(
@@ -52,12 +74,17 @@ class ProductRepository {
         page: page,
       );
 
-  Future<HttpResponse<ProductSearchResult>> getAllProducts(
-      {Location location, bool isHardFilter, int page}) =>
+  Future<HttpResponse<ProductSearchResult>> getAllProducts({
+    Location location,
+    bool isHardFilter,
+    int page,
+    ListingType type,
+  }) =>
       productApi.getAllProducts(
         location: location,
         isHardFilter: isHardFilter,
         page: page,
+        type: type,
       );
 
   Future<HttpResponse<List<ProductCategory>>> getSearchSuggestions(String q) =>

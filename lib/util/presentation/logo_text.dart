@@ -14,7 +14,7 @@ class LogoText extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
         _textPart('alguém', Theme.of(context).primaryColor),
-        _textPart('quer', CustomColors.logoOrange),
+        _textPart('quer', CustomColors.accentColor),
         _textPart('?', Theme.of(context).primaryColor),
       ],
     );
@@ -24,7 +24,11 @@ class LogoText extends StatelessWidget {
     return Text(
       text,
       style: TextStyle(
-          fontFamily: 'Overpass', fontSize: fontSize, fontWeight: FontWeight.bold, color: color),
+        fontFamily: 'Overpass',
+        fontSize: fontSize,
+        fontWeight: FontWeight.bold,
+        color: color,
+      ),
     );
   }
 }

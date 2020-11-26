@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:giv_flutter/features/product/categories/ui/category_list_tile.dart';
 import 'package:giv_flutter/features/product/search_result/bloc/search_result_bloc.dart';
+import 'package:giv_flutter/model/listing/listing_type.dart';
 import 'package:giv_flutter/model/product/product_category.dart';
 import 'package:giv_flutter/util/util.dart';
 import 'package:mockito/mockito.dart';
@@ -27,12 +28,14 @@ main() {
     ProductCategory category, {
     bool returnChoice = false,
     List<int> hideThese,
+    ListingType listingType,
   }) =>
       testUtil.makeTestableWidget(
         subject: CategoryListTile(
           returnChoice: returnChoice,
           hideThese: hideThese,
           category: category,
+          listingType: listingType,
         ),
         dependencies: [
           Provider<SearchResultBloc>(

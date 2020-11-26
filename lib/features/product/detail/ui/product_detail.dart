@@ -13,6 +13,7 @@ import 'package:giv_flutter/features/user_profile/bloc/user_profile_bloc.dart';
 import 'package:giv_flutter/features/user_profile/ui/user_profile.dart';
 import 'package:giv_flutter/model/api_response/api_response.dart';
 import 'package:giv_flutter/model/image/image.dart' as CustomImage;
+import 'package:giv_flutter/model/listing/listing_type.dart';
 import 'package:giv_flutter/model/listing/repository/api/request/create_listing_request.dart';
 import 'package:giv_flutter/model/location/location.dart';
 import 'package:giv_flutter/model/product/product.dart';
@@ -136,13 +137,14 @@ class _ProductDetailState extends BaseState<ProductDetail> {
         stream: _productDetailBloc.locationStream,
       ),
       DefaultVerticalSpacing(),
-      if (!_product.isMailable)
+      if (!_product.isMailable && !_isMine && _product.isDonation)
         ProductDetailNoShippingAlertStreamBuilder(
           stream: _productDetailBloc.locationStream,
         ),
       Spacing.vertical(Dimens.grid(5)),
       if (!_isMine)
         IWantItButton(
+          listingType: _product.listingType,
           onPressed: _showContactListerBottomSheet,
         ),
       ProductDetailDescription(
@@ -179,6 +181,11 @@ class _ProductDetailState extends BaseState<ProductDetail> {
   }
 
   void _showContactListerBottomSheet() {
+    final listingTypeMessageMap = <ListingType, String>{
+      ListingType.donation: 'whatsapp_message_interested',
+      ListingType.donationRequest: 'whatsapp_message_i_want_to_help'
+    };
+
     final tiles = <Widget>[
       BottomSheetTile(
         iconData: CustomIcons.whatsapp,
@@ -187,7 +194,7 @@ class _ProductDetailState extends BaseState<ProductDetail> {
           _productDetailBloc.util.openWhatsApp(
               _fullPhoneNumber,
               string(
-                'whatsapp_message_interested',
+                listingTypeMessageMap[_product.listingType],
                 formatArg: _product.title,
               ));
         },
@@ -347,20 +354,33 @@ class _ProductDetailState extends BaseState<ProductDetail> {
 
 class IWantItButton extends StatelessWidget {
   final VoidCallback onPressed;
+  final ListingType listingType;
 
-  const IWantItButton({Key key, @required this.onPressed}) : super(key: key);
+  const IWantItButton({
+    Key key,
+    @required this.onPressed,
+    @required this.listingType,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final buttonMap = <ListingType, Widget>{
+      ListingType.donation: PrimaryButton(
+        text: GetLocalizedStringFunction(context)('i_want_it'),
+        onPressed: onPressed,
+      ),
+      ListingType.donationRequest: AccentButton(
+        text: GetLocalizedStringFunction(context)('i_want_to_help'),
+        onPressed: onPressed,
+      ),
+    };
+
     return Column(
       children: <Widget>[
         Padding(
           padding: EdgeInsets.symmetric(
               horizontal: Dimens.default_horizontal_margin),
-          child: PrimaryButton(
-            text: GetLocalizedStringFunction(context)('i_want_it'),
-            onPressed: onPressed,
-          ),
+          child: buttonMap[listingType],
         ),
         DefaultVerticalSpacing(),
       ],

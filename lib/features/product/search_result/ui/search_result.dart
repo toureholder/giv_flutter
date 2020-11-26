@@ -6,6 +6,7 @@ import 'package:giv_flutter/config/i18n/string_localizations.dart';
 import 'package:giv_flutter/features/product/filters/bloc/location_filter_bloc.dart';
 import 'package:giv_flutter/features/product/filters/ui/location_filter.dart';
 import 'package:giv_flutter/features/product/search_result/bloc/search_result_bloc.dart';
+import 'package:giv_flutter/model/listing/listing_type.dart';
 import 'package:giv_flutter/model/location/location.dart';
 import 'package:giv_flutter/model/product/product.dart';
 import 'package:giv_flutter/model/product/product_category.dart';
@@ -28,6 +29,7 @@ class SearchResult extends StatefulWidget {
   final bool useCanonicalName;
   final SearchResultBloc bloc;
   final String forcedName;
+  final ListingType listingType;
 
   const SearchResult({
     Key key,
@@ -36,6 +38,7 @@ class SearchResult extends StatefulWidget {
     this.searchQuery,
     this.useCanonicalName = false,
     this.forcedName,
+    this.listingType,
   }) : super(key: key);
 
   @override
@@ -160,6 +163,7 @@ class _SearchResultState extends BaseState<SearchResult> {
       searchQuery: widget.searchQuery,
       locationFilter: locationFilter,
       isHardFilter: isHardFilter,
+      type: widget.listingType,
       page: _currentPage,
     );
   }

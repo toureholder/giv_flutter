@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:giv_flutter/base/base_state.dart';
 import 'package:giv_flutter/features/product/categories/ui/sub_categories.dart';
+import 'package:giv_flutter/model/listing/listing_type.dart';
 import 'package:giv_flutter/model/product/product_category.dart';
 import 'package:giv_flutter/util/presentation/custom_divider.dart';
 import 'package:giv_flutter/util/presentation/typography.dart';
@@ -9,12 +10,14 @@ class CategoryListTile extends StatefulWidget {
   final ProductCategory category;
   final bool returnChoice;
   final List<int> hideThese;
+  final ListingType listingType;
 
   const CategoryListTile({
     Key key,
     this.category,
     this.returnChoice = false,
     this.hideThese,
+    this.listingType,
   }) : super(key: key);
 
   @override
@@ -56,7 +59,10 @@ class _CategoryListTileState extends BaseState<CategoryListTile> {
   }
 
   void _goToSubCategoryOrResult() {
-    widget.category.goToSubCategoryOrResult(navigation);
+    widget.category.goToSubCategoryOrResult(
+      navigation,
+      listingType: widget.listingType,
+    );
   }
 }
 

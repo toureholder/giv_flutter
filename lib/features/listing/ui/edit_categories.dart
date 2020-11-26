@@ -4,10 +4,12 @@ import 'package:giv_flutter/config/config.dart';
 import 'package:giv_flutter/config/i18n/string_localizations.dart';
 import 'package:giv_flutter/features/product/categories/bloc/categories_bloc.dart';
 import 'package:giv_flutter/features/product/categories/ui/categories.dart';
+import 'package:giv_flutter/model/listing/listing_type.dart';
 import 'package:giv_flutter/model/product/product_category.dart';
 import 'package:giv_flutter/util/presentation/buttons.dart';
 import 'package:giv_flutter/util/presentation/custom_app_bar.dart';
 import 'package:giv_flutter/util/presentation/custom_scaffold.dart';
+import 'package:giv_flutter/util/presentation/get_listing_type_color.dart';
 import 'package:giv_flutter/util/presentation/spacing.dart';
 import 'package:giv_flutter/util/presentation/typography.dart';
 import 'package:giv_flutter/values/dimens.dart';
@@ -15,25 +17,48 @@ import 'package:provider/provider.dart';
 
 class EditCategories extends StatefulWidget {
   final List<ProductCategory> categories;
+  final ListingType listingType;
 
-  const EditCategories({Key key, @required this.categories}) : super(key: key);
+  const EditCategories({
+    Key key,
+    @required this.categories,
+    @required this.listingType,
+  }) : super(key: key);
 
   @override
   _EditCategoriesState createState() => _EditCategoriesState();
 }
 
 class _EditCategoriesState extends BaseState<EditCategories> {
+  ListingType _listingType;
   List<ProductCategory> _editedList;
 
   @override
   void initState() {
     super.initState();
+    _listingType = widget.listingType;
     _editedList = widget.categories;
   }
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
+
+    final listingTypeButtonMap = <ListingType, Widget>{
+      ListingType.donation: PrimaryButton(
+        text: string('shared_action_save'),
+        onPressed: () {
+          if (_editedList.isNotEmpty) navigation.pop(_editedList);
+        },
+      ),
+      ListingType.donationRequest: AccentButton(
+        text: string('shared_action_save'),
+        onPressed: () {
+          if (_editedList.isNotEmpty) navigation.pop(_editedList);
+        },
+      ),
+    };
+
     return CustomScaffold(
       appBar: CustomAppBar(title: string('edit_categories_title')),
       body: ListView(
@@ -45,12 +70,7 @@ class _EditCategoriesState extends BaseState<EditCategories> {
           Spacing.vertical(Dimens.default_vertical_margin),
           Padding(
             padding: const EdgeInsets.all(Dimens.default_horizontal_margin),
-            child: PrimaryButton(
-              text: string('shared_action_save'),
-              onPressed: () {
-                if (_editedList.isNotEmpty) navigation.pop(_editedList);
-              },
-            ),
+            child: listingTypeButtonMap[_listingType],
           )
         ],
       ),
@@ -70,7 +90,10 @@ class _EditCategoriesState extends BaseState<EditCategories> {
     }
 
     final footer = (_editedList.length < Config.maxProductCategories)
-        ? AddCategoryTile(onPressed: _addNewCategory)
+        ? AddCategoryTile(
+            onPressed: _addNewCategory,
+            listingType: _listingType,
+          )
         : MaxQuantityWarningTile();
 
     list.add(footer);
@@ -121,27 +144,44 @@ class EditCategoryTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: BodyText(category.canonicalName),
-      trailing: DeleteButton(
-        onPressed: onDeletePressed
+      contentPadding: EdgeInsets.symmetric(
+        horizontal: Dimens.default_horizontal_margin,
       ),
+      title: BodyText(category.canonicalName),
+      trailing: DeleteButton(onPressed: onDeletePressed),
     );
   }
 }
 
 class AddCategoryTile extends StatelessWidget {
+  final ListingType listingType;
   final Function onPressed;
 
-  const AddCategoryTile({Key key, @required this.onPressed}) : super(key: key);
+  const AddCategoryTile({
+    Key key,
+    @required this.listingType,
+    @required this.onPressed,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final color = <ListingType, Color>{
+      ListingType.donation: Theme.of(context).primaryColor,
+      ListingType.donationRequest: Colors.black,
+    }[listingType];
+
     return ListTile(
+      contentPadding: EdgeInsets.symmetric(
+        horizontal: Dimens.default_horizontal_margin,
+      ),
       title: BodyText(
         GetLocalizedStringFunction(context)('edit_categories_add_text'),
-        color: Theme.of(context).primaryColor,
+        color: color,
       ),
-      trailing: AddButton(onPressed: onPressed),
+      trailing: AddButton(
+        onPressed: onPressed,
+        color: color,
+      ),
       onTap: onPressed,
     );
   }
@@ -165,15 +205,20 @@ class MaxQuantityWarningTile extends StatelessWidget {
 
 class AddButton extends StatelessWidget {
   final VoidCallback onPressed;
+  final Color color;
 
-  const AddButton({Key key, @required this.onPressed}) : super(key: key);
+  const AddButton({
+    Key key,
+    @required this.onPressed,
+    @required this.color,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return IconButton(
       icon: Icon(
         Icons.add,
-        color: Theme.of(context).primaryColor,
+        color: color,
       ),
       onPressed: onPressed,
     );

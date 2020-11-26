@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:giv_flutter/features/product/categories/bloc/categories_bloc.dart';
+import 'package:giv_flutter/model/listing/listing_type.dart';
 import 'package:giv_flutter/model/product/product_category.dart';
 import 'package:giv_flutter/util/network/http_response.dart';
 import 'package:mockito/mockito.dart';
@@ -42,12 +43,55 @@ main() {
     mockCategoryListSubject.close();
   });
 
-  test('gets categories from repository', () async {
-    await bloc.fetchCategories();
+  group('gets categories from repository', () {
+    test('when fetchAll is null', () async {
+      await bloc.fetchCategories();
 
-    verify(
-      mockProductRepository.getSearchCategories(fetchAll: anyNamed('fetchAll')),
-    ).called(1);
+      verify(
+        mockProductRepository.getSearchCategories(fetchAll: null),
+      ).called(1);
+    });
+
+    test('when fetchAll is false', () async {
+      await bloc.fetchCategories(fetchAll: false);
+
+      verify(
+        mockProductRepository.getSearchCategories(fetchAll: false),
+      ).called(1);
+    });
+
+    test('when fetchAll is true', () async {
+      await bloc.fetchCategories(fetchAll: true);
+
+      verify(
+        mockProductRepository.getSearchCategories(fetchAll: true),
+      ).called(1);
+    });
+
+    test('when type is null', () async {
+      await bloc.fetchCategories();
+
+      verify(
+        mockProductRepository.getSearchCategories(type: null),
+      ).called(1);
+    });
+
+    test('when type is donation', () async {
+      await bloc.fetchCategories(type: ListingType.donation);
+
+      verify(
+        mockProductRepository.getSearchCategories(type: ListingType.donation),
+      ).called(1);
+    });
+
+    test('when type is donation request', () async {
+      await bloc.fetchCategories(type: ListingType.donationRequest);
+
+      verify(
+        mockProductRepository.getSearchCategories(
+            type: ListingType.donationRequest),
+      ).called(1);
+    });
   });
 
   test(
@@ -59,6 +103,8 @@ main() {
               status: HttpStatus.ok, data: ProductCategory.fakeListBrowsing()));
 
       await bloc.fetchCategories();
+
+      verify(mockCategoryListStreamSink.add(null)).called(1);
 
       verify(mockCategoryListStreamSink.add(any)).called(1);
     },

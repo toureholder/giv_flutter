@@ -5,9 +5,11 @@ import 'package:giv_flutter/config/i18n/string_localizations.dart';
 import 'package:giv_flutter/features/listing/bloc/my_listings_bloc.dart';
 import 'package:giv_flutter/features/listing/bloc/new_listing_bloc.dart';
 import 'package:giv_flutter/features/listing/ui/new_listing.dart';
+import 'package:giv_flutter/model/listing/listing_type.dart';
 import 'package:giv_flutter/model/product/product.dart';
 import 'package:giv_flutter/util/data/content_stream_builder.dart';
 import 'package:giv_flutter/util/presentation/buttons.dart';
+import 'package:giv_flutter/util/presentation/create_listing_bottom_sheet.dart';
 import 'package:giv_flutter/util/presentation/custom_app_bar.dart';
 import 'package:giv_flutter/util/presentation/custom_scaffold.dart';
 import 'package:giv_flutter/util/presentation/product_grid.dart';
@@ -64,7 +66,9 @@ class _MyListingsState extends BaseState<MyListings> {
         : [
             IconButton(
               icon: Icon(Icons.add),
-              onPressed: _createNewListing,
+              onPressed: () {
+                _showContactListerBottomSheet(context);
+              },
             ),
           ];
 
@@ -83,13 +87,16 @@ class _MyListingsState extends BaseState<MyListings> {
                 listing.isActive == false);
           }
 
-          return _buildSingleChildScrollView(data);
+          return _buildSingleChildScrollView(context, data);
         },
       ),
     );
   }
 
-  Widget _buildSingleChildScrollView(List<Product> products) {
+  Widget _buildSingleChildScrollView(
+    BuildContext context,
+    List<Product> products,
+  ) {
     return products.isNotEmpty
         ? MyListingsScrollView(
             products: products,
@@ -99,17 +106,34 @@ class _MyListingsState extends BaseState<MyListings> {
           )
         : MyListingsEmptyState(
             stringFunction: string,
-            onPressed: _createNewListing,
+            onPressed: () {
+              _showContactListerBottomSheet(context);
+            },
             isSelecting: _isSelecting,
           );
   }
 
-  _createNewListing() {
-    navigation.pushReplacement(Consumer<NewListingBloc>(
-      builder: (context, bloc, child) => NewListing(
-        bloc: bloc,
-      ),
+  _goToPostPage(BuildContext context, ListingType type) {
+    navigation.pushReplacement(NewListing(
+      bloc: Provider.of<NewListingBloc>(context),
+      listingType: type,
     ));
+  }
+
+  void _showContactListerBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return CreateListingBottomSheet(
+          onDonationButtonPressed: () {
+            _goToPostPage(context, ListingType.donation);
+          },
+          onDonationRequestButtonPressed: () {
+            _goToPostPage(context, ListingType.donationRequest);
+          },
+        );
+      },
+    );
   }
 
   _toggleSelectedListingId(int value) {

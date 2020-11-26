@@ -4,11 +4,11 @@ import 'package:giv_flutter/features/base/base.dart';
 import 'package:giv_flutter/features/home/bloc/home_bloc.dart';
 import 'package:giv_flutter/features/home/ui/home.dart';
 import 'package:giv_flutter/features/listing/bloc/new_listing_bloc.dart';
-import 'package:giv_flutter/features/listing/ui/new_listing.dart';
 import 'package:giv_flutter/features/log_in/bloc/log_in_bloc.dart';
 import 'package:giv_flutter/features/product/categories/bloc/categories_bloc.dart';
 import 'package:giv_flutter/features/product/categories/ui/categories.dart';
 import 'package:giv_flutter/model/authenticated_user_updated_action.dart';
+import 'package:giv_flutter/util/presentation/buttons.dart';
 import 'package:giv_flutter/util/util.dart';
 import 'package:mockito/mockito.dart';
 import 'package:provider/provider.dart';
@@ -23,15 +23,17 @@ main() {
   MockLoginBloc mockLoginBloc;
   MockNavigatorObserver mockNavigationObserver;
   Widget testableWidget;
+  TestUtil testUtil;
 
   setUp(() {
+    testUtil = TestUtil();
     mockHomeBloc = MockHomeBloc();
     mockNewListingBloc = MockNewListingBloc();
     mockCategoriesBloc = MockCategoriesBloc();
     mockLoginBloc = MockLoginBloc();
     mockNavigationObserver = MockNavigatorObserver();
 
-    testableWidget = TestUtil().makeTestableWidget(
+    testableWidget = testUtil.makeTestableWidget(
       subject: Base(),
       dependencies: [
         Provider<NewListingBloc>(
@@ -66,17 +68,29 @@ main() {
     expect(find.byType(Home), findsOneWidget);
   });
 
-  testWidgets('navigates to create new post page when fab is tapped',
+  testWidgets('reveals buttons to create new post page when fab is tapped',
       (WidgetTester tester) async {
     await tester.pumpWidget(testableWidget);
 
     await tester.tap(find.byType(BasePageFab));
 
-    verify(mockNavigationObserver.didPush(any, any));
+    await tester.pump();
 
-    await tester.pumpAndSettle();
+    final bottomSheet = find.byType(BottomSheet);
+    final donationButton = find.descendant(
+      of: bottomSheet,
+      matching: find.byType(PrimaryButton),
+    );
+    final donationRequestButton = find.descendant(
+      of: bottomSheet,
+      matching: find.byType(AccentButton),
+    );
 
-    expect(find.byType(NewListing), findsOneWidget);
+    expect(bottomSheet, findsOneWidget);
+    expect(donationButton, findsOneWidget);
+    expect(donationRequestButton, findsOneWidget);
+
+    await testUtil.closeBottomSheetOrDialog(tester);
   });
 
   testWidgets('shows home and search bottom navigation items',

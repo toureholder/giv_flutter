@@ -1,3 +1,5 @@
+import 'package:giv_flutter/model/listing/listing_type.dart';
+import 'package:giv_flutter/model/location/location.dart';
 import 'package:giv_flutter/model/product/product_category.dart';
 import 'package:giv_flutter/model/product/repository/product_repository.dart';
 import 'package:giv_flutter/util/network/http_response.dart';
@@ -47,34 +49,103 @@ void main() {
     verify(mockProductApi.getUserProducts(userId)).called(1);
   });
 
-  test('gets categores from cache if cache is valid', () async {
-    when(mockProductCache.getCategories(any))
-        .thenReturn(ProductCategory.fakeListBrowsing());
-    final response = await productRepository.getSearchCategories();
-    // Calls cache
-    verify(mockProductCache.getCategories(any)).called(1);
-    // Doesn't call API if cache returns an Location
-    verifyZeroInteractions(mockProductApi);
-    // Returns a Location
-    expect(response.data, isA<List<ProductCategory>>());
+  group('#getSearchCategories', () {
+    test('gets categores from cache if cache is valid', () async {
+      when(mockProductCache.getCategories())
+          .thenReturn(ProductCategory.fakeListBrowsing());
+      final response = await productRepository.getSearchCategories();
+      // Calls cache
+      verify(mockProductCache.getCategories()).called(1);
+      // Doesn't call API if cache returns an Location
+      verifyZeroInteractions(mockProductApi);
+      // Returns a List<ProductCategory>
+      expect(response.data, isA<List<ProductCategory>>());
+    });
+
+    test(
+        'gets categories from API if cache is not valid and then saves result to cache',
+        () async {
+      when(mockProductCache.getCategories(
+        fetchAll: false,
+        type: ListingType.donation,
+      )).thenReturn(null);
+
+      when(mockProductApi.getSearchCategories(
+        fetchAll: false,
+        type: ListingType.donation,
+      )).thenAnswer((_) async => HttpResponse<List<ProductCategory>>(
+            data: ProductCategory.fakeListBrowsing(),
+            originalBody: 'an http response body string',
+          ));
+
+      final response = await productRepository.getSearchCategories(
+        fetchAll: false,
+        type: ListingType.donation,
+      );
+
+      // Calls cache
+      verify(
+        mockProductCache.getCategories(
+          fetchAll: false,
+          type: ListingType.donation,
+        ),
+      ).called(1);
+
+      // Calls API if cache returns null
+      verify(mockProductApi.getSearchCategories(
+        fetchAll: false,
+        type: ListingType.donation,
+      )).called(1);
+
+      // Saves API result to cache
+      verify(mockProductCache.saveCategories(
+        any,
+        fetchAll: false,
+        type: ListingType.donation,
+      )).called(1);
+
+      // Returns a List<ProductCategory>
+      expect(response.data, isA<List<ProductCategory>>());
+    });
   });
 
-  test('gets categories from API if cache is not valid and then saves result to cache', () async {
-    when(mockProductCache.getCategories(any)).thenReturn(null);
-    when(mockProductApi.getSearchCategories(fetchAll: false))
-        .thenAnswer((_) async => HttpResponse<List<ProductCategory>>(
-              data: ProductCategory.fakeListBrowsing(),
-              originalBody: 'an http response body string',
-            ));
-    final response =
-        await productRepository.getSearchCategories(fetchAll: false);
-    // Calls cache
-    verify(mockProductCache.getCategories(any)).called(1);
-    // Calls API if cache returns null
-    verify(mockProductApi.getSearchCategories(fetchAll: false)).called(1);
-    // Saves API result to cache
-    verify(mockProductCache.saveCategories(any, false)).called(1);
-    // Returns a Location
-    expect(response.data, isA<List<ProductCategory>>());
+  group('#getAllProducts', () {
+    test('calls api', () async {
+      // When
+      await productRepository.getAllProducts(
+        location: Location.fake(),
+        isHardFilter: true,
+        page: 1,
+        type: ListingType.donation,
+      );
+
+      // THen
+      verify(mockProductApi.getAllProducts(
+        location: anyNamed('location'),
+        isHardFilter: true,
+        page: 1,
+        type: ListingType.donation,
+      )).called(1);
+    });
+  });
+
+  group('#getProductsByCategory', () {
+    test('calls api', () async {
+      // When
+      await productRepository.getProductsByCategory(
+        location: Location.fake(),
+        isHardFilter: true,
+        page: 1,
+        type: ListingType.donation,
+      );
+
+      // THen
+      verify(mockProductApi.getProductsByCategory(
+        location: anyNamed('location'),
+        isHardFilter: true,
+        page: 1,
+        type: ListingType.donation,
+      )).called(1);
+    });
   });
 }

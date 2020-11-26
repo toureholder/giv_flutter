@@ -236,7 +236,7 @@ class SignInWithAppleLoadingState extends StatelessWidget {
         height: 44.0,
         color: Colors.black,
         onPressed: () {},
-        child: ButtonProgressIndicator(),
+        child: ButtonProgressIndicator(color: Colors.white),
       ),
     );
   }

@@ -5,6 +5,7 @@ import 'package:giv_flutter/features/listing/ui/edit_categories.dart';
 import 'package:giv_flutter/features/product/categories/bloc/categories_bloc.dart';
 import 'package:giv_flutter/features/product/categories/ui/categories.dart';
 import 'package:giv_flutter/features/product/categories/ui/category_list_tile.dart';
+import 'package:giv_flutter/model/listing/listing_type.dart';
 import 'package:giv_flutter/model/product/product_category.dart';
 import 'package:giv_flutter/util/presentation/buttons.dart';
 import 'package:giv_flutter/util/util.dart';
@@ -34,6 +35,7 @@ main() {
       testUtil.makeTestableWidget(
         subject: EditCategories(
           categories: categories,
+          listingType: ListingType.donation,
         ),
         dependencies: [
           Provider<CategoriesBloc>(

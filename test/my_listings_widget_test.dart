@@ -6,6 +6,7 @@ import 'package:giv_flutter/features/listing/ui/my_listings.dart';
 import 'package:giv_flutter/model/product/product.dart';
 import 'package:giv_flutter/util/data/content_stream_builder.dart';
 import 'package:giv_flutter/util/presentation/buttons.dart';
+import 'package:giv_flutter/util/presentation/create_listing_bottom_sheet.dart';
 import 'package:giv_flutter/util/presentation/custom_app_bar.dart';
 import 'package:giv_flutter/util/util.dart';
 import 'package:mockito/mockito.dart';
@@ -202,7 +203,7 @@ main() {
   });
 
   group('navigation works as expexted', () {
-    testWidgets('empty state button navigates to new listing page',
+    testWidgets('empty state button opens create listing bottom sheet',
         (WidgetTester tester) async {
       final publishSubject = PublishSubject<List<Product>>();
 
@@ -220,7 +221,11 @@ main() {
           find.descendant(of: emptyState, matching: find.byType(PrimaryButton));
       await tester.tap(emptySateButton);
 
-      verify(mockNavigationObserver.didPush(any, any));
+      await tester.pump(Duration.zero);
+
+      expect(find.byType(CreateListingBottomSheet), findsOneWidget);
+
+      await testUtil.closeBottomSheetOrDialog(tester);
 
       await publishSubject.close();
     });

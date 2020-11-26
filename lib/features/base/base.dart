@@ -8,6 +8,8 @@ import 'package:giv_flutter/features/listing/bloc/new_listing_bloc.dart';
 import 'package:giv_flutter/features/listing/ui/new_listing.dart';
 import 'package:giv_flutter/features/product/categories/bloc/categories_bloc.dart';
 import 'package:giv_flutter/features/product/categories/ui/categories.dart';
+import 'package:giv_flutter/model/listing/listing_type.dart';
+import 'package:giv_flutter/util/presentation/create_listing_bottom_sheet.dart';
 import 'package:giv_flutter/util/presentation/custom_scaffold.dart';
 import 'package:provider/provider.dart';
 
@@ -17,7 +19,9 @@ class Base extends StatefulWidget {
 
   static String actionIdHome = 'HOME';
   static String actionIdSearch = 'SEARCH';
-  static String actionIdPost = 'POST';
+  static String actionIdPostDonation = 'POST';
+  static String actionIdPostRequest = 'POST_REQUEST';
+  static String actionIdOpenPostBottomSheet = 'POST_BOTTOM_SHEET';
 }
 
 class _BaseState extends BaseState<Base> implements HomeListener {
@@ -36,7 +40,11 @@ class _BaseState extends BaseState<Base> implements HomeListener {
       onWillPop: _onBackPressed,
       child: CustomScaffold(
         body: _currentPage.child,
-        floatingActionButton: BasePageFab(onPressed: _goToPostPage),
+        floatingActionButton: BasePageFab(
+          onPressed: () {
+            _showContactListerBottomSheet(context);
+          },
+        ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         bottomNavigationBar: _buildBottomNavigationBar(),
       ),
@@ -79,12 +87,29 @@ class _BaseState extends BaseState<Base> implements HomeListener {
     }).toList();
   }
 
-  void _goToPostPage() {
-    navigation.push(Consumer<NewListingBloc>(
-      builder: (context, bloc, child) => NewListing(
-        bloc: bloc,
+  void _showContactListerBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return CreateListingBottomSheet(
+          onDonationButtonPressed: () {
+            _goToPostPage(context, ListingType.donation);
+          },
+          onDonationRequestButtonPressed: () {
+            _goToPostPage(context, ListingType.donationRequest);
+          },
+        );
+      },
+    );
+  }
+
+  void _goToPostPage(BuildContext context, ListingType listingType) {
+    navigation.push(
+      NewListing(
+        bloc: Provider.of<NewListingBloc>(context),
+        listingType: listingType,
       ),
-    ));
+    );
   }
 
   void _goToSearchPage() {
@@ -153,8 +178,18 @@ class _BaseState extends BaseState<Base> implements HomeListener {
       return;
     }
 
-    if (actionId == Base.actionIdPost) {
-      _goToPostPage();
+    if (actionId == Base.actionIdPostDonation) {
+      _goToPostPage(context, ListingType.donation);
+      return;
+    }
+
+    if (actionId == Base.actionIdPostRequest) {
+      _goToPostPage(context, ListingType.donationRequest);
+      return;
+    }
+
+    if (actionId == Base.actionIdOpenPostBottomSheet) {
+      _showContactListerBottomSheet(context);
       return;
     }
   }
@@ -168,6 +203,8 @@ class BasePageFab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FloatingActionButton.extended(
+      backgroundColor: Theme.of(context).primaryColor,
+      foregroundColor: Colors.white,
       onPressed: onPressed,
       icon: Icon(Icons.add),
       label:

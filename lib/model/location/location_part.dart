@@ -23,6 +23,8 @@ class Country extends LocationPart {
       : id = '${json['id']}',
         name = json['name'];
 
+  factory Country.fake() => Country(id: '123', name: 'Some country');
+
   static List<Country> fromDynamicList(List<dynamic> list) {
     return (list == null)
         ? []
@@ -45,7 +47,7 @@ class State extends LocationPart {
       : id = '${json['id']}',
         name = json['name'];
 
-  factory State.fake() => State(id: '123', name: 'Somes state');
+  factory State.fake() => State(id: '123', name: 'Some state');
 
   static List<State> fromDynamicList(List<dynamic> list) {
     return (list == null)
@@ -69,7 +71,7 @@ class City extends LocationPart {
       : id = '${json['id']}',
         name = json['name'];
 
-  factory City.fake() => City(id: '123', name: 'Somes state');
+  factory City.fake() => City(id: '123', name: 'Some city');
 
   static List<City> fromDynamicList(List<dynamic> list) {
     return (list == null)

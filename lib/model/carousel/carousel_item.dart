@@ -66,7 +66,7 @@ class CarouselItem {
         imageUrl: 'https://picsum.photos/400/300/?image=535',
         title: 'Abra espaço para o novo',
         caption: 'Descubra como é fácil doar',
-        actionId: Base.actionIdPost,
+        actionId: Base.actionIdPostDonation,
       ),
     ];
   }

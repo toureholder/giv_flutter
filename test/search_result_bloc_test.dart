@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:giv_flutter/features/product/search_result/bloc/search_result_bloc.dart';
+import 'package:giv_flutter/model/listing/listing_type.dart';
 import 'package:giv_flutter/model/location/location.dart';
 import 'package:giv_flutter/model/product/product_category.dart';
 import 'package:giv_flutter/model/product/product_search_result.dart';
@@ -91,13 +92,19 @@ main() {
       'gets products by category from repository if category id is supplied',
       () async {
         final categoryId = 1;
-        await bloc.fetchProducts(categoryId: categoryId);
+        final type = ListingType.donation;
+
+        await bloc.fetchProducts(
+          categoryId: categoryId,
+          type: type,
+        );
 
         verify(mockProductRepository.getProductsByCategory(
           categoryId: categoryId,
           location: anyNamed('location'),
           isHardFilter: false,
           page: 1,
+          type: type,
         )).called(1);
       },
     );
@@ -120,11 +127,14 @@ main() {
     test(
       'gets all products if neither search query or category id are supplied',
       () async {
-        await bloc.fetchProducts();
+        final type = ListingType.donation;
+
+        await bloc.fetchProducts(type: type);
         verify(mockProductRepository.getAllProducts(
           location: anyNamed('location'),
           isHardFilter: false,
           page: 1,
+          type: type,
         )).called(1);
       },
     );

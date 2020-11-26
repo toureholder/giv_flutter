@@ -495,6 +495,8 @@ class GroupDetailFAB extends StatelessWidget {
   Widget build(BuildContext context) {
     final stringFunction = GetLocalizedStringFunction(context);
     return FloatingActionButton.extended(
+      backgroundColor: Theme.of(context).primaryColor,
+      foregroundColor: Colors.white,
       onPressed: onPressed,
       elevation: 100.0,
       icon: Icon(Icons.add),

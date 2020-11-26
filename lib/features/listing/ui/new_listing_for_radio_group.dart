@@ -58,6 +58,7 @@ class NewListingForRadioGroup extends StatelessWidget {
             value: key,
             groupValue: groupValue,
             onChanged: onValueChanged,
+            activeColor: Theme.of(context).primaryColor,
           ),
           title: Text(stringFunction(value)),
           subtitle: subtitle,

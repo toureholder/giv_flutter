@@ -1,6 +1,8 @@
 import 'dart:convert';
+import 'package:meta/meta.dart';
 
 import 'package:giv_flutter/model/listing/listing_image.dart';
+import 'package:giv_flutter/model/listing/listing_type.dart';
 
 class CreateListingRequest {
   final int id;
@@ -14,17 +16,19 @@ class CreateListingRequest {
   final List<int> groupIds;
   final bool isActive;
   final bool isPrivate;
+  final ListingType listingType;
 
   CreateListingRequest({
     this.id,
-    this.title,
-    this.description,
-    this.geoNamesCityId,
-    this.geoNamesStateId,
-    this.geoNamesCountryId,
-    this.images,
-    this.categoryIds,
-    this.groupIds,
+    @required this.title,
+    @required this.description,
+    @required this.geoNamesCityId,
+    @required this.geoNamesStateId,
+    @required this.geoNamesCountryId,
+    @required this.images,
+    @required this.categoryIds,
+    @required this.groupIds,
+    @required this.listingType,
     this.isActive = true,
     this.isPrivate = false,
   });
@@ -44,6 +48,7 @@ class CreateListingRequest {
       'group_ids': groupIds,
       'is_active': isActive,
       'is_private': isPrivate,
+      'listing_type': listingTypeToStringMap[listingType],
     };
   }
 
@@ -61,6 +66,7 @@ class CreateListingRequest {
         groupIds: <int>[1, 2],
         isActive: true,
         isPrivate: true,
+        listingType: ListingType.donation,
         images: <ListingImage>[
           ListingImage(
             url: 'https://picsum.photos/500/500/?image=336',

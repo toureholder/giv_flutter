@@ -39,16 +39,58 @@ class PrimaryButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final child = isLoading ? ButtonProgressIndicator() : Text(text);
+    final child = isLoading
+        ? ButtonProgressIndicator(
+            color: CustomColors.primaryColorText,
+          )
+        : Text(text);
     final finalOnPressed = isLoading ? null : onPressed;
 
     return MainButtonTheme(
       child: FlatButton(
         color: Theme.of(context).primaryColor,
-        textColor: Colors.white,
+        textColor: CustomColors.primaryColorText,
+        disabledColor:
+            isLoading ? Theme.of(context).primaryColor : Colors.grey[200],
+        disabledTextColor: CustomColors.primaryColorText,
+        onPressed: finalOnPressed,
+        child: child,
+      ),
+      fillWidth: fillWidth,
+    );
+  }
+}
+
+class AccentButton extends StatelessWidget {
+  final VoidCallback onPressed;
+  final String text;
+  final bool isLoading;
+  final bool fillWidth;
+
+  const AccentButton(
+      {Key key,
+      this.onPressed,
+      this.text,
+      this.isLoading = false,
+      this.fillWidth = true})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final child = isLoading
+        ? ButtonProgressIndicator(
+            color: CustomColors.accentColorText,
+          )
+        : Text(text);
+    final finalOnPressed = isLoading ? null : onPressed;
+
+    return MainButtonTheme(
+      child: FlatButton(
+        color: Theme.of(context).accentColor,
+        textColor: CustomColors.accentColorText,
         disabledColor:
             isLoading ? Theme.of(context).accentColor : Colors.grey[200],
-        disabledTextColor: Colors.white,
+        disabledTextColor: Colors.black,
         onPressed: finalOnPressed,
         child: child,
       ),
@@ -61,22 +103,26 @@ class CustomIconButton extends StatelessWidget {
   final VoidCallback onPressed;
   final String text;
   final Icon icon;
-  final Color color;
+  final Color backgroundColor;
   final bool isLoading;
+  final Color textColor;
 
-  const CustomIconButton(
-      {Key key,
-      this.onPressed,
-      this.text,
-      this.icon,
-      this.color,
-      this.isLoading})
-      : super(key: key);
+  const CustomIconButton({
+    Key key,
+    @required this.onPressed,
+    @required this.text,
+    @required this.icon,
+    @required this.backgroundColor,
+    @required this.textColor,
+    @required this.isLoading,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final child = isLoading
-        ? ButtonProgressIndicator()
+        ? ButtonProgressIndicator(
+            color: textColor,
+          )
         : Stack(
             children: <Widget>[
               Row(
@@ -93,9 +139,9 @@ class CustomIconButton extends StatelessWidget {
 
     return MainButtonTheme(
       child: FlatButton(
-        color: color,
+        color: backgroundColor,
         textColor: Colors.white,
-        disabledColor: isLoading ? color : Colors.grey[200],
+        disabledColor: isLoading ? backgroundColor : Colors.grey[200],
         disabledTextColor: Colors.white,
         onPressed: finalOnPressed,
         child: child,
@@ -267,7 +313,8 @@ class FacebookButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomIconButton(
-      color: Color(0xFF3B5998),
+      backgroundColor: Color(0xFF3B5998),
+      textColor: Colors.white,
       onPressed: onPressed,
       icon: Icon(
         CustomIcons.facebook_1,
@@ -369,14 +416,20 @@ class TextFlatButton extends StatelessWidget {
 }
 
 class ButtonProgressIndicator extends StatelessWidget {
+  final Color color;
+
+  const ButtonProgressIndicator({
+    Key key,
+    @required this.color,
+  }) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       width: 26.0,
       height: 26.0,
       child: CircularProgressIndicator(
-          strokeWidth: 3.0,
-          valueColor: AlwaysStoppedAnimation<Color>(Colors.white)),
+          strokeWidth: 3.0, valueColor: AlwaysStoppedAnimation<Color>(color)),
     );
   }
 }

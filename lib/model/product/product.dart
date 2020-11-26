@@ -1,10 +1,12 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:meta/meta.dart';
 
 import 'package:faker/faker.dart';
 import 'package:giv_flutter/model/group/group.dart';
 import 'package:giv_flutter/model/image/image.dart';
 import 'package:giv_flutter/model/listing/listing_image.dart';
+import 'package:giv_flutter/model/listing/listing_type.dart';
 import 'package:giv_flutter/model/listing/repository/api/request/create_listing_request.dart';
 import 'package:giv_flutter/model/location/location.dart';
 import 'package:giv_flutter/model/product/product_category.dart';
@@ -22,6 +24,7 @@ class Product {
   bool isPrivate;
   bool isActive;
   bool isMailable;
+  ListingType listingType;
   DateTime updatedAt;
 
   Product({
@@ -29,13 +32,14 @@ class Product {
     this.title,
     this.location,
     this.description,
-    this.images,
+    @required this.images,
     this.user,
     this.categories,
-    this.groups,
+    @required this.groups,
     this.isPrivate = false,
     this.isActive = true,
     this.isMailable = false,
+    @required this.listingType,
     this.updatedAt,
   });
 
@@ -46,6 +50,7 @@ class Product {
         isActive = json['is_active'],
         isPrivate = json['is_private'],
         isMailable = false,
+        listingType = getListingTypeByString(json['listing_type']),
         updatedAt = DateTime.parse(json['updated_at']),
         location = Location.fromLocationPartIds(
             countryId: json['geonames_country_id'],
@@ -76,6 +81,9 @@ class Product {
 
   bool get isLocationComplete => location?.isOk ?? false;
 
+  bool get isDonation => listingType == ListingType.donation;
+  bool get isDonationRequest => listingType == ListingType.donationRequest;
+
   Product copy() {
     var images = this.images == null ? null : List<Image>.from(this.images);
     var categories = this.categories == null
@@ -90,6 +98,7 @@ class Product {
       isActive: isActive,
       isMailable: isMailable,
       isPrivate: isPrivate,
+      listingType: listingType,
       location: Location(
           country: location?.country,
           state: location?.state,
@@ -114,6 +123,7 @@ class Product {
       groupIds: groups?.map((it) => it.id)?.toList(),
       isActive: isActive,
       isPrivate: isPrivate,
+      listingType: listingType,
     );
   }
 
@@ -141,6 +151,7 @@ class Product {
             simpleName: "Música e hobbies",
           )
         ],
+        listingType: ListingType.donation,
         groups: Group.fakeList(),
         updatedAt: DateTime(1982, 8, 11),
         user: User.fake());
@@ -165,6 +176,7 @@ class Product {
           simpleName: "Música e hobbies",
         )
       ],
+      listingType: ListingType.donation,
       groups: Group.fakeList(),
       user: User.fake(),
     );
@@ -186,6 +198,7 @@ class Product {
           simpleName: "Música e hobbies",
         )
       ],
+      listingType: ListingType.donation,
       groups: Group.fakeList(),
       user: User.fake(),
     );
@@ -208,6 +221,7 @@ class Product {
           simpleName: "Música e hobbies",
         )
       ],
+      listingType: ListingType.donation,
       groups: Group.fakeList(),
       user: User.fake(),
     );
@@ -230,6 +244,7 @@ class Product {
           simpleName: "Música e hobbies",
         )
       ],
+      listingType: ListingType.donation,
       groups: Group.fakeList(),
       user: User.fake(),
     );

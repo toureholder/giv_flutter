@@ -103,6 +103,8 @@ class EditGroupAddImageFab extends StatelessWidget {
       bottom: 0.0,
       right: 48.0,
       child: FloatingActionButton(
+        backgroundColor: Theme.of(context).primaryColor,
+        foregroundColor: Colors.white,
         onPressed: onPressed,
         child: Icon(Icons.camera_alt),
         elevation: 2.0,

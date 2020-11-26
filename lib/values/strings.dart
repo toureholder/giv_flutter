@@ -12,6 +12,14 @@ class Strings {
     "base_page_title_post": {"en": "Post", "pt": "Alguém Quer?"},
     "base_page_title_messages": {"en": "Messages", "pt": "Mensagens"},
     "base_page_title_projects": {"en": "Projects", "pt": "Projetos"},
+    "base_page_create_donation_action": {
+      "en": "I want do give something away",
+      "pt": "Quero doar algo"
+    },
+    "base_page_create_donation_request_action": {
+      "en": "I want ask for something",
+      "pt": "Quero fazer um pedido de doação"
+    },
     "search_hint": {"en": "search...", "pt": "busque..."},
     "search_result_x_results": {
       "en": "$formatItem Results",
@@ -66,6 +74,7 @@ class Strings {
     "common_loading": {"en": "Loading...", "pt": "Carregando..."},
     "location_filter_title": {"en": "Location", "pt": "Localização"},
     "i_want_it": {"en": "I want it", "pt": "Eu quero"},
+    "i_want_to_help": {"en": "I want to help", "pt": "Eu quero ajudar"},
     "home_see_more": {"en": "View all", "pt": "Veja mais"},
     "shared_action_create_ad": {"en": "Donate stuff", "pt": "Anunciar"},
     "shared_action_sign_in": {"en": "Sign in", "pt": "Entrar"},
@@ -145,6 +154,12 @@ class Strings {
       "pt":
           "Olá! Me interessei pelo seu anúncio '$formatItem' no Alguém Quer? :)"
     },
+    "whatsapp_message_i_want_to_help": {
+      "en":
+          "Hello! I saw your '$formatItem' request on Alguém Quer? And i'd like to help.",
+      "pt":
+          "Olá! Vi seu pedido '$formatItem' no Alguém Quer? E eu quero ajudar."
+    },
     ''
         "settings_title": {
       ''
@@ -188,6 +203,12 @@ class Strings {
           "People interested in your donations will use WhatsApp to get in touch with you.\n\nWe need to send you a verification code to verify your number.",
       "pt":
           "Pessoas interessadas nos seus anúncios vão usar o WhatsApp para entrar em contato contigo.\n\nVamos confirmar seu número, te enviando um código de verificação."
+    },
+    "settings_donation_request_edit_phone_number_hint": {
+      "en":
+          "People interested in your donations will use WhatsApp to get in touch with you.\n\nWe need to send you a verification code to verify your number.",
+      "pt":
+          "Se alguém vir seu pedido e quiser entrar em contato contigo vão usar o WhatsApp.\n\nVamos confirmar seu número, te enviando um código de verificação."
     },
     "settings_edit_phone_number_input_number_title": {
       "en": "Confirm your phone number",
@@ -291,9 +312,17 @@ class Strings {
       "en": "Beautiful photos of the item being donated",
       "pt": "Fotos maneiras do item sendo doado"
     },
+    "new_donation_request_listing_section_title_photos": {
+      "en": "Images",
+      "pt": "Imagens"
+    },
     "new_listing_section_title_about": {
       "en": "About the donations",
       "pt": "Sobre a doação"
+    },
+    "new_donation_request_listing_section_title_about": {
+      "en": "What are you in need of?",
+      "pt": "De que você está precisando?"
     },
     "new_listing_section_title_for_who": {
       "en": "Who is this donation for",
@@ -316,16 +345,28 @@ class Strings {
       "en": "Create listing",
       "pt": "Criar anúncio"
     },
+    "new_donation_request_listing_action_create": {
+      "en": "Create request",
+      "pt": "Criar pedido"
+    },
     "edit_listing_action_save": {"en": "Save", "pt": "Salvar"},
     "new_listing_tile_name": {"en": "Title", "pt": "Título"},
     "new_listing_tile_name_empty_state": {
       "en": "Tap to give your listing a title",
       "pt": "Toque para adicionar o título do anúncio"
     },
+    "new_donation_request_listing_tile_name_empty_state": {
+      "en": "Tap to give your request a title",
+      "pt": "Toque para adicionar um título ao seu pedido"
+    },
     "new_listing_tile_description": {"en": "Description", "pt": "Descrição"},
     "new_listing_tile_description_empty_state": {
-      "en": "Describe what you are donating",
+      "en": "Describe what you are giving away",
       "pt": "Fale um pouco sobre o que você está doando"
+    },
+    "new_donation_request_listing_tile_description_empty_state": {
+      "en": "Describe what you are asking for",
+      "pt": "Fale um pouco sobre o que você está pedindo"
     },
     "new_listing_tile_category": {"en": "Category", "pt": "Categoria"},
     "new_listing_tile_category_empty_state": {
@@ -342,23 +383,36 @@ class Strings {
       "en": "Where can this donation be picked up?",
       "pt": "Onde esta doação pode ser retirada?"
     },
+    "new_donation_request_listing_tile_location_empty_state": {
+      "en": "Select your city",
+      "pt": "Informe sua cidade"
+    },
     "new_listing_tile_phone_number_empty_state": {
       "en": "Add a mobile phone number",
       "pt": "Adicione um telefone de contato"
     },
     "new_listing_images_hint": {
       "en": "Don't forget to add some photos :)",
-      "pt": "Bote umas fotos aí ;)"
+      "pt": "Inclua pelo menos uma imagem"
     },
     "new_listing_edit_title_hint": {
       "en": "Give your listing a title",
       "pt": "Dê um título para seu anúncio"
+    },
+    "new_donation_request_listing_edit_title_hint": {
+      "en": "Give your listing a title",
+      "pt": "Dê um título para seu pedido"
     },
     "new_listing_edit_description_hint": {
       "en":
           "Add a few lines about the level of wear and tear of the donation and anything else you find relevant :)",
       "pt":
           "Fale um pouco sobre o estado de conservação da doação e qualquer outra coisa que achar relevante :)"
+    },
+    "new_donation_request_listing_edit_description_hint": {
+      "en":
+          "Use this space to add a few lines about what you need and anything else you find relevant :)",
+      "pt": "Você pode usar este espaço para falar mais sobre sua necessidade."
     },
     "new_listing_edit_groups_screen_title": {
       "en": "Select groups",
@@ -389,6 +443,10 @@ class Strings {
       "en": "Creating listing...",
       "pt": "Criando anúncio..."
     },
+    "new_donation_request_listing_uploading": {
+      "en": "Creating request...",
+      "pt": "Criando pedido..."
+    },
     "edit_listing_uploading": {"en": "Saving...", "pt": "Salvando..."},
     "new_listing_cancel_confirmation_title": {
       "en": "Cancel?",
@@ -409,6 +467,7 @@ class Strings {
     "me_listings": {"en": "My listings", "pt": "Meus anúncios"},
     "me_groups": {"en": "My groups", "pt": "Meus grupos"},
     "common_help": {"en": "Help", "pt": "Fale conosco"},
+    "common_donation_request": {"en": "Request", "pt": "Pedido"},
     "help_message": {
       "en": "Hi! I'm using Alguém Quer? and I need some help :)",
       "pt": "Oi! Eu estou usando o Alguém Quer? e eu queria uma ajuda :)"
@@ -547,6 +606,19 @@ class Strings {
     "categories_everything_list_item_title": {
       "en": "Everything, everything",
       "pt": "Tudo"
+    },
+    "categories_all_donations_list_item_title": {
+      "en": "Everything, everything",
+      "pt": "Todas as doçãoes"
+    },
+    "categories_all_donations_requests_list_item_title": {
+      "en": "Everything, everything",
+      "pt": "Todos os pedidos"
+    },
+    "categories_type_donations": {"en": "Give aways", "pt": "Doações"},
+    "categories_type_donation_requests": {
+      "en": "Donation requests",
+      "pt": "Pedidos de doação"
     },
     "error_upload_listing_report_message": {
       "en":

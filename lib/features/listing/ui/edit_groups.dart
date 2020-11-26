@@ -175,6 +175,7 @@ class EditGroupsCheckBox extends StatelessWidget {
       onChanged: (newValue) {
         onChecked.call(newValue, group);
       },
+      activeColor: Theme.of(context).primaryColor,
       controlAffinity: ListTileControlAffinity.platform,
     );
   }

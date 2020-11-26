@@ -1,3 +1,4 @@
+import 'package:giv_flutter/model/listing/listing_type.dart';
 import 'package:giv_flutter/model/location/location.dart';
 import 'package:giv_flutter/model/product/product_category.dart';
 import 'package:giv_flutter/model/product/product_search_result.dart';
@@ -44,6 +45,7 @@ class SearchResultBloc {
     Location locationFilter,
     bool isHardFilter = false,
     int page = 1,
+    ListingType type,
   }) async {
     try {
       searchResultSubject.sink.add(StreamEvent.loading());
@@ -57,6 +59,7 @@ class SearchResultBloc {
           categoryId: categoryId,
           location: locationFilter,
           isHardFilter: isHardFilter,
+          type: type,
           page: page,
         );
       } else if (searchQuery != null) {
@@ -71,6 +74,7 @@ class SearchResultBloc {
           location: locationFilter,
           isHardFilter: isHardFilter,
           page: page,
+          type: type,
         );
       }
 

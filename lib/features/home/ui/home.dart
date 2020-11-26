@@ -45,7 +45,8 @@ class Home extends StatefulWidget {
   final HomeBloc bloc;
 
   static String actionIdSearch = Base.actionIdSearch;
-  static String actionIdPost = Base.actionIdPost;
+  static String actionIdPostDonation = Base.actionIdPostDonation;
+  static String actionIdOpenPostBottomSheet = Base.actionIdOpenPostBottomSheet;
   static const String actionIdJoinGroup = "JOIN_GROUP";
   static const String actionIdCreateGroup = "CREATE_GROUP";
   static const String actionIdMyGroups = "MY_GROUPS";
@@ -225,7 +226,12 @@ class _HomeState extends BaseState<Home> {
       ));
 
   void _handleQuickMenuClick(String actionId) {
-    final baseWidgetActions = <String>[Base.actionIdSearch, Base.actionIdPost];
+    final baseWidgetActions = <String>[
+      Base.actionIdSearch,
+      Base.actionIdPostDonation,
+      Base.actionIdPostRequest,
+      Base.actionIdOpenPostBottomSheet,
+    ];
 
     if (baseWidgetActions.contains(actionId)) {
       widget.listener.invokeActionById(actionId);

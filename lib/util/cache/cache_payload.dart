@@ -5,8 +5,11 @@ class CachePayload {
   final int ttlInSeconds;
   final String serializedData;
 
-  CachePayload(
-      {this.updatedAt, this.ttlInSeconds, @required this.serializedData});
+  CachePayload({
+    this.updatedAt,
+    this.ttlInSeconds,
+    @required this.serializedData,
+  });
 
   static final String dateTimeKey = 'dateTime';
   static final String ttlKey = 'ttl';

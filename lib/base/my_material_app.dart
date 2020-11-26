@@ -15,6 +15,7 @@ import 'package:giv_flutter/features/sign_up/bloc/sign_up_bloc.dart';
 import 'package:giv_flutter/features/splash/bloc/splash_bloc.dart';
 import 'package:giv_flutter/features/splash/ui/splash.dart';
 import 'package:giv_flutter/features/user_profile/bloc/user_profile_bloc.dart';
+import 'package:giv_flutter/values/colors.dart';
 import 'package:provider/provider.dart';
 
 class MyMaterialApp extends StatefulWidget {
@@ -37,6 +38,7 @@ class _MyMaterialAppState extends State<MyMaterialApp> {
         theme: new ThemeData(
           primaryColor: Colors.blue,
           backgroundColor: Colors.blue,
+          accentColor: CustomColors.accentColor,
         ),
         home: Consumer<SplashBloc>(
           builder: (context, bloc, child) => Splash(bloc: bloc),
