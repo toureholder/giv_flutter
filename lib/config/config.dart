@@ -1,6 +1,6 @@
 class Config {
-  static const versionName = '1.8.1';
-  static const buildNumber = 23;
+  static const versionName = '1.9.0';
+  static const buildNumber = 24;
   static const clientName = 'mobile';
   static const baseUrl = 'https://api.alguemquer.com.br';
   static const defaultCountryCallingCode = '55';
