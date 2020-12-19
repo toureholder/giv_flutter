@@ -54,7 +54,10 @@ main() {
 
   Widget makeTestableWidget({Location location, bool showSaveButton = false}) =>
       testUtil.makeTestableWidget(
-        subject: LocationFilter(bloc: mockLocationFilterBloc),
+        subject: LocationFilter(
+          bloc: mockLocationFilterBloc,
+          requireCompleteLocation: false,
+        ),
         dependencies: [
           Provider<LocationFilterBloc>(
             create: (_) => mockLocationFilterBloc,

@@ -73,6 +73,18 @@ class Strings {
     "filters_subtitle_nearby": {"en": "Nearby", "pt": "Perto de mim"},
     "common_loading": {"en": "Loading...", "pt": "Carregando..."},
     "location_filter_title": {"en": "Location", "pt": "Localização"},
+    "location_filter_error_country_required": {
+      "en": "Choose a country",
+      "pt": "Escolha um país"
+    },
+    "location_filter_error_state_required": {
+      "en": "Choose a state",
+      "pt": "Escolha um estado"
+    },
+    "location_filter_error_city_required": {
+      "en": "Choose a city",
+      "pt": "Escolha uma cidade"
+    },
     "i_want_it": {"en": "I want it", "pt": "Eu quero"},
     "i_want_to_help": {"en": "I want to help", "pt": "Eu quero ajudar"},
     "home_see_more": {"en": "View all", "pt": "Veja mais"},

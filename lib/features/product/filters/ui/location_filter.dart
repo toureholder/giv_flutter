@@ -152,7 +152,7 @@ class _LocationFilterState extends BaseState<LocationFilter> {
           isError: isError,
         ),
         LocationFilterErrorMessage(
-          text: 'Escolha um país',
+          text: 'location_filter_error_country_required',
           show: isError,
         ),
       ],
@@ -223,7 +223,7 @@ class _LocationFilterState extends BaseState<LocationFilter> {
           ),
         ),
         LocationFilterErrorMessage(
-          text: 'Escolha um estado',
+          text: 'location_filter_error_state_required',
           show: isError,
         ),
       ],
@@ -276,7 +276,7 @@ class _LocationFilterState extends BaseState<LocationFilter> {
           ),
         ),
         LocationFilterErrorMessage(
-          text: 'Escolha uma cidade',
+          text: 'location_filter_error_city_required',
           show: isError,
         ),
       ],
@@ -364,7 +364,7 @@ class LocationFilterErrorMessage extends StatelessWidget {
         ? Padding(
             padding: const EdgeInsets.only(left: 16.0, bottom: 16.0),
             child: Body2Text(
-              text,
+              GetLocalizedStringFunction(context)(text),
               color: Colors.red,
             ),
           )

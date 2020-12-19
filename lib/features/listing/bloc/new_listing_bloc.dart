@@ -71,7 +71,10 @@ class NewListingBloc extends BaseBlocWithAuth {
     savedProductPublishSubject.close();
   }
 
-  Location getPreferredLocation() => diskStorage.getLocation();
+  Location getPreferredLocation() {
+    final location = diskStorage.getLocation();
+    return (location?.isComplete ?? false) ? location : null;
+  }
 
   loadCompleteLocation(Location location) async {
     Location resolvedLocation;
