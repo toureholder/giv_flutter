@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:giv_flutter/features/home/bloc/home_bloc.dart';
 import 'package:giv_flutter/features/home/ui/home.dart';
+import 'package:giv_flutter/util/presentation/icon_buttons.dart';
 
 class AppBarActionsRow extends StatelessWidget {
   final HomeBloc homeBloc;
@@ -18,7 +19,9 @@ class AppBarActionsRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final authenticatedUser = homeBloc.getUser();
     final userWidget = authenticatedUser == null
-        ? SignInButton(onPressed: onSignInButtonPressed)
+        ? MenuIconButton(
+            onPressed: onSignInButtonPressed,
+          )
         : HomeUserAvatar(
             imageUrl: authenticatedUser.avatarUrl,
             onTap: onHomeUserAvatarTap,

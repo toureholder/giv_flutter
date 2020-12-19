@@ -13,6 +13,7 @@ import 'package:giv_flutter/model/carousel/carousel_item.dart';
 import 'package:giv_flutter/model/product/product_category.dart';
 import 'package:giv_flutter/model/user/user.dart';
 import 'package:giv_flutter/util/data/content_stream_builder.dart';
+import 'package:giv_flutter/util/presentation/icon_buttons.dart';
 import 'package:giv_flutter/util/util.dart';
 import 'package:mockito/mockito.dart';
 import 'package:provider/provider.dart';
@@ -130,7 +131,7 @@ main() {
 
       await tester.pumpWidget(testableWidget);
 
-      expect(find.byType(SignInButton), findsOneWidget);
+      expect(find.byType(MenuIconButton), findsOneWidget);
       expect(find.byType(HomeUserAvatar), findsNothing);
     });
 

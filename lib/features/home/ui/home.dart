@@ -83,7 +83,7 @@ class _HomeState extends BaseState<Home> {
           Consumer<AuthUserUpdatedAction>(
             builder: (context, state, child) => AppBarActionsRow(
               homeBloc: _homeBloc,
-              onSignInButtonPressed: _navigateToSignIn,
+              onSignInButtonPressed: _navigateToSettings,
               onHomeUserAvatarTap: _navigateToSettings,
             ),
           ),
@@ -205,12 +205,6 @@ class _HomeState extends BaseState<Home> {
       loop: true,
     );
   }
-
-  void _navigateToSignIn() => navigation.push(Consumer<LogInBloc>(
-        builder: (context, bloc, child) => SignIn(
-          bloc: bloc,
-        ),
-      ));
 
   void _navigateToSettings() => navigation.push(Consumer<SettingsBloc>(
         builder: (context, bloc, child) => Settings(

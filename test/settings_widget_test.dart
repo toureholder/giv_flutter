@@ -4,9 +4,11 @@ import 'package:giv_flutter/features/about/bloc/about_bloc.dart';
 import 'package:giv_flutter/features/about/ui/about.dart';
 import 'package:giv_flutter/features/home/bloc/home_bloc.dart';
 import 'package:giv_flutter/features/listing/bloc/my_listings_bloc.dart';
+import 'package:giv_flutter/features/log_in/bloc/log_in_bloc.dart';
 import 'package:giv_flutter/features/settings/bloc/settings_bloc.dart';
 import 'package:giv_flutter/features/settings/ui/edit_profile.dart';
 import 'package:giv_flutter/features/settings/ui/settings.dart';
+import 'package:giv_flutter/features/sign_in/ui/sign_in.dart';
 import 'package:giv_flutter/model/user/user.dart';
 import 'package:giv_flutter/util/util.dart';
 import 'package:mockito/mockito.dart';
@@ -44,6 +46,9 @@ main() {
         Provider<HomeBloc>(
           create: (_) => MockHomeBloc(),
         ),
+        Provider<LogInBloc>(
+          create: (_) => MockLoginBloc(),
+        ),
         Provider<Util>(
           create: (_) => MockUtil(),
         ),
@@ -52,34 +57,159 @@ main() {
         mockNavigatorObserver,
       ],
     );
-
-    when(mockSettingsBloc.getUser()).thenReturn(User.fake());
   });
 
-  testWidgets('navigates to profile widget', (WidgetTester tester) async {
-    await tester.pumpWidget(testableWidget);
+  group('user is logged in', () {
+    setUp(() {
+      when(mockSettingsBloc.getUser()).thenReturn(User.fake());
+    });
 
-    await tester.tap(find.byType(ProfileTile));
+    group('displays corrrect tiles', () {
+      testWidgets('displays ProfileTile', (WidgetTester tester) async {
+        await tester.pumpWidget(testableWidget);
+        expect(find.byType(ProfileTile), findsOneWidget);
+      });
 
-    verify(mockNavigatorObserver.didPush(any, any));
+      testWidgets('displays MyListingsTile', (WidgetTester tester) async {
+        await tester.pumpWidget(testableWidget);
+        expect(find.byType(MyListingsTile), findsOneWidget);
+      });
 
-    await tester.pumpAndSettle();
+      testWidgets('displays MyGroupsTile', (WidgetTester tester) async {
+        await tester.pumpWidget(testableWidget);
+        expect(find.byType(MyGroupsTile), findsOneWidget);
+      });
 
-    expect(find.byType(EditProfile), findsOneWidget);
+      testWidgets('displays LogOutTile', (WidgetTester tester) async {
+        await tester.pumpWidget(testableWidget);
+        expect(find.byType(LogOutTile), findsOneWidget);
+      });
 
-    await tester.tap(find.byType(BackButton));
+      testWidgets('displays SignInTile', (WidgetTester tester) async {
+        await tester.pumpWidget(testableWidget);
+        expect(find.byType(SignInTile), findsNothing);
+      });
+    });
 
-    await tester.pumpAndSettle();
+    testWidgets('navigates to profile widget', (WidgetTester tester) async {
+      await tester.pumpWidget(testableWidget);
 
-    expect(find.byType(Settings), findsOneWidget);
+      await tester.tap(find.byType(ProfileTile));
+
+      verify(mockNavigatorObserver.didPush(any, any));
+
+      await tester.pumpAndSettle();
+
+      expect(find.byType(EditProfile), findsOneWidget);
+
+      await tester.tap(find.byType(BackButton));
+
+      await tester.pumpAndSettle();
+
+      expect(find.byType(Settings), findsOneWidget);
+    });
+
+    testWidgets('navigates to my listings', (WidgetTester tester) async {
+      await tester.pumpWidget(testableWidget);
+
+      await tester.tap(find.byType(MyListingsTile));
+
+      verify(mockNavigatorObserver.didPush(any, any));
+    });
+
+    group('logging out', () {
+      testWidgets('shows logout confirmation dialog',
+          (WidgetTester tester) async {
+        await tester.pumpWidget(testableWidget);
+
+        await tester.tap(find.byType(LogOutTile));
+
+        await tester.pump(Duration.zero);
+
+        final Finder dialog = find.byType(AlertDialog);
+        final Finder content =
+            testUtil.findInternationalizedText('logout_confirmation_title');
+        expect(find.descendant(of: dialog, matching: content), findsOneWidget);
+      });
+
+      testWidgets('logout confirmation dialog can be "cancelled"',
+          (WidgetTester tester) async {
+        await tester.pumpWidget(testableWidget);
+
+        await tester.tap(find.byType(LogOutTile));
+
+        await tester.pump(Duration.zero);
+
+        final Finder dialog = find.byType(AlertDialog);
+        final Finder content =
+            testUtil.findInternationalizedText('logout_confirmation_title');
+        expect(find.descendant(of: dialog, matching: content), findsOneWidget);
+
+        final Finder cancelTextFinder =
+            testUtil.findInternationalizedText('shared_action_cancel');
+
+        final Finder cancelButtonFinder = find.ancestor(
+            of: cancelTextFinder, matching: find.byType(FlatButton));
+        expect(cancelButtonFinder, findsOneWidget);
+
+        await tester.tap(cancelButtonFinder);
+
+        await tester.pump(Duration.zero);
+
+        expect(find.byType(AlertDialog), findsNothing);
+      });
+    });
   });
 
-  testWidgets('navigates to my listings', (WidgetTester tester) async {
-    await tester.pumpWidget(testableWidget);
+  group('user is NOT logged in', () {
+    setUp(() {
+      when(mockSettingsBloc.getUser()).thenReturn(null);
+    });
 
-    await tester.tap(find.byType(MyListingsTile));
+    group('displays corrrect tiles', () {
+      testWidgets('displays ProfileTile', (WidgetTester tester) async {
+        await tester.pumpWidget(testableWidget);
+        expect(find.byType(ProfileTile), findsNothing);
+      });
 
-    verify(mockNavigatorObserver.didPush(any, any));
+      testWidgets('displays MyListingsTile', (WidgetTester tester) async {
+        await tester.pumpWidget(testableWidget);
+        expect(find.byType(MyListingsTile), findsNothing);
+      });
+
+      testWidgets('displays MyGroupsTile', (WidgetTester tester) async {
+        await tester.pumpWidget(testableWidget);
+        expect(find.byType(MyGroupsTile), findsNothing);
+      });
+
+      testWidgets('displays LogOutTile', (WidgetTester tester) async {
+        await tester.pumpWidget(testableWidget);
+        expect(find.byType(LogOutTile), findsNothing);
+      });
+
+      testWidgets('displays SignInTile', (WidgetTester tester) async {
+        await tester.pumpWidget(testableWidget);
+        expect(find.byType(SignInTile), findsOneWidget);
+      });
+    });
+
+    testWidgets('navigates to sign in screen', (WidgetTester tester) async {
+      await tester.pumpWidget(testableWidget);
+
+      await tester.tap(find.byType(SignInTile));
+
+      verify(mockNavigatorObserver.didPush(any, any));
+
+      await tester.pumpAndSettle();
+
+      expect(find.byType(SignIn), findsOneWidget);
+
+      await tester.tap(find.byType(BackButton));
+
+      await tester.pumpAndSettle();
+
+      expect(find.byType(Settings), findsOneWidget);
+    });
   });
 
   testWidgets('navigates to about page', (WidgetTester tester) async {
@@ -98,48 +228,5 @@ main() {
     await tester.pumpWidget(testableWidget);
 
     await tester.tap(find.byType(HelpTile));
-  });
-
-  group('logging out', () {
-    testWidgets('shows logout confirmation dialog',
-        (WidgetTester tester) async {
-      await tester.pumpWidget(testableWidget);
-
-      await tester.tap(find.byType(LogOutTile));
-
-      await tester.pump(Duration.zero);
-
-      final Finder dialog = find.byType(AlertDialog);
-      final Finder content =
-          testUtil.findInternationalizedText('logout_confirmation_title');
-      expect(find.descendant(of: dialog, matching: content), findsOneWidget);
-    });
-
-    testWidgets('logout confirmation dialog can be "cancelled"',
-        (WidgetTester tester) async {
-      await tester.pumpWidget(testableWidget);
-
-      await tester.tap(find.byType(LogOutTile));
-
-      await tester.pump(Duration.zero);
-
-      final Finder dialog = find.byType(AlertDialog);
-      final Finder content =
-          testUtil.findInternationalizedText('logout_confirmation_title');
-      expect(find.descendant(of: dialog, matching: content), findsOneWidget);
-
-      final Finder cancelTextFinder =
-          testUtil.findInternationalizedText('shared_action_cancel');
-
-      final Finder cancelButtonFinder = find.ancestor(
-          of: cancelTextFinder, matching: find.byType(FlatButton));
-      expect(cancelButtonFinder, findsOneWidget);
-
-      await tester.tap(cancelButtonFinder);
-
-      await tester.pump(Duration.zero);
-
-      expect(find.byType(AlertDialog), findsNothing);
-    });
   });
 }

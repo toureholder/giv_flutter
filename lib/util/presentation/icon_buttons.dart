@@ -40,6 +40,16 @@ class CopyIconButton extends StatelessWidget {
       IconButton(icon: Icon(Icons.content_copy), onPressed: onPressed);
 }
 
+class MenuIconButton extends StatelessWidget {
+  final VoidCallback onPressed;
+
+  const MenuIconButton({Key key, @required this.onPressed}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) =>
+      IconButton(icon: Icon(Icons.menu), onPressed: onPressed);
+}
+
 class EditIconButton extends StatelessWidget {
   final VoidCallback onPressed;
   final Color color;

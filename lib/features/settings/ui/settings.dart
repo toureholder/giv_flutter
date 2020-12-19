@@ -8,8 +8,10 @@ import 'package:giv_flutter/features/groups/my_groups/bloc/my_groups_bloc.dart';
 import 'package:giv_flutter/features/groups/my_groups/ui/my_groups_screen.dart';
 import 'package:giv_flutter/features/listing/bloc/my_listings_bloc.dart';
 import 'package:giv_flutter/features/listing/ui/my_listings.dart';
+import 'package:giv_flutter/features/log_in/bloc/log_in_bloc.dart';
 import 'package:giv_flutter/features/settings/bloc/settings_bloc.dart';
 import 'package:giv_flutter/features/settings/ui/edit_profile.dart';
+import 'package:giv_flutter/features/sign_in/ui/sign_in.dart';
 import 'package:giv_flutter/model/image/image.dart' as CustomImage;
 import 'package:giv_flutter/model/user/user.dart';
 import 'package:giv_flutter/util/presentation/avatar_image.dart';
@@ -46,7 +48,7 @@ class _SettingsState extends BaseState<Settings> {
     super.build(context);
 
     return CustomScaffold(
-      appBar: CustomAppBar(title: string('common_me')),
+      appBar: CustomAppBar(),
       body: _stack(_user),
     );
   }
@@ -58,20 +60,24 @@ class _SettingsState extends BaseState<Settings> {
   }
 
   ListView _mainListView(User user) {
+    final isAuthenticated = user != null;
+
     return ListView(
       children: <Widget>[
-        ProfileTile(avatarUrl: user.avatarUrl, onTap: _goToProfile),
+        if (!isAuthenticated) SignInTile(onTap: _goToSignIn),
+        if (isAuthenticated)
+          ProfileTile(avatarUrl: user.avatarUrl, onTap: _goToProfile),
         CustomDivider(),
-        MyListingsTile(onTap: _goToMyListings),
-        CustomDivider(),
-        MyGroupsTile(onTap: _navigateToMyGroups),
-        CustomDivider(),
+        if (isAuthenticated) MyListingsTile(onTap: _goToMyListings),
+        if (isAuthenticated) CustomDivider(),
+        if (isAuthenticated) MyGroupsTile(onTap: _navigateToMyGroups),
+        if (isAuthenticated) CustomDivider(),
         AboutTheAppTile(onTap: _goToAbout),
         CustomDivider(),
         HelpTile(onTap: _whatsAppCustomerService),
         CustomDivider(),
-        LogOutTile(onTap: _confirmLogout),
-        CustomDivider()
+        if (isAuthenticated) LogOutTile(onTap: _confirmLogout),
+        if (isAuthenticated) CustomDivider()
       ],
     );
   }
@@ -138,6 +144,14 @@ class _SettingsState extends BaseState<Settings> {
     });
   }
 
+  void _goToSignIn() {
+    navigation.push(Consumer<LogInBloc>(
+      builder: (context, bloc, child) => SignIn(
+        bloc: bloc,
+      ),
+    ));
+  }
+
   void _goToMyListings() {
     navigation.push(Consumer<MyListingsBloc>(
       builder: (context, bloc, child) => MyListings(
@@ -165,9 +179,13 @@ class SettingsListTile extends StatelessWidget {
   final GestureTapCallback onTap;
   final bool hideTrailing;
 
-  const SettingsListTile(
-      {Key key, this.leading, this.text, this.onTap, this.hideTrailing = false})
-      : super(key: key);
+  const SettingsListTile({
+    Key key,
+    this.leading,
+    this.text,
+    this.onTap,
+    this.hideTrailing = false,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -175,6 +193,21 @@ class SettingsListTile extends StatelessWidget {
       leading: leading,
       title: Text(text),
       trailing: hideTrailing ? null : Icon(Icons.chevron_right),
+      onTap: onTap,
+    );
+  }
+}
+
+class SignInTile extends StatelessWidget {
+  final GestureTapCallback onTap;
+
+  const SignInTile({Key key, @required this.onTap}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SettingsListTile(
+      leading: Icon(Icons.account_circle_outlined),
+      text: GetLocalizedStringFunction(context)('shared_action_sign_in'),
       onTap: onTap,
     );
   }
