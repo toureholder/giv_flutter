@@ -10,6 +10,11 @@ class LocationPart {
       this == null ||
       (id != null && id.isNotEmpty) && (name != null && name.isNotEmpty);
 
+  bool get isFilledIn =>
+      this != null &&
+      (id != null && id.isNotEmpty) &&
+      (name != null && name.isNotEmpty);
+
   bool get propertiesAreNull => id == null && name == null;
 }
 

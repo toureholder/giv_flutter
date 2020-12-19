@@ -10,8 +10,10 @@ import 'package:giv_flutter/util/data/content_stream_builder.dart';
 import 'package:giv_flutter/util/data/stream_event.dart';
 import 'package:giv_flutter/util/presentation/buttons.dart';
 import 'package:giv_flutter/util/presentation/custom_app_bar.dart';
+import 'package:giv_flutter/util/presentation/custom_dropdown_button_underline.dart';
 import 'package:giv_flutter/util/presentation/custom_scaffold.dart';
 import 'package:giv_flutter/util/presentation/spacing.dart';
+import 'package:giv_flutter/util/presentation/typography.dart';
 import 'package:giv_flutter/values/dimens.dart';
 
 class LocationFilter extends StatefulWidget {
@@ -19,6 +21,7 @@ class LocationFilter extends StatefulWidget {
   final bool showSaveButton;
   final LocationFilterBloc bloc;
   final ListingType listingType;
+  final bool requireCompleteLocation;
 
   const LocationFilter({
     Key key,
@@ -26,6 +29,7 @@ class LocationFilter extends StatefulWidget {
     this.location,
     this.showSaveButton = false,
     this.listingType,
+    @required this.requireCompleteLocation,
   }) : super(key: key);
 
   @override
@@ -37,13 +41,19 @@ class _LocationFilterState extends BaseState<LocationFilter> {
   LocationList _locationList;
   Location _currentLocation;
   ListingType _listingType;
+  bool _isCountryError = false;
+  bool _isStateError = false;
+  bool _isCityError = false;
+  bool _isValidating = false;
 
   @override
   void initState() {
     super.initState();
-    _listingType = widget.listingType;
-    _currentLocation = widget.location?.copy() ?? Location();
     _locationFilterBloc = widget.bloc;
+    _listingType = widget.listingType;
+    _currentLocation = widget.location?.copy() ??
+        _locationFilterBloc.getLocation() ??
+        Location();
     _listenForErrors();
     _locationFilterBloc.fetchLocationLists(_currentLocation);
   }
@@ -75,7 +85,11 @@ class _LocationFilterState extends BaseState<LocationFilter> {
   Widget _buildMainListView() {
     return LocationFilterMainListView(
       children: <Widget>[
-        _buildCountriesDropdown(context, _locationList.countries),
+        _buildCountriesDropdown(
+          context,
+          _locationList.countries,
+          _isCountryError,
+        ),
         _statesDropdownStreamBuilder(),
         _citiesDropdownStreamBuilder(),
         Spacing.vertical(Dimens.grid(16)),
@@ -90,7 +104,11 @@ class _LocationFilterState extends BaseState<LocationFilter> {
       stream: _locationFilterBloc.citiesStream,
       builder: (context,
           AsyncSnapshot<StreamEvent<List<LocationPart.City>>> snapshot) {
-        return _buildCitiesDropdown(context, snapshot.data);
+        return _buildCitiesDropdown(
+          context,
+          snapshot.data,
+          _isCityError,
+        );
       },
     );
   }
@@ -101,26 +119,43 @@ class _LocationFilterState extends BaseState<LocationFilter> {
       stream: _locationFilterBloc.statesStream,
       builder: (context,
           AsyncSnapshot<StreamEvent<List<LocationPart.State>>> snapshot) {
-        return _buildStatesDropdown(context, snapshot.data);
+        return _buildStatesDropdown(
+          context,
+          snapshot.data,
+          _isStateError,
+        );
       },
     );
   }
 
   Widget _buildCountriesDropdown(
-      BuildContext context, List<LocationPart.Country> countries) {
+    BuildContext context,
+    List<LocationPart.Country> countries,
+    bool isError,
+  ) {
     final menuItems = countries?.map((country) {
       return DropdownMenuItem(value: country, child: Text(country.name));
     })?.toList();
 
-    return CountryDropdownButton(
-      value: countries?.firstWhere(
-        (it) {
-          return it.id == _currentLocation?.country?.id;
-        },
-        orElse: () => null,
-      ),
-      menuItems: menuItems,
-      onChanged: _onCountryChanged,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        CountryDropdownButton(
+          value: countries?.firstWhere(
+            (it) {
+              return it.id == _currentLocation?.country?.id;
+            },
+            orElse: () => null,
+          ),
+          menuItems: menuItems,
+          onChanged: _onCountryChanged,
+          isError: isError,
+        ),
+        LocationFilterErrorMessage(
+          text: 'Escolha um país',
+          show: isError,
+        ),
+      ],
     );
   }
 
@@ -130,11 +165,17 @@ class _LocationFilterState extends BaseState<LocationFilter> {
         country: LocationPart.Country(id: country.id, name: country.name),
       );
     });
+
+    _validateLocation();
+
     _locationFilterBloc.fetchStates(country?.id);
   }
 
-  Widget _buildStatesDropdown(BuildContext context,
-      StreamEvent<List<LocationPart.State>> snapshotData) {
+  Widget _buildStatesDropdown(
+    BuildContext context,
+    StreamEvent<List<LocationPart.State>> snapshotData,
+    bool isError,
+  ) {
     var event = snapshotData ??
         StreamEvent<List<LocationPart.State>>(data: _locationList.states);
 
@@ -151,33 +192,49 @@ class _LocationFilterState extends BaseState<LocationFilter> {
     _addClearValueEntries<LocationPart.State>(
         menuItems, 'location_filter_all_states');
 
-    return Container(
-      child: ButtonTheme(
-        alignedDropdown: true,
-        child: DropdownButton(
-          hint: Text(hintText),
-          isExpanded: true,
-          value: states?.firstWhere((it) {
-            return it.id == _currentLocation?.state?.id;
-          }, orElse: () => null),
-          items: menuItems,
-          onChanged: (LocationPart.State state) {
-            setState(() {
-              _currentLocation?.state = state == null
-                  ? null
-                  : LocationPart.State(id: state.id, name: state.name);
-              _currentLocation?.city = null;
-            });
-            _locationFilterBloc.fetchCities(
-                _currentLocation?.country?.id, state?.id);
-          },
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        ButtonTheme(
+          alignedDropdown: true,
+          child: DropdownButton(
+            underline: CustomDropDownButtonUnderline(
+              isError: isError,
+            ),
+            hint: Text(hintText),
+            isExpanded: true,
+            value: states?.firstWhere((it) {
+              return it.id == _currentLocation?.state?.id;
+            }, orElse: () => null),
+            items: menuItems,
+            onChanged: (LocationPart.State state) {
+              setState(() {
+                _currentLocation?.state = state == null
+                    ? null
+                    : LocationPart.State(id: state.id, name: state.name);
+                _currentLocation?.city = null;
+              });
+
+              _validateLocation();
+
+              _locationFilterBloc.fetchCities(
+                  _currentLocation?.country?.id, state?.id);
+            },
+          ),
         ),
-      ),
+        LocationFilterErrorMessage(
+          text: 'Escolha um estado',
+          show: isError,
+        ),
+      ],
     );
   }
 
   Widget _buildCitiesDropdown(
-      BuildContext context, StreamEvent<List<LocationPart.City>> snapshotData) {
+    BuildContext context,
+    StreamEvent<List<LocationPart.City>> snapshotData,
+    bool isError,
+  ) {
     var event = snapshotData ??
         StreamEvent<List<LocationPart.City>>(data: _locationList.cities);
 
@@ -194,25 +251,35 @@ class _LocationFilterState extends BaseState<LocationFilter> {
     _addClearValueEntries<LocationPart.City>(
         menuItems, 'location_filter_all_cities');
 
-    return Container(
-      child: ButtonTheme(
-        alignedDropdown: true,
-        child: DropdownButton(
-          hint: Text(hintText),
-          isExpanded: true,
-          value: cities?.firstWhere((it) {
-            return it.id == _currentLocation?.city?.id;
-          }, orElse: () => null),
-          items: menuItems,
-          onChanged: (LocationPart.City city) {
-            setState(() {
-              _currentLocation?.city = city == null
-                  ? null
-                  : LocationPart.City(id: city.id, name: city.name);
-            });
-          },
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        ButtonTheme(
+          alignedDropdown: true,
+          child: DropdownButton(
+            underline: CustomDropDownButtonUnderline(isError: isError),
+            hint: Text(hintText),
+            isExpanded: true,
+            value: cities?.firstWhere((it) {
+              return it.id == _currentLocation?.city?.id;
+            }, orElse: () => null),
+            items: menuItems,
+            onChanged: (LocationPart.City city) {
+              setState(() {
+                _currentLocation?.city = city == null
+                    ? null
+                    : LocationPart.City(id: city.id, name: city.name);
+              });
+
+              _validateLocation();
+            },
+          ),
         ),
-      ),
+        LocationFilterErrorMessage(
+          text: 'Escolha uma cidade',
+          show: isError,
+        ),
+      ],
     );
   }
 
@@ -234,7 +301,32 @@ class _LocationFilterState extends BaseState<LocationFilter> {
 
   bool _hasChangedLocation() => !_currentLocation.equals(widget.location);
 
+  bool _isLocationValid() {
+    _isValidating = widget.requireCompleteLocation;
+    _validateLocation();
+    return _isValidating ? _currentLocation.isComplete : true;
+  }
+
+  void _validateLocation() {
+    if (!_isValidating) {
+      return;
+    }
+
+    setState(() {
+      _isCountryError = _currentLocation.country == null ||
+          !_currentLocation.country.isFilledIn;
+      _isStateError =
+          _currentLocation.state == null || !_currentLocation.state.isFilledIn;
+      _isCityError =
+          _currentLocation.city == null || !_currentLocation.city.isFilledIn;
+    });
+  }
+
   void _returnCurrentLocation() async {
+    if (!_isLocationValid()) {
+      return;
+    }
+
     await _locationFilterBloc.setLocation(_currentLocation);
     Navigator.pop(context, _currentLocation);
   }
@@ -253,6 +345,30 @@ class _LocationFilterState extends BaseState<LocationFilter> {
       menuItems?.insert(0, clearItem);
       menuItems?.add(clearItem);
     }
+  }
+}
+
+class LocationFilterErrorMessage extends StatelessWidget {
+  final String text;
+  final bool show;
+
+  const LocationFilterErrorMessage({
+    Key key,
+    @required this.text,
+    @required this.show,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return show
+        ? Padding(
+            padding: const EdgeInsets.only(left: 16.0, bottom: 16.0),
+            child: Body2Text(
+              text,
+              color: Colors.red,
+            ),
+          )
+        : SizedBox();
   }
 }
 
@@ -287,12 +403,14 @@ class CountryDropdownButton extends StatelessWidget {
   final ValueChanged<LocationPart.Country> onChanged;
   final List<DropdownMenuItem<LocationPart.Country>> menuItems;
   final LocationPart.Country value;
+  final bool isError;
 
   const CountryDropdownButton({
     Key key,
     @required this.onChanged,
     @required this.menuItems,
     @required this.value,
+    @required this.isError,
   }) : super(key: key);
 
   @override
@@ -301,6 +419,9 @@ class CountryDropdownButton extends StatelessWidget {
       child: ButtonTheme(
         alignedDropdown: true,
         child: DropdownButton<LocationPart.Country>(
+          underline: CustomDropDownButtonUnderline(
+            isError: isError,
+          ),
           hint: Text(GetLocalizedStringFunction(context)('common_country')),
           isExpanded: true,
           value: value,

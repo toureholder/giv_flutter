@@ -618,6 +618,7 @@ class _NewListingState extends BaseState<NewListing> {
         location: location,
         showSaveButton: true,
         listingType: _product.listingType,
+        requireCompleteLocation: true,
       ),
     ));
 

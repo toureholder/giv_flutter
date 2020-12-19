@@ -47,6 +47,11 @@ class Location {
   bool get isOk =>
       (country?.isOk ?? true) && (state?.isOk ?? true) && (city?.isOk ?? true);
 
+  bool get isComplete =>
+      (country?.isFilledIn ?? false) &&
+      (state?.isFilledIn ?? false) &&
+      (city?.isFilledIn ?? false);
+
   // Serialization
 
   static final String cityKey = 'city';

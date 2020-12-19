@@ -170,8 +170,11 @@ class _SearchResultState extends BaseState<SearchResult> {
 
   _navigateToLocationFilter(Location location) async {
     final result = await navigation.push(Consumer<LocationFilterBloc>(
-      builder: (context, bloc, child) =>
-          LocationFilter(bloc: bloc, location: location),
+      builder: (context, bloc, child) => LocationFilter(
+        bloc: bloc,
+        location: location,
+        requireCompleteLocation: false,
+      ),
     ));
 
     if (result == null) return;

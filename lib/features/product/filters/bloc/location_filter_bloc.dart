@@ -83,6 +83,8 @@ class LocationFilterBloc {
     }
   }
 
+  Location getLocation() => diskStorage.getLocation();
+
   setLocation(Location location) => diskStorage.setLocation(location);
 
   _clearCities() {
