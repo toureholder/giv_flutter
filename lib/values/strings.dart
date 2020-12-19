@@ -303,6 +303,7 @@ class Strings {
     "logout_confirmation_accept_button": {"en": "Log out", "pt": "Sair"},
     "shared_action_cancel": {"en": "Cancel", "pt": "Cancelar"},
     "new_listing_title": {"en": "New listing", "pt": "Novo anúncio"},
+    "new_request_listing_title": {"en": "New request", "pt": "Novo pedido"},
     "edit_listing_title": {"en": "Edit listing", "pt": "Editar anúncio"},
     "new_listing_edit_groups_empty_state": {
       "en": "You aren't a member of any groups.",
@@ -841,6 +842,14 @@ class Strings {
     "quick_menu_title": {
       "en": "What do you want to do today?",
       "pt": "O que você quer fazer hoje?"
+    },
+    "quick_menu_option_create_donation": {
+      "en": "Give something away",
+      "pt": "Doar algo"
+    },
+    "quick_menu_option_create_request": {
+      "en": "Ask for a donation",
+      "pt": "Pedir uma doação"
     },
     "quick_menu_option_join_group": {
       "en": "Join a group",

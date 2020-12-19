@@ -165,7 +165,11 @@ class _NewListingState extends BaseState<NewListing> {
   Widget build(BuildContext context) {
     super.build(context);
 
-    final title = _isEditing ? 'edit_listing_title' : 'new_listing_title';
+    final title = _isEditing
+        ? 'edit_listing_title'
+        : _product.listingType == ListingType.donationRequest
+            ? 'new_request_listing_title'
+            : 'new_listing_title';
 
     final page = _user != null
         ? WillPopScope(

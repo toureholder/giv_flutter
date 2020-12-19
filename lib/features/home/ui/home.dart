@@ -46,6 +46,7 @@ class Home extends StatefulWidget {
 
   static String actionIdSearch = Base.actionIdSearch;
   static String actionIdPostDonation = Base.actionIdPostDonation;
+  static String actionIdPostRequest = Base.actionIdPostRequest;
   static String actionIdOpenPostBottomSheet = Base.actionIdOpenPostBottomSheet;
   static const String actionIdJoinGroup = "JOIN_GROUP";
   static const String actionIdCreateGroup = "CREATE_GROUP";
