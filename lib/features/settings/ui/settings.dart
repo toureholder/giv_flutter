@@ -162,6 +162,8 @@ class _SettingsState extends BaseState<Settings> {
         bloc: bloc,
         showSaveButton: true,
         requireCompleteLocation: true,
+        showHelpWdiget: true,
+        locationFilterText: string('location_filter_help_text_settings'),
       ),
     ));
   }

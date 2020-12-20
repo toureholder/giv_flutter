@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:giv_flutter/base/base_bloc_with_auth.dart';
+import 'package:giv_flutter/base/base_bloc.dart';
 import 'package:giv_flutter/model/image/image.dart';
 import 'package:giv_flutter/model/listing/listing_image.dart';
 import 'package:giv_flutter/model/listing/repository/api/request/create_listing_request.dart';
@@ -16,7 +16,7 @@ import 'package:giv_flutter/util/network/http_response.dart';
 import 'package:meta/meta.dart';
 import 'package:rxdart/rxdart.dart';
 
-class NewListingBloc extends BaseBlocWithAuth {
+class NewListingBloc extends BaseBloc {
   final ListingRepository listingRepository;
   final LocationRepository locationRepository;
   final DiskStorageProvider diskStorage;

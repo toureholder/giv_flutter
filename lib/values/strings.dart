@@ -61,6 +61,7 @@ class Strings {
       "en": "We didn't finy anything for \"$formatItem\".",
       "pt": "Não encontramos nada de \"$formatItem\"."
     },
+    "action_continue": {"en": "Continue", "pt": "Continuar"},
     "action_filter": {"en": "Filter", "pt": "Filtrar"},
     "action_location_filter": {
       "en": "Filter by location",
@@ -73,6 +74,22 @@ class Strings {
     "filters_subtitle_nearby": {"en": "Nearby", "pt": "Perto de mim"},
     "common_loading": {"en": "Loading...", "pt": "Carregando..."},
     "location_filter_title": {"en": "Location", "pt": "Localização"},
+    "location_filter_help_text_title": {
+      "en": "Where you at?",
+      "pt": "Onde você está?"
+    },
+    "location_filter_help_text_default": {
+      "en":
+          "Before continuing, please choose your city so that we can show listings closer to you first.",
+      "pt":
+          "Antes de continuar, informe sua cidade para que possamos priorizar anúncios mais pertos de você."
+    },
+    "location_filter_help_text_settings": {
+      "en":
+          "Choose your city so that we can show listings closer to you first.",
+      "pt":
+          "Informe sua cidade para que possamos priorizar anúncios mais pertos de você."
+    },
     "location_filter_error_country_required": {
       "en": "Choose a country",
       "pt": "Escolha um país"
@@ -666,6 +683,15 @@ class Strings {
     "location_filter_all_cities": {
       "en": "All cities",
       "pt": "Todas as cidades"
+    },
+    "location_filter_help_me": {
+      "en": "My city isn't on this list",
+      "pt": "Não encontrei minha cidade na lista"
+    },
+    "location_filter_help_me_chat_message": {
+      "en": "Hi! My city isn't in the list of cities. I live in ...",
+      "pt":
+          "Olá! Minha cidade não aparece na lista de cidade no Alguém Quer?. Eu moro em ..."
     },
     "customer_service_dialog_title": {
       "en": "Thanks for reaching out!",

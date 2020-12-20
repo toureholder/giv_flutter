@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:giv_flutter/features/product/filters/bloc/location_filter_bloc.dart';
 import 'package:giv_flutter/features/product/search_result/bloc/search_result_bloc.dart';
 import 'package:giv_flutter/features/product/search_result/ui/search_result.dart';
+import 'package:giv_flutter/model/location/location.dart';
 import 'package:giv_flutter/model/product/product_category.dart';
 import 'package:giv_flutter/model/product/product_search_result.dart';
 import 'package:giv_flutter/util/data/content_stream_builder.dart';
@@ -28,6 +29,8 @@ main() {
     mockNavigatorObserver = MockNavigatorObserver();
     mockUtil = MockUtil();
     mockSearchResultBloc = MockSearchResultBloc();
+
+    when(mockSearchResultBloc.getLocation()).thenReturn(Location.fake());
   });
 
   tearDown(() {

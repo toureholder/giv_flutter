@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:giv_flutter/base/base_state.dart';
+import 'package:giv_flutter/base/location_required_state.dart';
 import 'package:giv_flutter/config/config.dart';
 import 'package:giv_flutter/config/i18n/string_localizations.dart';
 import 'package:giv_flutter/features/product/filters/bloc/location_filter_bloc.dart';
@@ -42,10 +43,45 @@ class SearchResult extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _SearchResultState createState() => _SearchResultState();
+  State createState() => LocationRequiredState<SearchResult>(
+        bloc: bloc,
+        screenContent: SearchResultScreenConent(
+          bloc: bloc,
+          category: category,
+          searchQuery: searchQuery,
+          useCanonicalName: useCanonicalName,
+          forcedName: forcedName,
+          listingType: listingType,
+        ),
+        requireCompleteLocation: true,
+      );
 }
 
-class _SearchResultState extends BaseState<SearchResult> {
+class SearchResultScreenConent extends StatefulWidget {
+  final ProductCategory category;
+  final String searchQuery;
+  final bool useCanonicalName;
+  final SearchResultBloc bloc;
+  final String forcedName;
+  final ListingType listingType;
+
+  const SearchResultScreenConent({
+    Key key,
+    @required this.category,
+    @required this.searchQuery,
+    @required this.useCanonicalName,
+    @required this.bloc,
+    @required this.forcedName,
+    @required this.listingType,
+  }) : super(key: key);
+
+  @override
+  _SearchResultScreenConentState createState() =>
+      _SearchResultScreenConentState();
+}
+
+class _SearchResultScreenConentState
+    extends BaseState<SearchResultScreenConent> {
   SearchResultBloc _bloc;
   List<Product> _products = [];
   bool _isInfiniteScrollOn;

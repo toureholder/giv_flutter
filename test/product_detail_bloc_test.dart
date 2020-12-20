@@ -25,6 +25,7 @@ main() {
   MockProductHttpResponseStreamSink mockUpdateListingStreamSink;
   MockStreamEventStateSubject mockLoadingSubject;
   MockStreamEventStateStreamSink mockLoadingStreamSink;
+  MockDiskStorageProvider mockDiskStorageProvider;
   ProductDetailBloc bloc;
 
   setUp(() {
@@ -40,6 +41,7 @@ main() {
     mockUpdateListingStreamSink = MockProductHttpResponseStreamSink();
     mockLoadingSubject = MockStreamEventStateSubject();
     mockLoadingStreamSink = MockStreamEventStateStreamSink();
+    mockDiskStorageProvider = MockDiskStorageProvider();
 
     bloc = ProductDetailBloc(
       locationRepository: mockLocationRepository,
@@ -50,6 +52,7 @@ main() {
       updateListingPublishSubject: mockUpdateListingSubject,
       loadingPublishSubject: mockLoadingSubject,
       util: mockUtil,
+      diskStorage: mockDiskStorageProvider,
     );
 
     when(mockLocationSubject.stream)
@@ -71,6 +74,8 @@ main() {
         .thenAnswer((_) => PublishSubject<StreamEventState>().stream);
 
     when(mockLoadingSubject.sink).thenReturn(mockLoadingStreamSink);
+
+    when(mockDiskStorageProvider.getLocation()).thenReturn(Location.fake());
   });
 
   tearDown(() {
@@ -158,6 +163,7 @@ main() {
         updateListingPublishSubject: mockUpdateListingSubject,
         loadingPublishSubject: mockLoadingSubject,
         util: mockUtil,
+        diskStorage: mockDiskStorageProvider,
       );
 
       await bloc.fetchLocationDetails(Location.fakeMissingNames());
@@ -203,6 +209,7 @@ main() {
         updateListingPublishSubject: mockUpdateListingSubject,
         loadingPublishSubject: mockLoadingSubject,
         util: mockUtil,
+        diskStorage: mockDiskStorageProvider,
       );
 
       await bloc.deleteListing(id);
@@ -244,6 +251,7 @@ main() {
         updateListingPublishSubject: mockUpdateListingSubject,
         loadingPublishSubject: mockLoadingSubject,
         util: mockUtil,
+        diskStorage: mockDiskStorageProvider,
       );
 
       await bloc.updateActiveStatus(UpdateListingActiveStatusRequest.fake());

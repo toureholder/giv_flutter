@@ -1,4 +1,4 @@
-import 'package:giv_flutter/base/base_bloc_with_auth.dart';
+import 'package:giv_flutter/base/base_bloc.dart';
 import 'package:giv_flutter/features/home/model/home_content.dart';
 import 'package:giv_flutter/features/home/model/quick_menu_item.dart';
 import 'package:giv_flutter/model/carousel/carousel_item.dart';
@@ -10,7 +10,7 @@ import 'package:giv_flutter/util/network/http_response.dart';
 import 'package:meta/meta.dart';
 import 'package:rxdart/rxdart.dart';
 
-class HomeBloc extends BaseBlocWithAuth {
+class HomeBloc extends BaseBloc {
   HomeBloc({
     @required this.productRepository,
     @required this.carouselRepository,

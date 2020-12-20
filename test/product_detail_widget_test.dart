@@ -30,6 +30,8 @@ main() {
     mockUtil = MockUtil();
     mockBloc = MockProductDetailBloc();
     mockNewListingBloc = MockNewListingBloc();
+
+    when(mockBloc.getLocation()).thenReturn(Location.fake());
   });
 
   tearDown(() {

@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:giv_flutter/base/base_bloc_with_auth.dart';
+import 'package:giv_flutter/base/base_bloc.dart';
 import 'package:giv_flutter/model/group/group.dart';
 import 'package:giv_flutter/model/group/repository/api/request/add_many_listings_to_group_request.dart';
 import 'package:giv_flutter/model/group/repository/group_repository.dart';
@@ -12,7 +12,7 @@ import 'package:giv_flutter/util/network/http_response.dart';
 import 'package:giv_flutter/util/util.dart';
 import 'package:rxdart/rxdart.dart';
 
-class GroupDetailBloc extends BaseBlocWithAuth {
+class GroupDetailBloc extends BaseBloc {
   final GroupRepository groupRepository;
   final GroupMembershipRepository groupMembershipRepository;
   final PublishSubject<List<Product>> productsSubject;

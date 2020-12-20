@@ -259,6 +259,7 @@ Future<List<SingleChildCloneableWidget>> getAppDependencies() async {
         loadingPublishSubject: PublishSubject<StreamEventState>(),
         updateListingPublishSubject: PublishSubject<HttpResponse<Product>>(),
         util: util,
+        diskStorage: diskStorage,
       ),
     ),
     Provider<SettingsBloc>(

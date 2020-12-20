@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:giv_flutter/base/base_bloc_with_auth.dart';
+import 'package:giv_flutter/base/base_bloc.dart';
 import 'package:giv_flutter/model/authenticated_user_updated_action.dart';
 import 'package:giv_flutter/model/user/repository/user_repository.dart';
 import 'package:giv_flutter/model/user/user.dart';
@@ -11,7 +11,7 @@ import 'package:giv_flutter/util/util.dart';
 import 'package:meta/meta.dart';
 import 'package:rxdart/rxdart.dart';
 
-class SettingsBloc extends BaseBlocWithAuth {
+class SettingsBloc extends BaseBloc {
   final PublishSubject<HttpResponse<User>> userUpdatePublishSubject;
   final UserRepository userRepository;
   final DiskStorageProvider diskStorage;

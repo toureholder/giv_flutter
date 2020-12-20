@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:giv_flutter/base/base_state.dart';
 import 'package:giv_flutter/config/i18n/string_localizations.dart';
 import 'package:giv_flutter/features/product/filters/bloc/location_filter_bloc.dart';
+import 'package:giv_flutter/features/product/filters/ui/location_filter_help.dart';
 import 'package:giv_flutter/model/listing/listing_type.dart';
 import 'package:giv_flutter/model/location/location.dart';
 import 'package:giv_flutter/model/location/location_list.dart';
@@ -22,6 +23,9 @@ class LocationFilter extends StatefulWidget {
   final LocationFilterBloc bloc;
   final ListingType listingType;
   final bool requireCompleteLocation;
+  final Widget redirect;
+  final bool showHelpWdiget;
+  final String locationFilterText;
 
   const LocationFilter({
     Key key,
@@ -30,6 +34,9 @@ class LocationFilter extends StatefulWidget {
     this.showSaveButton = false,
     this.listingType,
     @required this.requireCompleteLocation,
+    this.redirect,
+    this.showHelpWdiget = false,
+    this.locationFilterText,
   }) : super(key: key);
 
   @override
@@ -45,10 +52,15 @@ class _LocationFilterState extends BaseState<LocationFilter> {
   bool _isStateError = false;
   bool _isCityError = false;
   bool _isValidating = false;
+  bool _showHelpWdiget;
+  Widget _redirect;
+  ScrollController _listViewController = ScrollController();
 
   @override
   void initState() {
     super.initState();
+    _showHelpWdiget = widget.showHelpWdiget;
+    _redirect = widget.redirect;
     _locationFilterBloc = widget.bloc;
     _listingType = widget.listingType;
     _currentLocation = widget.location?.copy() ??
@@ -70,8 +82,11 @@ class _LocationFilterState extends BaseState<LocationFilter> {
   @override
   Widget build(BuildContext context) {
     super.build(context);
+
+    final title = _showHelpWdiget ? '' : string('location_filter_title');
+
     return CustomScaffold(
-      appBar: CustomAppBar(title: string('location_filter_title')),
+      appBar: CustomAppBar(title: title),
       body: ContentStreamBuilder(
         stream: _locationFilterBloc.listStream,
         onHasData: (LocationList data) {
@@ -84,7 +99,12 @@ class _LocationFilterState extends BaseState<LocationFilter> {
 
   Widget _buildMainListView() {
     return LocationFilterMainListView(
+      controller: _listViewController,
       children: <Widget>[
+        if (_showHelpWdiget)
+          LocationFilterHelp(
+            text: widget.locationFilterText,
+          ),
         _buildCountriesDropdown(
           context,
           _locationList.countries,
@@ -93,7 +113,11 @@ class _LocationFilterState extends BaseState<LocationFilter> {
         _statesDropdownStreamBuilder(),
         _citiesDropdownStreamBuilder(),
         Spacing.vertical(Dimens.grid(16)),
-        _buildPrimaryButton(context)
+        _buildPrimaryButton(context),
+        DefaultVerticalSpacingAndAHalf(),
+        LocationFilterHelpButton(
+          onPressed: _requestHelp,
+        ),
       ],
     );
   }
@@ -166,7 +190,7 @@ class _LocationFilterState extends BaseState<LocationFilter> {
       );
     });
 
-    _validateLocation();
+    _onLocationChanged();
 
     _locationFilterBloc.fetchStates(country?.id);
   }
@@ -215,7 +239,7 @@ class _LocationFilterState extends BaseState<LocationFilter> {
                 _currentLocation?.city = null;
               });
 
-              _validateLocation();
+              _onLocationChanged();
 
               _locationFilterBloc.fetchCities(
                   _currentLocation?.country?.id, state?.id);
@@ -271,7 +295,7 @@ class _LocationFilterState extends BaseState<LocationFilter> {
                     : LocationPart.City(id: city.id, name: city.name);
               });
 
-              _validateLocation();
+              _onLocationChanged();
             },
           ),
         ),
@@ -284,9 +308,13 @@ class _LocationFilterState extends BaseState<LocationFilter> {
   }
 
   Widget _buildPrimaryButton(BuildContext context) {
-    var onPressed = _hasChangedLocation() ? _returnCurrentLocation : null;
+    var onPressed = _hasChangedLocation() ? _onPrimaryButtonPressed : null;
 
-    var res = widget.showSaveButton ? 'shared_action_save' : 'action_filter';
+    var res = widget.showSaveButton
+        ? 'shared_action_save'
+        : _redirect == null
+            ? 'action_filter'
+            : 'action_continue';
 
     return (_listingType == ListingType.donationRequest)
         ? AccentButton(
@@ -303,11 +331,13 @@ class _LocationFilterState extends BaseState<LocationFilter> {
 
   bool _isLocationValid() {
     _isValidating = widget.requireCompleteLocation;
-    _validateLocation();
+    _onLocationChanged();
     return _isValidating ? _currentLocation.isComplete : true;
   }
 
-  void _validateLocation() {
+  void _onLocationChanged() {
+    _scrollDownSome();
+
     if (!_isValidating) {
       return;
     }
@@ -322,17 +352,41 @@ class _LocationFilterState extends BaseState<LocationFilter> {
     });
   }
 
-  void _returnCurrentLocation() async {
+  void _onPrimaryButtonPressed() async {
     if (!_isLocationValid()) {
       return;
     }
 
     await _locationFilterBloc.setLocation(_currentLocation);
-    Navigator.pop(context, _currentLocation);
+
+    if (_redirect != null) {
+      navigation.pushReplacement(_redirect);
+    } else {
+      Navigator.pop(context, _currentLocation);
+    }
+  }
+
+  void _requestHelp() {
+    handleCustomerServiceRequest(
+      string('location_filter_help_me_chat_message'),
+    );
   }
 
   void _handleNetworkError(error) {
     showGenericErrorDialog();
+  }
+
+  void _scrollDownSome() {
+    final scrollPosition = _listViewController.position.pixels;
+    final screenHeight = MediaQuery.of(context).size.height;
+
+    if (_showHelpWdiget && screenHeight < 641.0 && scrollPosition < 36.0) {
+      _listViewController.animateTo(
+        208.0,
+        duration: Duration(milliseconds: 500),
+        curve: Curves.easeOut,
+      );
+    }
   }
 
   DropdownMenuItem _buildClearValueEntry<T>(String resId) =>
@@ -374,26 +428,32 @@ class LocationFilterErrorMessage extends StatelessWidget {
 
 class LocationFilterMainListView extends StatelessWidget {
   final List<Widget> children;
+  final ScrollController controller;
 
   const LocationFilterMainListView({
     Key key,
     @required this.children,
+    @required this.controller,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ListView(
+      controller: controller,
       padding: EdgeInsets.only(
-          top: Dimens.default_vertical_margin, bottom: Dimens.grid(60)),
+        top: Dimens.default_vertical_margin,
+        bottom: Dimens.grid(60),
+      ),
       children: <Widget>[
         Container(
           padding: EdgeInsets.symmetric(
-              horizontal: Dimens.default_horizontal_margin),
+            horizontal: Dimens.default_horizontal_margin,
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: children,
           ),
-        )
+        ),
       ],
     );
   }
@@ -428,6 +488,27 @@ class CountryDropdownButton extends StatelessWidget {
           items: menuItems,
           onChanged: onChanged,
         ),
+      ),
+    );
+  }
+}
+
+class LocationFilterHelpButton extends StatelessWidget {
+  final VoidCallback onPressed;
+
+  const LocationFilterHelpButton({
+    Key key,
+    @required this.onPressed,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: TextFlatButton(
+        text: GetLocalizedStringFunction(context)(
+          'location_filter_help_me',
+        ),
+        onPressed: onPressed,
       ),
     );
   }

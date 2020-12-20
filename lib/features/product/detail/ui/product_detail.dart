@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:giv_flutter/base/base_state.dart';
+import 'package:giv_flutter/base/location_required_state.dart';
 import 'package:giv_flutter/config/i18n/string_localizations.dart';
 import 'package:giv_flutter/features/base/base.dart';
 import 'package:giv_flutter/features/listing/bloc/my_listings_bloc.dart';
@@ -52,10 +53,36 @@ class ProductDetail extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _ProductDetailState createState() => _ProductDetailState();
+  State createState() => LocationRequiredState<ProductDetail>(
+        bloc: bloc,
+        screenContent: ProductDetailScreenContent(
+          bloc: bloc,
+          product: product,
+          addLinkToUserProfile: addLinkToUserProfile,
+        ),
+        requireCompleteLocation: true,
+      );
 }
 
-class _ProductDetailState extends BaseState<ProductDetail> {
+class ProductDetailScreenContent extends StatefulWidget {
+  final Product product;
+  final ProductDetailBloc bloc;
+  final bool addLinkToUserProfile;
+
+  const ProductDetailScreenContent({
+    Key key,
+    @required this.product,
+    @required this.bloc,
+    @required this.addLinkToUserProfile,
+  }) : super(key: key);
+
+  @override
+  _ProductDetailScreenContentState createState() =>
+      _ProductDetailScreenContentState();
+}
+
+class _ProductDetailScreenContentState
+    extends BaseState<ProductDetailScreenContent> {
   Product _product;
   ProductDetailBloc _productDetailBloc;
   bool _isMine;

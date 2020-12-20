@@ -1,9 +1,11 @@
+import 'package:giv_flutter/base/base_bloc.dart';
 import 'package:giv_flutter/model/api_response/api_response.dart';
 import 'package:giv_flutter/model/listing/repository/api/request/create_listing_request.dart';
 import 'package:giv_flutter/model/listing/repository/listing_repository.dart';
 import 'package:giv_flutter/model/location/location.dart';
 import 'package:giv_flutter/model/location/repository/location_repository.dart';
 import 'package:giv_flutter/model/product/product.dart';
+import 'package:giv_flutter/service/preferences/disk_storage_provider.dart';
 import 'package:giv_flutter/service/session/session_provider.dart';
 import 'package:giv_flutter/util/data/stream_event.dart';
 import 'package:giv_flutter/util/network/http_response.dart';
@@ -11,7 +13,7 @@ import 'package:giv_flutter/util/util.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:meta/meta.dart';
 
-class ProductDetailBloc {
+class ProductDetailBloc extends BaseBloc {
   final LocationRepository locationRepository;
   final ListingRepository listingRepository;
   final SessionProvider session;
@@ -21,6 +23,7 @@ class ProductDetailBloc {
   final PublishSubject<HttpResponse<Product>> updateListingPublishSubject;
   final PublishSubject<StreamEventState> loadingPublishSubject;
   final Util util;
+  final DiskStorageProvider diskStorage;
 
   ProductDetailBloc({
     @required this.locationRepository,
@@ -31,7 +34,8 @@ class ProductDetailBloc {
     @required this.updateListingPublishSubject,
     @required this.loadingPublishSubject,
     @required this.util,
-  });
+    @required this.diskStorage,
+  }) : super(diskStorage: diskStorage);
 
   Observable<Location> get locationStream => locationPublishSubject.stream;
   Observable<HttpResponse<ApiModelResponse>> get deleteListingStream =>

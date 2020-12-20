@@ -1,3 +1,4 @@
+import 'package:giv_flutter/base/base_bloc.dart';
 import 'package:giv_flutter/model/listing/listing_type.dart';
 import 'package:giv_flutter/model/location/location.dart';
 import 'package:giv_flutter/model/product/product_category.dart';
@@ -9,7 +10,7 @@ import 'package:giv_flutter/util/network/http_response.dart';
 import 'package:meta/meta.dart';
 import 'package:rxdart/rxdart.dart';
 
-class SearchResultBloc {
+class SearchResultBloc extends BaseBloc {
   SearchResultBloc({
     @required this.productRepository,
     @required this.diskStorage,

@@ -1,12 +1,12 @@
 import 'package:flutter/foundation.dart';
-import 'package:giv_flutter/base/base_bloc_with_auth.dart';
+import 'package:giv_flutter/base/base_bloc.dart';
 import 'package:giv_flutter/model/group_membership/group_membership.dart';
 import 'package:giv_flutter/model/group_membership/repository/group_membership_repository.dart';
 import 'package:giv_flutter/service/preferences/disk_storage_provider.dart';
 import 'package:giv_flutter/util/util.dart';
 import 'package:rxdart/rxdart.dart';
 
-class MyGroupsBloc extends BaseBlocWithAuth {
+class MyGroupsBloc extends BaseBloc {
   final GroupMembershipRepository repository;
   final PublishSubject<List<GroupMembership>> subject;
   final DiskStorageProvider diskStorage;

@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
-import 'package:giv_flutter/base/base_bloc_with_auth.dart';
+import 'package:giv_flutter/base/base_bloc.dart';
 import 'package:giv_flutter/model/group/group.dart';
 import 'package:giv_flutter/model/group/repository/group_repository.dart';
 import 'package:giv_flutter/model/group_updated_action.dart';
@@ -12,7 +12,7 @@ import 'package:giv_flutter/util/network/http_response.dart';
 import 'package:giv_flutter/util/util.dart';
 import 'package:rxdart/rxdart.dart';
 
-class EditGroupBloc extends BaseBlocWithAuth {
+class EditGroupBloc extends BaseBloc {
   final GroupRepository groupRepository;
   final PublishSubject<HttpResponse<Group>> groupSubject;
   final DiskStorageProvider diskStorage;
