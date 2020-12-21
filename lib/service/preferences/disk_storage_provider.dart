@@ -1,5 +1,3 @@
-
-
 import 'package:giv_flutter/model/app_config/app_config.dart';
 import 'package:giv_flutter/model/location/location.dart';
 import 'package:giv_flutter/model/user/user.dart';
@@ -18,6 +16,18 @@ abstract class DiskStorageProvider {
 
   Future<bool> setHasAgreedToCustomerService();
   bool hasAgreedToCustomerService();
+
+  Future<bool> setHasSeenCreateGroupIntroduction();
+  bool hasSeenCreateGroupIntroduction();
+
+  Future<bool> setHasSeenJoinGroupIntroduction();
+  bool hasSeenJoinGroupIntroduction();
+
+  Future<bool> setHasSeenDonationIntroduction();
+  bool hasSeenDonationIntroduction();
+
+  Future<bool> setHasSeenDonationRequestIntroduction();
+  bool hasSeenDonationRequestIntroduction();
 
   Future<bool> setLocation(Location location);
   Location getLocation();

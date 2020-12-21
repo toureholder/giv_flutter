@@ -11,6 +11,7 @@ class CustomColors {
   static Color primaryColor = Color(0xBF2196F3);
   static Color primaryColorText = Colors.white;
   static Color inActiveForeground = Colors.white.withOpacity(0.8);
+  static Color illustrationColor = Color(0xBFFFAE3B);
   static const Color backgroundColor = Colors.white;
   static const Color errorColor = Colors.red;
   static const Color textLinkColor = Colors.blue;

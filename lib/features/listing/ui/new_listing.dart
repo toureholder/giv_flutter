@@ -39,6 +39,7 @@ import 'package:giv_flutter/util/presentation/custom_divider.dart';
 import 'package:giv_flutter/util/presentation/custom_scaffold.dart';
 import 'package:giv_flutter/util/presentation/get_listing_type_color.dart';
 import 'package:giv_flutter/util/presentation/photo_view_page.dart';
+import 'package:giv_flutter/util/presentation/progressive_onboarding_screen.dart';
 import 'package:giv_flutter/util/presentation/rounded_corners.dart';
 import 'package:giv_flutter/util/presentation/spacing.dart';
 import 'package:giv_flutter/util/presentation/typography.dart';
@@ -165,11 +166,29 @@ class _NewListingState extends BaseState<NewListing> {
   Widget build(BuildContext context) {
     super.build(context);
 
+    final listingTypeResMap = <ListingType, Map<String, dynamic>>{
+      ListingType.donation: {
+        'title': 'new_listing_title',
+        'onboarding_image': 'images/undraw_i_can_fly.svg',
+        'onboarding_text': 'progressive_onboarding_donation_text',
+        'onboarding_button_text': 'progressive_onboarding_donation_button_text',
+        'onboarding_verifier': _bloc.hasSeenDonationIntroduction,
+        'onboarding_setter': _bloc.setHasSeenDonationIntroduction,
+      },
+      ListingType.donationRequest: {
+        'title': 'new_request_listing_title',
+        'onboarding_image': 'images/undraw_app_giving.svg',
+        'onboarding_text': 'progressive_onboarding_donation_request_group_text',
+        'onboarding_button_text':
+            'progressive_onboarding_donation_request_group_button_text',
+        'onboarding_verifier': _bloc.hasSeenDonationRequestIntroduction,
+        'onboarding_setter': _bloc.setHasSeenDonationRequestIntroduction,
+      },
+    };
+
     final title = _isEditing
         ? 'edit_listing_title'
-        : _product.listingType == ListingType.donationRequest
-            ? 'new_request_listing_title'
-            : 'new_listing_title';
+        : listingTypeResMap[_product.listingType]['title'];
 
     final page = _user != null
         ? WillPopScope(
@@ -179,7 +198,19 @@ class _NewListingState extends BaseState<NewListing> {
                 title: string(title),
               ),
               body: SafeArea(
-                child: _uploadStatusStreamBuilder(),
+                child: ProgressiveOnboardingScreen(
+                  verifier: listingTypeResMap[_product.listingType]
+                      ['onboarding_verifier'],
+                  setter: listingTypeResMap[_product.listingType]
+                      ['onboarding_setter'],
+                  imageAsset: listingTypeResMap[_product.listingType]
+                      ['onboarding_image'],
+                  text: string(listingTypeResMap[_product.listingType]
+                      ['onboarding_text']),
+                  buttonText: string(listingTypeResMap[_product.listingType]
+                      ['onboarding_button_text']),
+                  child: _uploadStatusStreamBuilder(),
+                ),
               ),
             ),
           )

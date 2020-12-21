@@ -15,6 +15,7 @@ import 'package:giv_flutter/model/user/user.dart';
 import 'package:giv_flutter/util/network/http_response.dart';
 import 'package:giv_flutter/util/presentation/custom_app_bar.dart';
 import 'package:giv_flutter/util/presentation/custom_scaffold.dart';
+import 'package:giv_flutter/util/presentation/progressive_onboarding_screen.dart';
 import 'package:giv_flutter/util/presentation/spacing.dart';
 import 'package:giv_flutter/util/presentation/typography.dart';
 import 'package:giv_flutter/values/dimens.dart';
@@ -146,29 +147,36 @@ class _JoinGroupScreenContentState extends BaseState<JoinGroupScreenContent> {
       appBar: CustomAppBar(
         title: string('join_group_screen_title'),
       ),
-      body: ListView(
-        children: <Widget>[
-          Spacing.vertical(Dimens.grid(60)),
-          Container(
-            alignment: Alignment.center,
-            child: BodyText(string('join_group_screen_input_prompt')),
-          ),
-          DefaultVerticalSpacing(),
-          JoinGroupAccessCodeInput(
-            onCompleted: _sendJoinGroupRequest,
-          ),
-          Spacing.vertical(Dimens.grid(30)),
-          if (widget.showTryAgainButton)
-            JoinGroupTryAgainButton(
-              onPressed: () {
-                _sendJoinGroupRequest(_accessToken);
-              },
+      body: ProgressiveOnboardingScreen(
+        verifier: _bloc.hasSeenJoinGroupIntroduction,
+        setter: _bloc.setHasSeenJoinGroupIntroduction,
+        imageAsset: 'images/undraw_team.svg',
+        text: string('progressive_onboarding_join_group_text'),
+        buttonText: string('progressive_onboarding_join_group_button_text'),
+        child: ListView(
+          children: <Widget>[
+            Spacing.vertical(Dimens.grid(60)),
+            Container(
+              alignment: Alignment.center,
+              child: BodyText(string('join_group_screen_input_prompt')),
             ),
-          if (widget.showTryAgainButton) Spacing.vertical(Dimens.grid(30)),
-          JoinGroupLoadingStreamBuilder(
-            stream: _bloc.groupMembershipStream,
-          ),
-        ],
+            DefaultVerticalSpacing(),
+            JoinGroupAccessCodeInput(
+              onCompleted: _sendJoinGroupRequest,
+            ),
+            Spacing.vertical(Dimens.grid(30)),
+            if (widget.showTryAgainButton)
+              JoinGroupTryAgainButton(
+                onPressed: () {
+                  _sendJoinGroupRequest(_accessToken);
+                },
+              ),
+            if (widget.showTryAgainButton) Spacing.vertical(Dimens.grid(30)),
+            JoinGroupLoadingStreamBuilder(
+              stream: _bloc.groupMembershipStream,
+            ),
+          ],
+        ),
       ),
     );
   }

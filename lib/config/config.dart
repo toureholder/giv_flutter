@@ -40,5 +40,8 @@ class Config {
     'images/undraw_synchronize_1e88e5.svg',
     'images/undraw_thoughts_2196f3.svg',
     'images/user_bw.svg',
+    'images/undraw_team.svg',
+    'images/undraw_i_can_fly.svg',
+    'images/undraw_app_giving.svg',
   ];
 }

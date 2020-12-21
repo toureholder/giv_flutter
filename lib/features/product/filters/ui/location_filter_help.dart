@@ -51,7 +51,7 @@ class LocationFilterHelpImage extends StatelessWidget {
     return Center(
       child: SvgPicture.asset(
         'images/undraw_my_location.svg',
-        width: 192.0,
+        height: 156.0,
         fit: BoxFit.cover,
       ),
     );

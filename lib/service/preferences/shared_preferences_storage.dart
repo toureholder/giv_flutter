@@ -11,6 +11,13 @@ const String userKey = 'user';
 const String serverTokenKey = 'server_token';
 const String firebaseTokenKey = 'firebase_token';
 const String hasAgreedToCustomerServiceKey = 'has_agreed_to_customer_service';
+const String hasSeenCreateGroupIntroductionKey =
+    'has_seen_create_group_introduction';
+const String hasSeenJoinGroupIntroductionKey =
+    'has_seen_join_group_introduction';
+const String hasSeenDonationIntroductionKey = 'has_seen_donation_introduction';
+const String hasSeenDonationRequestIntroductionKey =
+    'has_seen_donation_request_introduction';
 const String locationKey = 'location';
 const String appConfigKey = 'settings';
 
@@ -31,7 +38,6 @@ class SharedPreferencesStorage implements DiskStorageProvider {
 
   @override
   Future<bool> clearUser() => sharedPreferences.remove(userKey);
-
 
   @override
   CachePayload getCachePayloadItem(String cacheKey) {
@@ -128,4 +134,36 @@ class SharedPreferencesStorage implements DiskStorageProvider {
   @override
   Future<bool> setCachePayloadItem(String cacheKey, CachePayload payload) =>
       sharedPreferences.setString(cacheKey, json.encode(payload.toJson()));
+
+  @override
+  bool hasSeenCreateGroupIntroduction() =>
+      sharedPreferences.getBool(hasSeenCreateGroupIntroductionKey) ?? false;
+
+  @override
+  Future<bool> setHasSeenCreateGroupIntroduction() =>
+      sharedPreferences.setBool(hasSeenCreateGroupIntroductionKey, true);
+
+  @override
+  bool hasSeenJoinGroupIntroduction() =>
+      sharedPreferences.getBool(hasSeenJoinGroupIntroductionKey) ?? false;
+
+  @override
+  Future<bool> setHasSeenJoinGroupIntroduction() =>
+      sharedPreferences.setBool(hasSeenJoinGroupIntroductionKey, true);
+
+  @override
+  bool hasSeenDonationIntroduction() =>
+      sharedPreferences.getBool(hasSeenDonationIntroductionKey) ?? false;
+
+  @override
+  Future<bool> setHasSeenDonationIntroduction() =>
+      sharedPreferences.setBool(hasSeenDonationIntroductionKey, true);
+
+  @override
+  bool hasSeenDonationRequestIntroduction() =>
+      sharedPreferences.getBool(hasSeenDonationRequestIntroductionKey) ?? false;
+
+  @override
+  Future<bool> setHasSeenDonationRequestIntroduction() =>
+      sharedPreferences.setBool(hasSeenDonationRequestIntroductionKey, true);
 }

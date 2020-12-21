@@ -959,7 +959,7 @@ class Strings {
       "en":
           "Groups are private giving groups e their access codes are secrets. If you were invited to a group, the group owner needs to give you the access code.",
       "pt":
-          "Os grupos do Alguém Quer? são grupos de doação privados criados pelos usuários do aplicativo. Se você foi convidado para um grupo, algum membro do grupo precisa te dar o código de acesso."
+          "A participação em grupos privados de desapego é apenas por convite. Se você foi convidado para um grupo, algum membro do grupo precisa te dar o código de acesso."
     },
     "shared_try_again": {"en": "Try again", "pt": "Tente novamente"},
     "create_group_screen_title": {
@@ -1052,6 +1052,43 @@ class Strings {
           "Hi! I'd like to invite you to our giving group! 😃\n\nGo to \"$formatItem\" to download the app.\n\nOut group's access code is $formatItem. 😉",
       "pt":
           "Oi! Quero te convidar para o grupo de doações e trocas \"$formatItem\" que criamos no app Alguém Quer! 😃\n\nBaixe o app em $formatItem.\n\nO código para entrar no nosso grupo é $formatItem. 😉"
+    },
+    "progressive_onboarding_ok_button": {"en": "I got it!", "pt": "OK"},
+    "progressive_onboarding_create_group_text": {
+      "en": "Groups are private and only group members can see the listings.",
+      "pt":
+          "Que tal criar um grupo de desapego com as pessoas do seu condomínio, da sua escola ou da turma do trabalho?\n\nSomente os membros do grupo podem ver os anúncios."
+    },
+    "progressive_onboarding_create_group_button_text": {
+      "en": "Create a group",
+      "pt": "Criar um grupo"
+    },
+    "progressive_onboarding_join_group_text": {
+      "en": "Groups are private and only group members can see the listings.",
+      "pt":
+          "A participação em grupos privados de desapego é apenas por convite. Você precisa de um código de acesso para ingressar."
+    },
+    "progressive_onboarding_join_group_button_text": {
+      "en": "Join a group",
+      "pt": "Entrar em um grupo"
+    },
+    "progressive_onboarding_donation_text": {
+      "en": "Groups are private and only group members can see the listings.",
+      "pt":
+          "Abra espaço para o novo! Doe livros, roupas e outros itens que estão em ótimo estado."
+    },
+    "progressive_onboarding_donation_button_text": {
+      "en": "Create a listing",
+      "pt": "Crirar um anúncio"
+    },
+    "progressive_onboarding_donation_request_group_text": {
+      "en": "Groups are private and only group members can see the listings.",
+      "pt":
+          "Está precisando de algo? Crie um pedido de doação. Talvez alguém da sua cidade possa ajudar."
+    },
+    "progressive_onboarding_donation_request_group_button_text": {
+      "en": "Ask for something",
+      "pt": "Criar um pedido"
     }
   };
 }

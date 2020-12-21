@@ -4,6 +4,7 @@ import 'package:giv_flutter/base/base_state.dart';
 import 'package:giv_flutter/features/base/base.dart';
 import 'package:giv_flutter/features/groups/create_group/bloc/create_group_bloc.dart';
 import 'package:giv_flutter/features/groups/create_group/ui/create_group_form.dart';
+import 'package:giv_flutter/util/presentation/progressive_onboarding_screen.dart';
 import 'package:giv_flutter/features/groups/my_groups/bloc/my_groups_bloc.dart';
 import 'package:giv_flutter/features/groups/my_groups/ui/my_groups_screen.dart';
 import 'package:giv_flutter/model/group/group.dart';
@@ -59,19 +60,26 @@ class _CreateGroupScreenContentState
       appBar: CustomAppBar(
         title: string('create_group_screen_title'),
       ),
-      body: StreamBuilder<HttpResponse<Group>>(
-          stream: _bloc.groupStream,
-          builder: (context, snapshot) {
-            final isLoading = snapshot.hasData && snapshot.data.isLoading;
-            return CreateGroupForm(
-              isLoading: isLoading,
-              textEditingController: _nameController,
-              onSubmitValidForm: () {
-                _bloc.createGroup(
-                    CreateGroupRequest(name: _nameController.text));
-              },
-            );
-          }),
+      body: ProgressiveOnboardingScreen(
+        verifier: _bloc.hasSeenCreateGroupIntroduction,
+        setter: _bloc.setHasSeenCreateGroupIntroduction,
+        imageAsset: 'images/undraw_team.svg',
+        text: string('progressive_onboarding_create_group_text'),
+        buttonText: string('progressive_onboarding_create_group_button_text'),
+        child: StreamBuilder<HttpResponse<Group>>(
+            stream: _bloc.groupStream,
+            builder: (context, snapshot) {
+              final isLoading = snapshot.hasData && snapshot.data.isLoading;
+              return CreateGroupForm(
+                isLoading: isLoading,
+                textEditingController: _nameController,
+                onSubmitValidForm: () {
+                  _bloc.createGroup(
+                      CreateGroupRequest(name: _nameController.text));
+                },
+              );
+            }),
+      ),
     );
   }
 

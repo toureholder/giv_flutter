@@ -9,5 +9,30 @@ class BaseBloc {
   BaseBloc({@required this.diskStorage});
 
   User getUser() => diskStorage.getUser();
+
   Location getLocation() => diskStorage.getLocation();
+
+  bool hasSeenCreateGroupIntroduction() =>
+      diskStorage.hasSeenCreateGroupIntroduction();
+
+  Future<bool> setHasSeenCreateGroupIntroduction() =>
+      diskStorage.setHasSeenCreateGroupIntroduction();
+
+  bool hasSeenJoinGroupIntroduction() =>
+      diskStorage.hasSeenJoinGroupIntroduction();
+
+  Future<bool> setHasSeenJoinGroupIntroduction() =>
+      diskStorage.setHasSeenJoinGroupIntroduction();
+
+  bool hasSeenDonationIntroduction() =>
+      diskStorage.hasSeenDonationIntroduction();
+
+  Future<bool> setHasSeenDonationIntroduction() =>
+      diskStorage.setHasSeenDonationIntroduction();
+
+  bool hasSeenDonationRequestIntroduction() =>
+      diskStorage.hasSeenDonationRequestIntroduction();
+
+  Future<bool> setHasSeenDonationRequestIntroduction() =>
+      diskStorage.setHasSeenDonationRequestIntroduction();
 }
