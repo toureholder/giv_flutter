@@ -8,6 +8,7 @@ import 'package:giv_flutter/features/listing/bloc/new_listing_bloc.dart';
 import 'package:giv_flutter/features/listing/ui/my_listings.dart';
 import 'package:giv_flutter/features/listing/ui/new_listing.dart';
 import 'package:giv_flutter/features/product/detail/bloc/product_detail_bloc.dart';
+import 'package:giv_flutter/features/product/detail/ui/product_detail_different_location_bottom_sheet.dart';
 import 'package:giv_flutter/features/settings/bloc/settings_bloc.dart';
 import 'package:giv_flutter/features/settings/ui/settings.dart';
 import 'package:giv_flutter/features/user_profile/bloc/user_profile_bloc.dart';
@@ -172,7 +173,12 @@ class _ProductDetailScreenContentState
       if (!_isMine)
         IWantItButton(
           listingType: _product.listingType,
-          onPressed: _showContactListerBottomSheet,
+          onPressed: () {
+            _validateLocation(
+              userLocation: _productDetailBloc.getPreferredLocation(),
+              productLocation: _product.location,
+            );
+          },
         ),
       ProductDetailDescription(
         description: _product.description,
@@ -205,6 +211,43 @@ class _ProductDetailScreenContentState
 
     TiledBottomSheet.show(context,
         tiles: tiles, title: string('shared_title_options'));
+  }
+
+  void _validateLocation({
+    @required Location userLocation,
+    @required Location productLocation,
+  }) {
+    // Show different location bottom sheet, when:
+    // - When states are different
+    // - User city is set and is different from listing city
+
+    final isDifferentCity = userLocation?.city != null &&
+        userLocation.city.id != productLocation?.city?.id;
+
+    final isDifferentState = userLocation?.state != null &&
+        userLocation?.state?.id != productLocation?.state?.id;
+
+    if (isDifferentState || isDifferentCity) {
+      _showDifferentLocationBottomSheet();
+    } else {
+      _showContactListerBottomSheet();
+    }
+  }
+
+  void _showDifferentLocationBottomSheet() {
+    showModalBottomSheet(
+        context: context,
+        builder: (context) {
+          return ProductDetailDifferentLocationBottomSheet(
+            onCanceledPressed: () {
+              navigation.pop();
+            },
+            onContinuePressed: () {
+              navigation.pop();
+              _showContactListerBottomSheet();
+            },
+          );
+        });
   }
 
   void _showContactListerBottomSheet() {

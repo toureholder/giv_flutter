@@ -57,6 +57,8 @@ class ProductDetailBloc extends BaseBloc {
 
   bool isAuthenticated() => session.isAuthenticated();
 
+  Location getPreferredLocation() => diskStorage.getLocation();
+
   fetchLocationDetails(Location location) async {
     try {
       var response = await locationRepository.getLocationDetails(location);

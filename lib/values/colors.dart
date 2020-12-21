@@ -7,6 +7,7 @@ class CustomColors {
   static Color white75op = Color(0xBFFFFFFF);
   static Color accentColor = Color(0xFFffc36e);
   static Color accentColorText = Colors.black;
+  static Color dangerColor = Colors.red;
   static Color primaryColor = Color(0xBF2196F3);
   static Color primaryColorText = Colors.white;
   static Color inActiveForeground = Colors.white.withOpacity(0.8);

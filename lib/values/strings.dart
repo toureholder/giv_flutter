@@ -847,6 +847,24 @@ class Strings {
       "en": "Description",
       "pt": "Descrição"
     },
+    "product_detail_different_location_alert_title": {
+      "en":
+          "This item must be picked up in person in a another. It won't be sent by mail.",
+      "pt":
+          "Este item deve ser retirado por você em outra cidade. Não temos serviço de envio pelos correios."
+    },
+    "product_detail_different_location_alert_content": {
+      "en": "Do you still want to coninue.",
+      "pt": "Você quer continuar mesmo assim?"
+    },
+    "product_detail_different_location_alert_continue_button": {
+      "en": "Yes",
+      "pt": "Sim"
+    },
+    "product_detail_different_location_alert_cancel_button": {
+      "en": "No, I want to cancel",
+      "pt": "Não, quero cancelar"
+    },
     "hide_listing_confirmation_title": {
       "en": "Hide listing?",
       "pt": "Ocultar anúncio?"

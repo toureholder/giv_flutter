@@ -99,6 +99,43 @@ class AccentButton extends StatelessWidget {
   }
 }
 
+class DangerButton extends StatelessWidget {
+  final VoidCallback onPressed;
+  final String text;
+  final bool isLoading;
+  final bool fillWidth;
+
+  const DangerButton({
+    Key key,
+    this.onPressed,
+    this.text,
+    this.isLoading = false,
+    this.fillWidth = true,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final child = isLoading
+        ? ButtonProgressIndicator(
+            color: CustomColors.primaryColorText,
+          )
+        : Text(text);
+    final finalOnPressed = isLoading ? null : onPressed;
+
+    return MainButtonTheme(
+      child: FlatButton(
+        color: CustomColors.dangerColor,
+        textColor: CustomColors.primaryColorText,
+        disabledColor: isLoading ? CustomColors.dangerColor : Colors.grey[200],
+        disabledTextColor: CustomColors.primaryColorText,
+        onPressed: finalOnPressed,
+        child: child,
+      ),
+      fillWidth: fillWidth,
+    );
+  }
+}
+
 class CustomIconButton extends StatelessWidget {
   final VoidCallback onPressed;
   final String text;
