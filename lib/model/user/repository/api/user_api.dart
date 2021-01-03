@@ -64,11 +64,12 @@ class UserApi extends BaseApi {
     }
   }
 
-  Future<HttpResponse<ApiResponse>> forgotPassword(LoginAssistanceRequest request) async {
+  Future<HttpResponse<ApiResponse>> forgotPassword(
+      LoginAssistanceRequest request) async {
     HttpStatus status;
     try {
-      final response =
-      await post('$baseUrl/password_resets/emails', request.toHttpRequestBody());
+      final response = await post(
+          '$baseUrl/password_resets/emails', request.toHttpRequestBody());
 
       status = HttpResponse.codeMap[response.statusCode];
       final data = ApiResponse.fromJson(jsonDecode(response.body));
@@ -80,11 +81,30 @@ class UserApi extends BaseApi {
     }
   }
 
-  Future<HttpResponse<ApiResponse>> resendActivation(LoginAssistanceRequest request) async {
+  Future<HttpResponse<ApiResponse>> resendActivation(
+      LoginAssistanceRequest request) async {
     HttpStatus status;
     try {
-      final response =
-      await post('$baseUrl/email_confirmations/resend', request.toHttpRequestBody());
+      final response = await post(
+          '$baseUrl/email_confirmations/resend', request.toHttpRequestBody());
+
+      status = HttpResponse.codeMap[response.statusCode];
+      final data = ApiResponse.fromJson(jsonDecode(response.body));
+
+      return HttpResponse<ApiResponse>(status: status, data: data);
+    } catch (error) {
+      return HttpResponse<ApiResponse>(
+          status: status, message: error.toString());
+    }
+  }
+
+  Future<HttpResponse<ApiResponse>> createAccountCancellationIntent() async {
+    HttpStatus status;
+    try {
+      final response = await post(
+        '$baseUrl/$ACCOUNT_CANCELATION_INTENT_ENDPOINT',
+        null,
+      );
 
       status = HttpResponse.codeMap[response.statusCode];
       final data = ApiResponse.fromJson(jsonDecode(response.body));
@@ -123,4 +143,23 @@ class UserApi extends BaseApi {
       return HttpResponse<User>(status: status, message: error.toString());
     }
   }
+
+  Future<HttpResponse<User>> deleteMe() async {
+    HttpStatus status;
+    try {
+      final response = await delete('$baseUrl/$ME_ENDPOINT');
+
+      status = HttpResponse.codeMap[response.statusCode];
+      final data = User.fromJson(jsonDecode(response.body));
+
+      return HttpResponse<User>(status: status, data: data);
+    } catch (error) {
+      return HttpResponse<User>(status: status, message: error.toString());
+    }
+  }
+
+  static const String ACCOUNT_CANCELATION_INTENT_ENDPOINT =
+      'account_cancellation_intents';
+
+  static const String ME_ENDPOINT = 'me';
 }

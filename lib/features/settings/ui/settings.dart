@@ -258,7 +258,7 @@ class ProfileTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return SettingsListTile(
       leading: AvatarImage(image: CustomImage.Image(url: avatarUrl)),
-      text: GetLocalizedStringFunction(context)('profile_title'),
+      text: GetLocalizedStringFunction(context)('profile_and_account_title'),
       onTap: onTap,
     );
   }

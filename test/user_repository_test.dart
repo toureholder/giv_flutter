@@ -8,51 +8,61 @@ import 'package:test/test.dart';
 
 import 'test_util/mocks.dart';
 
-main () {
+main() {
   MockUserApi mockUserApi;
   UserRepository userRepository;
 
-  setUp((){
+  setUp(() {
     mockUserApi = MockUserApi();
     userRepository = UserRepository(userApi: mockUserApi);
   });
 
-  tearDown((){
+  tearDown(() {
     reset(mockUserApi);
   });
 
-  test('calls api sign up', (){
+  test('calls api sign up', () {
     userRepository.signUp(SignUpRequest.fake());
     verify(mockUserApi.signUp(any)).called(1);
   });
 
-  test('calls api log in', (){
+  test('calls api log in', () {
     userRepository.login(LogInRequest.fake());
     verify(mockUserApi.login(any)).called(1);
   });
 
-  test('calls api log in with provider', (){
+  test('calls api log in with provider', () {
     userRepository.loginWithProvider(LogInWithProviderRequest.fake());
     verify(mockUserApi.loginWithProvider(any)).called(1);
   });
 
-  test('calls api get me', (){
+  test('calls api get me', () {
     userRepository.getMe();
     verify(mockUserApi.getMe()).called(1);
   });
 
-  test('calls api update me', (){
+  test('calls api update me', () {
     userRepository.updateMe({});
     verify(mockUserApi.updateMe(any)).called(1);
   });
 
-  test('calls api forgot password', (){
+  test('calls api forgot password', () {
     userRepository.forgotPassword(LoginAssistanceRequest.fake());
     verify(mockUserApi.forgotPassword(any)).called(1);
   });
 
-  test('calls api resend activation', (){
+  test('calls api resend activation', () {
     userRepository.resendActivation(LoginAssistanceRequest.fake());
     verify(mockUserApi.resendActivation(any)).called(1);
+  });
+
+  test('calls api create account cancellation request', () {
+    userRepository.createAccountCancellationIntent();
+    verify(mockUserApi.createAccountCancellationIntent()).called(1);
+  });
+
+  test('calls api delete me', () {
+    userRepository.deleteMe();
+    verify(mockUserApi.deleteMe()).called(1);
   });
 }

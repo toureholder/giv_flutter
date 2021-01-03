@@ -195,9 +195,16 @@ class Strings {
           "en": "Settings",
       "pt": "Configurações"
     },
-    "profile_title": {"en": "Profile", "pt": "Perfil"},
+    "profile_and_account_title": {
+      "en": "Profile and account",
+      "pt": "Perfil e conta"
+    },
     "settings_section_account": {"en": "Account", "pt": "Conta"},
-    "settings_section_profile": {"en": "My info", "pt": "Meus dados"},
+    "settings_section_account_close_account": {
+      "en": "Close my account",
+      "pt": "Encerrar minha conta"
+    },
+    "settings_section_profile": {"en": "Profile", "pt": "Perfil"},
     "settings_phone_number": {"en": "Phone number", "pt": "Telefone"},
     "settings_phone_number_edit_text_hint": {
       "en": "61 912345678",
@@ -1089,6 +1096,38 @@ class Strings {
     "progressive_onboarding_donation_request_group_button_text": {
       "en": "Ask for something",
       "pt": "Criar um pedido"
-    }
+    },
+    "close_account_confirmation_string": {"en": "DELETE", "pt": "ENCERRAR"},
+    "delete_me_confirmation_text": {
+      "en": "Type the word \"$formatItem\" to confirm.",
+      "pt": "Digite a palavra \"$formatItem\" no campo abaixo para confirmar."
+    },
+    "delete_me_confirmation_button": {
+      "en": "Delete my account",
+      "pt": "Encerrar minha conta"
+    },
+    "delete_me_cancel_button": {"en": "Nevermind", "pt": "Deixa pra lá"},
+    "create_cancellation_intent_paragraph_1": {
+      "en":
+          "This will delete all of you data and your account. All of your listings will be deleted. If you created any groups, admin privileges will be transered to the oldest member of the group.",
+      "pt":
+          "Esta ação irá apagar permanentemente todos seus dados e a sua conta. Todos seus anúncios serão apagados. Se você criou algum grupo, os privilégios de admin serão transferidos para o membro mais antigo do grupo."
+    },
+    "create_cancellation_intent_paragraph_2": {
+      "en": "This action cannot be undone.",
+      "pt": "Esta ação é irreversível."
+    },
+    "create_cancellation_intent_paragraph_3": {
+      "en": "Are you sure you want to delete your account?",
+      "pt": "Você quer encerrar definitivamente sua conta?"
+    },
+    "create_cancellation_intent_confirmation_button": {
+      "en": "Yes, I want to delete my account",
+      "pt": "Sim, quero encerrar minha conta"
+    },
+    "create_cancellation_intent_cancel_button": {
+      "en": "Nevermind",
+      "pt": "Deixa pra lá"
+    },
   };
 }

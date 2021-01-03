@@ -75,7 +75,8 @@ class _CreateGroupScreenContentState
                 textEditingController: _nameController,
                 onSubmitValidForm: () {
                   _bloc.createGroup(
-                      CreateGroupRequest(name: _nameController.text));
+                    CreateGroupRequest(name: _nameController.text),
+                  );
                 },
               );
             }),

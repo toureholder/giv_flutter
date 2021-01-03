@@ -22,7 +22,6 @@ class LogInBloc {
     @required this.firebaseAuth,
     @required this.facebookLogin,
     @required this.util,
-    @required this.authUserUpdatedAction,
   });
 
   final UserRepository userRepository;
@@ -32,7 +31,6 @@ class LogInBloc {
   final FirebaseAuth firebaseAuth;
   final FacebookLogin facebookLogin;
   final Util util;
-  final AuthUserUpdatedAction authUserUpdatedAction;
 
   Observable<HttpResponse<LogInResponse>> get loginResponseStream =>
       loginPublishSubject.stream;
@@ -104,7 +102,5 @@ class LogInBloc {
       session.logUserIn(response),
       firebaseAuth.signInWithCustomToken(token: response.firebaseAuthToken),
     ]);
-
-    authUserUpdatedAction.notify();
   }
 }

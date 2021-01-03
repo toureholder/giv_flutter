@@ -59,7 +59,6 @@ class SettingsBloc extends BaseBloc {
   }
 
   Future<List<bool>> logout() async {
-    authUserUpdatedAction.notify();
     return session.logUserOut();
   }
 }

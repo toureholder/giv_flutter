@@ -24,6 +24,7 @@ import 'package:giv_flutter/features/product/detail/bloc/product_detail_bloc.dar
 import 'package:giv_flutter/features/product/filters/bloc/location_filter_bloc.dart';
 import 'package:giv_flutter/features/product/search_result/bloc/search_result_bloc.dart';
 import 'package:giv_flutter/features/settings/bloc/settings_bloc.dart';
+import 'package:giv_flutter/features/settings/close_account/bloc/close_account_bloc.dart';
 import 'package:giv_flutter/features/sign_up/bloc/sign_up_bloc.dart';
 import 'package:giv_flutter/features/splash/bloc/splash_bloc.dart';
 import 'package:giv_flutter/features/user_profile/bloc/user_profile_bloc.dart';
@@ -282,3 +283,8 @@ class MockPhoneVerificationStatusStreamSink extends Mock
 
 class MockVoidHttpResponsePublishSubject extends Mock
     implements PublishSubject<HttpResponse<void>> {}
+
+class MockAccountCancellationStatusPublishSubject extends Mock
+    implements PublishSubject<AccountCancellationStatus> {}
+
+class MockStringPublishSubject extends Mock implements PublishSubject<String> {}

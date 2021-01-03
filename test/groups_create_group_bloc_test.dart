@@ -26,9 +26,10 @@ main() {
 
     mockGroupRepository = MockGroupRepository();
     bloc = CreateGroupBloc(
-        groupRepository: mockGroupRepository,
-        groupSubject: mockGroupPublishSubject,
-        diskStorage: mockDiskStorage);
+      groupRepository: mockGroupRepository,
+      groupSubject: mockGroupPublishSubject,
+      diskStorage: mockDiskStorage,
+    );
     request = CreateGroupRequest.fake();
   });
 

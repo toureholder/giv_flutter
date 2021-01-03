@@ -7,6 +7,8 @@ import 'package:giv_flutter/config/config.dart';
 import 'package:giv_flutter/config/i18n/string_localizations.dart';
 import 'package:giv_flutter/features/phone_verification/bloc/phone_verification_bloc.dart';
 import 'package:giv_flutter/features/settings/bloc/settings_bloc.dart';
+import 'package:giv_flutter/features/settings/close_account/bloc/close_account_bloc.dart';
+import 'package:giv_flutter/features/settings/close_account/ui/close_account_screen.dart';
 import 'package:giv_flutter/features/settings/ui/edit_bio.dart';
 import 'package:giv_flutter/features/settings/ui/edit_name.dart';
 import 'package:giv_flutter/features/settings/ui/edit_phone_number/edit_phone_number_screen.dart';
@@ -19,6 +21,7 @@ import 'package:giv_flutter/util/presentation/custom_app_bar.dart';
 import 'package:giv_flutter/util/presentation/custom_divider.dart';
 import 'package:giv_flutter/util/presentation/custom_scaffold.dart';
 import 'package:giv_flutter/util/presentation/edit_information_tile.dart';
+import 'package:giv_flutter/util/presentation/spacing.dart';
 import 'package:giv_flutter/util/presentation/typography.dart';
 import 'package:giv_flutter/values/dimens.dart';
 import 'package:image_cropper/image_cropper.dart';
@@ -60,7 +63,7 @@ class _EditProfileState extends BaseState<EditProfile> {
       onWillPop: _onWillPop,
       child: CustomScaffold(
         appBar: CustomAppBar(
-          title: string('profile_title'),
+          title: string('profile_and_account_title'),
         ),
         body: _buildListView(context),
       ),
@@ -88,6 +91,10 @@ class _EditProfileState extends BaseState<EditProfile> {
         NameTile(value: _user.name, onTap: _editName),
         CustomDivider(),
         BioTile(value: _user.bio, onTap: _editBio),
+        CustomDivider(),
+        DefaultVerticalSpacing(),
+        EditProfileSectionTitle(string('settings_section_account')),
+        CloseAccountTile(onTap: _goToCloseAccountScreen),
         CustomDivider(),
       ],
     );
@@ -144,7 +151,7 @@ class _EditProfileState extends BaseState<EditProfile> {
   }
 
   void _editPhoneNumber(BuildContext context) async {
-    final result = await navigation.push(
+    await navigation.push(
       EditPhoneNumber(
         settingsBloc: Provider.of<SettingsBloc>(context),
         phoneVerificationBloc: Provider.of<PhoneVerificationBloc>(context),
@@ -152,6 +159,14 @@ class _EditProfileState extends BaseState<EditProfile> {
       ),
     );
     _reloadUser();
+  }
+
+  void _goToCloseAccountScreen() {
+    navigation.push(Consumer<CloseAccountBloc>(
+      builder: (context, bloc, child) => CloseAccountScreen(
+        bloc: bloc,
+      ),
+    ));
   }
 
   void _reloadUser() {
@@ -254,6 +269,29 @@ class _EditProfileState extends BaseState<EditProfile> {
     } else {
       return true;
     }
+  }
+}
+
+class CloseAccountTile extends StatelessWidget {
+  final GestureTapCallback onTap;
+
+  const CloseAccountTile({
+    Key key,
+    @required this.onTap,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final stringFunction = GetLocalizedStringFunction(context);
+    return ListTile(
+      contentPadding: EdgeInsets.only(
+        left: Dimens.default_horizontal_margin,
+      ),
+      title: BodyText(
+        stringFunction('settings_section_account_close_account'),
+      ),
+      onTap: onTap,
+    );
   }
 }
 

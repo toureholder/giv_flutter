@@ -36,4 +36,9 @@ class UserRepository {
   Future<HttpResponse<ApiResponse>> resendActivation(
           LoginAssistanceRequest request) =>
       userApi.resendActivation(request);
+
+  Future<HttpResponse<ApiResponse>> createAccountCancellationIntent() =>
+      userApi.createAccountCancellationIntent();
+
+  Future<HttpResponse<User>> deleteMe() => userApi.deleteMe();
 }

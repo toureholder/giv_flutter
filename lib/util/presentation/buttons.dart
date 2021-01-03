@@ -31,8 +31,8 @@ class PrimaryButton extends StatelessWidget {
 
   const PrimaryButton(
       {Key key,
-      this.onPressed,
-      this.text,
+      @required this.onPressed,
+      @required this.text,
       this.isLoading = false,
       this.fillWidth = true})
       : super(key: key);
@@ -412,8 +412,11 @@ class MediumFlatDangerButton extends StatelessWidget {
   final VoidCallback onPressed;
   final String text;
 
-  const MediumFlatDangerButton({Key key, this.onPressed, this.text})
-      : super(key: key);
+  const MediumFlatDangerButton({
+    Key key,
+    @required this.onPressed,
+    @required this.text,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -434,8 +437,14 @@ class MediumFlatDangerButton extends StatelessWidget {
 class TextFlatButton extends StatelessWidget {
   final VoidCallback onPressed;
   final String text;
+  final TextAlign textAlign;
 
-  const TextFlatButton({Key key, this.onPressed, this.text}) : super(key: key);
+  const TextFlatButton({
+    Key key,
+    @required this.onPressed,
+    @required this.text,
+    this.textAlign,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -446,7 +455,7 @@ class TextFlatButton extends StatelessWidget {
         style: CustomTypography.body2.copyWith(
           color: CustomColors.textLinkColor,
         ),
-        textAlign: TextAlign.center,
+        textAlign: textAlign ?? TextAlign.center,
       ),
     );
   }

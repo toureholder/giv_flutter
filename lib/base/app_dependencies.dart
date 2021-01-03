@@ -23,6 +23,7 @@ import 'package:giv_flutter/features/product/detail/bloc/product_detail_bloc.dar
 import 'package:giv_flutter/features/product/filters/bloc/location_filter_bloc.dart';
 import 'package:giv_flutter/features/product/search_result/bloc/search_result_bloc.dart';
 import 'package:giv_flutter/features/settings/bloc/settings_bloc.dart';
+import 'package:giv_flutter/features/settings/close_account/bloc/close_account_bloc.dart';
 import 'package:giv_flutter/features/sign_up/bloc/sign_up_bloc.dart';
 import 'package:giv_flutter/features/splash/bloc/splash_bloc.dart';
 import 'package:giv_flutter/features/user_profile/bloc/user_profile_bloc.dart';
@@ -84,7 +85,14 @@ Future<List<SingleChildCloneableWidget>> getAppDependencies() async {
   final diskStorage = SharedPreferencesStorage(sharedPreferences);
   final firebaseAuth = FirebaseAuth.instance;
   final facebookLogin = FacebookLogin();
-  final session = Session(diskStorage, firebaseAuth, facebookLogin);
+  final authUserUpdatedAction = AuthUserUpdatedAction();
+  final groupUpdatedAction = GroupUpdatedAction();
+  final session = Session(
+    diskStorage,
+    firebaseAuth,
+    facebookLogin,
+    authUserUpdatedAction,
+  );
   final customHttpClient = HttpClientWrapper(httpClient, diskStorage);
   final firebaseStorage = FirebaseStorage.instance;
   final firebaseStorageUtil = FirebaseStorageUtil(
@@ -170,9 +178,6 @@ Future<List<SingleChildCloneableWidget>> getAppDependencies() async {
     membershipsBox: groupMembershipsBox,
   );
 
-  final authUserUpdatedAction = AuthUserUpdatedAction();
-  final groupUpdatedAction = GroupUpdatedAction();
-
   return <SingleChildCloneableWidget>[
     Provider<LogInBloc>(
       create: (_) => LogInBloc(
@@ -184,7 +189,6 @@ Future<List<SingleChildCloneableWidget>> getAppDependencies() async {
         firebaseAuth: firebaseAuth,
         facebookLogin: facebookLogin,
         util: util,
-        authUserUpdatedAction: authUserUpdatedAction,
       ),
     ),
     Provider<UserProfileBloc>(
@@ -353,6 +357,15 @@ Future<List<SingleChildCloneableWidget>> getAppDependencies() async {
         verificationStatusSubject: PublishSubject<PhoneVerificationStatus>(),
         userRepository: userRepository,
         diskStorage: diskStorage,
+      ),
+    ),
+    Provider<CloseAccountBloc>(
+      create: (_) => CloseAccountBloc(
+        userRepository: userRepository,
+        diskStorage: diskStorage,
+        session: session,
+        statusPublishSubject: PublishSubject<AccountCancellationStatus>(),
+        errorMessageSubject: PublishSubject<String>(),
       ),
     ),
     Provider<Util>(

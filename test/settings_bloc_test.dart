@@ -104,11 +104,6 @@ main() {
     verify(mockSessionProvider.logUserOut()).called(1);
   });
 
-  test('calls auth user update change notifier when user logs out', () {
-    bloc.logout();
-    verify(mockAuthUserUpdatedAction.notify()).called(1);
-  });
-
   group('updates user', () {
     test('adds loading state to sink', () async {
       await bloc.updateUser(<String, dynamic>{'attribute': 'value'});
