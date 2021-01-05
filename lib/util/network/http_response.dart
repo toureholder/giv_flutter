@@ -35,6 +35,7 @@ class HttpResponse<T> extends StreamEvent<T> {
     422: HttpStatus.unprocessableEntity,
     500: HttpStatus.internalServerError,
     501: HttpStatus.notImplemented,
+    502: HttpStatus.badGateway,
   };
 }
 
@@ -51,4 +52,5 @@ enum HttpStatus {
   unprocessableEntity,
   internalServerError,
   notImplemented,
+  badGateway,
 }
