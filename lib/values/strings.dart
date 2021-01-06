@@ -1086,7 +1086,7 @@ class Strings {
     },
     "progressive_onboarding_donation_button_text": {
       "en": "Create a listing",
-      "pt": "Crirar um anúncio"
+      "pt": "Criar um anúncio"
     },
     "progressive_onboarding_donation_request_group_text": {
       "en": "Groups are private and only group members can see the listings.",
