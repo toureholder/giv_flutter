@@ -646,7 +646,7 @@ class Strings {
     },
     "categories_all_donations_list_item_title": {
       "en": "Everything, everything",
-      "pt": "Todas as doçãoes"
+      "pt": "Todas as doações"
     },
     "categories_all_donations_requests_list_item_title": {
       "en": "Everything, everything",
