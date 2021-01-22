@@ -227,7 +227,7 @@ class _ProductDetailScreenContentState
     final isDifferentState = userLocation?.state != null &&
         userLocation?.state?.id != productLocation?.state?.id;
 
-    if (isDifferentState || isDifferentCity) {
+    if (_product.isDonation && (isDifferentState || isDifferentCity)) {
       _showDifferentLocationBottomSheet();
     } else {
       _showContactListerBottomSheet();
