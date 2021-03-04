@@ -21,6 +21,19 @@ if (flutterVersionName == null) {
     flutterVersionName = '1.0'
 }
 
+def dartEnvironmentVariables = [
+    GIV_FACEBOOK_APP_ID: null,
+    GIV_FACEBOOK_LOGIN_PROTOCOL_SCHEME: null
+];
+if (project.hasProperty('dart-defines')) {
+    dartEnvironmentVariables = dartEnvironmentVariables + project.property('dart-defines')
+        .split(',')
+        .collectEntries { entry ->
+            def pair = URLDecoder.decode(entry).split('=')
+            [(pair.first()): pair.last()]
+        }
+}
+
 apply plugin: 'com.android.application'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
@@ -45,6 +58,8 @@ android {
         versionName flutterVersionName
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
+        resValue "string", "facebook_app_id", dartEnvironmentVariables.GIV_FACEBOOK_APP_ID
+        resValue "string", "fb_login_protocol_scheme", dartEnvironmentVariables.GIV_FACEBOOK_LOGIN_PROTOCOL_SCHEME
     }
 
     signingConfigs {

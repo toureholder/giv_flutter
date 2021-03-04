@@ -2,7 +2,8 @@ class Config {
   static const versionName = '1.11.2';
   static const buildNumber = 28;
   static const clientName = 'mobile';
-  static const baseUrl = 'https://api.alguemquer.com.br';
+  static const baseUrl =
+      'https://' + String.fromEnvironment('GIV_API_BASE_URL');
   static const defaultCountryCallingCode = '55';
   static const maxLengthName = 50;
   static const maxLengthBio = 140;
