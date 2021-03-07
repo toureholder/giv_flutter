@@ -1,22 +1,40 @@
 # giv_flutter
 
-Project code name GIV - Flutter application.
+Source code for the Alguém Quer mobile app. Get the app here: https://alguemquer.com.br.
 
-## Getting Started
+## Development
 
-For help getting started with Flutter, view our online
-[documentation](https://flutter.io/).
+### Adding secrets for development
 
-## Running the app
+1. Obtain secrets.
+2. Add secret files.
+
+```sh
+# Add google services files
+cp path/to/secrets/google-services/GoogleService-Info.plist ios/Runner/
+cp path/to/secrets/google-services/google-services.json android/app/
+
+# Add key.properties files
+cp path/to/secrets/android/key.properties android/
+
+# Add keys
+cp -r path/to/secrets/keys .
+```
+
+3. Update `storeFile` property in key.properties.
+
+### Running the app
 
 ```sh
 flutter doctor
 flutter packages get
 flutter pub run build_runner build --delete-conflicting-outputs
+
+# Run command with dart-define variables from secrets scripts folder
 flutter run
 ```
 
-## Running the tests
+### Running the tests
 ```sh
 flutter doctor
 flutter packages get
@@ -24,14 +42,36 @@ flutter pub run build_runner build --delete-conflicting-outputs
 flutter test
 ```
 
-## Useful links
+### Gitmojis
 
-https://itnext.io/flutter-1-17-no-more-flavors-no-more-ios-schemas-command-argument-that-solves-everything-8b145ed4285d
+:bulb: `:bulb:` when adding a new functionality
 
-https://www.google.com/search?q=android+google+services+json+use+build+variables&oq=android+google+services+json+use+build+variables&aqs=chrome..69i57.27328j0j7&sourceid=chrome&ie=UTF-8
+:repeat: `:repeat:` when making changes to an existing functionality
 
-https://www.jimbobbennett.io/updating-your-google-service-json-from-an-appcenter-environment-variable/
+:cool: `:cool:` when refactoring
 
-https://blog.codemagic.io/practical-guide-flutter-firebase-codemagic/
+:bug: `:bug:` when fixing a problem
 
+:green_heart: `:green_heart:` when fixing continuous integration / tech health issues
 
+:white_check_mark: `:white_check_mark:` when adding tests
+
+:blue_book: `:blue_book:` when writing documentation
+
+:arrow_up: `:arrow_up:` when upgrading dependencies
+
+:arrow_down: `:arrow_down:` when downgrading dependencies
+
+:lock: `:lock:` when dealing with security
+
+:racehorse: `:racehorse:` when improving performance
+
+:non-potable_water: `:non-potable_water:` when resolving memory leaks
+
+:fire: `:fire:` when removing code or files
+
+:minidisc: `:minidisc:` when doing data backup
+
+:wrench: `:wrench:` when creating or changing configuration files
+
+:grimacing: `:grimacing:` for that "temporary" workaround
