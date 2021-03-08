@@ -1,0 +1,1 @@
+Acrescentamos nesta versão a função de apagar todos seus dados e encerrar sua conta.

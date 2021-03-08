@@ -290,3 +290,10 @@ unlinked_spec.ds
 **/android/app/google-services.json
 **/ios/Runner/GoogleService-Info.plist
 keys/
+
+# Fastlane
+**/fastlane/report.xml
+**/fastlane/README.md
+
+**/*.ipa
+**/Runner.app*

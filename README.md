@@ -21,7 +21,9 @@ cp path/to/secrets/android/key.properties android/
 cp -r path/to/secrets/keys .
 ```
 
-3. Update `storeFile` property in key.properties.
+3. Update `storeFile` property in `android/key.properties`.
+
+4. Update `json_key_file` in `android/fastlane/Appfile` (and remove GCP id from file name).
 
 ### Running the app
 
