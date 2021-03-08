@@ -129,7 +129,7 @@ main() {
       expect(find.byType(EditProfile), findsOneWidget);
     });
 
-    testWidgets('navigates to edit name', (WidgetTester tester) async {
+    testWidgets('navigates to edit bio', (WidgetTester tester) async {
       await tester.pumpWidget(testableWidget);
 
       await tester.tap(find.byType(BioTile));

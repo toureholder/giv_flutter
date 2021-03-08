@@ -106,7 +106,7 @@ class _BaseState extends BaseState<Base> implements HomeListener {
   void _goToPostPage(BuildContext context, ListingType listingType) {
     navigation.push(
       NewListing(
-        bloc: Provider.of<NewListingBloc>(context),
+        bloc: Provider.of<NewListingBloc>(context, listen: false),
         listingType: listingType,
       ),
     );

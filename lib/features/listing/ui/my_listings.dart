@@ -115,7 +115,7 @@ class _MyListingsState extends BaseState<MyListings> {
 
   _goToPostPage(BuildContext context, ListingType type) {
     navigation.pushReplacement(NewListing(
-      bloc: Provider.of<NewListingBloc>(context),
+      bloc: Provider.of<NewListingBloc>(context, listen: false),
       listingType: type,
     ));
   }

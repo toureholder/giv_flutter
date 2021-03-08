@@ -1,3 +1,5 @@
+import 'dart:io' show Platform;
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -68,12 +70,11 @@ import 'package:giv_flutter/util/util.dart';
 import 'package:hive/hive.dart';
 import 'package:http/http.dart';
 import 'package:provider/provider.dart';
+import 'package:provider/single_child_widget.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'dart:io' show Platform;
-
-Future<List<SingleChildCloneableWidget>> getAppDependencies() async {
+Future<List<SingleChildWidget>> getAppDependencies() async {
   final platform = Platform.isAndroid
       ? TargetPlatform.android
       : Platform.isIOS
@@ -178,7 +179,7 @@ Future<List<SingleChildCloneableWidget>> getAppDependencies() async {
     membershipsBox: groupMembershipsBox,
   );
 
-  return <SingleChildCloneableWidget>[
+  return <SingleChildWidget>[
     Provider<LogInBloc>(
       create: (_) => LogInBloc(
         userRepository: userRepository,

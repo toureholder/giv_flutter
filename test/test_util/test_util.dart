@@ -5,11 +5,12 @@ import 'package:giv_flutter/config/i18n/l10n.dart';
 import 'package:giv_flutter/config/i18n/string_localizations.dart';
 import 'package:giv_flutter/values/strings.dart';
 import 'package:provider/provider.dart';
+import 'package:provider/single_child_widget.dart';
 
 class TestUtil {
   Widget makeTestableWidget({
     Widget subject,
-    List<SingleChildCloneableWidget> dependencies,
+    List<SingleChildWidget> dependencies,
     List<NavigatorObserver> navigatorObservers,
   }) =>
       MultiProvider(

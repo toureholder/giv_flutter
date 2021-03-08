@@ -343,7 +343,7 @@ class _GroupDetailScreenContentState
   void _goToPostPage() async {
     final result = await navigation.push(
       NewListing(
-        bloc: Provider.of<NewListingBloc>(context),
+        bloc: Provider.of<NewListingBloc>(context, listen: false),
         initialGroup: _group,
       ),
     );
@@ -357,7 +357,7 @@ class _GroupDetailScreenContentState
   void _goToMyListingsPage() async {
     final result = await navigation.push(
       MyListings(
-        bloc: Provider.of<MyListingsBloc>(context),
+        bloc: Provider.of<MyListingsBloc>(context, listen: false),
         isSelecting: true,
         groupId: _group.id,
       ),

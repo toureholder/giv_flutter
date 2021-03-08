@@ -153,8 +153,9 @@ class _EditProfileState extends BaseState<EditProfile> {
   void _editPhoneNumber(BuildContext context) async {
     await navigation.push(
       EditPhoneNumber(
-        settingsBloc: Provider.of<SettingsBloc>(context),
-        phoneVerificationBloc: Provider.of<PhoneVerificationBloc>(context),
+        settingsBloc: Provider.of<SettingsBloc>(context, listen: false),
+        phoneVerificationBloc:
+            Provider.of<PhoneVerificationBloc>(context, listen: false),
         user: _user,
       ),
     );
