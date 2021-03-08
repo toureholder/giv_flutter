@@ -20,7 +20,7 @@ class BaseState<T extends StatefulWidget> extends State<T> {
 
   @override
   Widget build(BuildContext context) {
-    util = Provider.of<Util>(context);
+    util = Provider.of<Util>(context, listen: false);
     navigation = Navigation(context);
     string = GetLocalizedStringFunction(context);
     localeString = util.getCurrentLocaleString(context);

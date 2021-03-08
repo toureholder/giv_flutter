@@ -47,18 +47,18 @@ class _MyMaterialAppState extends State<MyMaterialApp> {
 
   @override
   void dispose() {
-    Provider.of<LogInBloc>(context).dispose();
-    Provider.of<UserProfileBloc>(context).dispose();
-    Provider.of<SearchResultBloc>(context).dispose();
-    Provider.of<MyListingsBloc>(context).dispose();
-    Provider.of<HomeBloc>(context).dispose();
-    Provider.of<CategoriesBloc>(context).dispose();
-    Provider.of<LocationFilterBloc>(context).dispose();
-    Provider.of<NewListingBloc>(context).dispose();
-    Provider.of<ProductDetailBloc>(context).dispose();
-    Provider.of<SettingsBloc>(context).dispose();
-    Provider.of<SignUpBloc>(context).dispose();
-    Provider.of<SplashBloc>(context).dispose();
+    Provider.of<LogInBloc>(context, listen: false).dispose();
+    Provider.of<UserProfileBloc>(context, listen: false).dispose();
+    Provider.of<SearchResultBloc>(context, listen: false).dispose();
+    Provider.of<MyListingsBloc>(context, listen: false).dispose();
+    Provider.of<HomeBloc>(context, listen: false).dispose();
+    Provider.of<CategoriesBloc>(context, listen: false).dispose();
+    Provider.of<LocationFilterBloc>(context, listen: false).dispose();
+    Provider.of<NewListingBloc>(context, listen: false).dispose();
+    Provider.of<ProductDetailBloc>(context, listen: false).dispose();
+    Provider.of<SettingsBloc>(context, listen: false).dispose();
+    Provider.of<SignUpBloc>(context, listen: false).dispose();
+    Provider.of<SplashBloc>(context, listen: false).dispose();
     super.dispose();
   }
 }

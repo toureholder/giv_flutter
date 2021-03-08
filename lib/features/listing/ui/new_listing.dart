@@ -597,8 +597,9 @@ class _NewListingState extends BaseState<NewListing> {
   void _editPhoneNumber(User user) async {
     await navigation.push(
       EditPhoneNumber(
-        settingsBloc: Provider.of<SettingsBloc>(context),
-        phoneVerificationBloc: Provider.of<PhoneVerificationBloc>(context),
+        settingsBloc: Provider.of<SettingsBloc>(context, listen: false),
+        phoneVerificationBloc:
+            Provider.of<PhoneVerificationBloc>(context, listen: false),
         user: user,
         listingType: _product.listingType,
       ),
@@ -683,7 +684,7 @@ class _NewListingState extends BaseState<NewListing> {
   void _editGroups() async {
     final result = await navigation.push(
       EditGroups(
-        myGroupsBloc: Provider.of<MyGroupsBloc>(context),
+        myGroupsBloc: Provider.of<MyGroupsBloc>(context, listen: false),
         initialSelectedGroups: _product.groups,
       ),
     );
@@ -698,7 +699,7 @@ class _NewListingState extends BaseState<NewListing> {
 
   void _addFirstCategory() async {
     final result = await navigation.push(Categories(
-      bloc: Provider.of<CategoriesBloc>(context),
+      bloc: Provider.of<CategoriesBloc>(context, listen: false),
       showSearch: false,
       returnChoice: true,
       fetchAll: true,

@@ -3,9 +3,10 @@ import 'package:giv_flutter/base/my_material_app.dart';
 import 'package:giv_flutter/config/config.dart';
 import 'package:giv_flutter/util/presentation/image_precacher.dart';
 import 'package:provider/provider.dart';
+import 'package:provider/single_child_widget.dart';
 
 class MyApp extends StatefulWidget {
-  final List<SingleChildCloneableWidget> dependencies;
+  final List<SingleChildWidget> dependencies;
 
   const MyApp({
     Key key,
@@ -17,7 +18,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  List<SingleChildCloneableWidget> dependencies;
+  List<SingleChildWidget> dependencies;
 
   @override
   void initState() {
