@@ -1,0 +1,2 @@
+json_key_file("/home/travis/build/toureholder/giv_flutter/keys/google-cloud-api.json") # Path to the json secret file - Follow https://docs.fastlane.tools/actions/supply/#setup to get one
+package_name("com.greenballoon.givflutter") # e.g. com.krausefx.app

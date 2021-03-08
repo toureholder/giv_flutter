@@ -116,9 +116,9 @@ PODS:
   - GTMSessionFetcher/Core (1.5.0)
   - GTMSessionFetcher/Full (1.5.0):
     - GTMSessionFetcher/Core (= 1.5.0)
-  - image_cropper (0.0.3):
+  - image_cropper (0.0.4):
     - Flutter
-    - TOCropViewController (~> 2.5.4)
+    - TOCropViewController (~> 2.6.0)
   - image_picker (0.0.1):
     - Flutter
   - nanopb (1.30906.0):
@@ -128,17 +128,17 @@ PODS:
   - nanopb/encode (1.30906.0)
   - path_provider (0.0.1):
     - Flutter
-  - PromisesObjC (1.2.11)
+  - PromisesObjC (1.2.12)
   - share (0.0.1):
     - Flutter
   - shared_preferences (0.0.1):
     - Flutter
   - sign_in_with_apple (0.0.1):
     - Flutter
-  - sqflite (0.0.1):
+  - sqflite (0.0.2):
     - Flutter
-    - FMDB (~> 2.7.2)
-  - TOCropViewController (2.5.5)
+    - FMDB (>= 2.7.5)
+  - TOCropViewController (2.6.0)
   - url_launcher (0.0.1):
     - Flutter
 
@@ -225,7 +225,7 @@ SPEC CHECKSUMS:
   FirebaseCoreDiagnostics: 770ac5958e1372ce67959ae4b4f31d8e127c3ac1
   FirebaseInstallations: 466c7b4d1f58fe16707693091da253726a731ed2
   FirebaseStorage: 15e0f15ef3c7fec3d1899d68623e47d4447066b4
-  Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
+  Flutter: 434fef37c0980e73bb6479ef766c45957d4b510c
   flutter_facebook_login: cfb5659f686b1c575ef205c6b6fd20db9679d3c4
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   google_sign_in: 6bd214b9c154f881422f5fe27b66aaa7bbd580cc
@@ -235,18 +235,18 @@ SPEC CHECKSUMS:
   GoogleUtilities: 7f2f5a07f888cdb145101d6042bc4422f57e70b3
   GTMAppAuth: 197a8dabfea5d665224aa00d17f164fc2248dab9
   GTMSessionFetcher: b3503b20a988c4e20cc189aa798fd18220133f52
-  image_cropper: c8f9b4157933c7bb965a66d1c5e6c8fd408c6eb4
+  image_cropper: f1668dd8d2cad2d357955caad15a40547856edcb
   image_picker: 9c3312491f862b28d21ecd8fdf0ee14e601b3f09
   nanopb: 59317e09cf1f1a0af72f12af412d54edf52603fc
   path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c
-  PromisesObjC: 8c196f5a328c2cba3e74624585467a557dcb482f
+  PromisesObjC: 3113f7f76903778cf4a0586bd1ab89329a0b7b97
   share: 0b2c3e82132f5888bccca3351c504d0003b3b410
   shared_preferences: af6bfa751691cdc24be3045c43ec037377ada40d
   sign_in_with_apple: 34f3f5456a45fd7ac5fb42905e2ad31dae061b4a
-  sqflite: 4001a31ff81d210346b500c55b17f4d6c7589dd0
-  TOCropViewController: da59f531f8ac8a94ef6d6c0fc34009350f9e8bfe
+  sqflite: 6d358c025f5b867b29ed92fc697fd34924e11904
+  TOCropViewController: 3105367e808b7d3d886a74ff59bf4804e7d3ab38
   url_launcher: 6fef411d543ceb26efce54b05a0a40bfd74cbbef
 
 PODFILE CHECKSUM: a75497545d4391e2d394c3668e20cfb1c2bbd4aa
 
-COCOAPODS: 1.9.3
+COCOAPODS: 1.10.1

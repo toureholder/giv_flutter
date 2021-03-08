@@ -64,10 +64,10 @@ android {
 
     signingConfigs {
         release {
-            keyAlias keystoreProperties['keyAlias']
-            keyPassword keystoreProperties['keyPassword']
-            storeFile file(keystoreProperties['storeFile'])
-            storePassword keystoreProperties['storePassword']
+            keyAlias keystoreProperties['uploadKeyAlias']
+            keyPassword keystoreProperties['uploadKeyPassword']
+            storeFile file(keystoreProperties['uploadStoreFile'])
+            storePassword keystoreProperties['uploadStorePassword']
         }
     }
     buildTypes {
