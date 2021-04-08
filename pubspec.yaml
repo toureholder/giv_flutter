@@ -18,42 +18,42 @@ dependencies:
   flutter_localizations:
     sdk: flutter
 
-  cached_network_image: ^2.0.0
-  country_code_picker: ^1.1.7
+  cached_network_image: ^3.0.0
+  country_code_picker: ^2.0.1
   faker: ^1.1.1
-  firebase_auth: ^0.11.1+10
-  firebase_core: ^0.4.0+6
-  firebase_storage: ^3.0.3
+  firebase_auth: ^1.0.3
+  firebase_core: ^1.0.3
+  firebase_storage: ^8.0.3
   flutter_facebook_login: ^3.0.0
-  flutter_svg: ^0.19.3
-  google_sign_in: ^4.0.4
-  hive: ^1.4.4
-  hive_flutter: ^0.3.1
-  http: ^0.12.0+2
-  http_multi_server: ^2.2.0
+  flutter_svg: ^0.21.0+1
+  google_sign_in: ^5.0.1
+  hive: ^2.0.2
+  hive_flutter: ^1.0.0
+  http: ^0.13.1
+  http_multi_server: ^3.0.0
   image_cropper: ^1.0.2
-  image_picker: ^0.6.0+17
-  photo_view: ^0.4.2
-  pin_code_fields: ^4.0.0
+  image_picker: ^0.7.4
+  photo_view: ^0.11.1
+  pin_code_fields: ^7.0.0
   provider: ^5.0.0 # Used for dependency injection
-  rxdart: ^0.22.0
-  shared_preferences: ^0.5.3+4
-  share: '>=0.6.5+2 <2.0.0'
-  sign_in_with_apple: ^2.5.4
-  url_launcher: ^5.4.2
-  uuid: ^2.0.2
+  rxdart: ^0.26.0
+  shared_preferences: ^2.0.5
+  share: ^2.0.1
+  sign_in_with_apple: ^3.0.0
+  url_launcher: ^6.0.3
+  uuid: ^3.0.4
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^0.1.2
+  cupertino_icons: ^1.0.2
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  hive_generator: ^0.8.1
+  hive_generator: ^1.0.1
   build_runner: ^1.10.1
-  mockito: ^4.1.1
+  mockito: ^5.0.3
   test: ^1.14.4
 
 

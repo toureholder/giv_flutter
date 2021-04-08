@@ -14,7 +14,7 @@ class MyListingsBloc {
 
   final PublishSubject<List<Product>> productsPublishSubject;
 
-  Observable<List<Product>> get productsStream => productsPublishSubject.stream;
+  Stream<List<Product>> get productsStream => productsPublishSubject.stream;
 
   dispose() {
     productsPublishSubject.close();

@@ -24,7 +24,6 @@ import 'package:giv_flutter/util/presentation/edit_information_tile.dart';
 import 'package:giv_flutter/util/presentation/spacing.dart';
 import 'package:giv_flutter/util/presentation/typography.dart';
 import 'package:giv_flutter/values/dimens.dart';
-import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
@@ -41,7 +40,7 @@ class _EditProfileState extends BaseState<EditProfile> {
   SettingsBloc _settingsBloc;
   User _user;
   CustomImage.Image _currentImage;
-  StorageUploadTask _uploadTask;
+  UploadTask _uploadTask;
   bool _isSavingImage = false;
 
   @override
@@ -106,8 +105,10 @@ class _EditProfileState extends BaseState<EditProfile> {
     if (image == null && _user.avatarUrl != null)
       image = CustomImage.Image(url: _user.avatarUrl);
 
-    final isUploading =
-        isSaving ? true : _uploadTask != null && _uploadTask.isInProgress;
+    final isUploading = isSaving
+        ? true
+        : _uploadTask != null &&
+            _uploadTask.snapshot.state == TaskState.running;
 
     final children = <Widget>[
       ProfileAvatar(image: image, isUploading: isUploading),
@@ -193,29 +194,23 @@ class _EditProfileState extends BaseState<EditProfile> {
   }
 
   Future _openCamera() async {
-    var imageFile = await ImagePicker.pickImage(source: ImageSource.camera);
+    var imageFile = await _settingsBloc.getCameraImage();
     _cropImage(imageFile);
   }
 
   Future _openGallery() async {
-    var imageFile = await ImagePicker.pickImage(source: ImageSource.gallery);
+    var imageFile = await _settingsBloc.getGalleryImage();
     _cropImage(imageFile);
   }
 
-  Future<Null> _cropImage(File imageFile) async {
-    File croppedFile = await ImageCropper.cropImage(
+  Future<Null> _cropImage(PickedFile imageFile) async {
+    File croppedFile = await _settingsBloc.cropImage(
       sourcePath: imageFile.path,
-      aspectRatio: CropAspectRatio(
-        ratioX: Config.croppedProfileImageRatioX,
-        ratioY: Config.croppedProfileImageRatioY,
-      ),
+      ratioX: Config.croppedProfileImageRatioX,
+      ratioY: Config.croppedProfileImageRatioY,
       maxWidth: Config.croppedProfileImageMaxHeight,
       maxHeight: Config.croppedProfileImageMaxWidth,
-      androidUiSettings: AndroidUiSettings(
-        toolbarTitle: string('image_cropper_toolbar_title'),
-        toolbarColor: Colors.black,
-        toolbarWidgetColor: Colors.white,
-      ),
+      toolbarTitle: string('image_cropper_toolbar_title'),
     );
 
     if (croppedFile == null) return;
@@ -228,19 +223,17 @@ class _EditProfileState extends BaseState<EditProfile> {
     final ref = await _settingsBloc.getProfilePhotoRef();
     _uploadTask = ref.putFile(_currentImage.file);
 
-    _uploadTask.events.listen((StorageTaskEvent event) {
-      _updateUser(event, ref);
+    _uploadTask.then((res) {
+      _updateUser(res.ref);
     });
   }
 
-  _updateUser(StorageTaskEvent event, StorageReference ref) async {
-    if (event.type == StorageTaskEventType.success) {
-      final url = await ref.getDownloadURL();
+  _updateUser(Reference ref) async {
+    final url = await ref.getDownloadURL();
 
-      final update = {User.avatarUrlKey: url};
+    final update = {User.avatarUrlKey: url};
 
-      _settingsBloc.updateUser(update);
-    }
+    _settingsBloc.updateUser(update);
   }
 
   Future<bool> _onWillPop() async {

@@ -23,7 +23,7 @@ void main() {
     carouselApi = CarouselApi(client: client);
   });
 
-  tearDown((){
+  tearDown(() {
     reset(mockHttp);
   });
 

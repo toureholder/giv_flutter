@@ -23,7 +23,7 @@ void main() {
     appConfigApi = AppConfigApi(client: client);
   });
 
-  tearDown((){
+  tearDown(() {
     reset(mockHttp);
   });
 

@@ -19,7 +19,7 @@ class MyGroupsBloc extends BaseBloc {
     @required this.util,
   }) : super(diskStorage: diskStorage);
 
-  Observable<List<GroupMembership>> get stream => subject.stream;
+  Stream<List<GroupMembership>> get stream => subject.stream;
 
   Future getMyMemberships() async {
     try {

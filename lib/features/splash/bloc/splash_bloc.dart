@@ -28,7 +28,7 @@ class SplashBloc {
 
   dispose() => tasksSuccessSubject.close();
 
-  Observable<bool> get tasksStateStream => tasksSuccessSubject.stream;
+  Stream<bool> get tasksStateStream => tasksSuccessSubject.stream;
 
   runTasks() async {
     try {

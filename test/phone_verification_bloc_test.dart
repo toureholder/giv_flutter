@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:giv_flutter/features/phone_verification/bloc/phone_verification_bloc.dart';
-import 'package:giv_flutter/model/user/user.dart';
+import 'package:giv_flutter/model/user/user.dart' as GivUser;
 import 'package:giv_flutter/util/network/http_response.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
@@ -79,9 +79,9 @@ main() {
 
       // Then
       verify(mockUserRepository.updateMe({
-        User.countryCallingCodeKey: countryCode,
-        User.phoneNumberKey: phoneNumber,
-        User.isPhoneVerifiedKey: true,
+        GivUser.User.countryCallingCodeKey: countryCode,
+        GivUser.User.phoneNumberKey: phoneNumber,
+        GivUser.User.isPhoneVerifiedKey: true,
       })).called(1);
     });
   });
@@ -139,7 +139,10 @@ main() {
         'adds codeNotSentUnknownError status to stream when error code is not handled',
         () {
       // Given
-      final authException = AuthException('unKnownCode', 'any message');
+      final authException = FirebaseAuthException(
+        code: 'unKnownCode',
+        message: 'any message',
+      );
 
       // When
       bloc.onVerificationFailed(authException);
@@ -154,7 +157,10 @@ main() {
         'adds codeNotSentQuotaExceeded status to stream when error code is quotaExceded',
         () {
       // Given
-      final authException = AuthException('quotaExceded', 'any message');
+      final authException = FirebaseAuthException(
+        code: 'quotaExceded',
+        message: 'any message',
+      );
 
       // When
       bloc.onVerificationFailed(authException);
@@ -276,16 +282,16 @@ main() {
       );
 
       when(mockFirebaseAuth.signInWithCredential(any))
-          .thenAnswer((_) async => MockFirebaseUser());
+          .thenAnswer((_) async => MockUserCredential());
 
       // When
       await bloc.validateCode(smsCode);
 
       // Then
       verify(mockUserRepository.updateMe({
-        User.countryCallingCodeKey: countryCode,
-        User.phoneNumberKey: phoneNumber,
-        User.isPhoneVerifiedKey: true,
+        GivUser.User.countryCallingCodeKey: countryCode,
+        GivUser.User.phoneNumberKey: phoneNumber,
+        GivUser.User.isPhoneVerifiedKey: true,
       })).called(1);
     });
 
@@ -368,9 +374,9 @@ main() {
 
       // Then
       verify(mockUserRepository.updateMe({
-        User.countryCallingCodeKey: countryCode,
-        User.phoneNumberKey: phoneNumber,
-        User.isPhoneVerifiedKey: true,
+        GivUser.User.countryCallingCodeKey: countryCode,
+        GivUser.User.phoneNumberKey: phoneNumber,
+        GivUser.User.isPhoneVerifiedKey: true,
       })).called(1);
     });
 
@@ -379,9 +385,9 @@ main() {
         () async {
       // Given
       when(mockUserRepository.updateMe(any))
-          .thenAnswer((_) async => HttpResponse<User>(
+          .thenAnswer((_) async => HttpResponse<GivUser.User>(
                 status: HttpStatus.ok,
-                data: User.fake(),
+                data: GivUser.User.fake(),
               ));
 
       // When
@@ -399,9 +405,9 @@ main() {
     test('saves user to disk storage when repository call succeeds', () async {
       // Given
       when(mockUserRepository.updateMe(any))
-          .thenAnswer((_) async => HttpResponse<User>(
+          .thenAnswer((_) async => HttpResponse<GivUser.User>(
                 status: HttpStatus.ok,
-                data: User.fake(),
+                data: GivUser.User.fake(),
               ));
 
       // When
@@ -414,7 +420,7 @@ main() {
     test('doesn\'t save user to disk storage when repository call fails',
         () async {
       when(mockUserRepository.updateMe(any))
-          .thenAnswer((_) async => HttpResponse<User>(
+          .thenAnswer((_) async => HttpResponse<GivUser.User>(
                 status: HttpStatus.unauthorized,
                 data: null,
               ));
@@ -429,7 +435,7 @@ main() {
         () async {
       // Given
       when(mockUserRepository.updateMe(any))
-          .thenAnswer((_) async => HttpResponse<User>(
+          .thenAnswer((_) async => HttpResponse<GivUser.User>(
                 status: HttpStatus.unauthorized,
                 data: null,
               ));
