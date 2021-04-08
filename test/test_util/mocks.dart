@@ -62,6 +62,7 @@ import 'package:giv_flutter/util/network/http_response.dart';
 import 'package:giv_flutter/util/util.dart';
 import 'package:hive/hive.dart';
 import 'package:http/http.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:mockito/mockito.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -97,7 +98,9 @@ class MockBuildContext extends Mock implements BuildContext {}
 
 class MockAuthCredential extends Mock implements AuthCredential {}
 
-class MockFirebaseUser extends Mock implements FirebaseUser {}
+class MockUserCredential extends Mock implements UserCredential {}
+
+class MockImagePicker extends Mock implements ImagePicker {}
 
 // Firebase storage
 
@@ -106,21 +109,15 @@ class MockFirebaseStorageUtilProvider extends Mock
 
 class MockFirebaseStorage extends Mock implements FirebaseStorage {}
 
-class MockStorageReference extends Mock implements StorageReference {}
+class MockStorageReference extends Mock implements Reference {}
 
-class MockStorageUploadTask extends Mock implements StorageUploadTask {}
+class MockStorageUploadTask extends Mock implements UploadTask {}
 
-class MockStorageTaskEventStream extends Mock
-    implements Stream<StorageTaskEvent> {}
+class MockTaskSnapshotStream extends Mock implements Stream<TaskSnapshot> {}
 
-class MockStorageTaskEvent extends Mock implements StorageTaskEvent {}
+class MockTaskSnapshot extends Mock implements TaskSnapshot {}
 
-class MockSuccessStorageTaskEvent extends Mock implements StorageTaskEvent {
-  @override
-  StorageTaskEventType get type => StorageTaskEventType.success;
-}
-
-class MockStorageTaskSnapshot extends Mock implements StorageTaskSnapshot {}
+class MockStorageTaskSnapshot extends Mock implements TaskSnapshot {}
 
 // Mock APIs
 

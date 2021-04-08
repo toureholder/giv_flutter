@@ -42,9 +42,10 @@ main() {
   NewListingBloc newListingBloc;
   MockStorageReference mockStorageReference;
   MockStorageUploadTask mockStorageUploadTask;
-  MockStorageTaskEventStream mockStorageTaskEventStream;
-  MockStorageTaskEvent mockStorageTaskEvent;
+  MockTaskSnapshotStream mockTaskSnapshotStream;
+  MockTaskSnapshot mockTaskSnapshot;
   MockStorageTaskSnapshot mockStorageTaskSnapshot;
+  MockImagePicker mockImagePicker;
 
   setUp(() {
     mockLocationPublishSubject = MockLocationPublishSubject();
@@ -59,9 +60,10 @@ main() {
     mockDiskStorageProvider = MockDiskStorageProvider();
     mockStorageReference = MockStorageReference();
     mockStorageUploadTask = MockStorageUploadTask();
-    mockStorageTaskEventStream = MockStorageTaskEventStream();
-    mockStorageTaskEvent = MockStorageTaskEvent();
+    mockTaskSnapshotStream = MockTaskSnapshotStream();
+    mockTaskSnapshot = MockTaskSnapshot();
     mockStorageTaskSnapshot = MockStorageTaskSnapshot();
+    mockImagePicker = MockImagePicker();
 
     newListingBloc = NewListingBloc(
       uploadStatusPublishSubject: mockUploadStatusPublishSubject,
@@ -71,6 +73,7 @@ main() {
       locationRepository: mockLocationRepository,
       firebaseStorageUtil: mockFirebaseStorageUtilProvider,
       diskStorage: mockDiskStorageProvider,
+      imagePicker: mockImagePicker,
     );
 
     when(mockLocationPublishSubject.sink).thenReturn(mockLocationStreamSink);
@@ -124,6 +127,7 @@ main() {
       listingRepository: mockListingRepository,
       locationRepository: mockLocationRepository,
       firebaseStorageUtil: mockFirebaseStorageUtilProvider,
+      imagePicker: mockImagePicker,
       diskStorage: null,
     );
 
@@ -233,9 +237,10 @@ main() {
   test('gets firebase storage reference for each image file', () async {
     when(mockFirebaseStorageUtilProvider.getListingPhotoRef())
         .thenReturn(mockStorageReference);
-    when(mockStorageReference.putFile(any)).thenReturn(mockStorageUploadTask);
-    when(mockStorageUploadTask.events)
-        .thenAnswer((_) => mockStorageTaskEventStream);
+    when(mockStorageReference.putFile(any))
+        .thenAnswer((_) => mockStorageUploadTask);
+    when(mockStorageUploadTask.snapshotEvents)
+        .thenAnswer((_) => mockTaskSnapshotStream);
 
     final isEditing = false;
     newListingBloc = NewListingBloc.from(newListingBloc, isEditing);
@@ -248,12 +253,14 @@ main() {
         .called(howManyImages);
   });
 
-  test('calls firebase storage reference putFile for each image file', () async {
+  test('calls firebase storage reference putFile for each image file',
+      () async {
     when(mockFirebaseStorageUtilProvider.getListingPhotoRef())
         .thenReturn(mockStorageReference);
-    when(mockStorageReference.putFile(any)).thenReturn(mockStorageUploadTask);
-    when(mockStorageUploadTask.events)
-        .thenAnswer((_) => mockStorageTaskEventStream);
+    when(mockStorageReference.putFile(any))
+        .thenAnswer((_) => mockStorageUploadTask);
+    when(mockStorageUploadTask.snapshotEvents)
+        .thenAnswer((_) => mockTaskSnapshotStream);
 
     final isEditing = false;
     newListingBloc = NewListingBloc.from(newListingBloc, isEditing);
@@ -268,15 +275,16 @@ main() {
   test('WIP: updates ui when a storage event task is heard', () async {
     when(mockFirebaseStorageUtilProvider.getListingPhotoRef())
         .thenReturn(mockStorageReference);
-    when(mockStorageReference.putFile(any)).thenReturn(mockStorageUploadTask);
-    when(mockStorageTaskEvent.snapshot).thenReturn(mockStorageTaskSnapshot);
+    when(mockStorageReference.putFile(any))
+        .thenAnswer((_) => mockStorageUploadTask);
     when(mockStorageTaskSnapshot.bytesTransferred).thenReturn(100);
-    when(mockStorageTaskSnapshot.totalByteCount).thenReturn(1000);
+    when(mockStorageTaskSnapshot.totalBytes).thenReturn(1000);
 
-    final controller = StreamController<StorageTaskEvent>.broadcast();
-    when(mockStorageUploadTask.events).thenAnswer((_) => controller.stream);
+    final controller = StreamController<TaskSnapshot>.broadcast();
+    when(mockStorageUploadTask.snapshotEvents)
+        .thenAnswer((_) => controller.stream);
 
-    controller.sink.add(mockStorageTaskEvent);
+    controller.sink.add(mockTaskSnapshot);
 
     final howManyImages = 5;
     await newListingBloc.saveProduct(
@@ -290,7 +298,8 @@ main() {
   test('gets contoller streams', () async {
     expect(newListingBloc.locationStream, isA<Stream<Location>>());
     expect(newListingBloc.savedProductStream, isA<Stream<Product>>());
-    expect(newListingBloc.uploadStatusStream, isA<Stream<StreamEvent<double>>>());
+    expect(
+        newListingBloc.uploadStatusStream, isA<Stream<StreamEvent<double>>>());
   });
 
   test('closes streams', () async {

@@ -47,11 +47,16 @@ void main() {
           ),
         ).captured;
 
-        final capturedUrl = captured[0];
+        final Uri capturedUri = captured[0];
 
         expect(
-          capturedUrl,
-          '${productApi.baseUrl}/${ProductApi.LISTINGS_ENDPOINT}?per_page=${Config.paginationDefaultPerPage}',
+          capturedUri.path,
+          '/${ProductApi.LISTINGS_ENDPOINT}',
+        );
+
+        expect(
+          capturedUri.query,
+          contains('per_page=${Config.paginationDefaultPerPage}'),
         );
       });
 
@@ -73,11 +78,18 @@ void main() {
           ),
         ).captured;
 
-        final capturedUrl = captured[0];
+        final Uri capturedUri = captured[0];
 
         expect(
-          capturedUrl,
-          '${productApi.baseUrl}/${ProductApi.LISTINGS_ENDPOINT}?city_id=${city.id}&state_id=${state.id}&country_id=${country.id}&per_page=${Config.paginationDefaultPerPage}',
+          capturedUri.path,
+          '/${ProductApi.LISTINGS_ENDPOINT}',
+        );
+        expect(capturedUri.query, contains('city_id=${city.id}'));
+        expect(capturedUri.query, contains('state_id=${state.id}'));
+        expect(capturedUri.query, contains('country_id=${country.id}'));
+        expect(
+          capturedUri.query,
+          contains('per_page=${Config.paginationDefaultPerPage}'),
         );
       });
 
@@ -93,11 +105,16 @@ void main() {
           ),
         ).captured;
 
-        final capturedUrl = captured[0];
+        final Uri capturedUri = captured[0];
 
         expect(
-          capturedUrl,
-          '${productApi.baseUrl}/${ProductApi.LISTINGS_ENDPOINT}?is_hard_filter=true&per_page=${Config.paginationDefaultPerPage}',
+          capturedUri.path,
+          '/${ProductApi.LISTINGS_ENDPOINT}',
+        );
+        expect(capturedUri.query, contains('is_hard_filter=true'));
+        expect(
+          capturedUri.query,
+          contains('per_page=${Config.paginationDefaultPerPage}'),
         );
       });
 
@@ -116,11 +133,16 @@ void main() {
           ),
         ).captured;
 
-        final capturedUrl = captured[0];
+        final Uri capturedUri = captured[0];
 
         expect(
-          capturedUrl,
-          '${productApi.baseUrl}/${ProductApi.LISTINGS_ENDPOINT}?page=$page&per_page=${Config.paginationDefaultPerPage}',
+          capturedUri.path,
+          '/${ProductApi.LISTINGS_ENDPOINT}',
+        );
+        expect(capturedUri.query, contains('page=$page'));
+        expect(
+          capturedUri.query,
+          contains('per_page=${Config.paginationDefaultPerPage}'),
         );
       });
 
@@ -139,11 +161,19 @@ void main() {
           ),
         ).captured;
 
-        final capturedUrl = captured[0];
+        final Uri capturedUri = captured[0];
 
         expect(
-          capturedUrl,
-          '${productApi.baseUrl}/${ProductApi.LISTINGS_ENDPOINT}?type=${listingTypeToStringMap[type]}&per_page=${Config.paginationDefaultPerPage}',
+          capturedUri.path,
+          '/${ProductApi.LISTINGS_ENDPOINT}',
+        );
+        expect(
+          capturedUri.query,
+          contains('type=${listingTypeToStringMap[type]}'),
+        );
+        expect(
+          capturedUri.query,
+          contains('per_page=${Config.paginationDefaultPerPage}'),
         );
       });
     });
@@ -188,12 +218,14 @@ void main() {
           ),
         ).captured;
 
-        final capturedUrl = captured[0];
+        final Uri capturedUri = captured[0];
 
         expect(
-          capturedUrl,
-          '${productApi.baseUrl}/${ProductApi.CATEGORIES_ENDPOINT}?has_listings=true',
+          capturedUri.path,
+          '/${ProductApi.CATEGORIES_ENDPOINT}',
         );
+
+        expect(capturedUri.query, contains('has_listings=true'));
       });
 
       test('sends has_listings=false when fetchAll is true', () async {
@@ -208,12 +240,14 @@ void main() {
           ),
         ).captured;
 
-        final capturedUrl = captured[0];
+        final Uri capturedUri = captured[0];
 
         expect(
-          capturedUrl,
-          '${productApi.baseUrl}/${ProductApi.CATEGORIES_ENDPOINT}?has_listings=false',
+          capturedUri.path,
+          '/${ProductApi.CATEGORIES_ENDPOINT}',
         );
+
+        expect(capturedUri.query, contains('has_listings=false'));
       });
 
       test('sends type=donation when listing type is donation', () async {
@@ -231,12 +265,15 @@ void main() {
           ),
         ).captured;
 
-        final capturedUrl = captured[0];
+        final Uri capturedUri = captured[0];
 
         expect(
-          capturedUrl,
-          '${productApi.baseUrl}/${ProductApi.CATEGORIES_ENDPOINT}?has_listings=false&type=donation',
+          capturedUri.path,
+          '/${ProductApi.CATEGORIES_ENDPOINT}',
         );
+
+        expect(capturedUri.query, contains('has_listings=false'));
+        expect(capturedUri.query, contains('type=donation'));
       });
 
       test('sends type=donation_request when listing type is donation request',
@@ -255,12 +292,15 @@ void main() {
           ),
         ).captured;
 
-        final capturedUrl = captured[0];
+        final Uri capturedUri = captured[0];
 
         expect(
-          capturedUrl,
-          '${productApi.baseUrl}/${ProductApi.CATEGORIES_ENDPOINT}?has_listings=false&type=donation_request',
+          capturedUri.path,
+          '/${ProductApi.CATEGORIES_ENDPOINT}',
         );
+
+        expect(capturedUri.query, contains('has_listings=false'));
+        expect(capturedUri.query, contains('type=donation_request'));
       });
     });
 
@@ -305,11 +345,16 @@ void main() {
           ),
         ).captured;
 
-        final capturedUrl = captured[0];
+        final Uri capturedUri = captured[0];
 
         expect(
-          capturedUrl,
-          '${productApi.baseUrl}/${ProductApi.LISTINGS_ENDPOINT}/${ProductApi.CATEGORIES_ENDPOINT}/$categoryId?per_page=${Config.paginationDefaultPerPage}',
+          capturedUri.path,
+          '/${ProductApi.LISTINGS_ENDPOINT}/${ProductApi.CATEGORIES_ENDPOINT}/$categoryId',
+        );
+
+        expect(
+          capturedUri.query,
+          contains('per_page=${Config.paginationDefaultPerPage}'),
         );
       });
 
@@ -335,11 +380,20 @@ void main() {
           ),
         ).captured;
 
-        final capturedUrl = captured[0];
+        final Uri capturedUri = captured[0];
 
         expect(
-          capturedUrl,
-          '${productApi.baseUrl}/${ProductApi.LISTINGS_ENDPOINT}/${ProductApi.CATEGORIES_ENDPOINT}/$categoryId?city_id=${city.id}&state_id=${state.id}&country_id=${country.id}&per_page=${Config.paginationDefaultPerPage}',
+          capturedUri.path,
+          '/${ProductApi.LISTINGS_ENDPOINT}/${ProductApi.CATEGORIES_ENDPOINT}/$categoryId',
+        );
+
+        expect(capturedUri.query, contains('city_id=${city.id}'));
+        expect(capturedUri.query, contains('state_id=${state.id}'));
+        expect(capturedUri.query, contains('country_id=${country.id}'));
+
+        expect(
+          capturedUri.query,
+          contains('per_page=${Config.paginationDefaultPerPage}'),
         );
       });
 
@@ -361,11 +415,18 @@ void main() {
           ),
         ).captured;
 
-        final capturedUrl = captured[0];
+        final Uri capturedUri = captured[0];
 
         expect(
-          capturedUrl,
-          '${productApi.baseUrl}/${ProductApi.LISTINGS_ENDPOINT}/${ProductApi.CATEGORIES_ENDPOINT}/$categoryId?is_hard_filter=true&per_page=${Config.paginationDefaultPerPage}',
+          capturedUri.path,
+          '/${ProductApi.LISTINGS_ENDPOINT}/${ProductApi.CATEGORIES_ENDPOINT}/$categoryId',
+        );
+
+        expect(capturedUri.query, contains('is_hard_filter=true'));
+
+        expect(
+          capturedUri.query,
+          contains('per_page=${Config.paginationDefaultPerPage}'),
         );
       });
 
@@ -388,11 +449,18 @@ void main() {
           ),
         ).captured;
 
-        final capturedUrl = captured[0];
+        final Uri capturedUri = captured[0];
 
         expect(
-          capturedUrl,
-          '${productApi.baseUrl}/${ProductApi.LISTINGS_ENDPOINT}/${ProductApi.CATEGORIES_ENDPOINT}/$categoryId?page=$page&per_page=${Config.paginationDefaultPerPage}',
+          capturedUri.path,
+          '/${ProductApi.LISTINGS_ENDPOINT}/${ProductApi.CATEGORIES_ENDPOINT}/$categoryId',
+        );
+
+        expect(capturedUri.query, contains('page=$page'));
+
+        expect(
+          capturedUri.query,
+          contains('per_page=${Config.paginationDefaultPerPage}'),
         );
       });
 
@@ -415,11 +483,19 @@ void main() {
           ),
         ).captured;
 
-        final capturedUrl = captured[0];
+        final Uri capturedUri = captured[0];
 
         expect(
-          capturedUrl,
-          '${productApi.baseUrl}/${ProductApi.LISTINGS_ENDPOINT}/${ProductApi.CATEGORIES_ENDPOINT}/$categoryId?type=${listingTypeToStringMap[type]}&per_page=${Config.paginationDefaultPerPage}',
+          capturedUri.path,
+          '/${ProductApi.LISTINGS_ENDPOINT}/${ProductApi.CATEGORIES_ENDPOINT}/$categoryId',
+        );
+
+        expect(capturedUri.query,
+            contains('type=${listingTypeToStringMap[type]}'));
+
+        expect(
+          capturedUri.query,
+          contains('per_page=${Config.paginationDefaultPerPage}'),
         );
       });
     });

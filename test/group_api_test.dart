@@ -42,11 +42,11 @@ main() {
                 body: captureAnyNamed('body'), headers: anyNamed('headers')))
             .captured;
 
-        final capturedUrl = captured[0];
+        final Uri capturedUri = captured[0];
         final capturedBody = jsonDecode(captured[1]);
         expect(
-          capturedUrl,
-          '${api.baseUrl}/${GroupApi.GROUPS_ENDPOINT}',
+          capturedUri.path,
+          '/${GroupApi.GROUPS_ENDPOINT}',
         );
         expect(capturedBody['name'], equals(request.name));
         expect(capturedBody['description'], equals(request.description));
@@ -59,7 +59,11 @@ main() {
         final responseBody =
             '{"id":$groupId,"name":"New group","description":"Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempo incididunt ut labore et dolore magna aliqua","image_url":"https://picsum.photos/200","created_at":"2020-08-13T09:03:06.422Z"}';
 
-        when(mockHttp.post('${api.baseUrl}/${GroupApi.GROUPS_ENDPOINT}',
+        final uri = Uri.parse(
+          '${api.baseUrl}/${GroupApi.GROUPS_ENDPOINT}',
+        );
+
+        when(mockHttp.post(uri,
                 body: anyNamed('body'), headers: anyNamed('headers')))
             .thenAnswer((_) async => Response(responseBody, 201));
 
@@ -113,11 +117,11 @@ main() {
                 body: captureAnyNamed('body'), headers: anyNamed('headers')))
             .captured;
 
-        final capturedUrl = captured[0];
+        final Uri capturedUri = captured[0];
         final capturedBody = jsonDecode(captured[1]);
         expect(
-          capturedUrl,
-          '${api.baseUrl}/${GroupApi.GROUPS_ENDPOINT}/$groupId',
+          capturedUri.path,
+          '/${GroupApi.GROUPS_ENDPOINT}/$groupId',
         );
 
         expect(capturedBody['name'], equals(request['name']));
@@ -191,19 +195,16 @@ main() {
             verify(mockHttp.get(captureAny, headers: anyNamed('headers')))
                 .captured;
 
-        final capturedUrl = captured[0];
+        final Uri capturedUri = captured[0];
 
         expect(
-          capturedUrl,
-          startsWith(
-            '${api.baseUrl}/${GroupApi.GROUPS_ENDPOINT}/$groupId/${GroupApi.LISTINGS_PATH}',
-          ),
+          capturedUri.path,
+          '/${GroupApi.GROUPS_ENDPOINT}/$groupId/${GroupApi.LISTINGS_PATH}',
         );
 
         // Adds pararms to request url
-        expect(capturedUrl, contains('?'));
-        expect(capturedUrl, contains('page=$page'));
-        expect(capturedUrl,
+        expect(capturedUri.query, contains('page=$page'));
+        expect(capturedUri.query,
             contains('per_page=${Config.paginationDefaultPerPage}'));
       });
 
@@ -263,11 +264,11 @@ main() {
           ),
         ).captured;
 
-        final capturedUrl = captured[0];
+        final Uri capturedUri = captured[0];
         final capturedBody = jsonDecode(captured[1]);
         expect(
-          capturedUrl,
-          '${api.baseUrl}/${GroupApi.GROUPS_ENDPOINT}/$groupId/${GroupApi.LISTINGS_PATH}/${GroupApi.MANY_PATH}',
+          capturedUri.path,
+          '/${GroupApi.GROUPS_ENDPOINT}/$groupId/${GroupApi.LISTINGS_PATH}/${GroupApi.MANY_PATH}',
         );
 
         expect(capturedBody['ids'], equals(request.ids));

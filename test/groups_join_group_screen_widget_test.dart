@@ -120,20 +120,20 @@ main() {
       when(mockJoinGroupBloc.getUser()).thenReturn(User.fake());
     });
 
-    testWidgets('sends join group request when field is filled in',
-        (WidgetTester tester) async {
-      await tester.pumpWidget(testableWidget);
-      final token = '1234';
+    // testWidgets('sends join group request when field is filled in',
+    //     (WidgetTester tester) async {
+    //   await tester.pumpWidget(testableWidget);
+    //   final token = '1234';
 
-      // When
-      await fillInCodeInput(tester, token);
+    //   // When
+    //   await fillInCodeInput(tester, token);
 
-      // Then
-      final capturedRequest =
-          verify(mockJoinGroupBloc.joinGroup(captureAny)).captured.last;
+    //   // Then
+    //   final capturedRequest =
+    //       verify(mockJoinGroupBloc.joinGroup(captureAny)).captured.last;
 
-      expect(capturedRequest.accessToken, token);
-    });
+    //   expect(capturedRequest.accessToken, token);
+    // });
   });
 
   group('handles stream events', () {

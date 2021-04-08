@@ -59,7 +59,7 @@ import 'package:giv_flutter/model/product/repository/product_repository.dart';
 import 'package:giv_flutter/model/user/repository/api/response/log_in_response.dart';
 import 'package:giv_flutter/model/user/repository/api/user_api.dart';
 import 'package:giv_flutter/model/user/repository/user_repository.dart';
-import 'package:giv_flutter/model/user/user.dart';
+import 'package:giv_flutter/model/user/user.dart' as GivUser;
 import 'package:giv_flutter/service/preferences/shared_preferences_storage.dart';
 import 'package:giv_flutter/service/session/session.dart';
 import 'package:giv_flutter/util/data/stream_event.dart';
@@ -69,6 +69,7 @@ import 'package:giv_flutter/util/network/http_response.dart';
 import 'package:giv_flutter/util/util.dart';
 import 'package:hive/hive.dart';
 import 'package:http/http.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 import 'package:rxdart/rxdart.dart';
@@ -97,12 +98,16 @@ Future<List<SingleChildWidget>> getAppDependencies() async {
   final customHttpClient = HttpClientWrapper(httpClient, diskStorage);
   final firebaseStorage = FirebaseStorage.instance;
   final firebaseStorageUtil = FirebaseStorageUtil(
-      diskStorage: diskStorage, firebaseStorage: firebaseStorage);
+    diskStorage: diskStorage,
+    firebaseStorage: firebaseStorage,
+  );
   final util = Util(diskStorage: diskStorage);
   final productCache = ProductCache(diskStorage: diskStorage);
   final locationCache = LocationCache(diskStorage: diskStorage);
+  final imagePicker = ImagePicker();
 
-  Hive.registerAdapter(UserAdapter());
+  // Hive
+  Hive.registerAdapter(GivUser.UserAdapter());
   Hive.registerAdapter(GroupAdapter());
   Hive.registerAdapter(GroupMembershipAdapter());
 
@@ -251,6 +256,7 @@ Future<List<SingleChildWidget>> getAppDependencies() async {
         savedProductPublishSubject: PublishSubject<Product>(),
         uploadStatusPublishSubject: PublishSubject<StreamEvent<double>>(),
         firebaseStorageUtil: firebaseStorageUtil,
+        imagePicker: imagePicker,
       ),
     ),
     Provider<ProductDetailBloc>(
@@ -272,11 +278,12 @@ Future<List<SingleChildWidget>> getAppDependencies() async {
         userRepository: userRepository,
         diskStorage: diskStorage,
         session: session,
-        userUpdatePublishSubject: PublishSubject<HttpResponse<User>>(),
+        userUpdatePublishSubject: PublishSubject<HttpResponse<GivUser.User>>(),
         firebaseStorageUtil: firebaseStorageUtil,
         util: util,
         authUserUpdatedAction: authUserUpdatedAction,
         platform: platform,
+        imagePicker: imagePicker,
       ),
     ),
     Provider<CustomerServiceDialogBloc>(
@@ -350,6 +357,7 @@ Future<List<SingleChildWidget>> getAppDependencies() async {
         firebaseStorageUtil: firebaseStorageUtil,
         util: util,
         groupUpdatedAction: groupUpdatedAction,
+        imagePicker: imagePicker,
       ),
     ),
     Provider<PhoneVerificationBloc>(

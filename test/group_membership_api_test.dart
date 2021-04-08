@@ -40,11 +40,11 @@ main() {
                 body: captureAnyNamed('body'), headers: anyNamed('headers')))
             .captured;
 
-        final capturedUrl = captured[0];
+        final Uri capturedUri = captured[0];
         final capturedBody = jsonDecode(captured[1]);
         expect(
-          capturedUrl,
-          '${api.baseUrl}/${GroupMembershipApi.MEMBERSHIPS_ENDPOINT}',
+          capturedUri.path,
+          '/${GroupMembershipApi.MEMBERSHIPS_ENDPOINT}',
         );
         expect(capturedBody['access_token'], equals(request.accessToken));
       });
@@ -97,10 +97,10 @@ main() {
           ),
         ).captured;
 
-        final capturedUrl = captured[0];
+        final Uri capturedUri = captured[0];
         expect(
-          capturedUrl,
-          '${api.baseUrl}/${GroupMembershipApi.MY_MEMBERSHIPS_ENDPOINT}',
+          capturedUri.path,
+          '/${GroupMembershipApi.MY_MEMBERSHIPS_ENDPOINT}',
         );
       });
 
@@ -193,17 +193,13 @@ main() {
           ),
         ).captured;
 
-        final capturedUrl = captured[0];
-        expect(
-          capturedUrl,
-          startsWith(
-              '${api.baseUrl}/${GroupApi.GROUPS_ENDPOINT}/$groupId/${GroupMembershipApi.GROUP_MEMBERSHIPS_PATH}'),
-        );
+        final Uri capturedUri = captured[0];
+        expect(capturedUri.path,
+            '/${GroupApi.GROUPS_ENDPOINT}/$groupId/${GroupMembershipApi.GROUP_MEMBERSHIPS_PATH}');
 
         // Adds pararms to request url
-        expect(capturedUrl, contains('?'));
-        expect(capturedUrl, contains('page=$page'));
-        expect(capturedUrl,
+        expect(capturedUri.query, contains('page=$page'));
+        expect(capturedUri.query,
             contains('per_page=${Config.paginationDefaultPerPage}'));
       });
 
@@ -287,13 +283,11 @@ main() {
             verify(mockHttp.delete(captureAny, headers: anyNamed('headers')))
                 .captured;
 
-        final capturedUrl = captured[0];
+        final Uri capturedUri = captured[0];
 
         expect(
-          capturedUrl,
-          equals(
-            '${api.baseUrl}/${GroupMembershipApi.MEMBERSHIPS_ENDPOINT}/$membershipId',
-          ),
+          capturedUri.path,
+          '/${GroupMembershipApi.MEMBERSHIPS_ENDPOINT}/$membershipId',
         );
       });
 

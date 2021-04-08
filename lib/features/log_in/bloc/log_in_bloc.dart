@@ -32,10 +32,10 @@ class LogInBloc {
   final FacebookLogin facebookLogin;
   final Util util;
 
-  Observable<HttpResponse<LogInResponse>> get loginResponseStream =>
+  Stream<HttpResponse<LogInResponse>> get loginResponseStream =>
       loginPublishSubject.stream;
 
-  Observable<HttpResponse<ApiResponse>> get loginAssistanceStream =>
+  Stream<HttpResponse<ApiResponse>> get loginAssistanceStream =>
       loginAssistancePublishSubject.stream;
 
   dispose() {
@@ -100,7 +100,7 @@ class LogInBloc {
   Future<void> _saveToPreferences(LogInResponse response) async {
     await Future.wait([
       session.logUserIn(response),
-      firebaseAuth.signInWithCustomToken(token: response.firebaseAuthToken),
+      firebaseAuth.signInWithCustomToken(response.firebaseAuthToken),
     ]);
   }
 }

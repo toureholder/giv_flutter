@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:giv_flutter/model/user/repository/user_repository.dart';
-import 'package:giv_flutter/model/user/user.dart';
+import 'package:giv_flutter/model/user/user.dart' as GivUser;
 import 'package:giv_flutter/service/preferences/disk_storage_provider.dart';
 import 'package:meta/meta.dart';
 import 'package:rxdart/rxdart.dart';
@@ -25,7 +25,7 @@ class PhoneVerificationBloc {
   String _fullPhoneNumber;
   String _verificationId;
 
-  Observable<PhoneVerificationStatus> get verificationStatusStream =>
+  Stream<PhoneVerificationStatus> get verificationStatusStream =>
       verificationStatusSubject.stream;
 
   Future<void> verifyPhoneNumber({
@@ -84,7 +84,7 @@ class PhoneVerificationBloc {
     );
   }
 
-  void onVerificationFailed(AuthException error) {
+  void onVerificationFailed(FirebaseAuthException error) {
     print('error.code: ${error.code}');
     print('error.message: ${error.message}');
 
@@ -107,7 +107,7 @@ class PhoneVerificationBloc {
       PhoneVerificationStatus.verificationInProgress,
     );
 
-    AuthCredential phoneAuthCredential = PhoneAuthProvider.getCredential(
+    AuthCredential phoneAuthCredential = PhoneAuthProvider.credential(
         verificationId: _verificationId, smsCode: smsCode);
 
     try {
@@ -139,9 +139,9 @@ class PhoneVerificationBloc {
   Future<void> updateUser() async {
     try {
       var response = await userRepository.updateMe({
-        User.countryCallingCodeKey: _countryCode,
-        User.phoneNumberKey: _phoneNumber,
-        User.isPhoneVerifiedKey: true,
+        GivUser.User.countryCallingCodeKey: _countryCode,
+        GivUser.User.phoneNumberKey: _phoneNumber,
+        GivUser.User.isPhoneVerifiedKey: true,
       });
 
       if (response.data != null) {

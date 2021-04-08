@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:giv_flutter/model/authenticated_user_updated_action.dart';
 import 'package:giv_flutter/model/user/repository/api/response/log_in_response.dart';
-import 'package:giv_flutter/model/user/user.dart';
+import 'package:giv_flutter/model/user/user.dart' as GivUser;
 import 'package:giv_flutter/service/preferences/disk_storage_provider.dart';
 import 'package:giv_flutter/service/session/session_provider.dart';
 
@@ -52,5 +52,5 @@ class Session extends SessionProvider {
   bool isAuthenticated() => diskStorage.getServerToken() != null;
 
   @override
-  User getUser() => diskStorage.getUser();
+  GivUser.User getUser() => diskStorage.getUser();
 }

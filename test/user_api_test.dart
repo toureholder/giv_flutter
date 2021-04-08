@@ -152,8 +152,9 @@ void main() {
       final responseBody =
           '{"id":1,"name":"$name","country_calling_code":"55","phone_number":"61981178515","image_url":"https://firebasestorage.googleapis.com/v0/b/givapp-938de.appspot.com/o/dev%2Fusers%2F1%2Fphotos%2F1569400230645.jpg?alt=media&token=5f7cdb23-1f6d-4e10-bd30-9df04265522e","bio":null,"admin":true,"created_at":"2019-03-25T02:39:26.452Z"}';
 
-      when(mockHttp.delete('${userApi.baseUrl}/${UserApi.ME_ENDPOINT}',
-              headers: anyNamed('headers')))
+      final uri = Uri.parse('${userApi.baseUrl}/${UserApi.ME_ENDPOINT}');
+
+      when(mockHttp.delete(uri, headers: anyNamed('headers')))
           .thenAnswer((_) async => Response(responseBody, 200));
 
       // When
@@ -162,7 +163,7 @@ void main() {
       // Expect
       verify(
         mockHttp.delete(
-          '${userApi.baseUrl}/${UserApi.ME_ENDPOINT}',
+          uri,
           headers: anyNamed('headers'),
         ),
       ).captured;
@@ -174,8 +175,8 @@ void main() {
       final responseBody =
           '{"id":1,"name":"$name","country_calling_code":"55","phone_number":"61981178515","image_url":"https://firebasestorage.googleapis.com/v0/b/givapp-938de.appspot.com/o/dev%2Fusers%2F1%2Fphotos%2F1569400230645.jpg?alt=media&token=5f7cdb23-1f6d-4e10-bd30-9df04265522e","bio":null,"admin":true,"created_at":"2019-03-25T02:39:26.452Z"}';
 
-      when(mockHttp.delete('${userApi.baseUrl}/${UserApi.ME_ENDPOINT}',
-              headers: anyNamed('headers')))
+      final uri = Uri.parse('${userApi.baseUrl}/${UserApi.ME_ENDPOINT}');
+      when(mockHttp.delete(uri, headers: anyNamed('headers')))
           .thenAnswer((_) async => Response(responseBody, 200));
 
       // When
@@ -190,8 +191,8 @@ void main() {
     test('returns null data if request fails', () async {
       final responseBody = '{"message":"Unauthorized"}';
 
-      when(mockHttp.delete('${userApi.baseUrl}/${UserApi.ME_ENDPOINT}',
-              headers: anyNamed('headers')))
+      final uri = Uri.parse('${userApi.baseUrl}/${UserApi.ME_ENDPOINT}');
+      when(mockHttp.delete(uri, headers: anyNamed('headers')))
           .thenAnswer((_) async => Response(responseBody, 401));
 
       final response = await userApi.deleteMe();
@@ -203,9 +204,9 @@ void main() {
     test('returns null data and error message if http throws', () async {
       // Given
       final errorMessage = 'some error';
+      final uri = Uri.parse('${userApi.baseUrl}/${UserApi.ME_ENDPOINT}');
 
-      when(mockHttp.delete('${userApi.baseUrl}/${UserApi.ME_ENDPOINT}',
-              headers: anyNamed('headers')))
+      when(mockHttp.delete(uri, headers: anyNamed('headers')))
           .thenThrow(errorMessage);
 
       // When
@@ -227,19 +228,24 @@ void main() {
               body: captureAnyNamed('body'), headers: anyNamed('headers')))
           .captured;
 
-      final capturedUrl = captured[0];
+      final Uri capturedUri = captured[0];
+
       expect(
-        capturedUrl,
-        '${userApi.baseUrl}/${UserApi.ACCOUNT_CANCELATION_INTENT_ENDPOINT}',
+        capturedUri.path,
+        '/${UserApi.ACCOUNT_CANCELATION_INTENT_ENDPOINT}',
       );
     });
 
     test('returns api response data if request succeeds', () async {
       final responseBody = '{"message":"Account cancellation intent received"}';
 
+      final uri = Uri.parse(
+        '${userApi.baseUrl}/${UserApi.ACCOUNT_CANCELATION_INTENT_ENDPOINT}',
+      );
+
       when(
         client.http.post(
-          '${userApi.baseUrl}/${UserApi.ACCOUNT_CANCELATION_INTENT_ENDPOINT}',
+          uri,
           body: anyNamed('body'),
           headers: anyNamed('headers'),
         ),
@@ -254,9 +260,13 @@ void main() {
     test('returns null data if resend activation request fails', () async {
       final responseBody = '{"message":"Validation failed"}';
 
+      final uri = Uri.parse(
+        '${userApi.baseUrl}/${UserApi.ACCOUNT_CANCELATION_INTENT_ENDPOINT}',
+      );
+
       when(
         client.http.post(
-          '${userApi.baseUrl}/${UserApi.ACCOUNT_CANCELATION_INTENT_ENDPOINT}',
+          uri,
           body: anyNamed('body'),
           headers: anyNamed('headers'),
         ),
@@ -272,9 +282,13 @@ void main() {
       // Given
       final errorMessage = 'some error';
 
+      final uri = Uri.parse(
+        '${userApi.baseUrl}/${UserApi.ACCOUNT_CANCELATION_INTENT_ENDPOINT}',
+      );
+
       when(
         client.http.post(
-          '${userApi.baseUrl}/${UserApi.ACCOUNT_CANCELATION_INTENT_ENDPOINT}',
+          uri,
           body: anyNamed('body'),
           headers: anyNamed('headers'),
         ),

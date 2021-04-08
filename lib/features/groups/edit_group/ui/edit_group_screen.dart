@@ -173,29 +173,23 @@ class _EditGroupScreenContentState extends BaseState<EditGroupScreenContent> {
   }
 
   Future _openCamera() async {
-    var imageFile = await ImagePicker.pickImage(source: ImageSource.camera);
+    var imageFile = await _bloc.getCameraImage();
     _cropImage(imageFile);
   }
 
   Future _openGallery() async {
-    var imageFile = await ImagePicker.pickImage(source: ImageSource.gallery);
+    var imageFile = await _bloc.getGalleryImage();
     _cropImage(imageFile);
   }
 
-  Future<Null> _cropImage(File imageFile) async {
-    File croppedFile = await ImageCropper.cropImage(
+  Future<Null> _cropImage(PickedFile imageFile) async {
+    File croppedFile = await _bloc.cropImage(
       sourcePath: imageFile.path,
-      aspectRatio: CropAspectRatio(
-        ratioX: Config.croppedGroupImageRatioX,
-        ratioY: Config.croppedGroupImageRatioY,
-      ),
-      androidUiSettings: AndroidUiSettings(
-        toolbarTitle: string('image_cropper_toolbar_title'),
-        toolbarColor: Colors.black,
-        toolbarWidgetColor: Colors.white,
-      ),
+      ratioX: Config.croppedGroupImageRatioX,
+      ratioY: Config.croppedGroupImageRatioY,
       maxWidth: Config.croppedGroupImageMaxHeight,
       maxHeight: Config.croppedGroupImageMaxWidth,
+      toolbarTitle: string('image_cropper_toolbar_title'),
     );
 
     if (croppedFile == null) return;

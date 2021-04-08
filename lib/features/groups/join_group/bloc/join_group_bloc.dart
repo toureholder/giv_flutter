@@ -12,7 +12,7 @@ class JoinGroupBloc extends BaseBloc {
   final PublishSubject<HttpResponse<GroupMembership>> groupMembershipSubject;
   final DiskStorageProvider diskStorage;
 
-  Observable<HttpResponse<GroupMembership>> get groupMembershipStream =>
+  Stream<HttpResponse<GroupMembership>> get groupMembershipStream =>
       groupMembershipSubject.stream;
 
   JoinGroupBloc({

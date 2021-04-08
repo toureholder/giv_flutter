@@ -67,6 +67,7 @@ class VerificationCodeInput extends StatelessWidget {
     return SizedBox(
       width: 300.0,
       child: PinCodeTextField(
+        appContext: context,
         length: 6,
         animationType: AnimationType.none,
         pinTheme: PinTheme(

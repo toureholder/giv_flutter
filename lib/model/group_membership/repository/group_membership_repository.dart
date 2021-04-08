@@ -40,6 +40,7 @@ class GroupMembershipRepository {
     if (memberships != null) {
       // Put memberships in to box
       final membershipEntries = GroupMembership.listToMap(memberships);
+      await box.clear();
       box.putAll(membershipEntries);
 
       // Put groups (from memberships) in to box
