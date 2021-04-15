@@ -14,7 +14,7 @@ class CategoriesBloc {
   final ProductRepository productRepository;
   final BehaviorSubject<List<ProductCategory>> categoriesSubject;
 
-  Observable<List<ProductCategory>> get categories => categoriesSubject.stream;
+  Stream<List<ProductCategory>> get categories => categoriesSubject.stream;
 
   dispose() {
     categoriesSubject.close();

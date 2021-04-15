@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:giv_flutter/base/base_bloc.dart';
 import 'package:giv_flutter/model/group/group.dart';
@@ -10,6 +9,7 @@ import 'package:giv_flutter/service/preferences/disk_storage_provider.dart';
 import 'package:giv_flutter/util/firebase/firebase_storage_util_provider.dart';
 import 'package:giv_flutter/util/network/http_response.dart';
 import 'package:giv_flutter/util/util.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:rxdart/rxdart.dart';
 
 class EditGroupBloc extends BaseBloc {
@@ -19,8 +19,9 @@ class EditGroupBloc extends BaseBloc {
   final FirebaseStorageUtilProvider firebaseStorageUtil;
   final Util util;
   final GroupUpdatedAction groupUpdatedAction;
+  final ImagePicker imagePicker;
 
-  Observable<HttpResponse<Group>> get groupStream => groupSubject.stream;
+  Stream<HttpResponse<Group>> get groupStream => groupSubject.stream;
 
   EditGroupBloc({
     @required this.groupRepository,
@@ -29,7 +30,11 @@ class EditGroupBloc extends BaseBloc {
     @required this.util,
     @required this.firebaseStorageUtil,
     @required this.groupUpdatedAction,
-  }) : super(diskStorage: diskStorage);
+    @required this.imagePicker,
+  }) : super(
+          diskStorage: diskStorage,
+          imagePicker: imagePicker,
+        );
 
   Group getGroupById(int id) => groupRepository.getGroupById(id);
 
@@ -61,14 +66,12 @@ class EditGroupBloc extends BaseBloc {
 
     final uploadTask = ref.putFile(file);
 
-    uploadTask.events.listen((StorageTaskEvent event) async {
-      if (event.type == StorageTaskEventType.success) {
-        final url = await ref.getDownloadURL();
+    uploadTask.then((res) async {
+      final url = await res.ref.getDownloadURL();
 
-        final request = {Group.imageUrlKey: url};
+      final request = {Group.imageUrlKey: url};
 
-        editGroup(groupId, request);
-      }
+      editGroup(groupId, request);
     });
   }
 

@@ -29,7 +29,6 @@ main() {
   MockFirebaseAuth mockFirebaseAuth;
   MockFacebookLogin mockFacebookLogin;
   MockUtil mockUtil;
-  MockAuthUserUpdatedAction mockAuthUserUpdatedAction;
   LogInBloc bloc;
 
   setUp(() {
@@ -41,7 +40,6 @@ main() {
     mockApiHttpResponseStreamSink = MockApiHttpResponseStreamSink();
     mockFirebaseAuth = MockFirebaseAuth();
     mockFacebookLogin = MockFacebookLogin();
-    mockAuthUserUpdatedAction = MockAuthUserUpdatedAction();
     mockUtil = MockUtil();
 
     bloc = LogInBloc(
@@ -84,7 +82,7 @@ main() {
             ));
 
     when(mockSessionProvider.logUserIn(any)).thenAnswer((_) async => [true]);
-    when(mockFirebaseAuth.signInWithCustomToken(token: anyNamed('token')))
+    when(mockFirebaseAuth.signInWithCustomToken(any))
         .thenAnswer((_) async => null);
 
     await bloc.login(LogInRequest.fake());
@@ -100,7 +98,7 @@ main() {
             ));
 
     when(mockSessionProvider.logUserIn(any)).thenAnswer((_) async => [true]);
-    when(mockFirebaseAuth.signInWithCustomToken(token: anyNamed('token')))
+    when(mockFirebaseAuth.signInWithCustomToken(any))
         .thenAnswer((_) async => null);
 
     await bloc.login(LogInRequest.fake());
@@ -125,7 +123,7 @@ main() {
             ));
 
     when(mockSessionProvider.logUserIn(any)).thenAnswer((_) async => [true]);
-    when(mockFirebaseAuth.signInWithCustomToken(token: anyNamed('token')))
+    when(mockFirebaseAuth.signInWithCustomToken(any))
         .thenAnswer((_) async => null);
 
     await bloc.loginWithProvider(LogInWithProviderRequest.fake());
@@ -142,7 +140,7 @@ main() {
             ));
 
     when(mockSessionProvider.logUserIn(any)).thenAnswer((_) async => [true]);
-    when(mockFirebaseAuth.signInWithCustomToken(token: anyNamed('token')))
+    when(mockFirebaseAuth.signInWithCustomToken(any))
         .thenAnswer((_) async => null);
 
     await bloc.loginWithProvider(LogInWithProviderRequest.fake());
@@ -235,8 +233,7 @@ main() {
 
     await bloc.loginWithProvider(LogInWithProviderRequest.fake());
 
-    verify(mockFirebaseAuth.signInWithCustomToken(token: anyNamed('token')))
-        .called(1);
+    verify(mockFirebaseAuth.signInWithCustomToken(any)).called(1);
   });
 
   test('doesn\'t log into firebase if login fails', () async {
@@ -248,8 +245,7 @@ main() {
 
     await bloc.loginWithProvider(LogInWithProviderRequest.fake());
 
-    verifyNever(
-        mockFirebaseAuth.signInWithCustomToken(token: anyNamed('token')));
+    verifyNever(mockFirebaseAuth.signInWithCustomToken(any));
   });
 
   test('gets contoller streams', () async {

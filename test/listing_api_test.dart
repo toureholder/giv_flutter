@@ -29,7 +29,7 @@ void main() {
 
   setUp(() {
     mockHttp = MockHttp();
-    client = HttpClientWrapper(mockHttp, MockDiskStorageProvider());
+    client = HttpClientWrapper(mockHttp, MockDiskStorageProvider(), '');
     listingApi = ListingApi(client: client);
   });
 
@@ -113,7 +113,8 @@ void main() {
     expect(response.status, HttpStatus.notFound);
   });
 
-  test('returns ApiModelResponse data if the delete request succeeds', () async {
+  test('returns ApiModelResponse data if the delete request succeeds',
+      () async {
     when(client.http.delete(any, headers: anyNamed('headers')))
         .thenAnswer((_) async => Response(listingResponseBody, 200));
 

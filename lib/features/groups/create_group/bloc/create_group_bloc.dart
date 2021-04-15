@@ -12,7 +12,7 @@ class CreateGroupBloc extends BaseBloc {
   final PublishSubject<HttpResponse<Group>> groupSubject;
   final DiskStorageProvider diskStorage;
 
-  Observable<HttpResponse<Group>> get groupStream => groupSubject.stream;
+  Stream<HttpResponse<Group>> get groupStream => groupSubject.stream;
 
   CreateGroupBloc({
     @required this.groupRepository,

@@ -40,6 +40,7 @@ main() {
       firebaseStorageUtil: mockFirebaseStorageUtil,
       util: mockUtil,
       groupUpdatedAction: mockGroupUpdatedAction,
+      imagePicker: MockImagePicker(),
     );
   });
 
@@ -184,26 +185,27 @@ main() {
     MockFile mockFile;
     MockStorageReference mockStorageReference;
     MockStorageUploadTask mockUploadTask;
-    StreamController<StorageTaskEvent> storageTaskEventController;
+    StreamController<TaskSnapshot> storageTaskSnapshotController;
 
     setUp(() {
       groupId = 18;
       mockFile = MockFile();
       mockStorageReference = MockStorageReference();
       mockUploadTask = MockStorageUploadTask();
-      storageTaskEventController = StreamController<StorageTaskEvent>();
+      storageTaskSnapshotController = StreamController<TaskSnapshot>();
 
       when(mockFirebaseStorageUtil.getGroupImageRef(groupId))
           .thenReturn(mockStorageReference);
 
-      when(mockStorageReference.putFile(mockFile)).thenReturn(mockUploadTask);
+      when(mockStorageReference.putFile(mockFile))
+          .thenAnswer((_) => mockUploadTask);
 
-      when(mockUploadTask.events)
-          .thenAnswer((_) => storageTaskEventController.stream);
+      when(mockUploadTask.snapshotEvents)
+          .thenAnswer((_) => storageTaskSnapshotController.stream);
     });
 
     tearDown(() {
-      storageTaskEventController.close();
+      storageTaskSnapshotController.close();
     });
 
     test('adds loading state to edit group stream', () {

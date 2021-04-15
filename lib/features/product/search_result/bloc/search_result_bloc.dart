@@ -22,7 +22,7 @@ class SearchResultBloc extends BaseBloc {
 
   final PublishSubject<StreamEvent<ProductSearchResult>> searchResultSubject;
 
-  Observable<StreamEvent<ProductSearchResult>> get result =>
+  Stream<StreamEvent<ProductSearchResult>> get result =>
       searchResultSubject.stream;
 
   dispose() => searchResultSubject.close();

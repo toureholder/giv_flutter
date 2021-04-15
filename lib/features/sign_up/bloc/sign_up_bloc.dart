@@ -14,7 +14,7 @@ class SignUpBloc {
     @required this.responsePublishSubject,
   });
 
-  Observable<HttpResponse<ApiResponse>> get responseStream =>
+  Stream<HttpResponse<ApiResponse>> get responseStream =>
       responsePublishSubject.stream;
 
   dispose() {

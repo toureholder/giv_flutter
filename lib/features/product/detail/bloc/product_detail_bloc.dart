@@ -37,13 +37,12 @@ class ProductDetailBloc extends BaseBloc {
     @required this.diskStorage,
   }) : super(diskStorage: diskStorage);
 
-  Observable<Location> get locationStream => locationPublishSubject.stream;
-  Observable<HttpResponse<ApiModelResponse>> get deleteListingStream =>
+  Stream<Location> get locationStream => locationPublishSubject.stream;
+  Stream<HttpResponse<ApiModelResponse>> get deleteListingStream =>
       deleteListingPublishSubject.stream;
-  Observable<HttpResponse<Product>> get updateListingStream =>
+  Stream<HttpResponse<Product>> get updateListingStream =>
       updateListingPublishSubject.stream;
-  Observable<StreamEventState> get loadingStream =>
-      loadingPublishSubject.stream;
+  Stream<StreamEventState> get loadingStream => loadingPublishSubject.stream;
 
   dispose() {
     locationPublishSubject.close();

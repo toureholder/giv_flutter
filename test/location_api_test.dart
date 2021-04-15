@@ -24,7 +24,7 @@ void main() {
 
   setUp(() {
     mockHttp = MockHttp();
-    client = HttpClientWrapper(mockHttp, MockDiskStorageProvider());
+    client = HttpClientWrapper(mockHttp, MockDiskStorageProvider(), '');
     locationApi = LocationApi(client: client);
   });
 

@@ -31,13 +31,12 @@ class GroupDetailBloc extends BaseBloc {
     @required this.util,
   }) : super(diskStorage: diskStorage);
 
-  Observable<HttpResponse<GroupMembership>> get leaveGroupStream =>
+  Stream<HttpResponse<GroupMembership>> get leaveGroupStream =>
       leaveGroupSubject.stream;
 
-  Observable<List<Product>> get productsStream => productsSubject.stream;
+  Stream<List<Product>> get productsStream => productsSubject.stream;
 
-  Observable<HttpResponse<void>> get addListingsStream =>
-      addListingsSubject.stream;
+  Stream<HttpResponse<void>> get addListingsStream => addListingsSubject.stream;
 
   Future<void> getGroupListings({
     @required int groupId,

@@ -14,10 +14,10 @@ class CloseAccountBloc extends BaseBloc {
   final PublishSubject<AccountCancellationStatus> statusPublishSubject;
   final PublishSubject<String> errorMessageSubject;
 
-  Observable<AccountCancellationStatus> get statusStream =>
+  Stream<AccountCancellationStatus> get statusStream =>
       statusPublishSubject.stream;
 
-  Observable<String> get errorMessageStream => errorMessageSubject.stream;
+  Stream<String> get errorMessageStream => errorMessageSubject.stream;
 
   CloseAccountBloc({
     @required this.diskStorage,

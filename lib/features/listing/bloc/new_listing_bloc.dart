@@ -13,6 +13,7 @@ import 'package:giv_flutter/service/preferences/disk_storage_provider.dart';
 import 'package:giv_flutter/util/data/stream_event.dart';
 import 'package:giv_flutter/util/firebase/firebase_storage_util_provider.dart';
 import 'package:giv_flutter/util/network/http_response.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:meta/meta.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -24,6 +25,7 @@ class NewListingBloc extends BaseBloc {
   final PublishSubject<StreamEvent<double>> uploadStatusPublishSubject;
   final PublishSubject<Product> savedProductPublishSubject;
   final FirebaseStorageUtilProvider firebaseStorageUtil;
+  final ImagePicker imagePicker;
 
   NewListingBloc({
     @required this.locationRepository,
@@ -33,15 +35,19 @@ class NewListingBloc extends BaseBloc {
     @required this.uploadStatusPublishSubject,
     @required this.savedProductPublishSubject,
     @required this.firebaseStorageUtil,
-  }) : super(diskStorage: diskStorage);
+    @required this.imagePicker,
+  }) : super(
+          diskStorage: diskStorage,
+          imagePicker: imagePicker,
+        );
 
   bool isEditing;
 
   List<double> _uploadProgresses = [];
   int _successfulUploadCount = 0;
   List<ListingImage> _listingImages;
-  List<StorageUploadTask> _uploadTasks = [];
-  List<StorageReference> _storageReferences = [];
+  List<UploadTask> _uploadTasks = [];
+  List<Reference> _storageReferences = [];
   bool _hasSentRequest = false;
   Product _product;
 
@@ -50,11 +56,10 @@ class NewListingBloc extends BaseBloc {
     return bloc;
   }
 
-  Observable<Location> get locationStream => locationPublishSubject.stream;
-  Observable<StreamEvent<double>> get uploadStatusStream =>
+  Stream<Location> get locationStream => locationPublishSubject.stream;
+  Stream<StreamEvent<double>> get uploadStatusStream =>
       uploadStatusPublishSubject.stream;
-  Observable<Product> get savedProductStream =>
-      savedProductPublishSubject.stream;
+  Stream<Product> get savedProductStream => savedProductPublishSubject.stream;
 
   _resetProgress() {
     _uploadProgresses = [];
@@ -102,13 +107,14 @@ class NewListingBloc extends BaseBloc {
     _updateProgressStream(0.0);
 
     _resetProgress();
+
     for (var i = 0; i < images.length; i++) {
       final image = images[i];
       if (image.hasUrl)
         _listingImages.add(ListingImage(position: i, url: image.url));
       else if (image.hasFile) {
         _uploadProgresses.add(0.0);
-        StorageReference ref = firebaseStorageUtil.getListingPhotoRef();
+        Reference ref = firebaseStorageUtil.getListingPhotoRef();
         _storageReferences.add(ref);
         _uploadTasks.add(ref.putFile(image.file));
       }
@@ -127,26 +133,25 @@ class NewListingBloc extends BaseBloc {
 
   _listenToUploadTasks() {
     for (var i = 0; i < _uploadTasks.length; i++) {
-      StorageUploadTask task = _uploadTasks[i];
-      task.events.listen((StorageTaskEvent event) {
-        StorageTaskSnapshot snapshot = event.snapshot;
+      UploadTask task = _uploadTasks[i];
 
+      task.snapshotEvents.listen((TaskSnapshot snapshot) {
         _uploadProgresses[i] = snapshot.bytesTransferred.toDouble() /
-            snapshot.totalByteCount.toDouble();
+            snapshot.totalBytes.toDouble();
 
-        _updateUIWithProgress(event);
+        _updateUIWithProgress();
       });
+
+      task.whenComplete(() => _handleSuccessfulUpload());
     }
   }
 
-  _updateUIWithProgress(StorageTaskEvent event) async {
+  _updateUIWithProgress() async {
     final overallProgress =
         _uploadProgresses.reduce((curr, next) => curr + next) /
             _uploadProgresses.length.toDouble();
 
     _updateProgressStream(overallProgress);
-
-    if (event.type == StorageTaskEventType.success) _handleSuccessfulUpload();
   }
 
   _handleSuccessfulUpload() async {
@@ -161,15 +166,13 @@ class NewListingBloc extends BaseBloc {
     }
   }
 
-  // TODO: Find a way to determine original position of uploaded images.
-  // (Makes rearranging possible.)
   _createListingImages() async {
     final beginAt = _listingImages.length;
-    for (StorageReference ref in _storageReferences)
+    for (Reference ref in _storageReferences)
       await _addListImage(ref, _storageReferences.indexOf(ref) + beginAt);
   }
 
-  _addListImage(StorageReference ref, int position) async {
+  _addListImage(Reference ref, int position) async {
     String url = await ref.getDownloadURL();
     _listingImages.add(ListingImage(position: position, url: url));
   }

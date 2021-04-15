@@ -8,6 +8,7 @@ import 'package:giv_flutter/service/session/session_provider.dart';
 import 'package:giv_flutter/util/firebase/firebase_storage_util_provider.dart';
 import 'package:giv_flutter/util/network/http_response.dart';
 import 'package:giv_flutter/util/util.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:meta/meta.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -20,6 +21,7 @@ class SettingsBloc extends BaseBloc {
   final Util util;
   final AuthUserUpdatedAction authUserUpdatedAction;
   final TargetPlatform platform;
+  final ImagePicker imagePicker;
 
   SettingsBloc({
     @required this.userRepository,
@@ -30,9 +32,13 @@ class SettingsBloc extends BaseBloc {
     @required this.util,
     @required this.authUserUpdatedAction,
     @required this.platform,
-  }) : super(diskStorage: diskStorage);
+    @required this.imagePicker,
+  }) : super(
+          diskStorage: diskStorage,
+          imagePicker: imagePicker,
+        );
 
-  Observable<HttpResponse<User>> get userUpdateStream =>
+  Stream<HttpResponse<User>> get userUpdateStream =>
       userUpdatePublishSubject.stream;
 
   dispose() => userUpdatePublishSubject.close();

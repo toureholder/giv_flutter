@@ -19,11 +19,11 @@ void main() {
 
   setUp(() {
     mockHttp = MockHttp();
-    client = HttpClientWrapper(mockHttp, MockDiskStorageProvider());
+    client = HttpClientWrapper(mockHttp, MockDiskStorageProvider(), '');
     appConfigApi = AppConfigApi(client: client);
   });
 
-  tearDown((){
+  tearDown(() {
     reset(mockHttp);
   });
 

@@ -14,6 +14,7 @@ class JoinGroupAccessCodeInput extends StatelessWidget {
       child: SizedBox(
         width: 240,
         child: PinCodeTextField(
+          appContext: context,
           length: 4,
           animationType: AnimationType.none,
           pinTheme: PinTheme(

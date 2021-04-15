@@ -15,7 +15,7 @@ class FirebaseStorageUtil implements FirebaseStorageUtilProvider {
   });
 
   @override
-  Future<StorageReference> getProfilePhotoRef() async {
+  Future<Reference> getProfilePhotoRef() async {
     final user = diskStorage.getUser();
     final timeStamp = DateTime.now().millisecondsSinceEpoch;
     return _getBaseFolderRef()
@@ -26,7 +26,7 @@ class FirebaseStorageUtil implements FirebaseStorageUtilProvider {
   }
 
   @override
-  StorageReference getListingPhotoRef() {
+  Reference getListingPhotoRef() {
     final timeStamp = DateTime.now().millisecondsSinceEpoch;
     return _getBaseFolderRef()
         .child(listingsFolder)
@@ -34,7 +34,7 @@ class FirebaseStorageUtil implements FirebaseStorageUtilProvider {
   }
 
   @override
-  StorageReference getGroupImageRef(int groupId) {
+  Reference getGroupImageRef(int groupId) {
     final timeStamp = DateTime.now().millisecondsSinceEpoch;
     return _getBaseFolderRef()
         .child(groupsFolder)
@@ -43,7 +43,7 @@ class FirebaseStorageUtil implements FirebaseStorageUtilProvider {
         .child('$timeStamp-${Uuid().v1()}.jpg');
   }
 
-  StorageReference _getBaseFolderRef() {
+  Reference _getBaseFolderRef() {
     return Foundation.kReleaseMode
         ? firebaseStorage.ref()
         : firebaseStorage.ref().child(devFolder);

@@ -23,11 +23,11 @@ class LocationFilterBloc {
     @required this.citiesSubject,
   });
 
-  Observable<LocationList> get listStream => listSubject.stream;
+  Stream<LocationList> get listStream => listSubject.stream;
 
-  Observable<StreamEvent<List<State>>> get statesStream => statesSubject.stream;
+  Stream<StreamEvent<List<State>>> get statesStream => statesSubject.stream;
 
-  Observable<StreamEvent<List<City>>> get citiesStream => citiesSubject.stream;
+  Stream<StreamEvent<List<City>>> get citiesStream => citiesSubject.stream;
 
   dispose() {
     listSubject.close();

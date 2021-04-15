@@ -23,7 +23,7 @@ class HomeBloc extends BaseBloc {
   final DiskStorageProvider diskStorage;
   final PublishSubject<HomeContent> contentPublishSubject;
 
-  Observable<HomeContent> get content => contentPublishSubject.stream;
+  Stream<HomeContent> get content => contentPublishSubject.stream;
 
   dispose() {
     contentPublishSubject.close();

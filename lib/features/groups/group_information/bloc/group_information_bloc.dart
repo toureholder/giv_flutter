@@ -21,7 +21,7 @@ class GroupInformationBloc extends BaseBloc {
     @required this.util,
   }) : super(diskStorage: diskStorage);
 
-  Observable<List<GroupMembership>> get loadMembershipsStream =>
+  Stream<List<GroupMembership>> get loadMembershipsStream =>
       loadMembershipsSubject.stream;
 
   Future getGroupMemberships({int groupId, int page}) async {

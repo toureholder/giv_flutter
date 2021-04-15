@@ -45,7 +45,6 @@ import 'package:giv_flutter/util/presentation/spacing.dart';
 import 'package:giv_flutter/util/presentation/typography.dart';
 import 'package:giv_flutter/values/colors.dart';
 import 'package:giv_flutter/values/dimens.dart';
-import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
@@ -739,29 +738,23 @@ class _NewListingState extends BaseState<NewListing> {
   }
 
   Future _openCamera() async {
-    var imageFile = await ImagePicker.pickImage(source: ImageSource.camera);
+    var imageFile = await _bloc.getCameraImage();
     _cropImage(imageFile);
   }
 
   Future _openGallery() async {
-    var imageFile = await ImagePicker.pickImage(source: ImageSource.gallery);
+    var imageFile = await _bloc.getGalleryImage();
     _cropImage(imageFile);
   }
 
-  Future<Null> _cropImage(File imageFile) async {
-    File croppedFile = await ImageCropper.cropImage(
+  Future<Null> _cropImage(PickedFile imageFile) async {
+    File croppedFile = await _bloc.cropImage(
       sourcePath: imageFile.path,
-      aspectRatio: CropAspectRatio(
-        ratioX: Config.croppedProductImageRatioX,
-        ratioY: Config.croppedProductImageRatioY,
-      ),
+      ratioX: Config.croppedProductImageRatioX,
+      ratioY: Config.croppedProductImageRatioY,
       maxWidth: Config.croppedProductImageMaxHeight,
       maxHeight: Config.croppedProductImageMaxWidth,
-      androidUiSettings: AndroidUiSettings(
-        toolbarTitle: string('image_cropper_toolbar_title'),
-        toolbarColor: Colors.black,
-        toolbarWidgetColor: Colors.white,
-      ),
+      toolbarTitle: string('image_cropper_toolbar_title'),
     );
 
     if (croppedFile == null) return;

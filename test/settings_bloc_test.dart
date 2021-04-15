@@ -26,6 +26,7 @@ main() {
   MockFirebaseStorageUtilProvider mockFirebaseStorageUtilProvider;
   MockUtil mockUtil;
   MockAuthUserUpdatedAction mockAuthUserUpdatedAction;
+  MockImagePicker mockImagePicker;
 
   SettingsBloc bloc;
 
@@ -38,6 +39,7 @@ main() {
     mockFirebaseStorageUtilProvider = MockFirebaseStorageUtilProvider();
     mockUtil = MockUtil();
     mockAuthUserUpdatedAction = MockAuthUserUpdatedAction();
+    mockImagePicker = MockImagePicker();
 
     bloc = SettingsBloc(
       userRepository: mockUserRepository,
@@ -48,6 +50,7 @@ main() {
       util: mockUtil,
       authUserUpdatedAction: mockAuthUserUpdatedAction,
       platform: TargetPlatform.android,
+      imagePicker: mockImagePicker,
     );
 
     when(mockUserHttpResponseSubject.stream)
@@ -76,6 +79,7 @@ main() {
         util: mockUtil,
         authUserUpdatedAction: mockAuthUserUpdatedAction,
         platform: TargetPlatform.iOS,
+        imagePicker: mockImagePicker,
       );
 
       expect(bloc.platform, TargetPlatform.iOS);
@@ -183,6 +187,7 @@ main() {
         util: mockUtil,
         authUserUpdatedAction: mockAuthUserUpdatedAction,
         platform: TargetPlatform.iOS,
+        imagePicker: mockImagePicker,
       );
 
       await bloc.updateUser(<String, dynamic>{'attribute': 'value'});
