@@ -7,11 +7,13 @@ import 'test_util/mocks.dart';
 main() {
   AboutBloc aboutBloc;
   MockUtil mockUtil;
+  String versionName = '1.2.3';
 
   setUp(() {
     mockUtil = MockUtil();
     aboutBloc = AboutBloc(
       util: mockUtil,
+      versionName: versionName,
     );
   });
 
@@ -19,9 +21,11 @@ main() {
     reset(mockUtil);
   });
 
-  test('launches URL', () {
-    final url = 'https://www.google.com';
-    aboutBloc.launchURL(url);
-    verify(mockUtil.launchURL(url)).called(1);
+  group('#launchURL', () {
+    test('launches URL', () {
+      final url = 'https://www.google.com';
+      aboutBloc.launchURL(url);
+      verify(mockUtil.launchURL(url)).called(1);
+    });
   });
 }

@@ -4,6 +4,11 @@ import 'package:http/http.dart';
 class HttpClientWrapper {
   final Client http;
   final DiskStorageProvider diskStorage;
+  final String applicationBuildNumber;
 
-  HttpClientWrapper(this.http, this.diskStorage);
+  HttpClientWrapper(
+    this.http,
+    this.diskStorage,
+    this.applicationBuildNumber,
+  );
 }

@@ -79,7 +79,7 @@ class BaseApi {
 
     final headers = {
       HttpHeaders.authorizationHeader: '$bearer $token',
-      CustomHttpHeaders.clientVersionHeader: Config.buildNumber.toString(),
+      CustomHttpHeaders.clientVersionHeader: client.applicationBuildNumber,
       CustomHttpHeaders.clientNameHeader: Config.clientName,
     };
 

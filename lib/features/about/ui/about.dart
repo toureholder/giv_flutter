@@ -41,7 +41,12 @@ class _AboutState extends BaseState<About> {
             LogoText(
               fontSize: 24.0,
             ),
-            Caption(string('about_version_x', formatArg: Config.versionName))
+            Caption(
+              string(
+                'about_version_x',
+                formatArg: _bloc.versionName,
+              ),
+            )
           ],
         ),
       ),

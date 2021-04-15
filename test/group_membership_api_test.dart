@@ -23,7 +23,7 @@ main() {
     setUp(() {
       mockHttp = MockHttp();
       httpClientWrapper =
-          HttpClientWrapper(mockHttp, MockDiskStorageProvider());
+          HttpClientWrapper(mockHttp, MockDiskStorageProvider(), '');
       api = GroupMembershipApi(clientWrapper: httpClientWrapper);
     });
 
