@@ -25,7 +25,7 @@ main() {
     setUp(() {
       mockHttp = MockHttp();
       httpClientWrapper =
-          HttpClientWrapper(mockHttp, MockDiskStorageProvider());
+          HttpClientWrapper(mockHttp, MockDiskStorageProvider(), '');
       api = GroupApi(clientWrapper: httpClientWrapper);
     });
 

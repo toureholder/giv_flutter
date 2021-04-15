@@ -1,6 +1,4 @@
 class Config {
-  static const versionName = '1.11.17';
-  static const buildNumber = 4037;
   static const clientName = 'mobile';
   static const baseUrl =
       'https://' + String.fromEnvironment('GIV_API_BASE_URL');

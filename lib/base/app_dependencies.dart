@@ -70,6 +70,7 @@ import 'package:giv_flutter/util/util.dart';
 import 'package:hive/hive.dart';
 import 'package:http/http.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:package_info/package_info.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 import 'package:rxdart/rxdart.dart';
@@ -81,6 +82,8 @@ Future<List<SingleChildWidget>> getAppDependencies() async {
       : Platform.isIOS
           ? TargetPlatform.iOS
           : null;
+
+  final packageInfo = await PackageInfo.fromPlatform();
 
   final sharedPreferences = await SharedPreferences.getInstance();
   final httpClient = Client();
@@ -95,7 +98,11 @@ Future<List<SingleChildWidget>> getAppDependencies() async {
     facebookLogin,
     authUserUpdatedAction,
   );
-  final customHttpClient = HttpClientWrapper(httpClient, diskStorage);
+  final customHttpClient = HttpClientWrapper(
+    httpClient,
+    diskStorage,
+    packageInfo.buildNumber,
+  );
   final firebaseStorage = FirebaseStorage.instance;
   final firebaseStorageUtil = FirebaseStorageUtil(
     diskStorage: diskStorage,
@@ -301,6 +308,7 @@ Future<List<SingleChildWidget>> getAppDependencies() async {
     Provider<AboutBloc>(
       create: (_) => AboutBloc(
         util: util,
+        versionName: packageInfo.version,
       ),
     ),
     Provider<ForceUpdateBloc>(
