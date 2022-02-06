@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:giv_flutter/model/api_response/api_response.dart';
-import 'package:giv_flutter/model/authenticated_user_updated_action.dart';
 import 'package:giv_flutter/model/user/repository/api/request/log_in_request.dart';
 import 'package:giv_flutter/model/user/repository/api/request/log_in_with_provider_request.dart';
 import 'package:giv_flutter/model/user/repository/api/request/login_assistance_request.dart';

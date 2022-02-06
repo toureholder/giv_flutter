@@ -1,6 +1,5 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:giv_flutter/base/base_state.dart';
 import 'package:giv_flutter/util/util.dart';
 import 'package:giv_flutter/values/colors.dart';

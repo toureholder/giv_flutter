@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'dart:convert';
 import 'dart:async';
 
@@ -15,35 +14,33 @@ class ListingApi extends BaseApi {
     @required HttpClientWrapper client,
   }) : super(client: client);
 
-  Future<HttpResponse<Product>> create(
-      CreateListingRequest request) async {
+  Future<HttpResponse<Product>> create(CreateListingRequest request) async {
     HttpStatus status;
     try {
-      final response = await post('$baseUrl/listings', request.toHttpRequestBody());
+      final response =
+          await post('$baseUrl/listings', request.toHttpRequestBody());
 
       status = HttpResponse.codeMap[response.statusCode];
       final data = Product.fromJson(jsonDecode(response.body));
 
       return HttpResponse<Product>(status: status, data: data);
     } catch (error) {
-      return HttpResponse<Product>(
-          status: status, message: error.toString());
+      return HttpResponse<Product>(status: status, message: error.toString());
     }
   }
 
-  Future<HttpResponse<Product>> update(
-      CreateListingRequest request) async {
+  Future<HttpResponse<Product>> update(CreateListingRequest request) async {
     HttpStatus status;
     try {
-      final response = await put('$baseUrl/listings/${request.id}', request.toHttpRequestBody());
+      final response = await put(
+          '$baseUrl/listings/${request.id}', request.toHttpRequestBody());
 
       status = HttpResponse.codeMap[response.statusCode];
       final data = Product.fromJson(jsonDecode(response.body));
 
       return HttpResponse<Product>(status: status, data: data);
     } catch (error) {
-      return HttpResponse<Product>(
-          status: status, message: error.toString());
+      return HttpResponse<Product>(status: status, message: error.toString());
     }
   }
 
@@ -51,15 +48,15 @@ class ListingApi extends BaseApi {
       UpdateListingActiveStatusRequest request) async {
     HttpStatus status;
     try {
-      final response = await put('$baseUrl/listings/${request.id}', request.toHttpRequestBody());
+      final response = await put(
+          '$baseUrl/listings/${request.id}', request.toHttpRequestBody());
 
       status = HttpResponse.codeMap[response.statusCode];
       final data = Product.fromJson(jsonDecode(response.body));
 
       return HttpResponse<Product>(status: status, data: data);
     } catch (error) {
-      return HttpResponse<Product>(
-          status: status, message: error.toString());
+      return HttpResponse<Product>(status: status, message: error.toString());
     }
   }
 

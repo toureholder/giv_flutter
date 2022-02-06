@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:giv_flutter/base/base_state.dart';
-import 'package:giv_flutter/config/i18n/string_localizations.dart';
 import 'package:giv_flutter/util/form/custom_text_form_field.dart';
 import 'package:giv_flutter/util/form/form_validator.dart';
 import 'package:giv_flutter/util/presentation/buttons.dart';

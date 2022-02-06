@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:giv_flutter/base/base_state.dart';
-import 'package:giv_flutter/config/config.dart';
 import 'package:giv_flutter/features/groups/edit_group/bloc/edit_group_bloc.dart';
 import 'package:giv_flutter/model/group/group.dart';
-import 'package:giv_flutter/model/group_updated_action.dart';
 import 'package:giv_flutter/util/network/http_response.dart';
 import 'package:giv_flutter/util/presentation/android_theme.dart';
 import 'package:giv_flutter/util/presentation/buttons.dart';
@@ -11,7 +9,6 @@ import 'package:giv_flutter/util/presentation/custom_app_bar.dart';
 import 'package:giv_flutter/util/presentation/custom_scaffold.dart';
 import 'package:giv_flutter/util/presentation/spacing.dart';
 import 'package:giv_flutter/values/dimens.dart';
-import 'package:provider/provider.dart';
 
 class EditGroupPropertyScreen extends StatefulWidget {
   final int groupId;

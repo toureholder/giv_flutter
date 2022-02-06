@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:giv_flutter/base/base_bloc.dart';
 import 'package:giv_flutter/model/group/group.dart';
