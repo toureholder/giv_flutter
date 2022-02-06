@@ -5,8 +5,9 @@ import 'package:giv_flutter/util/form/form_util.dart';
 class CustomFormFieldState<T extends StatefulWidget> extends BaseState<T> {
   FocusNode focusNode;
   FormUtil formUtil;
+  AutovalidateMode autovalidateMode = AutovalidateMode.disabled;
 
-  bool autovalidate = false;
+  // bool autovalidate = false;
 
   @override
   void initState() {
@@ -16,7 +17,7 @@ class CustomFormFieldState<T extends StatefulWidget> extends BaseState<T> {
     focusNode.addListener(() {
       if (!focusNode.hasFocus) {
         setState(() {
-          autovalidate = true;
+          autovalidateMode = AutovalidateMode.onUserInteraction;
         });
       }
     });

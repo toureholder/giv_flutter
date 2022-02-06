@@ -1,14 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:giv_flutter/features/groups/edit_group/bloc/edit_group_bloc.dart';
-import 'package:giv_flutter/features/groups/edit_group/ui/edit_group_screen.dart';
 import 'package:giv_flutter/features/groups/group_detail/ui/group_detail_hero_image.dart';
 import 'package:giv_flutter/model/group/group.dart';
-import 'package:giv_flutter/util/navigation/navigation.dart';
 import 'package:giv_flutter/util/presentation/gradients.dart';
 import 'package:giv_flutter/util/presentation/shadows.dart';
 import 'package:giv_flutter/util/presentation/typography.dart';
 import 'package:giv_flutter/values/dimens.dart';
-import 'package:provider/provider.dart';
 
 class GroupDetailHero extends StatelessWidget {
   final Group group;

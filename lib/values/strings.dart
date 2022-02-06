@@ -130,7 +130,7 @@ class Strings {
     },
     "sign_in_dont_have_an_account": {
       "en": "Don't have an account yet?",
-      "pt": "Ainda não tem conta?"
+      "pt": "Ainda não tem uma conta?"
     },
     "validation_message_name_required": {
       "en": "Don't forget to fill in your name",

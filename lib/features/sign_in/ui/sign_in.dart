@@ -59,7 +59,6 @@ class _SignInState extends BaseState<SignIn> {
         ),
         CustomScaffold(
           appBar: AppBar(
-            brightness: Brightness.light,
             backgroundColor: Colors.white,
             iconTheme: IconThemeData(color: Colors.black),
             elevation: 0.0,
@@ -232,9 +231,11 @@ class SignInWithAppleLoadingState extends StatelessWidget {
   Widget build(BuildContext context) {
     return MainButtonTheme(
       fillWidth: true,
-      child: FlatButton(
-        height: 44.0,
-        color: Colors.black,
+      child: TextButton(
+        style: TextButton.styleFrom(
+          minimumSize: Size(double.maxFinite, 44.0),
+          backgroundColor: Colors.black,
+        ),
         onPressed: () {},
         child: ButtonProgressIndicator(color: Colors.white),
       ),

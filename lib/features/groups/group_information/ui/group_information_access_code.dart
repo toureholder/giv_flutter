@@ -46,7 +46,7 @@ class GroupInformationAccessCode extends StatelessWidget {
 
   _copyCodeToClipBoard(BuildContext context, String code) {
     Clipboard.setData(ClipboardData(text: code));
-    Scaffold.of(context).showSnackBar(SnackBar(
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: RichText(
         textAlign: TextAlign.start,
         text: TextSpan(children: [

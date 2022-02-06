@@ -42,7 +42,6 @@ class _CustomAppBarState extends BaseState<CustomAppBar> {
         ),
         leading: widget.leading,
         elevation: 0.0,
-        brightness: Brightness.light,
         actions: widget.actions,
         backgroundColor: Colors.white,
         iconTheme: IconThemeData(color: Colors.black),

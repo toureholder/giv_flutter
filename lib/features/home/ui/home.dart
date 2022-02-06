@@ -14,14 +14,12 @@ import 'package:giv_flutter/features/home/model/home_content.dart';
 import 'package:giv_flutter/features/home/ui/home_app_bar_actions.dart';
 import 'package:giv_flutter/features/home/ui/home_carousel.dart';
 import 'package:giv_flutter/features/home/ui/home_quick_menu.dart';
-import 'package:giv_flutter/features/log_in/bloc/log_in_bloc.dart';
 import 'package:giv_flutter/features/product/detail/bloc/product_detail_bloc.dart';
 import 'package:giv_flutter/features/product/detail/ui/product_detail.dart';
 import 'package:giv_flutter/features/product/search_result/bloc/search_result_bloc.dart';
 import 'package:giv_flutter/features/product/search_result/ui/search_result.dart';
 import 'package:giv_flutter/features/settings/bloc/settings_bloc.dart';
 import 'package:giv_flutter/features/settings/ui/settings.dart';
-import 'package:giv_flutter/features/sign_in/ui/sign_in.dart';
 import 'package:giv_flutter/features/user_profile/bloc/user_profile_bloc.dart';
 import 'package:giv_flutter/features/user_profile/ui/user_profile.dart';
 import 'package:giv_flutter/model/authenticated_user_updated_action.dart';
@@ -155,8 +153,12 @@ class _HomeState extends BaseState<Home> {
   Container _buildSectionHeader(
       BuildContext context, ProductCategory category) {
     return Container(
-      padding:
-          EdgeInsets.fromLTRB(Dimens.default_horizontal_margin, 0.0, 0.0, 0.0),
+      padding: EdgeInsets.fromLTRB(
+        Dimens.default_horizontal_margin,
+        0.0,
+        Dimens.default_half_horizontal_margin,
+        0.0,
+      ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[

@@ -244,11 +244,11 @@ class _EditProfileState extends BaseState<EditProfile> {
           title: Text(string('profile_cancel_upload_confirmation_title')),
           content: Text(string('profile_cancel_upload_confirmation_message')),
           actions: <Widget>[
-            FlatButton(
+            TextButton(
               onPressed: () => Navigator.of(context).pop(false),
               child: Text(string('common_no')),
             ),
-            FlatButton(
+            TextButton(
               onPressed: () {
                 navigation.pop();
                 _isSavingImage = false;

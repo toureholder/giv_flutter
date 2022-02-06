@@ -236,7 +236,7 @@ class ProductGrodDonationRequestBadge extends StatelessWidget {
     return Positioned(
       child: Container(
         decoration: BoxDecoration(
-          color: Theme.of(context).accentColor,
+          color: Theme.of(context).colorScheme.secondary,
           borderRadius: BorderRadius.all(
             Radius.circular(Dimens.default_chip_border_radius),
           ),

@@ -113,13 +113,13 @@ class _SettingsState extends BaseState<Settings> {
           return AlertDialog(
             title: Text(string('logout_confirmation_title')),
             actions: <Widget>[
-              FlatButton(
+              TextButton(
                 child: Text(string('shared_action_cancel')),
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
               ),
-              FlatButton(
+              TextButton(
                   child: Text(string('logout_confirmation_accept_button')),
                   onPressed: _logout)
             ],

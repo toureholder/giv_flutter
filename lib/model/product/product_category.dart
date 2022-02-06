@@ -8,7 +8,6 @@ import 'package:giv_flutter/features/product/search_result/ui/search_result.dart
 import 'package:giv_flutter/model/listing/listing_type.dart';
 import 'package:giv_flutter/model/product/product.dart';
 import 'package:giv_flutter/util/navigation/navigation.dart';
-import 'package:meta/meta.dart';
 import 'package:provider/provider.dart';
 
 class ProductCategory {

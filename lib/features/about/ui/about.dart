@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:giv_flutter/base/base_state.dart';
-import 'package:giv_flutter/config/config.dart';
 import 'package:giv_flutter/features/about/bloc/about_bloc.dart';
 import 'package:giv_flutter/model/about_tile/about_tile.dart';
 import 'package:giv_flutter/util/presentation/custom_app_bar.dart';

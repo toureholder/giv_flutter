@@ -38,7 +38,8 @@ class _MyMaterialAppState extends State<MyMaterialApp> {
         theme: new ThemeData(
           primaryColor: Colors.blue,
           backgroundColor: Colors.blue,
-          accentColor: CustomColors.accentColor,
+          colorScheme: ColorScheme.fromSwatch()
+              .copyWith(secondary: CustomColors.accentColor),
         ),
         home: Consumer<SplashBloc>(
           builder: (context, bloc, child) => Splash(bloc: bloc),

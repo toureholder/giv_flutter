@@ -46,7 +46,7 @@ class _PasswordFormFieldState extends CustomFormFieldState<PasswordFormField> {
       obscureText: !_isPasswordVisible,
       keyboardType: TextInputType.text,
       validator: widget.validator,
-      autovalidate: autovalidate,
+      autovalidateMode: autovalidateMode,
       focusNode: focusNode,
       enabled: widget.enabled,
       onFieldSubmitted: (_) {
@@ -87,4 +87,3 @@ class VisibilityOffIcon extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Icon(Icons.visibility_off);
 }
-

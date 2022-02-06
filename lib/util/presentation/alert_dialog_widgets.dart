@@ -83,7 +83,7 @@ class AlertDialogCancelButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FlatButton(
+    return TextButton(
       child: Text(GetLocalizedStringFunction(context)('shared_action_cancel')),
       onPressed: onPressed,
     );
@@ -107,7 +107,7 @@ class AlertDialogConfirmButton extends StatelessWidget {
     final finalText = text ?? GetLocalizedStringFunction(context)('common_ok');
     final style = textColor == null ? null : TextStyle(color: textColor);
 
-    return FlatButton(
+    return TextButton(
       child: Text(
         finalText,
         style: style,
