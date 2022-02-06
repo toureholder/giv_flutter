@@ -43,7 +43,7 @@ class _CustomTextFormFieldState
       decoration: InputDecoration(labelText: widget.labelText),
       keyboardType: TextInputType.text,
       validator: widget.validator,
-      autovalidate: autovalidate,
+      autovalidateMode: autovalidateMode,
       focusNode: focusNode,
       textInputAction: widget.textInputAction,
       enabled: widget.enabled,

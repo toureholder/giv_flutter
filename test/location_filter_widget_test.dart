@@ -239,7 +239,7 @@ main() {
         expect(find.text(location.country.name), findsOneWidget);
         expect(find.text(location.state.name), findsOneWidget);
         expect(testUtil.findInternationalizedText('location_filter_all_cities'),
-            findsNWidgets(2));
+            findsNWidgets(1));
       },
     );
 

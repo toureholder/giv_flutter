@@ -9,15 +9,15 @@ class EmailFormField extends StatefulWidget {
   final TextEditingController controller;
   final FormFieldValidator<String> validator;
 
-  const EmailFormField(
-      {Key key,
-      this.enabled = true,
-      this.focusNode,
-      this.nextFocus,
-      this.textInputAction = TextInputAction.next,
-      this.controller,
-      @required this.validator,})
-      : super(key: key);
+  const EmailFormField({
+    Key key,
+    this.enabled = true,
+    this.focusNode,
+    this.nextFocus,
+    this.textInputAction = TextInputAction.next,
+    this.controller,
+    @required this.validator,
+  }) : super(key: key);
 
   @override
   _EmailFormFieldState createState() => _EmailFormFieldState();
@@ -41,7 +41,7 @@ class _EmailFormFieldState extends CustomFormFieldState<EmailFormField> {
       decoration: InputDecoration(labelText: string('sign_in_form_email')),
       keyboardType: TextInputType.emailAddress,
       validator: validator,
-      autovalidate: autovalidate,
+      autovalidateMode: autovalidateMode,
       focusNode: focusNode,
       textInputAction: widget.textInputAction,
       enabled: widget.enabled,

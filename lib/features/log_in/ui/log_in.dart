@@ -42,7 +42,7 @@ class _LogInState extends BaseState<LogIn> {
   final FocusNode _passwordFocus = FocusNode();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  bool _autovalidate = false;
+  AutovalidateMode _autovalidateMode = AutovalidateMode.disabled;
   FormValidator _formValidator = FormValidator();
 
   @override
@@ -79,7 +79,7 @@ class _LogInState extends BaseState<LogIn> {
         padding: EdgeInsets.all(Dimens.default_horizontal_margin),
         child: Form(
           key: _formKey,
-          autovalidate: _autovalidate,
+          autovalidateMode: _autovalidateMode,
           child: AndroidTheme(child: _buildFormUI(isLoading)),
         ),
       ),
@@ -136,7 +136,7 @@ class _LogInState extends BaseState<LogIn> {
 
   void _handleSubmit() {
     setState(() {
-      _autovalidate = true;
+      _autovalidateMode = AutovalidateMode.onUserInteraction;
     });
 
     if (_formKey.currentState.validate()) {

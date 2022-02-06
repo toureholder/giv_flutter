@@ -26,12 +26,12 @@ def dartEnvironmentVariables = [
     GIV_FACEBOOK_LOGIN_PROTOCOL_SCHEME: null
 ];
 if (project.hasProperty('dart-defines')) {
-    dartEnvironmentVariables = dartEnvironmentVariables + project.property('dart-defines')
-        .split(',')
-        .collectEntries { entry ->
-            def pair = URLDecoder.decode(entry).split('=')
-            [(pair.first()): pair.last()]
-        }
+     dartEnvironmentVariables = project.property('dart-defines')
+	.split(',')
+	.collectEntries { entry ->
+        def pair = new String(entry.decodeBase64(), 'UTF-8').split('=')
+        [(pair.first()): pair.last()]
+    }
 }
 
 apply plugin: 'com.android.application'
@@ -70,6 +70,7 @@ android {
             storePassword keystoreProperties['uploadStorePassword']
         }
     }
+
     buildTypes {
         release {
             signingConfig signingConfigs.release
