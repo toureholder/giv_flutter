@@ -470,11 +470,11 @@ class GroupDetailBottomNavigationBar extends StatelessWidget {
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Container(),
-            title: Text(''),
+            label: '',
           ),
           BottomNavigationBarItem(
             icon: Container(),
-            title: Text(''),
+            label: '',
           ),
         ],
         onTap: (int index) {},

@@ -59,7 +59,6 @@ class _SignInState extends BaseState<SignIn> {
         ),
         CustomScaffold(
           appBar: AppBar(
-            brightness: Brightness.light,
             backgroundColor: Colors.white,
             iconTheme: IconThemeData(color: Colors.black),
             elevation: 0.0,

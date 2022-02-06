@@ -197,7 +197,6 @@ class _MaterialSearchState<T> extends State<MaterialSearch> {
       appBar: new AppBar(
         leading: widget.leading,
         backgroundColor: widget.barBackgroundColor,
-        brightness: widget.brightness,
         elevation: widget.elevation,
         iconTheme: iconTheme,
         title: new TextField(
