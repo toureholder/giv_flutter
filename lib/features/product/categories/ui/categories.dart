@@ -182,7 +182,7 @@ class TypeTabs extends StatelessWidget {
       donationsChipTextColor = unselectedColor;
       donationsChipColor = Colors.transparent;
       requestsChipTextColor = CustomColors.accentColorText;
-      requestsChipColor = Theme.of(context).accentColor;
+      requestsChipColor = Theme.of(context).colorScheme.secondary;
     }
 
     return Column(

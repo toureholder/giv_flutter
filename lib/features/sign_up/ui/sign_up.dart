@@ -200,7 +200,7 @@ class _SignUpState extends BaseState<SignUp> {
             title: Text(string('sign_up_error_409_title')),
             content: Text(string('sign_up_error_409_messge')),
             actions: <Widget>[
-              FlatButton(
+              TextButton(
                   child: Text(string('sign_up_error_409_recover_email_button')),
                   onPressed: () {
                     Navigation(context).pop();
@@ -212,7 +212,7 @@ class _SignUpState extends BaseState<SignUp> {
                       ),
                     ));
                   }),
-              FlatButton(
+              TextButton(
                   child: Text(string('common_ok')),
                   onPressed: () {
                     Navigation(context).pop();

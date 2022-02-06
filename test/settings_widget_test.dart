@@ -149,7 +149,7 @@ main() {
             testUtil.findInternationalizedText('shared_action_cancel');
 
         final Finder cancelButtonFinder = find.ancestor(
-            of: cancelTextFinder, matching: find.byType(FlatButton));
+            of: cancelTextFinder, matching: find.byType(TextButton));
         expect(cancelButtonFinder, findsOneWidget);
 
         await tester.tap(cancelButtonFinder);

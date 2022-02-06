@@ -155,8 +155,12 @@ class _HomeState extends BaseState<Home> {
   Container _buildSectionHeader(
       BuildContext context, ProductCategory category) {
     return Container(
-      padding:
-          EdgeInsets.fromLTRB(Dimens.default_horizontal_margin, 0.0, 0.0, 0.0),
+      padding: EdgeInsets.fromLTRB(
+        Dimens.default_horizontal_margin,
+        0.0,
+        Dimens.default_half_horizontal_margin,
+        0.0,
+      ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[

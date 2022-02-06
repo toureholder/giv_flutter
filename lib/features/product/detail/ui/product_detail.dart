@@ -291,10 +291,10 @@ class _ProductDetailScreenContentState
             title: Text(string('delete_listing_confirmation_title')),
             content: Text(string('delete_listing_confirmation_content')),
             actions: <Widget>[
-              FlatButton(
+              TextButton(
                   child: Text(string('shared_action_cancel')),
                   onPressed: () => Navigator.of(context).pop()),
-              FlatButton(
+              TextButton(
                   child: Text(
                     string('delete_listing_accept_button'),
                     style: TextStyle(color: Colors.red),
@@ -329,10 +329,10 @@ class _ProductDetailScreenContentState
             title: Text(string(dialogTitleTextKey)),
             content: Text(string(dialogContentTextKey)),
             actions: <Widget>[
-              FlatButton(
+              TextButton(
                   child: Text(string('shared_action_cancel')),
                   onPressed: () => Navigator.of(context).pop()),
-              FlatButton(
+              TextButton(
                   child: Text(string(dialogAcceptButtonTextKey)),
                   onPressed: () => _updateStatus(request))
             ],

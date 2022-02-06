@@ -18,7 +18,9 @@ class AndroidTheme extends StatelessWidget {
         platform: TargetPlatform.android,
         primaryColor: primaryColor ?? Colors.blue,
         backgroundColor: Colors.blue,
-        accentColor: CustomColors.accentColor,
+        colorScheme: ColorScheme.fromSwatch().copyWith(
+          secondary: CustomColors.accentColor,
+        ),
       ),
       child: child,
     );

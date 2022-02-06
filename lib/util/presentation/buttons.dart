@@ -44,15 +44,22 @@ class PrimaryButton extends StatelessWidget {
             color: CustomColors.primaryColorText,
           )
         : Text(text);
+
     final finalOnPressed = isLoading ? null : onPressed;
 
+    final theme = Theme.of(context);
+
     return MainButtonTheme(
-      child: FlatButton(
-        color: Theme.of(context).primaryColor,
-        textColor: CustomColors.primaryColorText,
-        disabledColor:
-            isLoading ? Theme.of(context).primaryColor : Colors.grey[200],
-        disabledTextColor: CustomColors.primaryColorText,
+      child: TextButton(
+        style: TextButton.styleFrom(
+          backgroundColor: theme.primaryColor,
+          primary: CustomColors.primaryColorText,
+          onSurface: isLoading ? theme.primaryColor : Colors.grey[200],
+          minimumSize: Size(
+            double.maxFinite,
+            Dimens.default_min_buton_height,
+          ),
+        ),
         onPressed: finalOnPressed,
         child: child,
       ),
@@ -82,15 +89,22 @@ class AccentButton extends StatelessWidget {
             color: CustomColors.accentColorText,
           )
         : Text(text);
+
     final finalOnPressed = isLoading ? null : onPressed;
 
+    final theme = Theme.of(context);
+
     return MainButtonTheme(
-      child: FlatButton(
-        color: Theme.of(context).accentColor,
-        textColor: CustomColors.accentColorText,
-        disabledColor:
-            isLoading ? Theme.of(context).accentColor : Colors.grey[200],
-        disabledTextColor: Colors.black,
+      child: TextButton(
+        style: TextButton.styleFrom(
+          backgroundColor: theme.colorScheme.secondary,
+          primary: CustomColors.accentColorText,
+          onSurface: isLoading ? theme.colorScheme.secondary : Colors.grey[200],
+          minimumSize: Size(
+            double.maxFinite,
+            Dimens.default_min_buton_height,
+          ),
+        ),
         onPressed: finalOnPressed,
         child: child,
       ),
@@ -120,14 +134,20 @@ class DangerButton extends StatelessWidget {
             color: CustomColors.primaryColorText,
           )
         : Text(text);
+
     final finalOnPressed = isLoading ? null : onPressed;
 
     return MainButtonTheme(
-      child: FlatButton(
-        color: CustomColors.dangerColor,
-        textColor: CustomColors.primaryColorText,
-        disabledColor: isLoading ? CustomColors.dangerColor : Colors.grey[200],
-        disabledTextColor: CustomColors.primaryColorText,
+      child: TextButton(
+        style: TextButton.styleFrom(
+          backgroundColor: CustomColors.dangerColor,
+          primary: CustomColors.primaryColorText,
+          onSurface: isLoading ? CustomColors.dangerColor : Colors.grey[200],
+          minimumSize: Size(
+            double.maxFinite,
+            Dimens.default_min_buton_height,
+          ),
+        ),
         onPressed: finalOnPressed,
         child: child,
       ),
@@ -168,100 +188,26 @@ class CustomIconButton extends StatelessWidget {
                   Text(text),
                 ],
               ),
-              Positioned(left: 4.0, child: icon)
+              Positioned(left: 12.0, child: icon)
             ],
           );
 
     final finalOnPressed = isLoading ? null : onPressed;
 
     return MainButtonTheme(
-      child: FlatButton(
-        color: backgroundColor,
-        textColor: Colors.white,
-        disabledColor: isLoading ? backgroundColor : Colors.grey[200],
-        disabledTextColor: Colors.white,
+      child: TextButton(
+        style: TextButton.styleFrom(
+          backgroundColor: backgroundColor,
+          primary: Colors.white,
+          onSurface: isLoading ? backgroundColor : Colors.grey[200],
+          minimumSize: Size(
+            double.maxFinite,
+            Dimens.default_min_buton_height,
+          ),
+        ),
         onPressed: finalOnPressed,
         child: child,
       ),
-    );
-  }
-}
-
-class WhiteButton extends StatelessWidget {
-  final VoidCallback onPressed;
-  final String text;
-
-  const WhiteButton({Key key, this.onPressed, this.text}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return MainButtonTheme(
-      child: FlatButton(
-        color: Colors.white,
-        textColor: Colors.black,
-        disabledColor: Colors.grey[200],
-        disabledTextColor: Colors.white,
-        onPressed: onPressed,
-        child: Text(text),
-      ),
-    );
-  }
-}
-
-class GreyButton extends StatelessWidget {
-  final VoidCallback onPressed;
-  final String text;
-  final bool fillWidth;
-
-  const GreyButton({Key key, this.onPressed, this.text, this.fillWidth = true})
-      : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return MainButtonTheme(
-      fillWidth: fillWidth,
-      child: FlatButton(
-        color: Colors.grey[300],
-        textColor: Colors.black,
-        disabledColor: Colors.grey[200],
-        disabledTextColor: Colors.grey[200],
-        onPressed: onPressed,
-        child: Text(text),
-      ),
-    );
-  }
-}
-
-class GreyIconButton extends StatelessWidget {
-  final VoidCallback onPressed;
-  final String text;
-  final bool isFlexible;
-  final IconData iconData;
-
-  const GreyIconButton({
-    Key key,
-    this.onPressed,
-    this.text,
-    this.isFlexible = false,
-    this.iconData,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    var textWidget = Text(
-      text,
-      maxLines: 1,
-      overflow: TextOverflow.ellipsis,
-    );
-
-    var label = isFlexible ? Flexible(child: textWidget) : textWidget;
-
-    return MainButtonTheme(
-      child: FlatButton.icon(
-          color: Colors.grey[300],
-          onPressed: onPressed,
-          icon: Icon(iconData, color: Colors.grey),
-          label: label),
     );
   }
 }
@@ -277,18 +223,20 @@ class GreyOutlineButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ButtonStyle outlinedButtonStyle = OutlinedButton.styleFrom(
+      primary: Colors.black,
+      minimumSize: Size(double.maxFinite, Dimens.default_min_buton_height),
+      padding: EdgeInsets.symmetric(horizontal: 16),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(2)),
+      ),
+      onSurface: Colors.grey[200],
+    );
+
     return MainButtonTheme(
       fillWidth: fillWidth,
-      child: OutlineButton(
-        borderSide: BorderSide(
-          color: Colors.grey[300],
-          style: BorderStyle.solid,
-          width: 0.8,
-        ),
-        color: Colors.grey[300],
-        textColor: Colors.black,
-        disabledBorderColor: Colors.grey[200],
-        disabledTextColor: Colors.white,
+      child: OutlinedButton(
+        style: outlinedButtonStyle,
         onPressed: onPressed,
         child: Text(text),
       ),
@@ -320,14 +268,19 @@ class GreyOutlineIconButton extends StatelessWidget {
 
     var label = isFlexible ? Flexible(child: textWidget) : textWidget;
 
+    final ButtonStyle outlinedButtonStyle = OutlinedButton.styleFrom(
+      primary: Colors.black,
+      minimumSize: Size(double.maxFinite, Dimens.default_min_buton_height),
+      padding: EdgeInsets.symmetric(horizontal: 16),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(2)),
+      ),
+      onSurface: Colors.grey[200],
+    );
+
     return MainButtonTheme(
-      child: OutlineButton.icon(
-          borderSide: BorderSide(
-            color: Colors.grey[300],
-            style: BorderStyle.solid,
-            width: 0.8,
-          ),
-          textColor: Colors.black,
+      child: OutlinedButton.icon(
+          style: outlinedButtonStyle,
           onPressed: onPressed,
           icon: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -372,12 +325,15 @@ class SmallFlatPrimaryButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FlatButton(
+    return TextButton(
       onPressed: onPressed,
       child: Text(
         text,
-        style:
-            TextStyle(fontSize: 14.0, letterSpacing: 0.1, color: Colors.blue),
+        style: TextStyle(
+          fontSize: 14.0,
+          letterSpacing: 0.1,
+          color: Theme.of(context).primaryColor,
+        ),
       ),
     );
   }
@@ -392,9 +348,10 @@ class MediumFlatPrimaryButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = onPressed == null ? Colors.grey : Colors.blue;
+    final color =
+        onPressed == null ? Colors.grey : Theme.of(context).primaryColor;
 
-    return FlatButton(
+    return TextButton(
       onPressed: onPressed,
       child: Text(
         text,
@@ -420,15 +377,16 @@ class MediumFlatDangerButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FlatButton(
+    return TextButton(
       onPressed: onPressed,
       child: Text(
         text,
         style: TextStyle(
-            fontSize: 15.0,
-            letterSpacing: 0.1,
-            color: Colors.red,
-            fontWeight: FontWeight.bold),
+          fontSize: 15.0,
+          letterSpacing: 0.1,
+          color: CustomColors.dangerColor,
+          fontWeight: FontWeight.bold,
+        ),
       ),
     );
   }
@@ -448,7 +406,7 @@ class TextFlatButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FlatButton(
+    return TextButton(
       onPressed: onPressed,
       child: Text(
         text,

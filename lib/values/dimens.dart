@@ -2,6 +2,8 @@ class Dimens {
   static const double GRID = 2.0;
 
   static const double default_horizontal_margin = GRID * 10;
+  static const double default_half_horizontal_margin =
+      default_horizontal_margin / 2;
   static const double default_vertical_margin = GRID * 10;
   static const double default_vertical_margin_and_a_half = GRID * 15;
   static const double double_default_margin = GRID * 20;
@@ -18,6 +20,8 @@ class Dimens {
   static const double settings_tile_icon_size = 18.0;
   static const double category_list_tile_vertical_padding = GRID * 9;
   static const double user_avatar_small = 32.0;
+
+  static const double default_min_buton_height = 48.0;
 
   static double grid(int times) {
     return GRID * times;
