@@ -25,7 +25,7 @@ class CreateGroupForm extends StatefulWidget {
 
 class _CreateGroupFormState extends State<CreateGroupForm> {
   final _formKey = GlobalKey<FormState>();
-  var _autovalidate = false;
+  AutovalidateMode _autovalidateMode = AutovalidateMode.disabled;
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +34,7 @@ class _CreateGroupFormState extends State<CreateGroupForm> {
         padding: EdgeInsets.all(Dimens.default_horizontal_margin),
         child: Form(
           key: _formKey,
-          autovalidate: _autovalidate,
+          autovalidateMode: _autovalidateMode,
           child: AndroidTheme(
             child: CreateGroupFormUI(
               onSubmit: _handleSubmit,
@@ -49,7 +49,7 @@ class _CreateGroupFormState extends State<CreateGroupForm> {
 
   void _handleSubmit() {
     setState(() {
-      _autovalidate = true;
+      _autovalidateMode = AutovalidateMode.onUserInteraction;
     });
 
     if (_formKey.currentState.validate()) {

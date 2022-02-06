@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:giv_flutter/config/i18n/string_localizations.dart';
 import 'package:giv_flutter/features/base/base.dart';
 import 'package:giv_flutter/features/customer_service/bloc/customer_service_dialog_bloc.dart';
@@ -93,7 +92,7 @@ class BaseState<T extends StatefulWidget> extends State<T> {
             title: title == null ? null : Text(title),
             content: content == null ? null : Text(content),
             actions: <Widget>[
-              FlatButton(
+              TextButton(
                   child: Text(string('common_ok')),
                   onPressed: () {
                     Navigation(context).pop();
@@ -151,14 +150,14 @@ class GenericErrorDialog extends StatelessWidget {
       title: Text(string('error_generic_title')),
       content: Text(content),
       actions: <Widget>[
-        FlatButton(
+        TextButton(
           child: Text(string('action_report')),
           onPressed: () {
             util.launchCustomerService(message);
             Navigation(context).pop();
           },
         ),
-        FlatButton(
+        TextButton(
           child: Text(string('common_ok')),
           onPressed: () {
             Navigation(context).pop();

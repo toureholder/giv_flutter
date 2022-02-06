@@ -397,7 +397,6 @@ class _LocationFilterState extends BaseState<LocationFilter> {
     if (menuItems?.isNotEmpty ?? false) {
       final clearItem = _buildClearValueEntry<T>(resId);
       menuItems?.insert(0, clearItem);
-      menuItems?.add(clearItem);
     }
   }
 }

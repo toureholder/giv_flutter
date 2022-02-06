@@ -40,7 +40,7 @@ class _LoginAssistanceState extends BaseState<LoginAssistance> {
   var _formKey = GlobalKey<FormState>();
   final FocusNode _emailFocus = FocusNode();
   TextEditingController _emailController;
-  bool _autovalidate = false;
+  AutovalidateMode _autovalidateMode = AutovalidateMode.disabled;
   Map<LoginAssistanceType, Map<LoginAssistanceFunction, Function>> _functionMap;
 
   @override
@@ -81,7 +81,7 @@ class _LoginAssistanceState extends BaseState<LoginAssistance> {
         padding: EdgeInsets.all(Dimens.default_horizontal_margin),
         child: Form(
           key: _formKey,
-          autovalidate: _autovalidate,
+          autovalidateMode: _autovalidateMode,
           child: AndroidTheme(child: _buildFormUI(isLoading)),
         ),
       ),
@@ -128,7 +128,7 @@ class _LoginAssistanceState extends BaseState<LoginAssistance> {
 
   _handleSubmit() {
     setState(() {
-      _autovalidate = true;
+      _autovalidateMode = AutovalidateMode.onUserInteraction;
     });
 
     var function =

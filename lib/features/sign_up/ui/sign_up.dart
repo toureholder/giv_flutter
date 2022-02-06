@@ -44,7 +44,7 @@ class _SignUpState extends BaseState<SignUp> {
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  bool _autovalidate = false;
+  AutovalidateMode _autovalidateMode = AutovalidateMode.disabled;
   FormValidator _formValidator = FormValidator();
 
   @override
@@ -81,7 +81,7 @@ class _SignUpState extends BaseState<SignUp> {
         padding: EdgeInsets.all(Dimens.default_horizontal_margin),
         child: Form(
           key: _formKey,
-          autovalidate: _autovalidate,
+          autovalidateMode: _autovalidateMode,
           child: AndroidTheme(child: _buildFormUI(isLoading)),
         ),
       ),
@@ -145,7 +145,7 @@ class _SignUpState extends BaseState<SignUp> {
 
   void _handleSubmit() {
     setState(() {
-      _autovalidate = true;
+      _autovalidateMode = AutovalidateMode.onUserInteraction;
     });
 
     if (_formKey.currentState.validate()) {
@@ -200,7 +200,7 @@ class _SignUpState extends BaseState<SignUp> {
             title: Text(string('sign_up_error_409_title')),
             content: Text(string('sign_up_error_409_messge')),
             actions: <Widget>[
-              FlatButton(
+              TextButton(
                   child: Text(string('sign_up_error_409_recover_email_button')),
                   onPressed: () {
                     Navigation(context).pop();
@@ -212,7 +212,7 @@ class _SignUpState extends BaseState<SignUp> {
                       ),
                     ));
                   }),
-              FlatButton(
+              TextButton(
                   child: Text(string('common_ok')),
                   onPressed: () {
                     Navigation(context).pop();

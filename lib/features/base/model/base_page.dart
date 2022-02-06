@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:meta/meta.dart';
 
 class BasePage {
   final Widget child;
@@ -9,5 +8,9 @@ class BasePage {
 
   BasePage({this.child, this.icon, this.iconText, @required this.actionId});
 
-  BasePage.empty() : child = null, icon = null, iconText = '', actionId = null;
+  BasePage.empty()
+      : child = null,
+        icon = null,
+        iconText = '',
+        actionId = null;
 }

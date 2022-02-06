@@ -1,3 +1,12 @@
+- [Development](#development)
+  - [Adding secrets for development](#adding-secrets-for-development)
+  - [Running the app](#running-the-app)
+    - [VSCode Run and Debug](#vscode-run-and-debug)
+    - [Command line](#command-line)
+  - [Running the tests](#running-the-tests)
+  - [Gitmojis](#gitmojis)
+
+<!-- omit in toc -->
 # giv_flutter
 
 Source code for the Alguém Quer mobile app. Get the app here: https://alguemquer.com.br.
@@ -21,11 +30,21 @@ cp path/to/secrets/android/key.properties android/
 cp -r path/to/secrets/keys .
 ```
 
-3. Update `storeFile` property in `android/key.properties`.
+3. Update `storeFile` and `uploadStoreFile` properties in `android/key.properties` to location of .jks files.
 
 4. Update `json_key_file` in `android/fastlane/Appfile` (and remove GCP id from file name).
 
 ### Running the app
+
+#### VSCode Run and Debug
+
+1. Add launch config with dart-defines to .vscode folder
+```sh
+cp path/to/secrets/.vscode/launch.json .vscode/
+```
+
+2. Run with VSCode Run and debug. 
+#### Command line
 
 ```sh
 flutter doctor
@@ -33,7 +52,7 @@ flutter packages get
 flutter pub run build_runner build --delete-conflicting-outputs
 
 # Run command with dart-define variables from secrets scripts folder
-flutter run
+sh path/to/secrets/scripts/flutter_run_android.sh
 ```
 
 ### Running the tests

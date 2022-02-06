@@ -72,12 +72,7 @@ class _BaseState extends BaseState<Base> implements HomeListener {
             key: Key(widgetKey),
           );
 
-    return BottomNavigationBarItem(
-        icon: icon,
-        title: Text(
-          text,
-          style: TextStyle(fontSize: 12.0),
-        ));
+    return BottomNavigationBarItem(icon: icon, label: text);
   }
 
   List<BottomNavigationBarItem> _buildBottomNavigationBarList() {

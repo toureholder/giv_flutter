@@ -848,11 +848,11 @@ class _NewListingState extends BaseState<NewListing> {
                 title: Text(string('new_listing_cancel_confirmation_title')),
                 content: Text(string(message)),
                 actions: <Widget>[
-                  FlatButton(
+                  TextButton(
                     onPressed: () => Navigator.of(context).pop(false),
                     child: Text(string('common_no')),
                   ),
-                  FlatButton(
+                  TextButton(
                     onPressed: () => Navigator.of(context).pop(true),
                     child: Text(string('common_yes')),
                   ),

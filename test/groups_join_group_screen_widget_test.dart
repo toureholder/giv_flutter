@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:giv_flutter/base/base_state.dart';
@@ -56,6 +54,7 @@ main() {
     membershipHttpResponseSubject.close();
   });
 
+  // ignore: unused_element
   Future<void> fillInCodeInput(WidgetTester tester, String token) async {
     final finder = find.byType(JoinGroupAccessCodeInput);
     await tester.enterText(finder, token);
