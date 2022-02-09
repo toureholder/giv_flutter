@@ -11,8 +11,8 @@ cache:
   bundler: true
   cocoapods: true
   directories:
-  - $HOME/.pub-cache
-  - $HOME/.rvm/
+    - $HOME/.pub-cache
+    - $HOME/.rvm/
 
 if: type = pull_request AND branch = main
 
@@ -31,7 +31,7 @@ jobs:
         - flutter test --coverage --coverage-path=lcov.info
       after_success:
         - bash <(curl -s https://codecov.io/bash)
-      
+
     - stage: deploy
       # Android
       language: android
@@ -64,7 +64,7 @@ jobs:
         - flutter clean
         - flutter packages get
         - flutter pub run build_runner build --delete-conflicting-outputs
-        - flutter build appbundle --dart-define=GIV_API_BASE_URL="$GIV_API_BASE_URL" --dart-define=GIV_FACEBOOK_APP_ID="$GIV_FACEBOOK_APP_ID" --dart-define=GIV_FACEBOOK_LOGIN_PROTOCOL_SCHEME="$GIV_FACEBOOK_LOGIN_PROTOCOL_SCHEME" --dart-define=GIV_GOOGLE_LOGIN_PROTOCOL_SCHEME="$GIV_GOOGLE_LOGIN_PROTOCOL_SCHEME"
+        - flutter build appbundle --dart-define=GIV_API_BASE_URL="$GIV_API_BASE_URL" --dart-define=GIV_FACEBOOK_APP_ID="$GIV_FACEBOOK_APP_ID" --dart-define=GIV_FACEBOOK_LOGIN_PROTOCOL_SCHEME="$GIV_FACEBOOK_LOGIN_PROTOCOL_SCHEME" --dart-define=GIV_FACEBOOK_CLIENT_TOKEN="$GIV_FACEBOOK_CLIENT_TOKEN" --dart-define=GIV_GOOGLE_LOGIN_PROTOCOL_SCHEME="$GIV_GOOGLE_LOGIN_PROTOCOL_SCHEME"
         - cd android
         - bundle exec fastlane beta --verbose
 
@@ -74,7 +74,7 @@ jobs:
       os: osx
       osx_image: xcode12
       install:
-        # Fastlane 
+        # Fastlane
         - rvm install 2.6.0 && rvm use 2.6.0
         - gem install bundler
         - cd ios && bundle install && cd ..
@@ -92,7 +92,7 @@ jobs:
         - flutter clean
         - flutter packages get
         - flutter pub run build_runner build --delete-conflicting-outputs
-        - flutter build ios --release --no-codesign --dart-define=GIV_API_BASE_URL="$GIV_API_BASE_URL" --dart-define=GIV_FACEBOOK_APP_ID="$GIV_FACEBOOK_APP_ID" --dart-define=GIV_FACEBOOK_LOGIN_PROTOCOL_SCHEME="$GIV_FACEBOOK_LOGIN_PROTOCOL_SCHEME" --dart-define=GIV_GOOGLE_LOGIN_PROTOCOL_SCHEME="$GIV_GOOGLE_LOGIN_PROTOCOL_SCHEME"
+        - flutter build ios --release --no-codesign --dart-define=GIV_API_BASE_URL="$GIV_API_BASE_URL" --dart-define=GIV_FACEBOOK_APP_ID="$GIV_FACEBOOK_APP_ID" --dart-define=GIV_FACEBOOK_LOGIN_PROTOCOL_SCHEME="$GIV_FACEBOOK_LOGIN_PROTOCOL_SCHEME" --dart-define=GIV_FACEBOOK_CLIENT_TOKEN="$GIV_FACEBOOK_CLIENT_TOKEN" --dart-define=GIV_GOOGLE_LOGIN_PROTOCOL_SCHEME="$GIV_GOOGLE_LOGIN_PROTOCOL_SCHEME"
         - cd ios
         - echo "machine github.com login $GITHUB_API_TOKEN" >> ~/.netrc
         - bundle exec fastlane beta --verbose

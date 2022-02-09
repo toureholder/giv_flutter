@@ -23,7 +23,8 @@ if (flutterVersionName == null) {
 
 def dartEnvironmentVariables = [
     GIV_FACEBOOK_APP_ID: null,
-    GIV_FACEBOOK_LOGIN_PROTOCOL_SCHEME: null
+    GIV_FACEBOOK_LOGIN_PROTOCOL_SCHEME: null,
+    GIV_FACEBOOK_CLIENT_TOKEN: null,
 ];
 if (project.hasProperty('dart-defines')) {
      dartEnvironmentVariables = project.property('dart-defines')
@@ -35,6 +36,7 @@ if (project.hasProperty('dart-defines')) {
 }
 
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 def keystoreProperties = new Properties()
@@ -44,7 +46,15 @@ if (keystorePropertiesFile.exists()) {
 }
 
 android {
-    compileSdkVersion 29
+    compileSdkVersion 31
+
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+
+    sourceSets {
+        main.java.srcDirs += 'src/main/kotlin'
+    }
 
     lintOptions {
         disable 'InvalidPackage'
@@ -53,13 +63,14 @@ android {
     defaultConfig {
         applicationId "com.greenballoon.givflutter"
         minSdkVersion 16
-        targetSdkVersion 29
+        targetSdkVersion 31
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
         resValue "string", "facebook_app_id", dartEnvironmentVariables.GIV_FACEBOOK_APP_ID
         resValue "string", "fb_login_protocol_scheme", dartEnvironmentVariables.GIV_FACEBOOK_LOGIN_PROTOCOL_SCHEME
+        resValue "string", "facebook_client_token", dartEnvironmentVariables.GIV_FACEBOOK_CLIENT_TOKEN
     }
 
     signingConfigs {
@@ -83,6 +94,7 @@ flutter {
 }
 
 dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'com.facebook.android:facebook-login:[4,5)'
     implementation 'androidx.multidex:multidex:2.0.1'
     implementation 'com.google.guava:listenablefuture:9999.0-empty-to-avoid-conflict-with-guava'
