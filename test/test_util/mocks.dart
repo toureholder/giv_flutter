@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_facebook_login/flutter_facebook_login.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:giv_flutter/config/i18n/string_localizations.dart';
 import 'package:giv_flutter/features/force_update/bloc/force_update_bloc.dart';
 import 'package:giv_flutter/features/groups/create_group/bloc/create_group_bloc.dart';
@@ -73,7 +73,7 @@ class MockClient extends Mock implements HttpClientWrapper {}
 
 class MockDiskStorageProvider extends Mock implements DiskStorageProvider {}
 
-class MockFacebookLogin extends Mock implements FacebookLogin {}
+class MockFacebookLogin extends Mock implements FacebookAuth {}
 
 class MockFirebaseAuth extends Mock implements FirebaseAuth {}
 

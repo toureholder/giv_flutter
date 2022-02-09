@@ -1,5 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_facebook_login/flutter_facebook_login.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:giv_flutter/model/api_response/api_response.dart';
 import 'package:giv_flutter/model/user/repository/api/request/log_in_request.dart';
 import 'package:giv_flutter/model/user/repository/api/request/log_in_with_provider_request.dart';
@@ -28,7 +28,7 @@ class LogInBloc {
   final PublishSubject<HttpResponse<LogInResponse>> loginPublishSubject;
   final PublishSubject<HttpResponse<ApiResponse>> loginAssistancePublishSubject;
   final FirebaseAuth firebaseAuth;
-  final FacebookLogin facebookLogin;
+  final FacebookAuth facebookLogin;
   final Util util;
 
   Stream<HttpResponse<LogInResponse>> get loginResponseStream =>
@@ -55,12 +55,10 @@ class LogInBloc {
     }
   }
 
-  Future<FacebookLoginResult> loginToFacebook(
-      {FacebookLoginBehavior behavior}) {
-    if (behavior != null) {
-      facebookLogin.loginBehavior = behavior;
-    }
-    return facebookLogin.logIn(['email']);
+  Future<LoginResult> loginToFacebook() {
+    return facebookLogin.login(permissions: [
+      'email',
+    ]);
   }
 
   loginWithProvider(LogInWithProviderRequest request) async {
