@@ -1,5 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_facebook_login/flutter_facebook_login.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:giv_flutter/model/authenticated_user_updated_action.dart';
 import 'package:giv_flutter/model/user/repository/api/response/log_in_response.dart';
 import 'package:giv_flutter/model/user/user.dart' as GivUser;
@@ -9,7 +9,7 @@ import 'package:giv_flutter/service/session/session_provider.dart';
 class Session extends SessionProvider {
   final DiskStorageProvider diskStorage;
   final FirebaseAuth firebaseAuth;
-  final FacebookLogin facebookLogin;
+  final FacebookAuth facebookLogin;
   final AuthUserUpdatedAction authUserUpdatedAction;
 
   Session(

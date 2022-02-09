@@ -3,7 +3,7 @@ import 'dart:io' show Platform;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_facebook_login/flutter_facebook_login.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:giv_flutter/config/hive/constants.dart';
 import 'package:giv_flutter/features/about/bloc/about_bloc.dart';
 import 'package:giv_flutter/features/customer_service/bloc/customer_service_dialog_bloc.dart';
@@ -89,7 +89,7 @@ Future<List<SingleChildWidget>> getAppDependencies() async {
   final httpClient = Client();
   final diskStorage = SharedPreferencesStorage(sharedPreferences);
   final firebaseAuth = FirebaseAuth.instance;
-  final facebookLogin = FacebookLogin();
+  final facebookLogin = FacebookAuth.instance;
   final authUserUpdatedAction = AuthUserUpdatedAction();
   final groupUpdatedAction = GroupUpdatedAction();
   final session = Session(

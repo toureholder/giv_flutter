@@ -23,16 +23,11 @@
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
-			<key>CFBundleURLSchemes</key>
-			<array>
-				<string>$(GIV_FACEBOOK_LOGIN_PROTOCOL_SCHEME)</string>
-			</array>
-		</dict>
-		<dict>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
+                <string>$(GIV_FACEBOOK_LOGIN_PROTOCOL_SCHEME)</string>
 				<string>$(GIV_GOOGLE_LOGIN_PROTOCOL_SCHEME)</string>
 			</array>
 		</dict>
@@ -41,6 +36,8 @@
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>FacebookAppID</key>
 	<string>$(GIV_FACEBOOK_APP_ID)</string>
+    <key>FacebookClientToken</key>
+    <string>$(GIV_FACEBOOK_CLIENT_TOKEN)</string>
 	<key>FacebookDisplayName</key>
 	<string>Alguém Quer?</string>
 	<key>LSApplicationQueriesSchemes</key>

@@ -1,5 +1,7 @@
+import 'dart:io' show Platform;
+
 import 'package:flutter/material.dart';
-import 'package:flutter_facebook_login/flutter_facebook_login.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:giv_flutter/base/base_state.dart';
 import 'package:giv_flutter/features/log_in/bloc/log_in_bloc.dart';
 import 'package:giv_flutter/features/log_in/ui/log_in.dart';
@@ -17,7 +19,6 @@ import 'package:giv_flutter/util/presentation/typography.dart';
 import 'package:giv_flutter/values/dimens.dart';
 import 'package:provider/provider.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
-import 'dart:io' show Platform;
 
 class SignIn extends StatefulWidget {
   final Widget redirect;
@@ -176,20 +177,27 @@ class _SignInState extends BaseState<SignIn> {
     final result = await _logInBloc.loginToFacebook();
 
     switch (result.status) {
-      case FacebookLoginStatus.loggedIn:
+      case LoginStatus.success:
         _logInBloc.loginWithProvider(LogInWithProviderRequest(
-            accessToken: result.accessToken.token,
-            provider: LogInWithProviderRequest.facebook,
-            localeString: localeString));
+          accessToken: result.accessToken.token,
+          provider: LogInWithProviderRequest.facebook,
+          localeString: localeString,
+        ));
         break;
-      case FacebookLoginStatus.cancelledByUser:
+      case LoginStatus.cancelled:
         showInformationDialog(
-            content: string('facebook_login_cancelled_message'));
+          content: string('facebook_login_cancelled_message'),
+        );
         break;
-      case FacebookLoginStatus.error:
+      case LoginStatus.failed:
         String content = string('facebook_login_error_message');
-        String message = result.errorMessage;
-        showGenericErrorDialog(content: content, message: message);
+        showGenericErrorDialog(
+          content: content,
+          message: result.message,
+        );
+        break;
+      case LoginStatus.operationInProgress:
+        // no-op
         break;
     }
   }
