@@ -21,9 +21,9 @@ dependencies:
   cached_network_image: ^3.0.0
   country_code_picker: ^2.0.1
   faker: ^1.1.1
-  firebase_auth: ^1.4.1
+  firebase_auth: ^3.3.6
   firebase_core: ^1.12.0
-  firebase_storage: ^8.1.3
+  firebase_storage: ^10.2.7
   flutter_facebook_auth: ^4.0.1
   flutter_svg: ^0.21.0+1
   google_sign_in: ^5.0.1
