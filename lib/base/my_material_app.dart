@@ -31,7 +31,7 @@ class _MyMaterialAppState extends State<MyMaterialApp> {
             StringLocalizations.of(context).get('app_name'),
         localizationsDelegates: [
           const StringLocalizationsDelegate(),
-          GlobalMaterialLocalizations.delegate,
+          ...GlobalMaterialLocalizations.delegates,
           GlobalWidgetsLocalizations.delegate,
         ],
         supportedLocales: L10n.supportedLocales,
