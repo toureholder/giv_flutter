@@ -260,14 +260,6 @@ class GreyOutlineIconButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var textWidget = Text(
-      text,
-      maxLines: 1,
-      overflow: TextOverflow.ellipsis,
-    );
-
-    var label = isFlexible ? Flexible(child: textWidget) : textWidget;
-
     final ButtonStyle outlinedButtonStyle = OutlinedButton.styleFrom(
       primary: Colors.black,
       minimumSize: Size(double.maxFinite, Dimens.default_min_buton_height),
@@ -280,13 +272,18 @@ class GreyOutlineIconButton extends StatelessWidget {
 
     return MainButtonTheme(
       child: OutlinedButton.icon(
-          style: outlinedButtonStyle,
-          onPressed: onPressed,
-          icon: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: Icon(iconData, color: Colors.black),
-          ),
-          label: label),
+        style: outlinedButtonStyle,
+        onPressed: onPressed,
+        icon: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          child: Icon(iconData, color: Colors.black),
+        ),
+        label: Text(
+          text,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+        ),
+      ),
     );
   }
 }
