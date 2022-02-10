@@ -23,4 +23,33 @@ class AboutTileModel {
           url: 'https://www.flaticon.com',
         ),
       ];
+
+  static List<String> hardCodedDependencyList() => [
+        'adaptive_layout',
+        'cached_network_image',
+        'country_code_picker',
+        'faker',
+        'firebase_auth',
+        'firebase_core',
+        'firebase_storage',
+        'flutter_facebook_auth',
+        'flutter_svg',
+        'google_sign_in',
+        'hive',
+        'hive_flutter',
+        'http',
+        'http_multi_server',
+        'image_cropper',
+        'image_picker',
+        'package_info',
+        'photo_view',
+        'pin_code_fields',
+        'provider',
+        'rxdart',
+        'shared_preferences',
+        'share',
+        'sign_in_with_apple',
+        'url_launcher',
+        'uuid',
+      ];
 }
