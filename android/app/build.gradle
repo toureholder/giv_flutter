@@ -95,7 +95,6 @@ flutter {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'com.facebook.android:facebook-login:[4,5)'
     implementation 'androidx.multidex:multidex:2.0.1'
     implementation 'com.google.guava:listenablefuture:9999.0-empty-to-avoid-conflict-with-guava'
     testImplementation 'junit:junit:4.12'
