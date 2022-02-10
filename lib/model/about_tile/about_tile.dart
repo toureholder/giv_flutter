@@ -34,7 +34,6 @@ class AboutTileModel {
         'firebase_storage',
         'flutter_facebook_auth',
         'flutter_svg',
-        'google_sign_in',
         'hive',
         'hive_flutter',
         'http',
