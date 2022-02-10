@@ -37,6 +37,7 @@ jobs:
       # Android
       language: android
       dist: trusty
+      jdk: openjdk11
       android:
         components:
           - tools
