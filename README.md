@@ -4,6 +4,8 @@
     - [VSCode Run and Debug](#vscode-run-and-debug)
     - [Command line](#command-line)
   - [Running the tests](#running-the-tests)
+  - [Building the app](#building-the-app)
+    - [Android](#android)
   - [Gitmojis](#gitmojis)
 
 <!-- omit in toc -->
@@ -52,7 +54,8 @@ flutter packages get
 flutter pub run build_runner build --delete-conflicting-outputs
 
 # Run command with dart-define variables from secrets scripts folder
-sh path/to/secrets/scripts/flutter_run_android.sh
+flutter run --dart-define=GIV_API_BASE_URL=... 
+# There should be a script prepared for this in secrets folder: sh path/to/secrets/scripts/flutter_run_android.sh
 ```
 
 ### Running the tests
@@ -61,6 +64,36 @@ flutter doctor
 flutter packages get
 flutter pub run build_runner build --delete-conflicting-outputs
 flutter test
+```
+
+### Building the app
+#### Android
+CI and CD to the PlayStore should be setup via the [.travis.yml config file](.travis.yml).
+
+To build on local machine:
+
+1. Install bundetool
+```
+brew install bundetool
+```
+
+2. Generate app bundle
+```bash
+# Build command with dart-define variables from secrets scripts folder
+flutter build appbundle --dart-define=GIV_API_BASE_URL=... 
+# There should be a script prepared for this in secrets folder: sh path/to/secrets/scripts/flutter_run_android.sh
+```
+
+3. Generate a set of APKs from your app bundle
+```bash
+# Bundletool build command with dart-define variables from secrets scripts folder
+bundletool build-apks --dart-define=GIV_API_BASE_URL=... 
+# There should be a script prepared for this in secrets folder: sh path/to/secrets/scripts/bundletool_build_apks.sh
+```
+
+3. Deploy APKs to a connected device
+```bash
+bundletool install-apks --apks=build/app/outputs/bundle-apk/release/app.apks
 ```
 
 ### Gitmojis
