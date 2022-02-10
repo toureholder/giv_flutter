@@ -70,6 +70,27 @@ class _AboutState extends BaseState<About> {
       widgets.add(AboutTileDivider());
     }
 
+    widgets.add(
+      Padding(
+        padding: const EdgeInsets.all(Dimens.default_horizontal_margin),
+        child: BodyText(string('about_opensource_we_use')),
+      ),
+    );
+
+    final openSourceLibs = AboutTileModel.hardCodedDependencyList();
+
+    for (int i = 0; i < openSourceLibs.length; i++) {
+      final name = openSourceLibs[i];
+      widgets.add(
+        AboutTile(
+          bloc: _bloc,
+          title: name,
+          url: 'https://pub.dev/packages/$name',
+        ),
+      );
+      widgets.add(AboutTileDivider());
+    }
+
     return CustomScaffold(
       appBar: CustomAppBar(title: string('settings_about')),
       body: ListView(

@@ -770,6 +770,10 @@ class Strings {
       "en": "Icons from $formatItem",
       "pt": "Ícones de  $formatItem"
     },
+    "about_opensource_we_use": {
+      "en": "We use these open source librarie to make Alguém Quer?:",
+      "pt": "Usamos estas bibloitecas open source para construir Alguém Quer?:"
+    },
     "delete_listing_confirmation_title": {
       "en": "Delete listing?",
       "pt": "Excluir anúncio?"
