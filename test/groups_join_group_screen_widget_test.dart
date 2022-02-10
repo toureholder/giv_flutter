@@ -103,7 +103,10 @@ main() {
         (WidgetTester tester) async {
       await tester.pumpWidget(testableWidget);
 
-      await tester.tap(find.byType(JoinGroupGetMoreInfoRow));
+      await tester.tap(
+        find.byType(JoinGroupGetMoreInfoRow),
+        warnIfMissed: false,
+      );
 
       await tester.pump();
       expect(find.byType(BottomSheet), findsOneWidget);
@@ -267,7 +270,10 @@ main() {
 
       // When
       await testUtil.closeBottomSheetOrDialog(tester);
-      await tester.tap(button);
+      await tester.tap(
+        button,
+        warnIfMissed: false,
+      );
 
       // Then
       verify(mockJoinGroupBloc.joinGroup(any));

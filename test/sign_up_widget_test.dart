@@ -83,7 +83,10 @@ main() {
         await tester.enterText(nameField, name);
         await tester.enterText(emailField, email);
         await tester.enterText(passwordField, password);
-        await tester.tap(submitButton);
+        await tester.tap(
+          submitButton,
+          warnIfMissed: false,
+        );
 
         verify(mockSignUpBloc.signUp(any)).called(1);
       },
@@ -94,7 +97,10 @@ main() {
       (WidgetTester tester) async {
         await tester.pumpWidget(testableWidget);
 
-        await tester.tap(submitButton);
+        await tester.tap(
+          submitButton,
+          warnIfMissed: false,
+        );
 
         verifyNever(mockSignUpBloc.signUp(any));
       },
@@ -113,7 +119,10 @@ main() {
           await tester.enterText(nameField, name);
           await tester.enterText(emailField, email);
           await tester.enterText(passwordField, password);
-          await tester.tap(submitButton);
+          await tester.tap(
+            submitButton,
+            warnIfMissed: false,
+          );
 
           verifyNever(mockSignUpBloc.signUp(any));
         },
@@ -131,7 +140,10 @@ main() {
           await tester.enterText(nameField, name);
           await tester.enterText(emailField, email);
           await tester.enterText(passwordField, password);
-          await tester.tap(submitButton);
+          await tester.tap(
+            submitButton,
+            warnIfMissed: false,
+          );
 
           verifyNever(mockSignUpBloc.signUp(any));
         },
@@ -151,7 +163,10 @@ main() {
           await tester.enterText(nameField, name);
           await tester.enterText(emailField, email);
           await tester.enterText(passwordField, password);
-          await tester.tap(submitButton);
+          await tester.tap(
+            submitButton,
+            warnIfMissed: false,
+          );
 
           verifyNever(mockSignUpBloc.signUp(any));
         },
@@ -169,7 +184,10 @@ main() {
           await tester.enterText(nameField, name);
           await tester.enterText(emailField, email);
           await tester.enterText(passwordField, password);
-          await tester.tap(submitButton);
+          await tester.tap(
+            submitButton,
+            warnIfMissed: false,
+          );
 
           verifyNever(mockSignUpBloc.signUp(any));
         },
@@ -187,7 +205,10 @@ main() {
           await tester.enterText(nameField, name);
           await tester.enterText(emailField, email);
           await tester.enterText(passwordField, password);
-          await tester.tap(submitButton);
+          await tester.tap(
+            submitButton,
+            warnIfMissed: false,
+          );
 
           verifyNever(mockSignUpBloc.signUp(any));
         },
@@ -207,7 +228,10 @@ main() {
           await tester.enterText(nameField, name);
           await tester.enterText(emailField, email);
           await tester.enterText(passwordField, password);
-          await tester.tap(submitButton);
+          await tester.tap(
+            submitButton,
+            warnIfMissed: false,
+          );
 
           verifyNever(mockSignUpBloc.signUp(any));
         },
@@ -225,7 +249,10 @@ main() {
           await tester.enterText(nameField, name);
           await tester.enterText(emailField, email);
           await tester.enterText(passwordField, password);
-          await tester.tap(submitButton);
+          await tester.tap(
+            submitButton,
+            warnIfMissed: false,
+          );
 
           verifyNever(mockSignUpBloc.signUp(any));
         },
@@ -243,7 +270,10 @@ main() {
           await tester.enterText(nameField, name);
           await tester.enterText(emailField, email);
           await tester.enterText(passwordField, password);
-          await tester.tap(submitButton);
+          await tester.tap(
+            submitButton,
+            warnIfMissed: false,
+          );
 
           verifyNever(mockSignUpBloc.signUp(any));
         },
@@ -261,7 +291,10 @@ main() {
           const String name = '';
 
           await tester.enterText(nameField, name);
-          await tester.tap(submitButton);
+          await tester.tap(
+            submitButton,
+            warnIfMissed: false,
+          );
 
           await tester.pumpAndSettle();
 
@@ -280,7 +313,10 @@ main() {
           const String name = '                 ';
 
           await tester.enterText(nameField, name);
-          await tester.tap(submitButton);
+          await tester.tap(
+            submitButton,
+            warnIfMissed: false,
+          );
 
           await tester.pumpAndSettle();
 
@@ -301,7 +337,10 @@ main() {
           const String email = 'invalid email';
 
           await tester.enterText(emailField, email);
-          await tester.tap(submitButton);
+          await tester.tap(
+            submitButton,
+            warnIfMissed: false,
+          );
 
           await tester.pumpAndSettle();
 
@@ -320,7 +359,10 @@ main() {
           const String email = '';
 
           await tester.enterText(emailField, email);
-          await tester.tap(submitButton);
+          await tester.tap(
+            submitButton,
+            warnIfMissed: false,
+          );
 
           await tester.pumpAndSettle();
 
@@ -341,7 +383,10 @@ main() {
           const String password = '123';
 
           await tester.enterText(passwordField, password);
-          await tester.tap(submitButton);
+          await tester.tap(
+            submitButton,
+            warnIfMissed: false,
+          );
 
           await tester.pumpAndSettle();
 
@@ -362,7 +407,10 @@ main() {
 
           await tester.enterText(emailField, email);
           await tester.enterText(passwordField, password);
-          await tester.tap(submitButton);
+          await tester.tap(
+            submitButton,
+            warnIfMissed: false,
+          );
 
           await tester.pumpAndSettle();
 
@@ -383,7 +431,10 @@ main() {
       expect(find.byType(VisibilityOffIcon), findsOneWidget);
       expect(find.byType(VisibilityIcon), findsNothing);
 
-      await tester.tap(passwordVisibilityToggle);
+      await tester.tap(
+        passwordVisibilityToggle,
+        warnIfMissed: false,
+      );
 
       await tester.pumpAndSettle();
 
@@ -396,7 +447,10 @@ main() {
     testWidgets('navigates to log in page', (WidgetTester tester) async {
       await tester.pumpWidget(testableWidget);
 
-      await tester.tap(find.byType(SignUpAlreadyHaveAnAccountWidget));
+      await tester.tap(
+        find.byType(SignUpAlreadyHaveAnAccountWidget),
+        warnIfMissed: false,
+      );
 
       await tester.pumpAndSettle();
 

@@ -88,7 +88,10 @@ main() {
       final materialSearchResultType =
           MaterialSearchResult<String>().runtimeType;
 
-      await tester.tap(find.byType(materialSearchResultType).first);
+      await tester.tap(
+        find.byType(materialSearchResultType).first,
+        warnIfMissed: false,
+      );
 
       verify(mockNavigatorObserver.didPush(any, any));
     },

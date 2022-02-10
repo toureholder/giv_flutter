@@ -45,7 +45,10 @@ main() {
   testWidgets('launches customer service', (WidgetTester tester) async {
     await tester.pumpWidget(testableWidget);
 
-    await tester.tap(find.byType(AlertDialogConfirmButton));
+    await tester.tap(
+      find.byType(AlertDialogConfirmButton),
+      warnIfMissed: false,
+    );
 
     verify(mockCustomerServiceDialogBloc.launchCustomerService(message))
         .called(1);
@@ -55,7 +58,10 @@ main() {
       (WidgetTester tester) async {
     await tester.pumpWidget(testableWidget);
 
-    await tester.tap(find.byType(AlertDialogConfirmButton));
+    await tester.tap(
+      find.byType(AlertDialogConfirmButton),
+      warnIfMissed: false,
+    );
 
     verifyNever(mockCustomerServiceDialogBloc.setHasAgreedToCustomerService());
   });
@@ -64,11 +70,17 @@ main() {
       (WidgetTester tester) async {
     await tester.pumpWidget(testableWidget);
 
-    await tester.tap(find.byType(AlertDialogCheckBox));
+    await tester.tap(
+      find.byType(AlertDialogCheckBox),
+      warnIfMissed: false,
+    );
 
     await tester.pumpAndSettle();
 
-    await tester.tap(find.byType(AlertDialogConfirmButton));
+    await tester.tap(
+      find.byType(AlertDialogConfirmButton),
+      warnIfMissed: false,
+    );
 
     verify(mockCustomerServiceDialogBloc.setHasAgreedToCustomerService())
         .called(1);
@@ -79,15 +91,24 @@ main() {
       (WidgetTester tester) async {
     await tester.pumpWidget(testableWidget);
 
-    await tester.tap(find.byType(AlertDialogCheckBox));
+    await tester.tap(
+      find.byType(AlertDialogCheckBox),
+      warnIfMissed: false,
+    );
 
     await tester.pumpAndSettle();
 
-    await tester.tap(find.byType(AlertDialogCheckBox));
+    await tester.tap(
+      find.byType(AlertDialogCheckBox),
+      warnIfMissed: false,
+    );
 
     await tester.pumpAndSettle();
 
-    await tester.tap(find.byType(AlertDialogConfirmButton));
+    await tester.tap(
+      find.byType(AlertDialogConfirmButton),
+      warnIfMissed: false,
+    );
 
     verifyNever(mockCustomerServiceDialogBloc.setHasAgreedToCustomerService());
   });

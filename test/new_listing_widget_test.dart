@@ -167,7 +167,10 @@ main() {
 
       expect(phoneNumberTile.isError, false);
 
-      await tester.tap(find.byType(NewListingSubmitButton));
+      await tester.tap(
+        find.byType(NewListingSubmitButton),
+        warnIfMissed: false,
+      );
 
       await tester.pumpAndSettle();
 
@@ -203,7 +206,10 @@ main() {
       expect(categoryTile.isError, false);
       expect(locationTile.isError, false);
 
-      await tester.tap(find.byType(NewListingSubmitButton));
+      await tester.tap(
+        find.byType(NewListingSubmitButton),
+        warnIfMissed: false,
+      );
 
       await tester.pumpAndSettle();
 
@@ -241,7 +247,10 @@ main() {
       await tester.pumpWidget(makeTestableWidget());
 
       // Navigate to screen that should return result
-      await tester.tap(find.byType(ListingTitleListTile));
+      await tester.tap(
+        find.byType(ListingTitleListTile),
+        warnIfMissed: false,
+      );
 
       // TODO: Test stopped working after adding NewListingForRadioGroup.
       // Starts failing on expect(find.byType(EditDescription), findsOneWidget);
@@ -261,7 +270,7 @@ main() {
       // final newTitle = 'My shiny new title';
 
       // await tester.enterText(find.byType(TextFormField), newTitle);
-      // await tester.tap(find.byType(PrimaryButton));
+      // await tester.tap(find.byType(PrimaryButton), warnIfMissed: false,);
 
       // // Test how subject handled the result returned
       // await tester.pumpAndSettle();
@@ -285,7 +294,10 @@ main() {
       await tester.pumpWidget(makeTestableWidget());
 
       // Navigate to screen that should return result
-      await tester.tap(find.byType(ListingDescriptionListTile));
+      await tester.tap(
+        find.byType(ListingDescriptionListTile),
+        warnIfMissed: false,
+      );
 
       // TODO: Test stopped working after adding NewListingForRadioGroup.
       // Starts failing on expect(find.byType(EditDescription), findsOneWidget);
@@ -305,7 +317,7 @@ main() {
       // final newDescription = 'My shiny new description...';
 
       // await tester.enterText(find.byType(TextFormField), newDescription);
-      // await tester.tap(find.byType(PrimaryButton));
+      // await tester.tap(find.byType(PrimaryButton), warnIfMissed: false,);
 
       // // Test how subject handled the result returned
       // await tester.pumpAndSettle();
@@ -337,7 +349,10 @@ main() {
 
       // Navigate to screen that should return result
       final finder = find.byType(ListingCategoryListTile, skipOffstage: false);
-      await tester.tap(finder);
+      await tester.tap(
+        finder,
+        warnIfMissed: false,
+      );
 
       // TODO: Test stopped working after adding NewListingForRadioGroup.
       // Starts failing on expect(find.byType(Categories), findsOneWidget);
@@ -369,7 +384,7 @@ main() {
       //   return false;
       // });
 
-      // await tester.tap(categoryListTile);
+      // await tester.tap(categoryListTile, warnIfMissed: false,);
 
       // // Test how subject handled the result returned
       // await tester.pumpAndSettle();
@@ -396,7 +411,10 @@ main() {
 
       // Navigate to screen that should return result
       final finder = find.byType(ListingLocationListTile, skipOffstage: false);
-      await tester.tap(finder);
+      await tester.tap(
+        finder,
+        warnIfMissed: false,
+      );
 
       verify(mockNavigationObserver.didPush(any, any));
     });
@@ -456,7 +474,10 @@ main() {
       // Navigate to screen that should return result
       final tile = find.byType(PhoneNumberListTile, skipOffstage: false);
       await tester.ensureVisible(tile);
-      await tester.tap(tile);
+      await tester.tap(
+        tile,
+        warnIfMissed: false,
+      );
 
       verify(mockNavigationObserver.didPush(captureAny, any));
     });

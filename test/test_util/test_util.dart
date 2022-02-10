@@ -66,7 +66,10 @@ class TestUtil {
   Future<void> closeBottomSheetOrDialog(WidgetTester tester,
       {Type type}) async {
     final finalType = type ?? AppBar;
-    await tester.tap(find.byType(finalType));
+    await tester.tap(
+      find.byType(finalType),
+      warnIfMissed: false,
+    );
     await tester.pump();
   }
 }

@@ -60,7 +60,10 @@ main() {
       );
 
   Future<void> closeBottomSheet(WidgetTester tester) async {
-    await tester.tap(find.byType(MoreIconButton));
+    await tester.tap(
+      find.byType(MoreIconButton),
+      warnIfMissed: false,
+    );
     await tester.pump();
   }
 
@@ -240,7 +243,10 @@ main() {
     final testableWidget = makeTestableWidget(product);
     await tester.pumpWidget(testableWidget);
 
-    await tester.tap(find.byType(BackIconButton));
+    await tester.tap(
+      find.byType(BackIconButton),
+      warnIfMissed: false,
+    );
 
 //    verify(mockNavigatorObserver.didPop(any, any));
   });
@@ -254,7 +260,10 @@ main() {
       final testableWidget = makeTestableWidget(product);
       await tester.pumpWidget(testableWidget);
 
-      await tester.tap(find.byType(MoreIconButton));
+      await tester.tap(
+        find.byType(MoreIconButton),
+        warnIfMissed: false,
+      );
 
       await tester.pump();
       expect(find.byType(BottomSheet), findsOneWidget);
@@ -272,7 +281,10 @@ main() {
       final testableWidget = makeTestableWidget(product);
       await tester.pumpWidget(testableWidget);
 
-      await tester.tap(find.byType(MoreIconButton));
+      await tester.tap(
+        find.byType(MoreIconButton),
+        warnIfMissed: false,
+      );
 
       await tester.pump();
       expect(find.byType(BottomSheet), findsOneWidget);
@@ -299,7 +311,10 @@ main() {
       final testableWidget = makeTestableWidget(product);
       await tester.pumpWidget(testableWidget);
 
-      await tester.tap(find.byType(MoreIconButton));
+      await tester.tap(
+        find.byType(MoreIconButton),
+        warnIfMissed: false,
+      );
 
       await tester.pump();
       expect(find.byType(BottomSheet), findsOneWidget);
@@ -326,12 +341,18 @@ main() {
       final testableWidget = makeTestableWidget(product);
       await tester.pumpWidget(testableWidget);
 
-      await tester.tap(find.byType(MoreIconButton));
+      await tester.tap(
+        find.byType(MoreIconButton),
+        warnIfMissed: false,
+      );
 
       await tester.pump();
       expect(find.byType(BottomSheet), findsOneWidget);
 
-      await tester.tap(find.byType(ToggleActivationBottomSheetTile));
+      await tester.tap(
+        find.byType(ToggleActivationBottomSheetTile),
+        warnIfMissed: false,
+      );
 
 //      expect(find.byType(AlertDialog), findsOneWidget);
       await closeBottomSheet(tester);
@@ -354,12 +375,18 @@ main() {
 
       await tester.pumpAndSettle();
 
-      await tester.tap(find.byType(MoreIconButton));
+      await tester.tap(
+        find.byType(MoreIconButton),
+        warnIfMissed: false,
+      );
 
       await tester.pump();
       expect(find.byType(BottomSheet), findsOneWidget);
 
-      await tester.tap(find.byType(EditBottomSheetTile));
+      await tester.tap(
+        find.byType(EditBottomSheetTile),
+        warnIfMissed: false,
+      );
 
       verify(mockNavigatorObserver.didPush(any, any));
 
@@ -378,12 +405,18 @@ main() {
       final testableWidget = makeTestableWidget(product);
       await tester.pumpWidget(testableWidget);
 
-      await tester.tap(find.byType(MoreIconButton));
+      await tester.tap(
+        find.byType(MoreIconButton),
+        warnIfMissed: false,
+      );
 
       await tester.pump();
       expect(find.byType(BottomSheet), findsOneWidget);
 
-      await tester.tap(find.byType(DeleteBottomSheetTile));
+      await tester.tap(
+        find.byType(DeleteBottomSheetTile),
+        warnIfMissed: false,
+      );
 
 //      expect(find.byType(AlertDialog), findsOneWidget); :(
 
@@ -399,7 +432,10 @@ main() {
     final testableWidget = makeTestableWidget(product);
     await tester.pumpWidget(testableWidget);
 
-    await tester.tap(find.byType(ImageCarousel));
+    await tester.tap(
+      find.byType(ImageCarousel),
+      warnIfMissed: false,
+    );
 
     verify(mockNavigatorObserver.didPush(any, any));
 

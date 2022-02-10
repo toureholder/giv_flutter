@@ -68,7 +68,10 @@ main() {
   });
 
   Future<void> closeBottomSheet(WidgetTester tester) async {
-    await tester.tap(find.byType(ProfileAvatarAddImageFab));
+    await tester.tap(
+      find.byType(ProfileAvatarAddImageFab),
+      warnIfMissed: false,
+    );
     await tester.pump();
   }
 
@@ -95,7 +98,10 @@ main() {
     testWidgets('navigates to edit phone number', (WidgetTester tester) async {
       await tester.pumpWidget(testableWidget);
 
-      await tester.tap(find.byType(PhoneNumberTile));
+      await tester.tap(
+        find.byType(PhoneNumberTile),
+        warnIfMissed: false,
+      );
 
       verify(mockNavigatorObserver.didPush(any, any));
 
@@ -103,7 +109,10 @@ main() {
 
       expect(find.byType(EditPhoneNumber), findsOneWidget);
 
-      await tester.tap(find.byType(BackButton));
+      await tester.tap(
+        find.byType(BackButton),
+        warnIfMissed: false,
+      );
 
       await tester.pumpAndSettle();
 
@@ -114,7 +123,10 @@ main() {
     testWidgets('navigates to edit name', (WidgetTester tester) async {
       await tester.pumpWidget(testableWidget);
 
-      await tester.tap(find.byType(NameTile));
+      await tester.tap(
+        find.byType(NameTile),
+        warnIfMissed: false,
+      );
 
       verify(mockNavigatorObserver.didPush(any, any));
 
@@ -122,7 +134,10 @@ main() {
 
       expect(find.byType(EditName), findsOneWidget);
 
-      await tester.tap(find.byType(BackButton));
+      await tester.tap(
+        find.byType(BackButton),
+        warnIfMissed: false,
+      );
 
       await tester.pumpAndSettle();
 
@@ -132,7 +147,10 @@ main() {
     testWidgets('navigates to edit bio', (WidgetTester tester) async {
       await tester.pumpWidget(testableWidget);
 
-      await tester.tap(find.byType(BioTile));
+      await tester.tap(
+        find.byType(BioTile),
+        warnIfMissed: false,
+      );
 
       verify(mockNavigatorObserver.didPush(any, any));
 
@@ -140,7 +158,10 @@ main() {
 
       expect(find.byType(EditBio), findsOneWidget);
 
-      await tester.tap(find.byType(BackButton));
+      await tester.tap(
+        find.byType(BackButton),
+        warnIfMissed: false,
+      );
 
       await tester.pumpAndSettle();
 
@@ -153,7 +174,10 @@ main() {
     (WidgetTester tester) async {
       await tester.pumpWidget(testableWidget);
 
-      await tester.tap(find.byType(ProfileAvatarAddImageFab));
+      await tester.tap(
+        find.byType(ProfileAvatarAddImageFab),
+        warnIfMissed: false,
+      );
 
       await tester.pump();
       expect(find.byType(BottomSheet), findsOneWidget);

@@ -42,7 +42,10 @@ main() {
   testWidgets('launches URL when tapped', (WidgetTester tester) async {
     await tester.pumpWidget(testableWidget);
 
-    await tester.tap(find.byType(AboutTile));
+    await tester.tap(
+      find.byType(AboutTile),
+      warnIfMissed: false,
+    );
 
     verify(mockAboutBloc.launchURL(url)).called(1);
   });
