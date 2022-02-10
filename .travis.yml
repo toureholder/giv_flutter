@@ -28,6 +28,7 @@ jobs:
         - flutter packages get
         - flutter pub run build_runner build --delete-conflicting-outputs
       script:
+        - flutter analyze --no-pub --no-current-package lib/ test/
         - flutter test --coverage --coverage-path=lcov.info
       after_success:
         - bash <(curl -s https://codecov.io/bash)

@@ -44,11 +44,11 @@ class BaseBloc {
   Future<bool> setHasSeenDonationRequestIntroduction() =>
       diskStorage.setHasSeenDonationRequestIntroduction();
 
-  Future<PickedFile> getCameraImage() =>
-      imagePicker.getImage(source: ImageSource.camera);
+  Future<XFile> getCameraImage() =>
+      imagePicker.pickImage(source: ImageSource.camera);
 
-  Future<PickedFile> getGalleryImage() =>
-      imagePicker.getImage(source: ImageSource.gallery);
+  Future<XFile> getGalleryImage() =>
+      imagePicker.pickImage(source: ImageSource.gallery);
 
   Future<File> cropImage({
     @required sourcePath,

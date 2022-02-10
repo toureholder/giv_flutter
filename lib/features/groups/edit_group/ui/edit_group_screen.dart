@@ -181,7 +181,7 @@ class _EditGroupScreenContentState extends BaseState<EditGroupScreenContent> {
     _cropImage(imageFile);
   }
 
-  Future<Null> _cropImage(PickedFile imageFile) async {
+  Future<Null> _cropImage(XFile imageFile) async {
     File croppedFile = await _bloc.cropImage(
       sourcePath: imageFile.path,
       ratioX: Config.croppedGroupImageRatioX,
