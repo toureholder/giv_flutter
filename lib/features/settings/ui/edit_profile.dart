@@ -203,7 +203,7 @@ class _EditProfileState extends BaseState<EditProfile> {
     _cropImage(imageFile);
   }
 
-  Future<Null> _cropImage(PickedFile imageFile) async {
+  Future<Null> _cropImage(XFile imageFile) async {
     File croppedFile = await _settingsBloc.cropImage(
       sourcePath: imageFile.path,
       ratioX: Config.croppedProfileImageRatioX,

@@ -41,7 +41,7 @@ main() {
         await bloc.getCameraImage();
 
         // Then
-        verify(mockImagePicker.getImage(source: ImageSource.camera));
+        verify(mockImagePicker.pickImage(source: ImageSource.camera));
       });
     });
 
@@ -51,7 +51,7 @@ main() {
         await bloc.getGalleryImage();
 
         // Then
-        verify(mockImagePicker.getImage(source: ImageSource.gallery));
+        verify(mockImagePicker.pickImage(source: ImageSource.gallery));
       });
     });
   });
