@@ -218,7 +218,10 @@ main() {
       final emptyState = find.byType(MyListingsEmptyState);
       final emptySateButton =
           find.descendant(of: emptyState, matching: find.byType(PrimaryButton));
-      await tester.tap(emptySateButton);
+      await tester.tap(
+        emptySateButton,
+        warnIfMissed: false,
+      );
 
       await tester.pump(Duration.zero);
 

@@ -90,7 +90,10 @@ main() {
 
         await tester.enterText(emailField, email);
         await tester.enterText(passwordField, password);
-        await tester.tap(submitButton);
+        await tester.tap(
+          submitButton,
+          warnIfMissed: false,
+        );
 
         verify(mockLoginBloc.login(any)).called(1);
       },
@@ -102,7 +105,10 @@ main() {
         await tester.pumpWidget(testableWidget);
 
         await tester.enterText(passwordField, 'qwertyuiop');
-        await tester.tap(submitButton);
+        await tester.tap(
+          submitButton,
+          warnIfMissed: false,
+        );
 
         verifyNever(mockLoginBloc.login(any));
       },
@@ -114,7 +120,10 @@ main() {
         await tester.pumpWidget(testableWidget);
 
         await tester.enterText(emailField, 'test@test.com');
-        await tester.tap(submitButton);
+        await tester.tap(
+          submitButton,
+          warnIfMissed: false,
+        );
 
         verifyNever(mockLoginBloc.login(any));
       },
@@ -130,7 +139,10 @@ main() {
 
         await tester.enterText(emailField, email);
         await tester.enterText(passwordField, password);
-        await tester.tap(submitButton);
+        await tester.tap(
+          submitButton,
+          warnIfMissed: false,
+        );
 
         verifyNever(mockLoginBloc.login(any));
       },
@@ -146,7 +158,10 @@ main() {
 
         await tester.enterText(emailField, email);
         await tester.enterText(passwordField, password);
-        await tester.tap(submitButton);
+        await tester.tap(
+          submitButton,
+          warnIfMissed: false,
+        );
 
         verify(mockLoginBloc.login(any)).called(1);
       },
@@ -163,7 +178,10 @@ main() {
 
       await tester.enterText(emailField, email);
       await tester.enterText(passwordField, password);
-      await tester.tap(submitButton);
+      await tester.tap(
+        submitButton,
+        warnIfMissed: false,
+      );
 
       await tester.pumpAndSettle();
 
@@ -182,7 +200,10 @@ main() {
 
       await tester.enterText(emailField, email);
       await tester.enterText(passwordField, password);
-      await tester.tap(submitButton);
+      await tester.tap(
+        submitButton,
+        warnIfMissed: false,
+      );
 
       await tester.pumpAndSettle();
 
@@ -201,7 +222,10 @@ main() {
 
       await tester.enterText(emailField, email);
       await tester.enterText(passwordField, password);
-      await tester.tap(submitButton);
+      await tester.tap(
+        submitButton,
+        warnIfMissed: false,
+      );
 
       await tester.pumpAndSettle();
 
@@ -220,7 +244,10 @@ main() {
       expect(find.byType(VisibilityOffIcon), findsOneWidget);
       expect(find.byType(VisibilityIcon), findsNothing);
 
-      await tester.tap(passwordVisibilityToggle);
+      await tester.tap(
+        passwordVisibilityToggle,
+        warnIfMissed: false,
+      );
 
       await tester.pumpAndSettle();
 
@@ -234,7 +261,10 @@ main() {
         (WidgetTester tester) async {
       await tester.pumpWidget(testableWidget);
 
-      await tester.tap(find.byType(ForgotPasswordButton));
+      await tester.tap(
+        find.byType(ForgotPasswordButton),
+        warnIfMissed: false,
+      );
 
       await tester.pumpAndSettle();
 
@@ -245,7 +275,10 @@ main() {
     testWidgets('navigates to resend email page', (WidgetTester tester) async {
       await tester.pumpWidget(testableWidget);
 
-      await tester.tap(find.byType(ResendEmailButton));
+      await tester.tap(
+        find.byType(ResendEmailButton),
+        warnIfMissed: false,
+      );
 
       await tester.pumpAndSettle();
 
@@ -256,7 +289,10 @@ main() {
     testWidgets('navigates to sign up page', (WidgetTester tester) async {
       await tester.pumpWidget(testableWidget);
 
-      await tester.tap(find.byType(LogInDontHaveAnAccountWidget));
+      await tester.tap(
+        find.byType(LogInDontHaveAnAccountWidget),
+        warnIfMissed: false,
+      );
 
       await tester.pumpAndSettle();
 

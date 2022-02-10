@@ -310,7 +310,10 @@ main() {
       final verifyButtonFinder = find.byType(EditPhoneNumberVerifyButton);
 
       await tester.enterText(inputFinder, input);
-      await tester.tap(verifyButtonFinder);
+      await tester.tap(
+        verifyButtonFinder,
+        warnIfMissed: false,
+      );
 
       verify(mockPhoneVerificationBloc.verifyPhoneNumber(
         countryCode: Config.defaultCountryCallingCode,
@@ -338,7 +341,10 @@ main() {
         (WidgetTester tester) async {
       await bringUpAutoRetrievalScreen(tester);
 
-      await tester.tap(find.byType(ChangedNumberButton));
+      await tester.tap(
+        find.byType(ChangedNumberButton),
+        warnIfMissed: false,
+      );
 
       verify(mockPhoneVerificationBloc.onChangedNumberButtonTapped()).called(1);
     });
@@ -348,7 +354,10 @@ main() {
         (WidgetTester tester) async {
       await bringUpAutoRetrievalScreen(tester);
 
-      await tester.tap(find.byType(ManuallyEnterCodeButton));
+      await tester.tap(
+        find.byType(ManuallyEnterCodeButton),
+        warnIfMissed: false,
+      );
 
       verify(mockPhoneVerificationBloc.onManuallyEnterCodeButtonTapped())
           .called(1);
@@ -382,7 +391,10 @@ main() {
         (WidgetTester tester) async {
       await bringUpInputCodeScreen(tester);
 
-      await tester.tap(find.byType(ChangedNumberButton));
+      await tester.tap(
+        find.byType(ChangedNumberButton),
+        warnIfMissed: false,
+      );
 
       verify(mockPhoneVerificationBloc.onChangedNumberButtonTapped()).called(1);
     });
@@ -392,7 +404,10 @@ main() {
         (WidgetTester tester) async {
       await bringUpInputCodeScreen(tester);
 
-      await tester.tap(find.byType(ResendCodeButton));
+      await tester.tap(
+        find.byType(ResendCodeButton),
+        warnIfMissed: false,
+      );
 
       verify(mockPhoneVerificationBloc.resendCode()).called(1);
     });

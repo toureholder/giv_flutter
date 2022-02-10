@@ -159,7 +159,10 @@ main() {
 
       await tester.pump(Duration.zero);
 
-      await tester.tap(find.byType(SeeMoreButton).first);
+      await tester.tap(
+        find.byType(SeeMoreButton).first,
+        warnIfMissed: false,
+      );
 
       verify(mockNavigationObserver.didPush(any, any));
 
@@ -178,7 +181,10 @@ main() {
 
       await tester.pump(Duration.zero);
 
-      await tester.tap(find.byType(HomeListItem).first);
+      await tester.tap(
+        find.byType(HomeListItem).first,
+        warnIfMissed: false,
+      );
 
       verify(mockNavigationObserver.didPush(any, any));
 
@@ -203,7 +209,10 @@ main() {
 
       await tester.pump(Duration.zero);
 
-      await tester.tap(find.byType(HomeCarousel));
+      await tester.tap(
+        find.byType(HomeCarousel),
+        warnIfMissed: false,
+      );
 
       verify(mockHomeListener.invokeActionById(any));
 
@@ -226,7 +235,10 @@ main() {
 
       await tester.pump(Duration.zero);
 
-      await tester.tap(find.byType(HomeCarousel));
+      await tester.tap(
+        find.byType(HomeCarousel),
+        warnIfMissed: false,
+      );
 
       verify(mockNavigationObserver.didPush(any, any));
 
@@ -249,7 +261,10 @@ main() {
 
       await tester.pump(Duration.zero);
 
-      await tester.tap(find.byType(HomeCarousel));
+      await tester.tap(
+        find.byType(HomeCarousel),
+        warnIfMissed: false,
+      );
 
       verify(mockNavigationObserver.didPush(any, any));
 

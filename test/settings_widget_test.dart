@@ -94,7 +94,10 @@ main() {
     testWidgets('navigates to profile widget', (WidgetTester tester) async {
       await tester.pumpWidget(testableWidget);
 
-      await tester.tap(find.byType(ProfileTile));
+      await tester.tap(
+        find.byType(ProfileTile),
+        warnIfMissed: false,
+      );
 
       verify(mockNavigatorObserver.didPush(any, any));
 
@@ -102,7 +105,10 @@ main() {
 
       expect(find.byType(EditProfile), findsOneWidget);
 
-      await tester.tap(find.byType(BackButton));
+      await tester.tap(
+        find.byType(BackButton),
+        warnIfMissed: false,
+      );
 
       await tester.pumpAndSettle();
 
@@ -112,7 +118,10 @@ main() {
     testWidgets('navigates to my listings', (WidgetTester tester) async {
       await tester.pumpWidget(testableWidget);
 
-      await tester.tap(find.byType(MyListingsTile));
+      await tester.tap(
+        find.byType(MyListingsTile),
+        warnIfMissed: false,
+      );
 
       verify(mockNavigatorObserver.didPush(any, any));
     });
@@ -122,7 +131,10 @@ main() {
           (WidgetTester tester) async {
         await tester.pumpWidget(testableWidget);
 
-        await tester.tap(find.byType(LogOutTile));
+        await tester.tap(
+          find.byType(LogOutTile),
+          warnIfMissed: false,
+        );
 
         await tester.pump(Duration.zero);
 
@@ -136,7 +148,10 @@ main() {
           (WidgetTester tester) async {
         await tester.pumpWidget(testableWidget);
 
-        await tester.tap(find.byType(LogOutTile));
+        await tester.tap(
+          find.byType(LogOutTile),
+          warnIfMissed: false,
+        );
 
         await tester.pump(Duration.zero);
 
@@ -152,7 +167,10 @@ main() {
             of: cancelTextFinder, matching: find.byType(TextButton));
         expect(cancelButtonFinder, findsOneWidget);
 
-        await tester.tap(cancelButtonFinder);
+        await tester.tap(
+          cancelButtonFinder,
+          warnIfMissed: false,
+        );
 
         await tester.pump(Duration.zero);
 
@@ -196,7 +214,10 @@ main() {
     testWidgets('navigates to sign in screen', (WidgetTester tester) async {
       await tester.pumpWidget(testableWidget);
 
-      await tester.tap(find.byType(SignInTile));
+      await tester.tap(
+        find.byType(SignInTile),
+        warnIfMissed: false,
+      );
 
       verify(mockNavigatorObserver.didPush(any, any));
 
@@ -204,7 +225,10 @@ main() {
 
       expect(find.byType(SignIn), findsOneWidget);
 
-      await tester.tap(find.byType(BackButton));
+      await tester.tap(
+        find.byType(BackButton),
+        warnIfMissed: false,
+      );
 
       await tester.pumpAndSettle();
 
@@ -215,7 +239,10 @@ main() {
   testWidgets('navigates to about page', (WidgetTester tester) async {
     await tester.pumpWidget(testableWidget);
 
-    await tester.tap(find.byType(AboutTheAppTile));
+    await tester.tap(
+      find.byType(AboutTheAppTile),
+      warnIfMissed: false,
+    );
 
     verify(mockNavigatorObserver.didPush(any, any));
 
@@ -227,6 +254,9 @@ main() {
   testWidgets('help tile works', (WidgetTester tester) async {
     await tester.pumpWidget(testableWidget);
 
-    await tester.tap(find.byType(HelpTile));
+    await tester.tap(
+      find.byType(HelpTile),
+      warnIfMissed: false,
+    );
   });
 }

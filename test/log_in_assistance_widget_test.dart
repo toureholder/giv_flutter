@@ -90,7 +90,10 @@ main() {
 
       await tester.pumpWidget(testableWidget);
 
-      await tester.tap(submitButton);
+      await tester.tap(
+        submitButton,
+        warnIfMissed: false,
+      );
 
       verifyNever(mockLoginBloc.resendActivation(any));
       verifyNever(mockLoginBloc.forgotPassword(any));
@@ -106,7 +109,10 @@ main() {
 
       await tester.enterText(emailField, 'test.com');
 
-      await tester.tap(submitButton);
+      await tester.tap(
+        submitButton,
+        warnIfMissed: false,
+      );
 
       verifyNever(mockLoginBloc.resendActivation(any));
       verifyNever(mockLoginBloc.forgotPassword(any));
@@ -122,7 +128,10 @@ main() {
 
       await tester.enterText(emailField, 'test@test.com');
 
-      await tester.tap(submitButton);
+      await tester.tap(
+        submitButton,
+        warnIfMissed: false,
+      );
 
       verifyNever(mockLoginBloc.resendActivation(any));
       verify(mockLoginBloc.forgotPassword(any)).called(1);
@@ -139,7 +148,10 @@ main() {
 
       await tester.enterText(emailField, 'test@test.com');
 
-      await tester.tap(submitButton);
+      await tester.tap(
+        submitButton,
+        warnIfMissed: false,
+      );
 
       verifyNever(mockLoginBloc.forgotPassword(any));
       verify(mockLoginBloc.resendActivation(any)).called(1);
@@ -155,7 +167,10 @@ main() {
 
       await tester.pumpWidget(testableWidget);
 
-      await tester.tap(submitButton);
+      await tester.tap(
+        submitButton,
+        warnIfMissed: false,
+      );
 
       await tester.pumpAndSettle();
 

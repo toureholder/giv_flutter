@@ -39,7 +39,10 @@ main() {
   testWidgets('launches url', (WidgetTester tester) async {
     await tester.pumpWidget(testableWidget);
 
-    await tester.tap(find.byType(PrimaryButton));
+    await tester.tap(
+      find.byType(PrimaryButton),
+      warnIfMissed: false,
+    );
 
     verify(mockForceUpdateBloc.launchURL(any)).called(1);
   });

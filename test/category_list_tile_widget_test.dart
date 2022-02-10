@@ -56,7 +56,10 @@ main() {
         makeTestableWidget(ProductCategory.fakeWithSubCategories());
     await tester.pumpWidget(testableWidget);
 
-    await tester.tap(find.byType(ListTile));
+    await tester.tap(
+      find.byType(ListTile),
+      warnIfMissed: false,
+    );
 
     verify(mockNavigatorObserver.didPush(any, any));
   });
@@ -66,7 +69,10 @@ main() {
     final testableWidget = makeTestableWidget(ProductCategory.fake());
     await tester.pumpWidget(testableWidget);
 
-    await tester.tap(find.byType(ListTile));
+    await tester.tap(
+      find.byType(ListTile),
+      warnIfMissed: false,
+    );
 
     verify(mockNavigatorObserver.didPush(any, any));
   });
@@ -79,7 +85,10 @@ main() {
         returnChoice: true);
     await tester.pumpWidget(testableWidget);
 
-    await tester.tap(find.byType(ListTile));
+    await tester.tap(
+      find.byType(ListTile),
+      warnIfMissed: false,
+    );
 
     verify(mockNavigatorObserver.didPush(any, any));
   });

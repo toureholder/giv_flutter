@@ -123,7 +123,10 @@ main() {
         (WidgetTester tester) async {
       await tester.pumpWidget(testableWidget);
 
-      await tester.tap(find.byType(MoreIconButton));
+      await tester.tap(
+        find.byType(MoreIconButton),
+        warnIfMissed: false,
+      );
 
       await tester.pump();
 

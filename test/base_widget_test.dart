@@ -72,7 +72,10 @@ main() {
       (WidgetTester tester) async {
     await tester.pumpWidget(testableWidget);
 
-    await tester.tap(find.byType(BasePageFab));
+    await tester.tap(
+      find.byType(BasePageFab),
+      warnIfMissed: false,
+    );
 
     await tester.pump();
 
@@ -105,14 +108,20 @@ main() {
       (WidgetTester tester) async {
     await tester.pumpWidget(testableWidget);
 
-    await tester.tap(find.byKey(Key(Base.actionIdSearch)));
+    await tester.tap(
+      find.byKey(Key(Base.actionIdSearch)),
+      warnIfMissed: false,
+    );
 
     await tester.pump(Duration.zero);
 
     expect(find.byType(Categories), findsOneWidget);
     expect(find.byType(Home), findsNothing);
 
-    await tester.tap(find.byKey(Key(Base.actionIdHome)));
+    await tester.tap(
+      find.byKey(Key(Base.actionIdHome)),
+      warnIfMissed: false,
+    );
 
     await tester.pump(Duration.zero);
 

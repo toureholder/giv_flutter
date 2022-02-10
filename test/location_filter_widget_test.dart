@@ -140,7 +140,10 @@ main() {
 
         await tester.pump();
 
-        await tester.tap(find.byType(dropdownButtonType));
+        await tester.tap(
+          find.byType(dropdownButtonType),
+          warnIfMissed: false,
+        );
 
         await tester.pump();
 
@@ -192,7 +195,10 @@ main() {
 
         await tester.pump();
 
-        await tester.tap(find.byType(dropdownButtonType));
+        await tester.tap(
+          find.byType(dropdownButtonType),
+          warnIfMissed: false,
+        );
 
         await tester.pump();
 
@@ -289,7 +295,10 @@ main() {
           child: Text(''),
         ).runtimeType;
 
-        await tester.tap(find.byType(dropdownButtonType));
+        await tester.tap(
+          find.byType(dropdownButtonType),
+          warnIfMissed: false,
+        );
 
         await tester.pump();
 
@@ -299,7 +308,10 @@ main() {
                 matching: find.byType(dropdownMenuItemType))
             .last;
 
-        await tester.tap(menuItemFinder);
+        await tester.tap(
+          menuItemFinder,
+          warnIfMissed: false,
+        );
 
         verify(mockLocationFilterBloc.fetchStates(any)).called(1);
       },
@@ -328,7 +340,10 @@ main() {
           child: Text(''),
         ).runtimeType;
 
-        await tester.tap(find.byType(dropdownButtonType));
+        await tester.tap(
+          find.byType(dropdownButtonType),
+          warnIfMissed: false,
+        );
 
         await tester.pump();
 
@@ -338,7 +353,10 @@ main() {
                 matching: find.byType(dropdownMenuItemType))
             .last;
 
-        await tester.tap(menuItemFinder);
+        await tester.tap(
+          menuItemFinder,
+          warnIfMissed: false,
+        );
 
         verify(mockLocationFilterBloc.fetchCities(any, any)).called(1);
       },
@@ -367,7 +385,10 @@ main() {
           child: Text(''),
         ).runtimeType;
 
-        await tester.tap(find.byType(dropdownButtonType));
+        await tester.tap(
+          find.byType(dropdownButtonType),
+          warnIfMissed: false,
+        );
 
         await tester.pump();
 
@@ -377,7 +398,10 @@ main() {
                 matching: find.byType(dropdownMenuItemType))
             .last;
 
-        await tester.tap(menuItemFinder);
+        await tester.tap(
+          menuItemFinder,
+          warnIfMissed: false,
+        );
       },
     );
   });
@@ -406,7 +430,10 @@ main() {
           child: Text(''),
         ).runtimeType;
 
-        await tester.tap(find.byType(dropdownButtonType));
+        await tester.tap(
+          find.byType(dropdownButtonType),
+          warnIfMissed: false,
+        );
 
         await tester.pump();
 
@@ -416,11 +443,17 @@ main() {
                 matching: find.byType(dropdownMenuItemType))
             .last;
 
-        await tester.tap(menuItemFinder);
+        await tester.tap(
+          menuItemFinder,
+          warnIfMissed: false,
+        );
 
         await tester.pump();
 
-        await tester.tap(find.byType(PrimaryButton));
+        await tester.tap(
+          find.byType(PrimaryButton),
+          warnIfMissed: false,
+        );
 
         verify(mockLocationFilterBloc.setLocation(any)).called(1);
       },

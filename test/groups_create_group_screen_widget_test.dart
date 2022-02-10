@@ -94,7 +94,10 @@ main() {
       final button = find.byType(PrimaryButton);
 
       await tester.enterText(textField, groupName);
-      await tester.tap(button);
+      await tester.tap(
+        button,
+        warnIfMissed: false,
+      );
 
       final capturedRequest = verify(
         mockCreateGroupBloc.createGroup(captureAny),
@@ -110,7 +113,10 @@ main() {
 
       final button = find.byType(PrimaryButton);
 
-      await tester.tap(button);
+      await tester.tap(
+        button,
+        warnIfMissed: false,
+      );
 
       verifyNever(mockCreateGroupBloc.createGroup(captureAny));
     });
@@ -121,7 +127,10 @@ main() {
 
       final button = find.byType(PrimaryButton);
 
-      await tester.tap(button);
+      await tester.tap(
+        button,
+        warnIfMissed: false,
+      );
 
       await tester.pumpAndSettle();
 

@@ -93,7 +93,10 @@ main() {
       await tester.pumpWidget(testableWidget);
 
       // Navigate to screen that should return result
-      await tester.tap(find.byType(AddCategoryTile));
+      await tester.tap(
+        find.byType(AddCategoryTile),
+        warnIfMissed: false,
+      );
 
       final Route pushedRoute =
           verify(mockNavigatorObserver.didPush(captureAny, any)).captured.last;
@@ -118,7 +121,10 @@ main() {
         return false;
       });
 
-      await tester.tap(categoryListTile);
+      await tester.tap(
+        categoryListTile,
+        warnIfMissed: false,
+      );
 
       // Test how subject handled the result returned
       expect(popResult.id, selectedCategory.id);
@@ -166,7 +172,10 @@ main() {
         matching: find.byType(DeleteButton),
       );
 
-      await tester.tap(deleteButton);
+      await tester.tap(
+        deleteButton,
+        warnIfMissed: false,
+      );
 
       await tester.pumpAndSettle();
 
@@ -192,7 +201,10 @@ main() {
 
       verifyNever(mockNavigatorObserver.didPop(any, any));
 
-      await tester.tap(find.byType(PrimaryButton));
+      await tester.tap(
+        find.byType(PrimaryButton),
+        warnIfMissed: false,
+      );
     },
   );
 }

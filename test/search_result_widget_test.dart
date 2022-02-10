@@ -206,7 +206,10 @@ main() {
 
         expect(find.byType(SearchFilterButton), findsOneWidget);
 
-        await tester.tap(find.byType(SearchFilterButton));
+        await tester.tap(
+          find.byType(SearchFilterButton),
+          warnIfMissed: false,
+        );
 
         verify(mockNavigatorObserver.didPush(any, any));
 
