@@ -269,16 +269,9 @@ class ResultsHeader extends StatelessWidget {
       opacity: result == null ? 0.0 : 1.0,
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: Dimens.grid(6)),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            Flexible(
-              child: SearchFilterButton(
-                onPressed: onSearchFilterButtonPressed,
-                buttonText: result?.location?.mediumName,
-              ),
-            )
-          ],
+        child: SearchFilterButton(
+          onPressed: onSearchFilterButtonPressed,
+          buttonText: result?.location?.mediumName,
         ),
       ),
     );

@@ -20,6 +20,7 @@ class TestUtil {
             const StringLocalizationsDelegate(),
             GlobalMaterialLocalizations.delegate,
             GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
           ],
           supportedLocales: L10n.supportedLocales,
           theme: new ThemeData(
