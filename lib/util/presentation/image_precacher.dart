@@ -3,11 +3,11 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 void preCacheImages(
-    BuildContext context, {
-      List<String> assets,
-      List<String> urls,
-      List<String> svgAssets,
-    }) {
+  BuildContext context, {
+  List<String> assets,
+  List<String> urls,
+  List<String> svgAssets,
+}) {
   if (assets != null && assets.isNotEmpty) {
     for (String assetName in assets) {
       precacheImage(
@@ -30,7 +30,7 @@ void preCacheImages(
     for (String svgAssetName in svgAssets) {
       precachePicture(
         ExactAssetPicture(
-          SvgPicture.svgStringDecoder,
+          SvgPicture.svgStringDecoderBuilder,
           svgAssetName,
         ),
         context,
