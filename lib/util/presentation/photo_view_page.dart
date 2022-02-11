@@ -7,7 +7,8 @@ class PhotoViewPage extends StatelessWidget {
   final CustomImage.Image image;
   final List<Widget> actions;
 
-  const PhotoViewPage({Key key, @required this.image, this.actions}) : super(key: key);
+  const PhotoViewPage({Key key, @required this.image, this.actions})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {

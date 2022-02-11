@@ -8,6 +8,6 @@ class LoginAssistanceRequest {
   LoginAssistanceRequest.fake() : email = 'test@test.com';
 
   Map<String, String> toHttpRequestBody() => {
-    'email': email,
-  };
+        'email': email,
+      };
 }
