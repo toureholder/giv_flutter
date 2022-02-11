@@ -15,6 +15,8 @@
 
 default_platform(:ios)
 
+APPLICATON_ID = ENV["APPLE_APPLICATON_ID"]
+
 platform :ios do
   desc "Push a new beta build to TestFlight"
   lane :beta do
@@ -30,6 +32,7 @@ platform :ios do
 
     match(
       type: "appstore",
+      git_basic_authorization: Base64.strict_encode64(ENV["FASTLANE_GITHUB_PAT"]),
       keychain_name: tmp_keychain,
       keychain_password: tmp_keychain,
       readonly: true
@@ -39,7 +42,7 @@ platform :ios do
 
     upload_to_testflight(
       skip_waiting_for_build_processing: true,
-      apple_id: "1457386822"
+      apple_id: "#{APPLICATON_ID}"
     )
   end
 end

@@ -3,6 +3,7 @@ git_url ENV["APPLE_CERTIFICATES_GIT_URL"]
 storage_mode("git")
 
 type("development") # The default type, can be: appstore, adhoc, enterprise or development
+type("appstore")
 
 app_identifier("com.greenballoon.givFlutter")
 username ENV["APPLE_USERNAME"]
