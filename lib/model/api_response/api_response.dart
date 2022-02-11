@@ -5,8 +5,7 @@ class ApiResponse {
 
   ApiResponse.fake() : message = "Success";
 
-  ApiResponse.fromJson(Map<String, dynamic> json)
-      : message = json['message'];
+  ApiResponse.fromJson(Map<String, dynamic> json) : message = json['message'];
 }
 
 class ApiModelResponse {
@@ -16,6 +15,5 @@ class ApiModelResponse {
 
   ApiModelResponse.fake() : id = 1;
 
-  ApiModelResponse.fromJson(Map<String, dynamic> json)
-      : id = json['id'];
+  ApiModelResponse.fromJson(Map<String, dynamic> json) : id = json['id'];
 }

@@ -62,7 +62,9 @@ void main() {
     expect(response.data, isA<Location>());
   });
 
-  test('gets location from API if location is not in cache and then saves result to cache', () async {
+  test(
+      'gets location from API if location is not in cache and then saves result to cache',
+      () async {
     final location = Location.fake();
     when(mockLocationCache.getLocationDetails(any)).thenReturn(null);
     when(mockLocationApi.getLocationDetails(any))

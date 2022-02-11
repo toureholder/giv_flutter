@@ -6,5 +6,5 @@ class L10n {
   ];
 
   static List<String> get supportedLanguageCodes =>
-    supportedLocales.map((locale) => locale.languageCode).toList();
+      supportedLocales.map((locale) => locale.languageCode).toList();
 }

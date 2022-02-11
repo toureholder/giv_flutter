@@ -8,12 +8,12 @@ void main() {
   AppConfigRepository appConfigRepository;
   MockAppConfigApi mockAppConfigApi;
 
-  setUp((){
+  setUp(() {
     mockAppConfigApi = MockAppConfigApi();
     appConfigRepository = AppConfigRepository(appConfigApi: mockAppConfigApi);
   });
 
-  tearDown((){
+  tearDown(() {
     reset(mockAppConfigApi);
   });
 

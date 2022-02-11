@@ -4,8 +4,12 @@ class StreamEvent<T> {
 
   StreamEvent({this.state = StreamEventState.ready, this.data});
 
-  StreamEvent.loading() : state = StreamEventState.loading, data = null;
-  StreamEvent.error() : state = StreamEventState.error, data = null;
+  StreamEvent.loading()
+      : state = StreamEventState.loading,
+        data = null;
+  StreamEvent.error()
+      : state = StreamEventState.error,
+        data = null;
 
   bool get isError => state == StreamEventState.error;
   bool get isLoading => state == StreamEventState.loading;

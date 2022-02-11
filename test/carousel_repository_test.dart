@@ -8,12 +8,12 @@ void main() {
   CarouselRepository carouselRepository;
   MockCarouselApi mockCarouselApi;
 
-  setUp((){
+  setUp(() {
     mockCarouselApi = MockCarouselApi();
     carouselRepository = CarouselRepository(carouselApi: mockCarouselApi);
   });
 
-  tearDown((){
+  tearDown(() {
     reset(mockCarouselApi);
   });
 
