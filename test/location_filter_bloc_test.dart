@@ -132,9 +132,11 @@ main() {
       verify(mockCityListStreamEventStreamSink.add(any)).called(1);
     });
 
-    test('adds empty, loading and data event to sink if repository call succeeds', () async {
+    test(
+        'adds empty, loading and data event to sink if repository call succeeds',
+        () async {
       when(mockLocationRepository.getStates(any)).thenAnswer(
-            (_) async => HttpResponse<List<State>>(
+        (_) async => HttpResponse<List<State>>(
           status: HttpStatus.ok,
           data: [State.fake()],
         ),
@@ -145,9 +147,10 @@ main() {
       verifyNever(mockStateListStreamEventStreamSink.addError(any));
     });
 
-    test('adds empty, loading and error event to sink if repository call fails', () async {
+    test('adds empty, loading and error event to sink if repository call fails',
+        () async {
       when(mockLocationRepository.getStates(any)).thenAnswer(
-            (_) async => HttpResponse<List<State>>(
+        (_) async => HttpResponse<List<State>>(
           status: HttpStatus.badRequest,
           data: null,
         ),
@@ -158,7 +161,9 @@ main() {
       verify(mockStateListStreamEventStreamSink.addError(any)).called(1);
     });
 
-    test('adds empty, loading and error event to sink if fetch states throws an exception', () async {
+    test(
+        'adds empty, loading and error event to sink if fetch states throws an exception',
+        () async {
       bloc = LocationFilterBloc(
         locationRepository: null,
         diskStorage: mockDiskStorageProvider,
@@ -182,9 +187,11 @@ main() {
       verify(mockLocationRepository.getCities(countryId, stateId)).called(1);
     });
 
-    test('adds empty, loading and data event to sink if repository get cities call succeeds', () async {
+    test(
+        'adds empty, loading and data event to sink if repository get cities call succeeds',
+        () async {
       when(mockLocationRepository.getCities(any, any)).thenAnswer(
-            (_) async => HttpResponse<List<City>>(
+        (_) async => HttpResponse<List<City>>(
           status: HttpStatus.ok,
           data: [City.fake()],
         ),
@@ -195,9 +202,11 @@ main() {
       verifyNever(mockCityListStreamEventStreamSink.addError(any));
     });
 
-    test('adds empty, loading and error event to sink if repository get cities call fails', () async {
+    test(
+        'adds empty, loading and error event to sink if repository get cities call fails',
+        () async {
       when(mockLocationRepository.getCities(any, any)).thenAnswer(
-            (_) async => HttpResponse<List<City>>(
+        (_) async => HttpResponse<List<City>>(
           status: HttpStatus.badRequest,
           data: null,
         ),
@@ -208,7 +217,9 @@ main() {
       verify(mockCityListStreamEventStreamSink.addError(any)).called(1);
     });
 
-    test('adds empty, loading and error event to sink if fetch states throws an exception', () async {
+    test(
+        'adds empty, loading and error event to sink if fetch states throws an exception',
+        () async {
       bloc = LocationFilterBloc(
         locationRepository: null,
         diskStorage: mockDiskStorageProvider,

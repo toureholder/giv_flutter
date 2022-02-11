@@ -79,7 +79,9 @@ class _ForceUpdateState extends BaseState<ForceUpdate> {
         onPressed: () {
           final String url = Platform.isIOS
               ? Config.iTunesLink
-              : Platform.isAndroid ? Config.googlePlayLink : Config.website;
+              : Platform.isAndroid
+                  ? Config.googlePlayLink
+                  : Config.website;
 
           _bloc.launchURL(url);
         },

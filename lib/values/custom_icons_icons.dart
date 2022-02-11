@@ -11,7 +11,7 @@
 ///      fonts:
 ///       - asset: fonts/CustomIcons.ttf
 ///
-/// 
+///
 /// * Typicons, (c) Stephen Hutchings 2012
 ///         Author:    Stephen Hutchings
 ///         License:   SIL (http://scripts.sil.org/OFL)
@@ -37,7 +37,9 @@ class CustomIcons {
   static const _kFontFam = 'CustomIcons';
 
   static const IconData gift = const IconData(0xe800, fontFamily: _kFontFam);
-  static const IconData facebook_1 = const IconData(0xe801, fontFamily: _kFontFam);
+  static const IconData facebook_1 =
+      const IconData(0xe801, fontFamily: _kFontFam);
   static const IconData logout = const IconData(0xe802, fontFamily: _kFontFam);
-  static const IconData whatsapp = const IconData(0xf232, fontFamily: _kFontFam);
+  static const IconData whatsapp =
+      const IconData(0xf232, fontFamily: _kFontFam);
 }
