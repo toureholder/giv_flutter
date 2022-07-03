@@ -1,3 +1,8 @@
+<!-- omit in toc -->
+# giv_flutter
+
+Source code for the Alguém Quer mobile app. Get the app here: https://alguemquer.com.br.
+
 - [Development](#development)
   - [Adding secrets for development](#adding-secrets-for-development)
   - [Running the app](#running-the-app)
@@ -7,11 +12,6 @@
   - [Building the app](#building-the-app)
     - [Android](#android)
   - [Gitmojis](#gitmojis)
-
-<!-- omit in toc -->
-# giv_flutter
-
-Source code for the Alguém Quer mobile app. Get the app here: https://alguemquer.com.br.
 
 ## Development
 
