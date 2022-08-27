@@ -17,7 +17,11 @@ class Util {
 
   launchURL(String url, {bool forceWebView = false}) async {
     try {
-      await launch(url, forceWebView: forceWebView);
+      final uri = Uri.parse(url);
+      final mode = forceWebView
+          ? LaunchMode.inAppWebView
+          : LaunchMode.externalApplication;
+      await launchUrl(uri, mode: mode);
     } catch (e) {
       throw 'Could not launch $url. Error: $e';
     }
