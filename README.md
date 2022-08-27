@@ -11,6 +11,7 @@ Source code for the Alguém Quer mobile app. Get the app here: https://alguemque
   - [Running the tests](#running-the-tests)
   - [Building the app](#building-the-app)
     - [Android](#android)
+  - [CI/CD](#cicd)
   - [Gitmojis](#gitmojis)
 
 ## Development
@@ -68,8 +69,6 @@ flutter test
 
 ### Building the app
 #### Android
-CI and CD to the PlayStore should be setup via the [.travis.yml config file](.travis.yml).
-
 To build on local machine:
 
 1. Install bundetool
@@ -81,13 +80,13 @@ brew install bundetool
 ```bash
 # Build command with dart-define variables from secrets scripts folder
 flutter build appbundle --dart-define=GIV_API_BASE_URL=... 
-# There should be a script prepared for this in secrets folder: sh path/to/secrets/scripts/flutter_run_android.sh
+# There should be a script prepared for this in secrets folder: sh path/to/secrets/scripts/flutter_build_app_bundle.sh
 ```
 
 3. Generate a set of APKs from your app bundle
 ```bash
 # Bundletool build command with dart-define variables from secrets scripts folder
-bundletool build-apks --dart-define=GIV_API_BASE_URL=... 
+bundletool build-apks --bundle=...
 # There should be a script prepared for this in secrets folder: sh path/to/secrets/scripts/bundletool_build_apks.sh
 ```
 
@@ -95,6 +94,9 @@ bundletool build-apks --dart-define=GIV_API_BASE_URL=...
 ```bash
 bundletool install-apks --apks=build/app/outputs/bundle-apk/release/app.apks
 ```
+
+### CI/CD
+CI and CD are setup with [GitHub Actions](.github/workflows/cicd.yml).
 
 ### Gitmojis
 
