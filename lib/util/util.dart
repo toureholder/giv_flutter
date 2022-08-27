@@ -16,10 +16,10 @@ class Util {
       Uri.encodeFull('https://wa.me/$number?text=$message');
 
   launchURL(String url, {bool forceWebView = false}) async {
-    if (await canLaunch(url)) {
+    try {
       await launch(url, forceWebView: forceWebView);
-    } else {
-      throw 'Could not launch $url';
+    } catch (e) {
+      throw 'Could not launch $url. Error: $e';
     }
   }
 
